@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.sultan.arabicai.R
 import com.sultan.arabicai.data.local.entity.QuizDifficulty
@@ -117,7 +118,7 @@ fun QuizScreen() {
                                 .padding(16.dp)
                                 .let { m ->
                                     if (selectedAnswer == null) {
-                                        m.clickable {
+                                        m.clickable(role = Role.Button) {
                                             selectedAnswer = option
                                             if (isCorrect) correctCount++
                                         }

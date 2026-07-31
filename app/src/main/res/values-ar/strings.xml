@@ -2,6 +2,13 @@
 <resources>
     <string name="app_name">سلطان: الذكاء الاصطناعي للغة العربية</string>
 
+    <!-- Bottom navigation -->
+    <string name="nav_overview">نظرة عامة</string>
+    <string name="nav_library">المكتبة</string>
+    <string name="nav_vocabulary">المفردات</string>
+    <string name="nav_speaking">التحدث</string>
+    <string name="nav_profile">الملف الشخصي</string>
+
     <!-- Onboarding -->
     <string name="onboarding_kicker">سلطان للذكاء الاصطناعي</string>
     <string name="onboarding_edition">إصدار رؤية 2030 الرائد</string>

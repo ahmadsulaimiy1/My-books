@@ -1,5 +1,7 @@
 package com.sultan.arabicai.navigation
 
+import com.sultan.arabicai.R
+
 object NavRoutes {
     const val ONBOARDING = "onboarding"
     const val BIOMETRIC_LOGIN = "biometric_login"
@@ -22,11 +24,16 @@ object NavRoutes {
     fun lessonDetail(lessonId: Long) = "lesson_detail/$lessonId"
 }
 
-/** Bottom navigation destinations — the five pillars of the flagship experience. */
-enum class TopLevelDestination(val route: String, val label: String) {
-    DASHBOARD(NavRoutes.DASHBOARD, "Overview"),
-    LIBRARY(NavRoutes.LIBRARY, "Library"),
-    VOCABULARY(NavRoutes.VOCABULARY, "Vocabulary"),
-    SPEAKING_LAB(NavRoutes.SPEAKING_LAB, "Speaking"),
-    PROFILE(NavRoutes.PROFILE, "Profile")
+/**
+ * Bottom navigation destinations — the five pillars of the flagship experience.
+ * [labelRes] rather than a raw String: this is the single most-visible surface in the app on
+ * every screen, so it must localize like everything else (a Phase 3 QA re-audit caught this
+ * enum still holding hardcoded English after the Phase 2.5 string-externalization pass).
+ */
+enum class TopLevelDestination(val route: String, val labelRes: Int) {
+    DASHBOARD(NavRoutes.DASHBOARD, R.string.nav_overview),
+    LIBRARY(NavRoutes.LIBRARY, R.string.nav_library),
+    VOCABULARY(NavRoutes.VOCABULARY, R.string.nav_vocabulary),
+    SPEAKING_LAB(NavRoutes.SPEAKING_LAB, R.string.nav_speaking),
+    PROFILE(NavRoutes.PROFILE, R.string.nav_profile)
 }

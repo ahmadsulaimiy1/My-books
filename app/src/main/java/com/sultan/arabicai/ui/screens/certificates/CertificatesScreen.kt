@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,9 +25,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.collectAsState
 import androidx.core.content.FileProvider
@@ -65,14 +68,23 @@ fun CertificatesScreen() {
                     TextField(value = recipientName, onValueChange = { recipientName = it }, label = { Text(stringResource(R.string.certificates_recipient_name)) }, modifier = Modifier.fillMaxWidth())
 
                     Box {
-                        Text(
-                            stringResource(R.string.certificates_level_label, stringResource(certificateLevelLabel(selectedLevel))),
-                            style = MaterialTheme.typography.bodyMedium,
+                        // heightIn(min = 48.dp) + Role.DropdownList: a Phase 3 accessibility
+                        // re-audit found this trigger's touch target was well under the 48dp
+                        // minimum (only top padding, no enforced height) and carried no
+                        // semantic role, unlike the DropdownMenu items it opens.
+                        Box(
                             modifier = Modifier
-                                .padding(top = 12.dp)
                                 .fillMaxWidth()
-                                .clickable { levelMenuOpen = true }
-                        )
+                                .heightIn(min = 48.dp)
+                                .clickable(role = Role.DropdownList) { levelMenuOpen = true }
+                                .padding(top = 12.dp),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            Text(
+                                stringResource(R.string.certificates_level_label, stringResource(certificateLevelLabel(selectedLevel))),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                         DropdownMenu(expanded = levelMenuOpen, onDismissRequest = { levelMenuOpen = false }) {
                             CertificateLevel.entries.forEach { level ->
                                 DropdownMenuItem(text = { Text(stringResource(certificateLevelLabel(level))) }, onClick = { selectedLevel = level; levelMenuOpen = false })

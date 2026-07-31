@@ -104,8 +104,15 @@ fun LessonDetailScreen(lessonId: Long, onStartQuiz: (Long) -> Unit) {
     val arabicVoiceLabel = stringResource(R.string.voice_language_arabic)
 
     fun attemptPlay() {
-        if (!engineReady) return
-        val readiness = VoiceDataManager.readinessFor(engine.isLanguageAvailable(ArabicTtsEngine.ARABIC_MSA))
+        // Phase 3 TTS-scenario tracing caught this: when there is no TTS engine on the device
+        // at all, `engineReady` never becomes true, so the old `if (!engineReady) return` here
+        // made Play silently do nothing — exactly the failure mode the voice-missing dialog
+        // was built to eliminate, just for a case its trigger condition didn't cover.
+        val readiness = if (!engineReady) {
+            VoiceReadiness.ENGINE_UNAVAILABLE
+        } else {
+            VoiceDataManager.readinessFor(engine.isLanguageAvailable(ArabicTtsEngine.ARABIC_MSA))
+        }
         if (readiness == VoiceReadiness.READY) {
             controller.play()
         } else {
@@ -125,13 +132,22 @@ fun LessonDetailScreen(lessonId: Long, onStartQuiz: (Long) -> Unit) {
                         Text(stringResource(R.string.lesson_tap_word_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         FlowRow(Modifier.padding(top = 8.dp)) {
                             currentLesson.dialogueAr.split(Regex("\\s+")).forEach { token ->
-                                val clean = token.trim { !it.isLetter() }
+                                // Trimming only strips non-letters from the token's *edges*;
+                                // Arabic tashkeel (diacritics) sitting mid-word survive that and
+                                // previously broke matching against unvoweled vocab entries — a
+                                // Phase 3 QA re-audit caught that the tashkeel fix claimed in an
+                                // earlier pass was never actually applied. stripTashkeel() now
+                                // removes diacritics from both sides of the comparison.
+                                val clean = token.trim { !it.isLetter() }.stripTashkeel()
                                 Text(
                                     text = "$token ",
                                     style = MaterialTheme.typography.headlineMedium,
                                     color = MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier.padding(2.dp).let { base ->
-                                        val match = vocabForLesson.firstOrNull { it.arabic.contains(clean) || clean.contains(it.arabic) }
+                                        val match = vocabForLesson.firstOrNull {
+                                            val vocabWord = it.arabic.stripTashkeel()
+                                            vocabWord.contains(clean) || clean.contains(vocabWord)
+                                        }
                                         if (match != null) base.clickable { selectedWord = match } else base
                                     }
                                 )
@@ -216,6 +232,14 @@ fun LessonDetailScreen(lessonId: Long, onStartQuiz: (Long) -> Unit) {
         )
     }
 }
+
+/**
+ * Strips Arabic tashkeel (U+064B–U+0652: fathatan..sukun, covering the harakat, tanwin, and
+ * shadda), the superscript alef (U+0670), and tatweel (U+0640) so a fully-voweled dialogue
+ * token can match an unvoweled vocabulary entry, and vice versa. Unicode escapes are used
+ * explicitly rather than literal diacritic glyphs in source to keep the pattern unambiguous.
+ */
+private fun String.stripTashkeel(): String = replace(Regex("[\u064B-\u0652\u0670\u0640]"), "")
 
 private fun readingModeLabel(mode: ReadingMode): Int = when (mode) {
     ReadingMode.WORD -> R.string.reading_mode_word

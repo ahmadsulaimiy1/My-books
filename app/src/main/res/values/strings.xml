@@ -2,6 +2,13 @@
 <resources>
     <string name="app_name">Sultan Arabic AI</string>
 
+    <!-- Bottom navigation -->
+    <string name="nav_overview">Overview</string>
+    <string name="nav_library">Library</string>
+    <string name="nav_vocabulary">Vocabulary</string>
+    <string name="nav_speaking">Speaking</string>
+    <string name="nav_profile">Profile</string>
+
     <!-- Onboarding -->
     <string name="onboarding_kicker">SULTAN ARABIC AI</string>
     <string name="onboarding_edition">Saudi Vision 2030 Flagship Edition</string>

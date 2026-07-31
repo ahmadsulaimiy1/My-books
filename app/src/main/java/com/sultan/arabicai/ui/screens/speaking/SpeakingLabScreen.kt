@@ -149,8 +149,13 @@ fun SpeakingLabScreen() {
 
                     Row(Modifier.padding(top = 20.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         Button(onClick = {
-                            if (!engineReady) return@Button
-                            val readiness = VoiceDataManager.readinessFor(engine.isLanguageAvailable(ArabicTtsEngine.ARABIC_MSA))
+                            // See LessonDetailScreen.attemptPlay() for why engineReady==false is
+                            // routed through the dialog too, not returned from silently.
+                            val readiness = if (!engineReady) {
+                                VoiceReadiness.ENGINE_UNAVAILABLE
+                            } else {
+                                VoiceDataManager.readinessFor(engine.isLanguageAvailable(ArabicTtsEngine.ARABIC_MSA))
+                            }
                             if (readiness == VoiceReadiness.READY) {
                                 engine.speakChunk(word.arabic, "native_${word.id}")
                             } else {

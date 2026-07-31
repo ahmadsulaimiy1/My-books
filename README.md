@@ -9,7 +9,12 @@ design mockup. It targets the full ambition described in the product brief — a
 Vision‑2030‑grade learning experience — by shipping a solid, genuinely working core today and
 documenting the more ambitious AI‑research features as an honest, staged roadmap rather than
 faking them. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for exactly what is real right now versus
-what is planned.
+what is planned, and [`docs/PHASE3_RELEASE_READINESS.md`](docs/PHASE3_RELEASE_READINESS.md) for
+the current, evidence-based release-readiness status (build verification, device/version
+compatibility, and a release decision — currently **Not Ready For Release**, primarily because
+no build has ever successfully compiled in any environment this project has been developed in
+so far). Play Store draft materials (privacy policy, terms of service, data safety form, store
+listing copy) live in [`docs/store/`](docs/store/).
 
 ## What's implemented (real, working code)
 

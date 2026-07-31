@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -25,6 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
+import com.sultan.arabicai.R
 import com.sultan.arabicai.security.BiometricAuthManager
 import com.sultan.arabicai.security.BiometricAvailability
 import com.sultan.arabicai.security.BiometricResult
@@ -77,8 +79,8 @@ fun SultanNavHost(activity: FragmentActivity) {
                                     restoreState = true
                                 }
                             },
-                            icon = { Icon(iconFor(destination), contentDescription = destination.label) },
-                            label = { Text(destination.label) }
+                            icon = { Icon(iconFor(destination), contentDescription = stringResource(destination.labelRes)) },
+                            label = { Text(stringResource(destination.labelRes)) }
                         )
                     }
                 }
@@ -100,12 +102,19 @@ fun SultanNavHost(activity: FragmentActivity) {
             }
 
             composable(NavRoutes.BIOMETRIC_LOGIN) {
+                // Resolved here (a @Composable context) rather than inside onAuthenticate — that
+                // lambda runs later, on a button click, where stringResource() can't be called.
+                // A Phase 3 QA re-audit caught these as hardcoded English reaching the native
+                // BiometricPrompt dialog even though the Compose fallback screen already used
+                // the correct string resources.
+                val biometricTitle = stringResource(R.string.auth_biometric_title)
+                val biometricSubtitle = stringResource(R.string.auth_biometric_subtitle)
                 BiometricLoginScreen(
                     availability = biometricManager.checkAvailability(),
                     onAuthenticate = {
                         biometricManager.authenticate(
-                            titleRes = "Unlock Sultan Arabic AI",
-                            subtitleRes = "Use your fingerprint or face to continue"
+                            titleRes = biometricTitle,
+                            subtitleRes = biometricSubtitle
                         ) { result ->
                             if (result is BiometricResult.Success) {
                                 SecurePreferences.recordUnlock(context, System.currentTimeMillis())

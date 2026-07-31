@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.sultan.arabicai.R
 import com.sultan.arabicai.di.LocalAppContainer
@@ -39,7 +40,7 @@ fun LessonListScreen(bookId: Long, onOpenLesson: (Long) -> Unit) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onOpenLesson(lesson.id) },
+                    .clickable(role = Role.Button) { onOpenLesson(lesson.id) },
                 shape = RoundedCornerShape(18.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
