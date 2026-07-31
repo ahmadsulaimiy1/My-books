@@ -121,6 +121,9 @@ interface AchievementDao {
     @Query("SELECT * FROM achievements ORDER BY unlockedAtEpochMillis DESC")
     fun observeAll(): Flow<List<AchievementEntity>>
 
+    @Query("SELECT COUNT(*) FROM achievements")
+    suspend fun count(): Int
+
     @Query("SELECT * FROM achievements WHERE `key` = :key")
     suspend fun getByKey(key: String): AchievementEntity?
 }

@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data-extraction-rules>
     <cloud-backup>
-        <!-- Progress/vocabulary DB is eligible for encrypted cloud backup + multi-device sync;
-             biometric/session secrets never leave the device. -->
+        <!-- Session/auth flags are always excluded — encrypted or not, they never leave the
+             device via backup. -->
         <exclude domain="sharedpref" path="secure_prefs.xml" />
+        <!-- The Room database is plaintext SQLite today and holds PII (certificate recipient
+             names) — excluded from backup as a compensating control until it's encrypted at
+             rest. See docs/ROADMAP.md "Security debt: database encryption" for the tracked
+             decision and docs/ARCHITECTURE.md for the plan. Once SQLCipher (or equivalent) is
+             wired in, this exclusion can be lifted so cloud backup / multi-device sync can
+             cover learning progress as originally intended. -->
+        <exclude domain="database" path="sultan_arabic_ai.db" />
+        <exclude domain="database" path="sultan_arabic_ai.db-wal" />
+        <exclude domain="database" path="sultan_arabic_ai.db-shm" />
     </cloud-backup>
     <device-transfer>
         <exclude domain="sharedpref" path="secure_prefs.xml" />
+        <exclude domain="database" path="sultan_arabic_ai.db" />
+        <exclude domain="database" path="sultan_arabic_ai.db-wal" />
+        <exclude domain="database" path="sultan_arabic_ai.db-shm" />
     </device-transfer>
 </data-extraction-rules>

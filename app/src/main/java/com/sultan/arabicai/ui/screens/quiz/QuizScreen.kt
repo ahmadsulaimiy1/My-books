@@ -24,7 +24,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sultan.arabicai.R
 import com.sultan.arabicai.data.local.entity.QuizDifficulty
 import com.sultan.arabicai.data.local.entity.QuizQuestionEntity
 import com.sultan.arabicai.data.local.entity.QuizType
@@ -52,12 +54,12 @@ fun QuizScreen() {
 
     when (stage) {
         QuizStage.SETUP -> Column(Modifier.fillMaxSize().padding(20.dp)) {
-            Text("Assessment Centre", style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
-            Text("On-device quiz generation from your vocabulary bank — no network required.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
+            Text(stringResource(R.string.quiz_title), style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
+            Text(stringResource(R.string.quiz_subtitle), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
 
             Row(Modifier.padding(top = 20.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 QuizDifficulty.entries.forEach { d ->
-                    FilterChip(selected = difficulty == d, onClick = { difficulty = d }, label = { Text(d.name.lowercase().replaceFirstChar { it.uppercase() }) })
+                    FilterChip(selected = difficulty == d, onClick = { difficulty = d }, label = { Text(stringResource(quizDifficultyLabel(d))) })
                 }
             }
 
@@ -75,7 +77,7 @@ fun QuizScreen() {
                 },
                 modifier = Modifier.fillMaxWidth().padding(top = 24.dp)
             ) {
-                Text("Generate Quiz")
+                Text(stringResource(R.string.quiz_generate))
             }
         }
 
@@ -86,7 +88,7 @@ fun QuizScreen() {
                 return
             }
             Column(Modifier.fillMaxSize().padding(20.dp)) {
-                Text("Question ${questionIndex + 1} of ${questions.size}", style = MaterialTheme.typography.labelLarge, color = SultanColors.RoyalGold)
+                Text(stringResource(R.string.quiz_question_progress, questionIndex + 1, questions.size), style = MaterialTheme.typography.labelLarge, color = SultanColors.RoyalGold)
                 Text(question.promptAr, style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(top = 12.dp))
                 Text(question.promptEn, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
@@ -136,7 +138,7 @@ fun QuizScreen() {
                             if (questionIndex >= questions.size) stage = QuizStage.RESULTS
                         },
                         modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
-                    ) { Text(if (questionIndex + 1 >= questions.size) "Finish" else "Next") }
+                    ) { Text(stringResource(if (questionIndex + 1 >= questions.size) R.string.quiz_action_finish else R.string.quiz_action_next)) }
                 }
             }
         }
@@ -157,14 +159,21 @@ fun QuizScreen() {
                 }
             }
             Column(Modifier.fillMaxSize().padding(20.dp), verticalArrangement = Arrangement.Center) {
-                Text("Assessment Complete", style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
-                Text("$correctCount / ${questions.size} correct", style = MaterialTheme.typography.headlineLarge, color = SultanColors.RoyalGold, modifier = Modifier.padding(top = 12.dp))
+                Text(stringResource(R.string.quiz_complete_title), style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
+                Text(stringResource(R.string.quiz_score, correctCount, questions.size), style = MaterialTheme.typography.headlineLarge, color = SultanColors.RoyalGold, modifier = Modifier.padding(top = 12.dp))
                 Button(
                     onClick = { stage = QuizStage.SETUP },
                     colors = ButtonDefaults.buttonColors(containerColor = SultanColors.RoyalGold, contentColor = SultanColors.RoyalNavyDeep),
                     modifier = Modifier.fillMaxWidth().padding(top = 24.dp)
-                ) { Text("New Assessment") }
+                ) { Text(stringResource(R.string.quiz_new_assessment)) }
             }
         }
     }
+}
+
+private fun quizDifficultyLabel(difficulty: QuizDifficulty): Int = when (difficulty) {
+    QuizDifficulty.EASY -> R.string.quiz_difficulty_easy
+    QuizDifficulty.MEDIUM -> R.string.quiz_difficulty_medium
+    QuizDifficulty.HARD -> R.string.quiz_difficulty_hard
+    QuizDifficulty.SCHOLAR -> R.string.quiz_difficulty_scholar
 }

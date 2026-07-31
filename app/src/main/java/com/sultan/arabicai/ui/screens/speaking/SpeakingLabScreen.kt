@@ -31,12 +31,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import com.sultan.arabicai.R
 import com.sultan.arabicai.data.local.entity.VocabWordEntity
 import com.sultan.arabicai.di.LocalAppContainer
 import com.sultan.arabicai.domain.gamification.RankEngine
 import com.sultan.arabicai.tts.ArabicTtsEngine
+import com.sultan.arabicai.tts.VoiceDataManager
+import com.sultan.arabicai.tts.VoiceReadiness
+import com.sultan.arabicai.ui.components.VoiceDataMissingDialog
 import com.sultan.arabicai.ui.theme.SultanColors
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -54,6 +62,7 @@ import kotlinx.coroutines.launch
 fun SpeakingLabScreen() {
     val container = LocalAppContainer.current
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     val scope = rememberCoroutineScope()
 
     val words by container.vocabularyRepository.observeAll().collectAsState(initial = emptyList())
@@ -67,6 +76,7 @@ fun SpeakingLabScreen() {
 
     val engine = remember { container.newArabicTtsEngine(context) }
     var engineReady by remember { mutableStateOf(false) }
+    var showVoiceMissingDialog by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         engine.initialize { success ->
             engineReady = success
@@ -81,19 +91,43 @@ fun SpeakingLabScreen() {
     var player by remember { mutableStateOf<MediaPlayer?>(null) }
     val outputFile = remember { File(context.cacheDir, "speaking_lab_take.3gp") }
 
-    DisposableEffect(Unit) {
-        onDispose {
+    fun stopRecordingIfActive() {
+        if (isRecording) {
+            runCatching { recorder?.stop() }
             recorder?.release()
-            player?.release()
+            recorder = null
+            isRecording = false
         }
     }
 
+    DisposableEffect(Unit) {
+        onDispose {
+            stopRecordingIfActive()
+            player?.release()
+        }
+    }
+    // A recording or native-voice playback left running while the user backgrounds the app
+    // would otherwise keep the mic hot / audio playing silently in the background — stop both
+    // on ON_STOP, not just when this screen leaves the composition.
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                stopRecordingIfActive()
+                engine.stop()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    val arabicVoiceLabel = stringResource(R.string.voice_language_arabic)
+
     Column(Modifier.fillMaxSize().padding(20.dp)) {
-        Text("Speaking Lab", style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
-        Text("Record, compare against the native voice, repeat.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.speaking_lab_title), style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
+        Text(stringResource(R.string.speaking_lab_subtitle), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
         LazyRow(Modifier.padding(top = 16.dp)) {
-            items(words) { word ->
+            items(words, key = { it.id }) { word ->
                 FilterChip(
                     selected = selectedWord?.id == word.id,
                     onClick = { selectedWord = word },
@@ -114,15 +148,23 @@ fun SpeakingLabScreen() {
                     Text("${word.transliteration} · ${word.english}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
                     Row(Modifier.padding(top = 20.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Button(onClick = { if (engineReady) engine.speakChunk(word.arabic, "native_${word.id}") }) {
-                            Text("Hear Native Voice")
+                        Button(onClick = {
+                            if (!engineReady) return@Button
+                            val readiness = VoiceDataManager.readinessFor(engine.isLanguageAvailable(ArabicTtsEngine.ARABIC_MSA))
+                            if (readiness == VoiceReadiness.READY) {
+                                engine.speakChunk(word.arabic, "native_${word.id}")
+                            } else {
+                                showVoiceMissingDialog = true
+                            }
+                        }) {
+                            Text(stringResource(R.string.speaking_lab_hear_native))
                         }
                     }
 
                     Row(Modifier.padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         if (!hasMicPermission) {
                             Button(onClick = { permissionLauncher.launch(Manifest.permission.RECORD_AUDIO) }) {
-                                Text("Grant Microphone Access")
+                                Text(stringResource(R.string.speaking_lab_grant_mic))
                             }
                         } else {
                             Button(
@@ -153,7 +195,7 @@ fun SpeakingLabScreen() {
                                     contentColor = SultanColors.RoyalNavyDeep
                                 )
                             ) {
-                                Text(if (isRecording) "Stop Recording" else "Record My Voice")
+                                Text(stringResource(if (isRecording) R.string.speaking_lab_stop_recording else R.string.speaking_lab_record))
                             }
 
                             if (hasRecording && !isRecording) {
@@ -175,7 +217,7 @@ fun SpeakingLabScreen() {
                                         )
                                     }
                                 }) {
-                                    Text("Play My Recording")
+                                    Text(stringResource(R.string.speaking_lab_play_recording))
                                 }
                             }
                         }
@@ -184,11 +226,18 @@ fun SpeakingLabScreen() {
             }
         } else {
             Text(
-                "Select a word above to begin a practice session.",
+                stringResource(R.string.speaking_lab_select_word_hint),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 24.dp)
             )
         }
+    }
+
+    if (showVoiceMissingDialog) {
+        VoiceDataMissingDialog(
+            languageLabel = arabicVoiceLabel,
+            onDismiss = { showVoiceMissingDialog = false }
+        )
     }
 }

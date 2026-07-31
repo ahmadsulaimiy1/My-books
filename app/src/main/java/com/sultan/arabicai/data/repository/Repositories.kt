@@ -22,7 +22,6 @@ import com.sultan.arabicai.data.local.entity.ScholarRank
 import com.sultan.arabicai.data.local.entity.StudySessionEntity
 import com.sultan.arabicai.data.local.entity.UserStatsEntity
 import com.sultan.arabicai.data.local.entity.VocabWordEntity
-import com.sultan.arabicai.domain.gamification.RankEngine
 import com.sultan.arabicai.domain.quiz.QuizGenerator
 import com.sultan.arabicai.domain.srs.RecallQuality
 import com.sultan.arabicai.domain.srs.SpacedRepetitionScheduler
@@ -170,7 +169,7 @@ class ProgressRepository(
     fun observeAchievements(): Flow<List<AchievementEntity>> = achievementDao.observeAll()
 
     suspend fun seedAchievementsIfEmpty(achievements: List<AchievementEntity>) {
-        achievementDao.upsertAll(achievements)
+        if (achievementDao.count() == 0) achievementDao.upsertAll(achievements)
     }
 
     suspend fun unlock(key: String, nowEpochMillis: Long = System.currentTimeMillis()) {

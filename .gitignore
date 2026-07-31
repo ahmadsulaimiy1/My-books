@@ -9,3 +9,6 @@ captures/
 .cxx/
 app/build/
 *.hprof
+keystore.properties
+*.keystore
+*.jks

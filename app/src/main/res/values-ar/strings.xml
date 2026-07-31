@@ -1,37 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">سلطان: الذكاء الاصطناعي للغة العربية</string>
-    <string name="app_tagline">التدريب السعودي المتكامل للغة العربية</string>
 
+    <!-- Onboarding -->
+    <string name="onboarding_kicker">سلطان للذكاء الاصطناعي</string>
+    <string name="onboarding_edition">إصدار رؤية 2030 الرائد</string>
     <string name="onboarding_welcome_title">معيار رائد لإتقان اللغة العربية</string>
-    <string name="onboarding_welcome_subtitle">مستوحى من طموح رؤية 2030</string>
+    <string name="onboarding_welcome_subtitle">يضم كتاب سلطان: المستوى المتوسط الثاني للمؤلف أحمد سليمي، ومعلماً ذكياً يعمل دون اتصال، ومختبر تحدث مصمم للدارسين والسفراء وكبار الدارسين.</string>
     <string name="onboarding_cta_begin">ابدأ رحلتك</string>
 
+    <!-- Auth -->
     <string name="auth_biometric_title">افتح سلطان للذكاء الاصطناعي</string>
     <string name="auth_biometric_subtitle">استخدم بصمتك أو وجهك للمتابعة</string>
+    <string name="auth_biometric_authenticate">تحقق من الهوية</string>
     <string name="auth_biometric_negative">استخدام كلمة المرور بدلاً من ذلك</string>
-    <string name="auth_biometric_not_available">المصادقة البيومترية غير متاحة على هذا الجهاز. سيتم المتابعة بالوصول القياسي.</string>
 
+    <!-- Dashboard -->
     <string name="dashboard_title">نظرة تنفيذية عامة</string>
-    <string name="dashboard_learning_hours">ساعات التعلم</string>
+    <string name="dashboard_streak_xp">%1$d يوماً متتالياً · %2$d نقطة خبرة</string>
+    <string name="dashboard_section_this_week">هذا الأسبوع</string>
+    <string name="dashboard_section_skill_analytics">تحليلات المهارات</string>
+    <string name="dashboard_section_recent_sessions">الجلسات الأخيرة</string>
+    <string name="dashboard_learning_minutes">دقائق التعلم</string>
+    <string name="dashboard_minutes_value">%1$d دقيقة</string>
     <string name="dashboard_lessons_completed">الدروس المكتملة</string>
-    <string name="dashboard_vocabulary_mastered">المفردات المتقنة</string>
-    <string name="dashboard_speaking_score">درجة التحدث</string>
-    <string name="dashboard_listening_score">درجة الاستماع</string>
-    <string name="dashboard_grammar_score">درجة القواعد</string>
+    <string name="dashboard_vocabulary_reviewed">المفردات المراجعة</string>
+    <string name="dashboard_monthly_minutes">الدقائق الشهرية</string>
+    <string name="dashboard_speaking_score">التحدث</string>
+    <string name="dashboard_listening_score">الاستماع</string>
+    <string name="dashboard_grammar_score">القواعد</string>
+    <string name="dashboard_percent_value">%1$d%%</string>
+    <string name="dashboard_session_day">اليوم %1$d</string>
+    <string name="dashboard_session_summary">%1$d دقيقة · %2$d دروس</string>
 
+    <!-- Library -->
     <string name="library_title">المكتبة الرقمية</string>
-    <string name="library_book_sultan_2">سلطان: الكتاب المتوسط الثاني</string>
-    <string name="library_book_sultan_2_author">أحمد سليمي</string>
+    <string name="library_subtitle">PDF وEPUB وDOCX وTXT وHTML — كل الصيغ، دون اتصال بالإنترنت.</string>
+    <string name="library_action_read">قراءة</string>
+    <string name="library_action_lessons">الدروس</string>
+    <string name="library_book_byline">بقلم %1$s · %2$s</string>
+    <string name="proficiency_level_beginner">مبتدئ</string>
+    <string name="proficiency_level_intermediate">متوسط</string>
+    <string name="proficiency_level_advanced">متقدم</string>
+    <string name="proficiency_level_scholar">مستوى الدارس</string>
 
+    <!-- PDF Reader -->
+    <string name="pdf_reader_add_note">إضافة ملاحظة</string>
+    <string name="pdf_reader_bookmark">إشارة مرجعية</string>
+    <string name="pdf_reader_previous_page">الصفحة السابقة</string>
+    <string name="pdf_reader_next_page">الصفحة التالية</string>
+    <string name="pdf_reader_page_indicator">الصفحة %1$d من %2$d</string>
+    <string name="pdf_reader_page_content_description">الصفحة %1$d</string>
+    <string name="pdf_reader_load_error">تعذر فتح هذا الكتاب. حاول إغلاق المكتبة وإعادة فتحها.</string>
+
+    <!-- Lessons -->
+    <string name="lessons_title">الدروس</string>
+    <string name="lesson_unit_number">الوحدة %1$d</string>
+    <string name="lesson_summary">%1$d دقيقة · %2$s</string>
+    <string name="lesson_tap_word_hint">اضغط على أي كلمة لعرض الترجمة والجذر والقواعد</string>
+    <string name="lesson_speaking_practice">تدريب التحدث</string>
+    <string name="lesson_speed_label">السرعة: %1$s×</string>
+    <string name="lesson_action_play">تشغيل</string>
+    <string name="lesson_action_pause">إيقاف مؤقت</string>
+    <string name="lesson_action_repeat">إعادة</string>
+    <string name="lesson_loop_on">التكرار: مفعّل</string>
+    <string name="lesson_loop_off">التكرار: متوقف</string>
+    <string name="lesson_grammar_focus">التركيز النحوي</string>
+    <string name="lesson_start_quiz">ابدأ اختبار هذا الدرس</string>
+    <string name="lesson_word_translation">الترجمة: %1$s</string>
+    <string name="lesson_word_transliteration">النطق: %1$s</string>
+    <string name="lesson_word_root">الجذر: %1$s</string>
+    <string name="lesson_word_part_of_speech">نوع الكلمة: %1$s</string>
+    <string name="lesson_word_synonyms">المرادفات: %1$s</string>
+    <string name="lesson_word_antonyms">الأضداد: %1$s</string>
+
+    <string name="reading_mode_word">كلمة</string>
+    <string name="reading_mode_sentence">جملة</string>
+    <string name="reading_mode_paragraph">فقرة</string>
+    <string name="delivery_preset_native_pace">وتيرة طبيعية</string>
+    <string name="delivery_preset_slow_learning">تعلم بطيء</string>
+    <string name="delivery_preset_teacher_mode">وضع المعلم</string>
+    <string name="delivery_preset_child_mode">وضع الطفل</string>
+
+    <!-- Vocabulary -->
     <string name="vocabulary_title">بنك المفردات</string>
+    <string name="vocabulary_word_count">%1$d كلمة · مدعوم بالتكرار المتباعد</string>
+    <string name="vocabulary_review_due">مراجعة البطاقات المستحقة</string>
+    <string name="vocabulary_word_root">الجذر: %1$s</string>
+    <string name="vocabulary_favourite">المفضلة</string>
+    <string name="vocabulary_mark_difficult">تحديد كصعبة</string>
+
+    <!-- Flashcards -->
     <string name="flashcards_title">البطاقات التعليمية</string>
+    <string name="flashcards_progress">%1$d تمت مراجعتها · %2$d متبقية</string>
+    <string name="flashcards_tap_to_reveal">اضغط للكشف</string>
+    <string name="flashcards_root">الجذر: %1$s</string>
+    <string name="flashcards_none_due">لا توجد بطاقات مستحقة الآن — تحقق لاحقاً أو ادرس درساً جديداً.</string>
+    <string name="flashcards_done">تم</string>
+    <string name="flashcards_recall_prompt">ما مدى تذكرك لهذه الكلمة؟</string>
+    <string name="flashcards_grade_again">إعادة</string>
+    <string name="flashcards_grade_hard">صعبة</string>
+    <string name="flashcards_grade_good">جيدة</string>
+    <string name="flashcards_grade_easy">سهلة</string>
 
+    <!-- Quiz -->
     <string name="quiz_title">مركز التقييم</string>
+    <string name="quiz_subtitle">توليد اختبارات على الجهاز من بنك مفرداتك — دون الحاجة للإنترنت.</string>
+    <string name="quiz_generate">إنشاء اختبار</string>
+    <string name="quiz_question_progress">السؤال %1$d من %2$d</string>
+    <string name="quiz_action_next">التالي</string>
+    <string name="quiz_action_finish">إنهاء</string>
+    <string name="quiz_complete_title">اكتمل التقييم</string>
+    <string name="quiz_score">%1$d من %2$d إجابات صحيحة</string>
+    <string name="quiz_new_assessment">تقييم جديد</string>
+    <string name="quiz_difficulty_easy">سهل</string>
+    <string name="quiz_difficulty_medium">متوسط</string>
+    <string name="quiz_difficulty_hard">صعب</string>
+    <string name="quiz_difficulty_scholar">مستوى الدارس</string>
 
+    <!-- Speaking Lab -->
     <string name="speaking_lab_title">مختبر التحدث</string>
+    <string name="speaking_lab_subtitle">سجّل صوتك، قارنه بالنطق الأصلي، وكرر المحاولة.</string>
+    <string name="speaking_lab_hear_native">استماع للنطق الأصلي</string>
+    <string name="speaking_lab_grant_mic">السماح باستخدام الميكروفون</string>
+    <string name="speaking_lab_record">تسجيل صوتي</string>
+    <string name="speaking_lab_stop_recording">إيقاف التسجيل</string>
+    <string name="speaking_lab_play_recording">تشغيل تسجيلي</string>
+    <string name="speaking_lab_select_word_hint">اختر كلمة أعلاه لبدء جلسة تدريب.</string>
 
+    <!-- Voice data availability -->
+    <string name="voice_missing_title">بيانات الصوت مطلوبة</string>
+    <string name="voice_missing_message">بيانات صوت %1$s غير مثبتة على هذا الجهاز.</string>
+    <string name="voice_missing_details">يتولى محرك تحويل النص إلى كلام في جهازك تنزيل الأصوات مباشرة. سيؤدي الضغط على \"تنزيل الصوت\" إلى فتح مدير بيانات الصوت في النظام، حيث يمكنك تثبيت العربية أو الإنجليزية أو أي لغة أخرى مدعومة. إذا كان المحرك نفسه مفقوداً أو قديماً، استخدم \"فتح إعدادات تحويل النص إلى كلام\" لتغيير المحرك أو التحقق من التحديثات.</string>
+    <string name="voice_missing_action_learn_more">معرفة المزيد</string>
+    <string name="voice_missing_action_hide_details">إخفاء التفاصيل</string>
+    <string name="voice_missing_action_download">تنزيل الصوت</string>
+    <string name="voice_missing_action_settings">فتح إعدادات تحويل النص إلى كلام</string>
+    <string name="voice_language_arabic">العربية</string>
+
+    <!-- Profile -->
     <string name="profile_title">الملف الشخصي للدارس</string>
+    <string name="profile_xp_streak">%1$d نقطة خبرة إجمالية · %2$d يوماً متتالياً (الأفضل %3$d)</string>
+    <string name="profile_biometric_lock_title">القفل البيومتري</string>
+    <string name="profile_biometric_lock_subtitle">طلب بصمة الإصبع أو الوجه عند فتح التطبيق</string>
+    <string name="profile_view_certificates">عرض شهادات التكريم</string>
+    <string name="profile_achievements">الإنجازات</string>
+    <string name="profile_achievement_unlocked">مفتوح</string>
+    <string name="profile_achievement_locked">مغلق</string>
     <string name="rank_beginner">مبتدئ</string>
     <string name="rank_student">طالب</string>
     <string name="rank_scholar">دارس</string>
@@ -42,5 +157,18 @@
     <string name="rank_elite_scholar">دارس النخبة</string>
     <string name="rank_grand_scholar">الدارس الأكبر</string>
 
+    <!-- Certificates -->
     <string name="certificates_title">شهادات التكريم</string>
+    <string name="certificates_recipient_name">اسم المستلم</string>
+    <string name="certificates_default_recipient">الدارس</string>
+    <string name="certificates_level_label">المستوى: %1$s</string>
+    <string name="certificates_issue">إصدار الشهادة</string>
+    <string name="certificates_verification">رمز التحقق: %1$s</string>
+    <string name="certificates_share">مشاركة الشهادة PDF</string>
+    <string name="certificates_share_chooser_title">مشاركة الشهادة</string>
+    <string name="certificate_level_course_completion">إتمام الدورة</string>
+    <string name="certificate_level_excellence">التميز</string>
+    <string name="certificate_level_distinction">الامتياز</string>
+    <string name="certificate_level_honour">الشرف</string>
+    <string name="certificate_level_grand_honour">الشرف الكبرى</string>
 </resources>

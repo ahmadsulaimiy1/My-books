@@ -1,9 +1,22 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
 }
+
+// Release signing reads from a gitignored keystore.properties (see keystore.properties.example
+// at the repo root for the expected format) rather than any secret committed to source control.
+// If that file doesn't exist — as in this repository, since no real signing key is available —
+// the release build simply isn't signed; it still compiles and can be inspected/tested locally,
+// but distributing it requires supplying real keystore.properties out-of-band.
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) load(keystorePropertiesFile.inputStream())
+}
+val hasReleaseSigningConfig = keystorePropertiesFile.exists()
 
 android {
     namespace = "com.sultan.arabicai"
@@ -19,10 +32,24 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        if (hasReleaseSigningConfig) {
+            create("release") {
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            if (hasReleaseSigningConfig) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
         debug {
             isMinifyEnabled = false
@@ -74,8 +101,10 @@ dependencies {
     implementation("androidx.biometric:biometric:1.1.0")
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
-    // Background sync scaffold (offline -> online reconciliation)
-    implementation("androidx.work:work-runtime-ktx:2.10.0")
+    // NOTE: WorkManager (androidx.work:work-runtime-ktx) was removed here — it was declared
+    // for the Phase 7 background-sync roadmap item but had zero call sites anywhere in the
+    // app (flagged as a dead dependency in the Phase 2 audit). Re-add it when Phase 7's sync
+    // work actually begins.
 
     // Certificate QR verification codes
     implementation("com.google.zxing:core:3.5.3")

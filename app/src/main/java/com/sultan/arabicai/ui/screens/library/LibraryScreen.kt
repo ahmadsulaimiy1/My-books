@@ -1,7 +1,6 @@
 package com.sultan.arabicai.ui.screens.library
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,14 +15,18 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sultan.arabicai.R
 import com.sultan.arabicai.data.local.entity.BookEntity
+import com.sultan.arabicai.data.local.entity.ProficiencyLevel
 import com.sultan.arabicai.di.LocalAppContainer
 
 @Composable
@@ -39,15 +42,15 @@ fun LibraryScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            Text("Digital Library", style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
+            Text(stringResource(R.string.library_title), style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
             Text(
-                "PDF, EPUB, DOCX, TXT, HTML — every format, fully offline.",
+                stringResource(R.string.library_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
-        items(books) { book ->
+        items(books, key = { it.id }) { book ->
             BookCard(book, onOpenReader = { onOpenReader(book.id) }, onOpenLessons = { onOpenLessons(book.id) })
         }
     }
@@ -71,23 +74,23 @@ private fun BookCard(book: BookEntity, onOpenReader: () -> Unit, onOpenLessons: 
             Column(Modifier.padding(start = 16.dp).weight(1f)) {
                 Text(book.titleEn, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
                 Text(book.titleAr, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("by ${book.author} · ${book.level}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.library_book_byline, book.author, stringResource(proficiencyLevelLabel(book.level))), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
-                Row(Modifier.padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Text(
-                        "Read",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.clickable(onClick = onOpenReader)
-                    )
-                    Text(
-                        "Lessons",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.clickable(onClick = onOpenLessons)
-                    )
+                Row(Modifier.padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    // Real buttons rather than clickable Text: guaranteed touch target size,
+                    // Role.Button semantics, and focus/pressed-state styling for screen-reader
+                    // and D-pad/keyboard navigation.
+                    TextButton(onClick = onOpenReader) { Text(stringResource(R.string.library_action_read)) }
+                    TextButton(onClick = onOpenLessons) { Text(stringResource(R.string.library_action_lessons)) }
                 }
             }
         }
     }
+}
+
+private fun proficiencyLevelLabel(level: ProficiencyLevel): Int = when (level) {
+    ProficiencyLevel.BEGINNER -> R.string.proficiency_level_beginner
+    ProficiencyLevel.INTERMEDIATE -> R.string.proficiency_level_intermediate
+    ProficiencyLevel.ADVANCED -> R.string.proficiency_level_advanced
+    ProficiencyLevel.SCHOLAR -> R.string.proficiency_level_scholar
 }

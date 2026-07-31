@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- INTERNET, ACCESS_NETWORK_STATE, and POST_NOTIFICATIONS were removed here — the Phase 2
+         audit found zero networking or notification code anywhere in the app, so declaring
+         them was unused attack-surface expansion. Re-add INTERNET/ACCESS_NETWORK_STATE when
+         Phase 7 (cloud sync/backend) actually lands, and POST_NOTIFICATIONS when a real
+         notification feature ships. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".SultanApplication"

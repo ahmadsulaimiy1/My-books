@@ -58,6 +58,26 @@ class ArabicTtsEngine(private val context: Context) {
             result == TextToSpeech.LANG_COUNTRY_VAR_AVAILABLE
     }
 
+    /**
+     * Non-mutating check for whether [locale]'s voice data is actually installed — unlike
+     * [selectLocale], this never changes the engine's active language, so it's safe to call
+     * before every playback action to decide whether to show [VoiceDataManager]'s recovery UI
+     * instead of silently attempting (and possibly failing) speech synthesis.
+     */
+    fun isLanguageAvailable(locale: Locale): Int =
+        tts?.isLanguageAvailable(locale) ?: TextToSpeech.LANG_NOT_SUPPORTED
+
+    /** Human-readable labels of every TTS engine installed on the device (e.g. "Google Speech Services"). */
+    fun installedEngineLabels(): List<String> =
+        tts?.engines?.map { it.label } ?: emptyList()
+
+    /** The label of whichever engine is currently active, if resolvable. */
+    fun currentEngineLabel(): String? {
+        val engine = tts ?: return null
+        val defaultPackage = engine.defaultEngine ?: return null
+        return engine.engines?.firstOrNull { it.name == defaultPackage }?.label ?: defaultPackage
+    }
+
     fun availableVoicesFor(languageTag: String): List<VoiceProfile> {
         val voices: Set<Voice> = tts?.voices ?: emptySet()
         return voices

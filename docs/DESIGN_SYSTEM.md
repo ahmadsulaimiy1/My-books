@@ -22,6 +22,22 @@ like the splash screen) — the two **must** stay numerically identical.
 Rank tiers (`SultanColors.Tier*`) give each of the nine `ScholarRank` levels a distinct accent,
 ascending in prestige — cooler, quieter tones for early ranks, gold tones for the top two.
 
+### Contrast
+
+Text/background pairs are checked against WCAG's relative-luminance contrast formula
+(4.5:1 minimum for normal text, 3:1 for large text/UI components). The one pairing that failed
+an audit pass — light theme's `onSecondary` on `secondary` — has been fixed:
+
+| Pair | Ratio | Result |
+|---|---|---|
+| Royal Gold on Royal Navy Deep (dark theme primary) | ≈7.7:1 | Pass (AAA) |
+| Silver on Royal Navy (dark theme body text) | ≈7.3:1 | Pass |
+| Pure White on Royal Gold Dim (light theme, **previous** `onSecondary`) | ≈3.8:1 | **Fail** (below 4.5:1) |
+| Ink Black on Royal Gold Dim (light theme, **current** `onSecondary`) | ≈5.25:1 | Pass |
+
+If you introduce a new colour pairing, check it against this table's method before shipping —
+white text reads as premium on navy but not on a mid-tone gold; dark text does.
+
 ## Typography
 
 `ui/theme/Type.kt` defines the Material 3 type scale plus a dedicated `ArabicType` scale (larger

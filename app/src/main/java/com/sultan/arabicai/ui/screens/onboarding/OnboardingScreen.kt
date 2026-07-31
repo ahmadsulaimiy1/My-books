@@ -16,9 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.sultan.arabicai.R
 import com.sultan.arabicai.ui.theme.SultanColors
 
 @Composable
@@ -38,20 +40,20 @@ fun OnboardingScreen(onBegin: () -> Unit) {
             EightPointSeal()
 
             Text(
-                "SULTAN ARABIC AI",
+                stringResource(R.string.onboarding_kicker),
                 color = SultanColors.RoyalGoldBright,
                 style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier.padding(top = 32.dp)
             )
             Text(
-                "Saudi Vision 2030 Flagship Edition",
+                stringResource(R.string.onboarding_edition),
                 color = SultanColors.Silver,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp)
             )
 
             Text(
-                "A Flagship Standard of Arabic Mastery",
+                stringResource(R.string.onboarding_welcome_title),
                 color = SultanColors.Platinum,
                 style = MaterialTheme.typography.displayMedium,
                 textAlign = TextAlign.Center,
@@ -59,8 +61,7 @@ fun OnboardingScreen(onBegin: () -> Unit) {
                 modifier = Modifier.padding(top = 40.dp)
             )
             Text(
-                "Featuring SULTAN: Intermediate Book 2 by Ahmad Sulaimiy, an offline AI tutor, " +
-                    "and a speaking lab built for scholars, ambassadors, and grand scholars alike.",
+                stringResource(R.string.onboarding_welcome_subtitle),
                 color = SultanColors.Silver,
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
@@ -77,7 +78,7 @@ fun OnboardingScreen(onBegin: () -> Unit) {
                     contentColor = SultanColors.RoyalNavyDeep
                 )
             ) {
-                Text("Begin Your Journey", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.onboarding_cta_begin), style = MaterialTheme.typography.titleMedium)
             }
         }
     }

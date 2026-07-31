@@ -26,9 +26,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.collectAsState
 import androidx.core.content.FileProvider
+import com.sultan.arabicai.R
 import com.sultan.arabicai.certificate.CertificateGenerator
 import com.sultan.arabicai.data.local.entity.CertificateEntity
 import com.sultan.arabicai.data.local.entity.CertificateLevel
@@ -45,24 +47,26 @@ fun CertificatesScreen() {
     val scope = rememberCoroutineScope()
 
     val certificates by container.certificateRepository.observeAll().collectAsState(initial = emptyList())
-    var recipientName by remember { mutableStateOf("Learner") }
+    val defaultRecipient = stringResource(R.string.certificates_default_recipient)
+    var recipientName by remember { mutableStateOf(defaultRecipient) }
     var levelMenuOpen by remember { mutableStateOf(false) }
     var selectedLevel by remember { mutableStateOf(CertificateLevel.COURSE_COMPLETION) }
+    val shareChooserTitle = stringResource(R.string.certificates_share_chooser_title)
 
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            Text("Certificates of Honour", style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
+            Text(stringResource(R.string.certificates_title), style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
 
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), modifier = Modifier.padding(top = 16.dp)) {
                 Column(Modifier.padding(16.dp)) {
-                    TextField(value = recipientName, onValueChange = { recipientName = it }, label = { Text("Recipient name") }, modifier = Modifier.fillMaxWidth())
+                    TextField(value = recipientName, onValueChange = { recipientName = it }, label = { Text(stringResource(R.string.certificates_recipient_name)) }, modifier = Modifier.fillMaxWidth())
 
                     Box {
                         Text(
-                            "Level: ${selectedLevel.name.replace('_', ' ')}",
+                            stringResource(R.string.certificates_level_label, stringResource(certificateLevelLabel(selectedLevel))),
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier
                                 .padding(top = 12.dp)
@@ -71,7 +75,7 @@ fun CertificatesScreen() {
                         )
                         DropdownMenu(expanded = levelMenuOpen, onDismissRequest = { levelMenuOpen = false }) {
                             CertificateLevel.entries.forEach { level ->
-                                DropdownMenuItem(text = { Text(level.name.replace('_', ' ')) }, onClick = { selectedLevel = level; levelMenuOpen = false })
+                                DropdownMenuItem(text = { Text(stringResource(certificateLevelLabel(level))) }, onClick = { selectedLevel = level; levelMenuOpen = false })
                             }
                         }
                     }
@@ -85,7 +89,7 @@ fun CertificatesScreen() {
                                     titleAr = titleAr,
                                     titleEn = titleEn,
                                     level = selectedLevel,
-                                    recipientName = recipientName.ifBlank { "Learner" },
+                                    recipientName = recipientName.ifBlank { defaultRecipient },
                                     issuedAtEpochMillis = System.currentTimeMillis(),
                                     verificationCode = code,
                                     filePath = ""
@@ -96,18 +100,18 @@ fun CertificatesScreen() {
                         },
                         modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
                     ) {
-                        Text("Issue Certificate")
+                        Text(stringResource(R.string.certificates_issue))
                     }
                 }
             }
         }
 
-        items(certificates) { certificate ->
+        items(certificates, key = { it.id }) { certificate ->
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
                 Column(Modifier.padding(16.dp)) {
                     Text(certificate.titleEn, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
                     Text(certificate.recipientName, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Text("Verification: ${certificate.verificationCode}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.certificates_verification, certificate.verificationCode), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Button(
                         onClick = {
                             val file = File(certificate.filePath)
@@ -118,15 +122,23 @@ fun CertificatesScreen() {
                                     putExtra(Intent.EXTRA_STREAM, uri)
                                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                                 }
-                                context.startActivity(Intent.createChooser(intent, "Share certificate"))
+                                context.startActivity(Intent.createChooser(intent, shareChooserTitle))
                             }
                         },
                         modifier = Modifier.padding(top = 8.dp)
                     ) {
-                        Text("Share PDF")
+                        Text(stringResource(R.string.certificates_share))
                     }
                 }
             }
         }
     }
+}
+
+private fun certificateLevelLabel(level: CertificateLevel): Int = when (level) {
+    CertificateLevel.COURSE_COMPLETION -> R.string.certificate_level_course_completion
+    CertificateLevel.EXCELLENCE -> R.string.certificate_level_excellence
+    CertificateLevel.DISTINCTION -> R.string.certificate_level_distinction
+    CertificateLevel.HONOUR -> R.string.certificate_level_honour
+    CertificateLevel.GRAND_HONOUR -> R.string.certificate_level_grand_honour
 }

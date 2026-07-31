@@ -17,9 +17,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.NavigateBefore
+import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.BookmarkBorder
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -34,7 +34,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sultan.arabicai.R
 import com.sultan.arabicai.di.LocalAppContainer
 import com.sultan.arabicai.ui.theme.SultanColors
 import java.io.File
@@ -46,6 +48,9 @@ import kotlinx.coroutines.withContext
  * Real PDF rendering via the platform [PdfRenderer] — no third-party PDF library required.
  * Assets can't be opened by [PdfRenderer] directly (it needs a real file descriptor), so the
  * bundled book is copied into the app's cache directory once on first open.
+ *
+ * Opening the book (asset copy + PdfRenderer construction) and rendering each page both run on
+ * [Dispatchers.IO] via [LaunchedEffect] — none of it runs synchronously on the main thread.
  */
 @Composable
 fun PdfReaderScreen(bookId: Long) {
@@ -54,6 +59,8 @@ fun PdfReaderScreen(bookId: Long) {
 
     var book by remember { mutableStateOf<com.sultan.arabicai.data.local.entity.BookEntity?>(null) }
     var renderer by remember { mutableStateOf<PdfRenderer?>(null) }
+    var pfd by remember { mutableStateOf<ParcelFileDescriptor?>(null) }
+    var loadError by remember { mutableStateOf(false) }
     var pageIndex by remember { mutableIntStateOf(0) }
     var pageBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
@@ -61,17 +68,33 @@ fun PdfReaderScreen(bookId: Long) {
         book = container.libraryRepository.getBook(bookId)
     }
 
-    DisposableEffect(book) {
-        val currentBook = book
-        var fd: ParcelFileDescriptor? = null
-        if (currentBook != null) {
-            val file = copyAssetToCache(context, currentBook.assetPath)
-            fd = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-            renderer = PdfRenderer(fd)
+    // Opening the book is real disk I/O (asset copy + PdfRenderer construction) — always off
+    // the main thread, and guarded so a corrupt/missing asset surfaces as an error state
+    // instead of crashing the screen.
+    LaunchedEffect(book) {
+        val currentBook = book ?: return@LaunchedEffect
+        val opened = withContext(Dispatchers.IO) {
+            runCatching {
+                val file = copyAssetToCache(context, currentBook.assetPath)
+                val descriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+                descriptor to PdfRenderer(descriptor)
+            }
         }
+        opened.onSuccess { (descriptor, r) ->
+            pfd = descriptor
+            renderer = r
+        }.onFailure {
+            loadError = true
+        }
+    }
+
+    // Cleanup runs once, when the screen itself leaves composition — reads whichever
+    // renderer/descriptor are current at that point, not whatever existed when this effect
+    // was installed.
+    DisposableEffect(Unit) {
         onDispose {
             renderer?.close()
-            fd?.close()
+            pfd?.close()
         }
     }
 
@@ -101,16 +124,24 @@ fun PdfReaderScreen(bookId: Long) {
                 modifier = Modifier.weight(1f)
             )
             IconButton(onClick = { /* note-taking hook: container.libraryRepository.addNote(...) */ }) {
-                Icon(Icons.Filled.EditNote, contentDescription = "Add note", tint = SultanColors.RoyalGold)
+                Icon(Icons.Filled.EditNote, contentDescription = stringResource(R.string.pdf_reader_add_note), tint = SultanColors.RoyalGold)
             }
             IconButton(onClick = { /* bookmark hook: container.libraryRepository.addBookmark(...) */ }) {
-                Icon(Icons.Filled.BookmarkBorder, contentDescription = "Bookmark", tint = SultanColors.RoyalGold)
+                Icon(Icons.Filled.BookmarkBorder, contentDescription = stringResource(R.string.pdf_reader_bookmark), tint = SultanColors.RoyalGold)
             }
         }
 
         Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-            pageBitmap?.let { bmp ->
-                Image(bitmap = bmp.asImageBitmap(), contentDescription = "Page ${pageIndex + 1}")
+            when {
+                loadError -> Text(
+                    stringResource(R.string.pdf_reader_load_error),
+                    color = SultanColors.Silver,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                pageBitmap != null -> Image(
+                    bitmap = pageBitmap!!.asImageBitmap(),
+                    contentDescription = stringResource(R.string.pdf_reader_page_content_description, pageIndex + 1)
+                )
             }
         }
 
@@ -119,15 +150,16 @@ fun PdfReaderScreen(bookId: Long) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             IconButton(onClick = { if (pageIndex > 0) pageIndex-- }) {
-                Icon(Icons.Filled.ChevronLeft, contentDescription = "Previous page", tint = SultanColors.RoyalGold)
+                // AutoMirrored so the arrow points the correct direction in RTL layouts too.
+                Icon(Icons.AutoMirrored.Filled.NavigateBefore, contentDescription = stringResource(R.string.pdf_reader_previous_page), tint = SultanColors.RoyalGold)
             }
             Text(
-                "Page ${pageIndex + 1} of ${renderer?.pageCount ?: 0}",
+                stringResource(R.string.pdf_reader_page_indicator, pageIndex + 1, renderer?.pageCount ?: 0),
                 color = SultanColors.Silver,
                 style = MaterialTheme.typography.bodyMedium
             )
             IconButton(onClick = { val count = renderer?.pageCount ?: 0; if (pageIndex < count - 1) pageIndex++ }) {
-                Icon(Icons.Filled.ChevronRight, contentDescription = "Next page", tint = SultanColors.RoyalGold)
+                Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = stringResource(R.string.pdf_reader_next_page), tint = SultanColors.RoyalGold)
             }
         }
     }

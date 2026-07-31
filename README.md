@@ -43,7 +43,15 @@ what is planned.
   verification code checkable against the local database.
 - **Security** — biometric (fingerprint/face) login gated to `BIOMETRIC_STRONG` /
   `DEVICE_CREDENTIAL` only, AES‑256‑GCM `EncryptedSharedPreferences` for session state, and a
-  network security config that blocks cleartext traffic outright.
+  network security config that blocks cleartext traffic outright. The Room database itself
+  (lessons, vocabulary, progress, certificates) is **not** encrypted at rest — this is a known,
+  tracked gap, not an oversight; see "Security debt: database encryption" in
+  [`docs/ROADMAP.md`](docs/ROADMAP.md) for why it's deferred and what compensating control is
+  in place today.
+- **Voice data recovery** — before any TTS playback, the app checks whether the requested
+  language's voice data is actually installed (`tts/VoiceDataManager.kt`) and shows a clear,
+  actionable dialog instead of silently failing if it isn't — no Play button appears to do
+  nothing.
 - **Executive dashboard** — learning hours, lessons completed, vocabulary mastered, and
   speaking/listening/grammar analytics, aggregated from real session data.
 
@@ -76,17 +84,59 @@ app/src/main/java/com/sultan/arabicai/
 
 ## Building
 
-This project requires the Android SDK and a network connection able to reach Google's Maven
-repository (`dl.google.com`) to resolve AndroidX/Compose dependencies — neither was available in
-the environment that produced this scaffold, so the code has been written and manually reviewed
-for correctness but **has not been compiled**. To build:
+**Requirements** (exact versions this project is pinned to — see `build.gradle.kts` /
+`app/build.gradle.kts` / `gradle/wrapper/gradle-wrapper.properties`):
+
+| Tool | Version |
+|---|---|
+| JDK | 17 |
+| Gradle (via wrapper — do not use a system Gradle) | 8.10.2 |
+| Android Gradle Plugin | 8.7.2 |
+| Kotlin | 2.0.21 |
+| Compose compiler plugin | 2.0.21 (must match the Kotlin version exactly) |
+| KSP | 2.0.21-1.0.28 |
+| compileSdk / targetSdk | 35 |
+| minSdk | 26 |
+
+Android Studio Ladybug (2024.2) or newer bundles a compatible SDK/toolchain and is the easiest
+path — open the project root and let it sync.
+
+From the command line:
 
 ```bash
-./gradlew assembleDebug
+./gradlew assembleDebug      # unsigned debug APK
+./gradlew assembleRelease    # release APK — unsigned unless keystore.properties exists (see below)
+./gradlew lint                # Android Lint
 ```
 
-Open in Android Studio (Ladybird/Koala or newer) for the smoothest experience — it will offer to
-download the Gradle/AGP toolchain and Android SDK automatically.
+**Honesty note on verification status:** the environment that produced this codebase had no
+Android SDK and no network access to Google's Maven repository (`dl.google.com` — confirmed
+blocked, not just absent), so none of the commands above have actually been run against this
+code. What *has* been done instead, as a substitute:
+
+- A full manual, line-by-line audit of every Kotlin file against the real Compose/Room/
+  Navigation/Biometric/TTS/PdfRenderer/ZXing API surfaces for the pinned versions above (see
+  the Phase 2 audit this project went through — ask in-repo history / PR description for the
+  full report), which found and fixed several real defects.
+- A scripted check that every `.kt` file's package declaration matches its directory path.
+- A scripted check for balanced braces/parens across every file (catches gross structural
+  errors, not semantic ones).
+- A scripted cross-reference of every `R.string.*` reference against both `values/strings.xml`
+  and `values-ar/strings.xml` to confirm 1:1 key parity and no orphaned/unused string resources.
+- A manual "lint-equivalent" pass for the specific classes of issue Android Lint would catch
+  that are checkable without the toolchain: unused imports, unused resources, hardcoded
+  user-facing strings, missing `contentDescription`.
+
+None of this substitutes for actually running `./gradlew assembleDebug`/`lint` on a real
+toolchain — do that before trusting a release build, and treat this project as **audited and
+manually verified, not compiler-verified**, until someone does.
+
+### Signing a release build
+
+Release builds are unsigned by default (see `app/build.gradle.kts`). To sign one, copy
+`keystore.properties.example` to `keystore.properties` (repo root, already gitignored) and fill
+in real values pointing at your own keystore — never commit `keystore.properties` or the
+keystore file itself.
 
 ## Content note
 

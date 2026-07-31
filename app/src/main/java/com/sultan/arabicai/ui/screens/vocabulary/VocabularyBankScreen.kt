@@ -24,7 +24,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sultan.arabicai.R
 import com.sultan.arabicai.data.local.entity.VocabWordEntity
 import com.sultan.arabicai.di.LocalAppContainer
 import com.sultan.arabicai.ui.theme.SultanColors
@@ -41,10 +43,10 @@ fun VocabularyBankScreen(onOpenFlashcards: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item {
-            Text("Vocabulary Bank", style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
-            Text("${words.size} words · spaced repetition powered", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.vocabulary_title), style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
+            Text(stringResource(R.string.vocabulary_word_count, words.size), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Button(onClick = onOpenFlashcards, modifier = Modifier.fillMaxWidth().padding(top = 12.dp)) {
-                Text("Review Due Flashcards")
+                Text(stringResource(R.string.vocabulary_review_due))
             }
         }
 
@@ -65,19 +67,19 @@ private fun VocabRow(word: VocabWordEntity, onToggleFavorite: () -> Unit, onTogg
             Column(Modifier.weight(1f)) {
                 Text(word.arabic, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onSurface)
                 Text("${word.transliteration} · ${word.english}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("Root: ${word.rootLetters}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.vocabulary_word_root, word.rootLetters), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             IconButton(onClick = onToggleFavorite) {
                 Icon(
                     if (word.isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    contentDescription = "Favourite",
+                    contentDescription = stringResource(R.string.vocabulary_favourite),
                     tint = SultanColors.RoyalGold
                 )
             }
             IconButton(onClick = onToggleDifficult) {
                 Icon(
                     Icons.Filled.Flag,
-                    contentDescription = "Mark difficult",
+                    contentDescription = stringResource(R.string.vocabulary_mark_difficult),
                     tint = if (word.isMarkedDifficult) SultanColors.Error else SultanColors.Silver
                 )
             }

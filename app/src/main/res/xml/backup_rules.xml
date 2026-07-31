@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <full-backup-content>
     <exclude domain="sharedpref" path="secure_prefs.xml" />
+    <!-- Compensating control until the Room DB is encrypted at rest — see
+         res/xml/data_extraction_rules.xml and docs/ROADMAP.md for the tracked decision. -->
+    <exclude domain="database" path="sultan_arabic_ai.db" />
+    <exclude domain="database" path="sultan_arabic_ai.db-wal" />
+    <exclude domain="database" path="sultan_arabic_ai.db-shm" />
 </full-backup-content>

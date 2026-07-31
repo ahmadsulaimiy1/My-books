@@ -26,7 +26,9 @@ behind it.
 | Digital library / PDF reader | ✅ | Platform `PdfRenderer`, bundled SULTAN Book 2 |
 | Gamification (ranks, XP, streaks, achievements) | ✅ | `RankEngine.kt`, nine-tier ladder |
 | Luxury certificates with QR verification | ✅ | `CertificateGenerator.kt`, on-device `PdfDocument` + ZXing |
-| Biometric login, encrypted local storage | ✅ | `BiometricAuthManager`, `SecurePreferences` |
+| Biometric login | ✅ | `BiometricAuthManager`, gated to `BIOMETRIC_STRONG`/`DEVICE_CREDENTIAL` |
+| Encrypted session storage | ✅ | `SecurePreferences` — AES-256-GCM `EncryptedSharedPreferences`, scoped to session/auth flags only |
+| Encrypted local **database** (lessons, vocabulary, progress, certificates with PII) | 🚧 | Deliberately deferred — see "Security debt: database encryption" below |
 | Real book content import (replacing starter seed data) | 📋 | Needs a PDF→lesson extraction pipeline (see below) |
 | Tajweed-aware pronunciation mode, Hijazi/Najdi voice styles | 📋 | Stock Android TTS voices are not dialect-specific; needs bundled neural TTS (see Phase 3) |
 | AI pronunciation scoring, accent/mispronunciation detection | 📋 | Needs an on-device ASR/phoneme-alignment model (see Phase 3) |
@@ -41,6 +43,31 @@ by unit/lesson heading, and produce a JSON file matching `LessonEntity`/`VocabWo
 that `ContentSeeder` can load instead of the hand-written starter data. This is a content
 pipeline, not a model — it just wasn't runnable in the environment that produced this scaffold
 (no PDF-parsing libraries were installable).
+
+### Security debt: database encryption (explicitly deferred)
+
+The Phase 2 audit found the Room database (`sultan_arabic_ai.db`) — which holds learning
+history and certificate records containing recipients' full names — is plain, unencrypted
+SQLite. This is a genuine finding, not resolved by this stabilization pass, and it's being
+deferred deliberately rather than silently:
+
+- **Why deferred, not fixed now:** encrypting Room requires wiring in SQLCipher's
+  `SupportFactory` (or an equivalent), a new third-party native dependency, in an environment
+  with no Android SDK or network access to actually compile-test the integration. Adding an
+  unverified crypto dependency is exactly the kind of unchecked claim this stabilization sprint
+  exists to eliminate, not repeat.
+- **Compensating control applied now:** the database is excluded from Android's auto-backup
+  (`res/xml/data_extraction_rules.xml`, `res/xml/backup_rules.xml`) so it can't leave the device
+  via `adb backup` or cloud backup while unencrypted — a real, verifiable, zero-dependency fix
+  applied in this pass.
+- **Documentation corrected:** README.md and this file no longer describe "encrypted local
+  storage" as covering the whole app — only `SecurePreferences` (session/auth flags) is
+  encrypted today.
+- **Concrete follow-up plan:** add `net.zetetic:android-database-sqlcipher` +
+  `androidx.sqlite:sqlite` and pass a `SupportFactory(passphrase)` — with the passphrase itself
+  generated and stored via Android Keystore (the same pattern `SecurePreferences` already uses
+  for its `MasterKey`) — to `Room.databaseBuilder(...).openHelperFactory(supportFactory)` in
+  `AppDatabase.kt`. This needs a real device/emulator to verify before landing.
 
 ## Phase 2 — English learning
 

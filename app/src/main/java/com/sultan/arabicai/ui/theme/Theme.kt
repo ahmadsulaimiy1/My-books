@@ -33,7 +33,10 @@ private val SultanLightColorScheme = lightColorScheme(
     primaryContainer = SultanColors.Platinum,
     onPrimaryContainer = SultanColors.RoyalNavyDeep,
     secondary = SultanColors.RoyalGoldDim,
-    onSecondary = SultanColors.PureWhite,
+    // PureWhite on RoyalGoldDim measures ~3.8:1 (WCAG relative-luminance formula) — fails the
+    // 4.5:1 AA threshold for normal text. InkBlack on the same background measures ~5.25:1,
+    // which passes. See docs/DESIGN_SYSTEM.md for the computed values.
+    onSecondary = SultanColors.InkBlack,
     background = SultanColors.PureWhite,
     onBackground = SultanColors.InkBlack,
     surface = SultanColors.Platinum,

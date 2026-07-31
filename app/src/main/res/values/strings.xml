@@ -1,45 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sultan Arabic AI</string>
-    <string name="app_tagline">Saudi Ultimate Language Training</string>
 
     <!-- Onboarding -->
+    <string name="onboarding_kicker">SULTAN ARABIC AI</string>
+    <string name="onboarding_edition">Saudi Vision 2030 Flagship Edition</string>
     <string name="onboarding_welcome_title">A Flagship Standard of Arabic Mastery</string>
-    <string name="onboarding_welcome_subtitle">Inspired by the ambition of Vision 2030</string>
+    <string name="onboarding_welcome_subtitle">Featuring SULTAN: Intermediate Book 2 by Ahmad Sulaimiy, an offline AI tutor, and a speaking lab built for scholars, ambassadors, and grand scholars alike.</string>
     <string name="onboarding_cta_begin">Begin Your Journey</string>
 
     <!-- Auth -->
     <string name="auth_biometric_title">Unlock Sultan Arabic AI</string>
     <string name="auth_biometric_subtitle">Use your fingerprint or face to continue</string>
+    <string name="auth_biometric_authenticate">Authenticate</string>
     <string name="auth_biometric_negative">Use passcode instead</string>
-    <string name="auth_biometric_not_available">Biometric authentication is not available on this device. Continuing with standard access.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Executive Overview</string>
-    <string name="dashboard_learning_hours">Learning Hours</string>
+    <string name="dashboard_streak_xp">%1$d-day streak · %2$d XP</string>
+    <string name="dashboard_section_this_week">This Week</string>
+    <string name="dashboard_section_skill_analytics">Skill Analytics</string>
+    <string name="dashboard_section_recent_sessions">Recent Sessions</string>
+    <string name="dashboard_learning_minutes">Learning Minutes</string>
+    <string name="dashboard_minutes_value">%1$d min</string>
     <string name="dashboard_lessons_completed">Lessons Completed</string>
-    <string name="dashboard_vocabulary_mastered">Vocabulary Mastered</string>
-    <string name="dashboard_speaking_score">Speaking Score</string>
-    <string name="dashboard_listening_score">Listening Score</string>
-    <string name="dashboard_grammar_score">Grammar Score</string>
+    <string name="dashboard_vocabulary_reviewed">Vocabulary Reviewed</string>
+    <string name="dashboard_monthly_minutes">Monthly Minutes</string>
+    <string name="dashboard_speaking_score">Speaking</string>
+    <string name="dashboard_listening_score">Listening</string>
+    <string name="dashboard_grammar_score">Grammar</string>
+    <string name="dashboard_percent_value">%1$d%%</string>
+    <string name="dashboard_session_day">Day %1$d</string>
+    <string name="dashboard_session_summary">%1$d min · %2$d lessons</string>
 
     <!-- Library -->
     <string name="library_title">Digital Library</string>
-    <string name="library_book_sultan_2">SULTAN: Intermediate Book 2</string>
-    <string name="library_book_sultan_2_author">Ahmad Sulaimiy</string>
+    <string name="library_subtitle">PDF, EPUB, DOCX, TXT, HTML — every format, fully offline.</string>
+    <string name="library_action_read">Read</string>
+    <string name="library_action_lessons">Lessons</string>
+    <string name="library_book_byline">by %1$s · %2$s</string>
+    <string name="proficiency_level_beginner">Beginner</string>
+    <string name="proficiency_level_intermediate">Intermediate</string>
+    <string name="proficiency_level_advanced">Advanced</string>
+    <string name="proficiency_level_scholar">Scholar</string>
+
+    <!-- PDF Reader -->
+    <string name="pdf_reader_add_note">Add note</string>
+    <string name="pdf_reader_bookmark">Bookmark</string>
+    <string name="pdf_reader_previous_page">Previous page</string>
+    <string name="pdf_reader_next_page">Next page</string>
+    <string name="pdf_reader_page_indicator">Page %1$d of %2$d</string>
+    <string name="pdf_reader_page_content_description">Page %1$d</string>
+    <string name="pdf_reader_load_error">This book could not be opened. Try closing and reopening the Library.</string>
+
+    <!-- Lessons -->
+    <string name="lessons_title">Lessons</string>
+    <string name="lesson_unit_number">Unit %1$d</string>
+    <string name="lesson_summary">%1$d min · %2$s</string>
+    <string name="lesson_tap_word_hint">Tap any word for translation, root &amp; grammar</string>
+    <string name="lesson_speaking_practice">Speaking Practice</string>
+    <string name="lesson_speed_label">Speed: %1$s×</string>
+    <string name="lesson_action_play">Play</string>
+    <string name="lesson_action_pause">Pause</string>
+    <string name="lesson_action_repeat">Repeat</string>
+    <string name="lesson_loop_on">Loop: On</string>
+    <string name="lesson_loop_off">Loop: Off</string>
+    <string name="lesson_grammar_focus">Grammar Focus</string>
+    <string name="lesson_start_quiz">Start Quiz for This Lesson</string>
+    <string name="lesson_word_translation">Translation: %1$s</string>
+    <string name="lesson_word_transliteration">Transliteration: %1$s</string>
+    <string name="lesson_word_root">Root: %1$s</string>
+    <string name="lesson_word_part_of_speech">Part of speech: %1$s</string>
+    <string name="lesson_word_synonyms">Synonyms: %1$s</string>
+    <string name="lesson_word_antonyms">Antonyms: %1$s</string>
+
+    <string name="reading_mode_word">Word</string>
+    <string name="reading_mode_sentence">Sentence</string>
+    <string name="reading_mode_paragraph">Paragraph</string>
+    <string name="delivery_preset_native_pace">Native pace</string>
+    <string name="delivery_preset_slow_learning">Slow learning</string>
+    <string name="delivery_preset_teacher_mode">Teacher mode</string>
+    <string name="delivery_preset_child_mode">Child mode</string>
 
     <!-- Vocabulary -->
     <string name="vocabulary_title">Vocabulary Bank</string>
+    <string name="vocabulary_word_count">%1$d words · spaced repetition powered</string>
+    <string name="vocabulary_review_due">Review Due Flashcards</string>
+    <string name="vocabulary_word_root">Root: %1$s</string>
+    <string name="vocabulary_favourite">Favourite</string>
+    <string name="vocabulary_mark_difficult">Mark difficult</string>
+
+    <!-- Flashcards -->
     <string name="flashcards_title">Flashcards</string>
+    <string name="flashcards_progress">%1$d reviewed · %2$d remaining</string>
+    <string name="flashcards_tap_to_reveal">Tap to reveal</string>
+    <string name="flashcards_root">Root: %1$s</string>
+    <string name="flashcards_none_due">No cards due right now — check back later or study a fresh lesson.</string>
+    <string name="flashcards_done">Done</string>
+    <string name="flashcards_recall_prompt">How well did you recall this?</string>
+    <string name="flashcards_grade_again">Again</string>
+    <string name="flashcards_grade_hard">Hard</string>
+    <string name="flashcards_grade_good">Good</string>
+    <string name="flashcards_grade_easy">Easy</string>
 
     <!-- Quiz -->
     <string name="quiz_title">Assessment Centre</string>
+    <string name="quiz_subtitle">On-device quiz generation from your vocabulary bank — no network required.</string>
+    <string name="quiz_generate">Generate Quiz</string>
+    <string name="quiz_question_progress">Question %1$d of %2$d</string>
+    <string name="quiz_action_next">Next</string>
+    <string name="quiz_action_finish">Finish</string>
+    <string name="quiz_complete_title">Assessment Complete</string>
+    <string name="quiz_score">%1$d / %2$d correct</string>
+    <string name="quiz_new_assessment">New Assessment</string>
+    <string name="quiz_difficulty_easy">Easy</string>
+    <string name="quiz_difficulty_medium">Medium</string>
+    <string name="quiz_difficulty_hard">Hard</string>
+    <string name="quiz_difficulty_scholar">Scholar</string>
 
     <!-- Speaking Lab -->
     <string name="speaking_lab_title">Speaking Lab</string>
+    <string name="speaking_lab_subtitle">Record, compare against the native voice, repeat.</string>
+    <string name="speaking_lab_hear_native">Hear Native Voice</string>
+    <string name="speaking_lab_grant_mic">Grant Microphone Access</string>
+    <string name="speaking_lab_record">Record My Voice</string>
+    <string name="speaking_lab_stop_recording">Stop Recording</string>
+    <string name="speaking_lab_play_recording">Play My Recording</string>
+    <string name="speaking_lab_select_word_hint">Select a word above to begin a practice session.</string>
+
+    <!-- Voice data availability -->
+    <string name="voice_missing_title">Voice Data Needed</string>
+    <string name="voice_missing_message">%1$s voice data is not installed on this device.</string>
+    <string name="voice_missing_details">Your device\'s text-to-speech engine handles voice downloads directly. Tapping \"Download Voice\" opens the system voice-data manager, where you can install Arabic, English, or any other supported language. If the engine itself is missing or outdated, use \"Open TTS Settings\" to switch engines or check for updates.</string>
+    <string name="voice_missing_action_learn_more">Learn more</string>
+    <string name="voice_missing_action_hide_details">Hide details</string>
+    <string name="voice_missing_action_download">Download Voice</string>
+    <string name="voice_missing_action_settings">Open TTS Settings</string>
+    <!-- voice_language_english intentionally omitted: no English playback surface exists yet
+         to trigger an English voice-data check (see docs/ROADMAP.md Phase 2). Add it back
+         alongside that work rather than leaving an unused resource in the meantime. -->
+    <string name="voice_language_arabic">Arabic</string>
 
     <!-- Profile -->
     <string name="profile_title">Scholar Profile</string>
+    <string name="profile_xp_streak">%1$d XP total · %2$d-day streak (best %3$d)</string>
+    <string name="profile_biometric_lock_title">Biometric Lock</string>
+    <string name="profile_biometric_lock_subtitle">Require fingerprint or face unlock on launch</string>
+    <string name="profile_view_certificates">View Certificates of Honour</string>
+    <string name="profile_achievements">Achievements</string>
+    <string name="profile_achievement_unlocked">Unlocked</string>
+    <string name="profile_achievement_locked">Locked</string>
     <string name="rank_beginner">Beginner</string>
     <string name="rank_student">Student</string>
     <string name="rank_scholar">Scholar</string>
@@ -52,4 +162,16 @@
 
     <!-- Certificates -->
     <string name="certificates_title">Certificates of Honour</string>
+    <string name="certificates_recipient_name">Recipient name</string>
+    <string name="certificates_default_recipient">Learner</string>
+    <string name="certificates_level_label">Level: %1$s</string>
+    <string name="certificates_issue">Issue Certificate</string>
+    <string name="certificates_verification">Verification: %1$s</string>
+    <string name="certificates_share">Share PDF</string>
+    <string name="certificates_share_chooser_title">Share certificate</string>
+    <string name="certificate_level_course_completion">Course Completion</string>
+    <string name="certificate_level_excellence">Excellence</string>
+    <string name="certificate_level_distinction">Distinction</string>
+    <string name="certificate_level_honour">Honour</string>
+    <string name="certificate_level_grand_honour">Grand Honour</string>
 </resources>

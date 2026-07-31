@@ -25,7 +25,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sultan.arabicai.R
 import com.sultan.arabicai.data.local.entity.VocabWordEntity
 import com.sultan.arabicai.di.LocalAppContainer
 import com.sultan.arabicai.domain.gamification.RankEngine
@@ -47,18 +49,22 @@ fun FlashcardScreen(onFinished: () -> Unit) {
     }
 
     Column(Modifier.fillMaxSize().padding(20.dp), verticalArrangement = Arrangement.Center) {
-        Text("Flashcards", style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
-        Text("$reviewedCount reviewed · ${(queue.size - index).coerceAtLeast(0)} remaining", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.flashcards_title), style = MaterialTheme.typography.displayMedium, color = MaterialTheme.colorScheme.onBackground)
+        Text(
+            stringResource(R.string.flashcards_progress, reviewedCount, (queue.size - index).coerceAtLeast(0)),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
 
         val current = queue.getOrNull(index)
         if (current == null) {
             Text(
-                "No cards due right now — check back later or study a fresh lesson.",
+                stringResource(R.string.flashcards_none_due),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 40.dp)
             )
-            Button(onClick = onFinished, modifier = Modifier.padding(top = 24.dp)) { Text("Done") }
+            Button(onClick = onFinished, modifier = Modifier.padding(top = 24.dp)) { Text(stringResource(R.string.flashcards_done)) }
             return@Column
         }
 
@@ -77,39 +83,39 @@ fun FlashcardScreen(onFinished: () -> Unit) {
                     if (revealed) {
                         Text(current.transliteration, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 12.dp))
                         Text(current.english, style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.primary)
-                        Text("Root: ${current.rootLetters}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.flashcards_root, current.rootLetters), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     } else {
-                        Text("Tap to reveal", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 12.dp))
+                        Text(stringResource(R.string.flashcards_tap_to_reveal), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 12.dp))
                     }
                 }
             }
         }
 
         if (revealed) {
-            Text("How well did you recall this?", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 20.dp))
+            Text(stringResource(R.string.flashcards_recall_prompt), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 20.dp))
             Row {
-                GradeButton("Again", RecallQuality.INCORRECT_FAMILIAR) { grade ->
+                GradeButton(R.string.flashcards_grade_again, RecallQuality.INCORRECT_FAMILIAR) { grade ->
                     scope.launch {
                         container.vocabularyRepository.submitReview(current, grade)
                         container.progressRepository.awardXp(RankEngine.Xp.VOCAB_WORD_MASTERED / 4)
                         reviewedCount++; index++; revealed = false
                     }
                 }
-                GradeButton("Hard", RecallQuality.CORRECT_DIFFICULT) { grade ->
+                GradeButton(R.string.flashcards_grade_hard, RecallQuality.CORRECT_DIFFICULT) { grade ->
                     scope.launch {
                         container.vocabularyRepository.submitReview(current, grade)
                         container.progressRepository.awardXp(RankEngine.Xp.VOCAB_WORD_MASTERED / 2)
                         reviewedCount++; index++; revealed = false
                     }
                 }
-                GradeButton("Good", RecallQuality.CORRECT_HESITANT) { grade ->
+                GradeButton(R.string.flashcards_grade_good, RecallQuality.CORRECT_HESITANT) { grade ->
                     scope.launch {
                         container.vocabularyRepository.submitReview(current, grade)
                         container.progressRepository.awardXp(RankEngine.Xp.VOCAB_WORD_MASTERED)
                         reviewedCount++; index++; revealed = false
                     }
                 }
-                GradeButton("Easy", RecallQuality.CORRECT_PERFECT) { grade ->
+                GradeButton(R.string.flashcards_grade_easy, RecallQuality.CORRECT_PERFECT) { grade ->
                     scope.launch {
                         container.vocabularyRepository.submitReview(current, grade)
                         container.progressRepository.awardXp(RankEngine.Xp.VOCAB_WORD_MASTERED)
@@ -122,8 +128,8 @@ fun FlashcardScreen(onFinished: () -> Unit) {
 }
 
 @Composable
-private fun GradeButton(label: String, quality: RecallQuality, onClick: (RecallQuality) -> Unit) {
+private fun GradeButton(labelRes: Int, quality: RecallQuality, onClick: (RecallQuality) -> Unit) {
     Button(onClick = { onClick(quality) }, modifier = Modifier.padding(4.dp)) {
-        Text(label)
+        Text(stringResource(labelRes))
     }
 }

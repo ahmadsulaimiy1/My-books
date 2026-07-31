@@ -21,8 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.sultan.arabicai.R
 import com.sultan.arabicai.security.BiometricAvailability
 import com.sultan.arabicai.ui.theme.SultanColors
 
@@ -63,13 +65,13 @@ fun BiometricLoginScreen(
             }
 
             Text(
-                "Unlock Sultan Arabic AI",
+                stringResource(R.string.auth_biometric_title),
                 color = SultanColors.Platinum,
                 style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier.padding(top = 32.dp)
             )
             Text(
-                "Use your fingerprint or face to continue",
+                stringResource(R.string.auth_biometric_subtitle),
                 color = SultanColors.Silver,
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
@@ -86,11 +88,11 @@ fun BiometricLoginScreen(
                     contentColor = SultanColors.RoyalNavyDeep
                 )
             ) {
-                Text("Authenticate", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.auth_biometric_authenticate), style = MaterialTheme.typography.titleMedium)
             }
 
             TextButton(onClick = onSkip, modifier = Modifier.padding(top = 8.dp)) {
-                Text("Use passcode instead", color = SultanColors.Silver)
+                Text(stringResource(R.string.auth_biometric_negative), color = SultanColors.Silver)
             }
         }
     }
