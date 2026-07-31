@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Portal | Al-Balagh International Premium College</title>
+<meta name="description" content="The Staff Portal of Al-Balagh International Premium College — the administrative workspace for institutional staff.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#173A63; --navy-dark:#0F2847; --gold:#BC9A4A; --gold-light:#D8C58C;
+    --manuscript:#F6F2E7; --surface:#FFFFFF; --ink:#1C2430; --ink-muted:#4B5568;
+    --border:#E1DACB; --border-dark:#2A3E5C; --emerald:#1E4C43;
+    --radius-sm:6px; --radius-md:8px; --radius-lg:16px;
+    --shadow-1:0 1px 3px rgba(15,40,71,0.08); --shadow-2:0 8px 24px rgba(15,40,71,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:'Inter',sans-serif; color:var(--ink); background:var(--manuscript); -webkit-font-smoothing:antialiased;}
+  [dir="rtl"] body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;}
+  h1,h2,h3{font-family:'Fraunces',serif; margin:0; color:var(--navy);}
+  [dir="rtl"] h1,[dir="rtl"] h2,[dir="rtl"] h3{font-family:'Amiri',serif;}
+  p{margin:0; color:var(--ink-muted); line-height:1.6;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--navy); outline-offset:2px;}
+  .skip-link{position:absolute; left:-999px; top:0; background:#fff; color:var(--navy); padding:12px 20px; z-index:1000;}
+  .skip-link:focus{left:0;}
+
+  .demo-banner{background:#8A6A2E; color:#fff; text-align:center; font-size:12.5px; font-weight:600; padding:8px 16px;}
+  .demo-banner strong{font-weight:700;}
+
+  .portal-shell{display:grid; grid-template-columns:250px 1fr; min-height:100vh;}
+  @media (max-width:900px){ .portal-shell{grid-template-columns:1fr;} }
+
+  .sidebar{background:var(--navy-dark); color:#fff; padding:20px 0; position:sticky; top:0; height:100vh; overflow-y:auto;}
+  @media (max-width:900px){ .sidebar{position:fixed; inset:0 20% 0 0; z-index:200; transform:translateX(-100%); transition:transform .25s ease; height:100vh;} [dir="rtl"] .sidebar{inset:0 0 0 20%; transform:translateX(100%);} .sidebar.open{transform:translateX(0);} }
+  .sidebar-brand{display:flex; align-items:center; gap:10px; padding:0 20px 20px; border-bottom:1px solid var(--border-dark); margin-bottom:14px;}
+  .sidebar-brand span{font-family:'Fraunces',serif; font-size:17px; font-weight:600;}
+  [dir="rtl"] .sidebar-brand span{font-family:'Amiri',serif;}
+  .nav-group{margin-bottom:6px;}
+  .nav-group-label{font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:#7C86A0; padding:14px 20px 6px; font-weight:700;}
+  .nav-item{display:flex; align-items:center; gap:10px; width:100%; text-align:start; background:none; border:none; color:#C7CEDC; padding:10px 20px; font-size:13.5px; font-weight:500; border-inline-start:3px solid transparent;}
+  .nav-item:hover{background:rgba(255,255,255,0.04); color:#fff;}
+  .nav-item.active{background:rgba(255,255,255,0.06); color:#fff; border-inline-start-color:var(--gold);}
+  .sidebar-close{display:none; background:none; border:none; color:#fff; font-size:22px; position:absolute; top:14px; inset-inline-end:14px;}
+  @media (max-width:900px){ .sidebar-close{display:block;} }
+
+  .topbar{background:var(--surface); border-bottom:1px solid var(--border); padding:14px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; position:sticky; top:0; z-index:50;}
+  .topbar-left{display:flex; align-items:center; gap:14px; flex:1;}
+  .menu-toggle{display:none; background:none; border:none; font-size:22px; color:var(--navy);}
+  @media (max-width:900px){ .menu-toggle{display:block;} }
+  .search-box{flex:1; max-width:380px; position:relative;}
+  .search-box input{width:100%; height:40px; border:1px solid var(--border); border-radius:999px; padding:0 16px 0 38px; font-size:13.5px; background:var(--manuscript);}
+  [dir="rtl"] .search-box input{padding:0 38px 0 16px;}
+  .search-box svg{position:absolute; left:14px; top:50%; transform:translateY(-50%);}
+  [dir="rtl"] .search-box svg{left:auto; right:14px;}
+  .topbar-right{display:flex; align-items:center; gap:16px;}
+  .icon-btn{position:relative; background:none; border:none; color:var(--ink-muted); padding:6px;}
+  .icon-btn .dot{position:absolute; top:2px; right:2px; width:8px; height:8px; border-radius:50%; background:#8C4A3A; border:1.5px solid #fff;}
+  .profile-chip{display:flex; align-items:center; gap:8px; padding:6px 12px 6px 6px; border-radius:999px; background:var(--manuscript); border:1px solid var(--border);}
+  [dir="rtl"] .profile-chip{padding:6px 6px 6px 12px;}
+  .profile-avatar{width:28px; height:28px; border-radius:50%; background:var(--navy); display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:700;}
+  .profile-chip span{font-size:12.5px; font-weight:600;}
+
+  .content{padding:32px;}
+  @media (max-width:600px){ .content{padding:20px;} }
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .welcome-banner{background:linear-gradient(135deg,var(--navy) 0%, var(--navy-dark) 100%); border-radius:var(--radius-lg); padding:32px; color:#fff; margin-bottom:28px; display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap;}
+  .welcome-banner h2{color:#fff; font-size:24px; margin-bottom:6px;}
+  .welcome-banner p{color:#C7CEDC; font-size:13.5px;}
+  .welcome-meta{display:flex; gap:24px; flex-wrap:wrap;}
+  .welcome-meta div{font-size:12px; color:#9AA5BD;}
+  .welcome-meta strong{display:block; color:#fff; font-size:14px; font-weight:600;}
+
+  .widget-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-bottom:28px;}
+  @media (max-width:960px){ .widget-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .widget-grid{grid-template-columns:1fr;} }
+  .widget{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px;}
+  .widget .label{font-size:11px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px;}
+  .widget .value{font-size:20px; font-weight:700; color:var(--ink);}
+  .widget .sub{font-size:11.5px; color:var(--ink-muted); margin-top:4px;}
+
+  .two-col{display:grid; grid-template-columns:1.4fr 1fr; gap:22px;}
+  @media (max-width:900px){ .two-col{grid-template-columns:1fr;} }
+  .panel-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:24px; margin-bottom:20px;}
+  .panel-card h3{font-size:17px; margin-bottom:16px;}
+  .list-row{display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); font-size:13.5px;}
+  .list-row:last-child{border-bottom:none;}
+  .badge{display:inline-block; font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:999px;}
+  .badge.ok{background:rgba(30,76,67,0.1); color:#1E4C43;}
+  .badge.warn{background:rgba(188,154,74,0.12); color:#8A6A2E;}
+
+  .module-header{margin-bottom:24px;}
+  .module-header h2{font-size:26px; margin-bottom:8px;}
+  .module-status{display:inline-block; font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px; margin-bottom:16px;}
+  .module-status.building{background:rgba(30,76,67,0.1); color:#1E4C43;}
+  .module-status.planned{background:rgba(188,154,74,0.12); color:#8A6A2E;}
+  .feature-chip-grid{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+  .feature-chip-grid span{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 16px; font-size:12.5px; font-weight:600; color:var(--ink-muted);}
+
+  .rbac-note{background:rgba(188,154,74,0.08); border:1px dashed var(--gold); border-radius:var(--radius-sm); padding:14px 18px; font-size:12.5px; color:var(--ink); margin-top:16px;}
+
+  .id-card{background:linear-gradient(135deg,var(--navy) 0%, var(--navy-dark) 100%); border-radius:var(--radius-lg); padding:28px; color:#fff; max-width:440px; position:relative; overflow:hidden;}
+  .id-card .id-row{display:flex; gap:20px; align-items:center; margin-bottom:20px;}
+  .id-photo{width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.1); border:2px dashed rgba(255,255,255,0.4); display:flex; align-items:center; justify-content:center;}
+  .id-card .qr{width:70px; height:70px; background:#fff; border-radius:var(--radius-sm); margin-top:16px; display:flex; align-items:center; justify-content:center; color:var(--navy); font-size:9px; font-weight:700; text-align:center;}
+  .id-field{font-size:11px; color:#9AA5BD; margin-bottom:2px;}
+  .id-value{font-size:14px; font-weight:600; margin-bottom:10px;}
+  [dir="rtl"] .feature-chip-grid{direction:rtl;}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link" data-i18n="skipLink">Skip to main content</a>
+<div class="demo-banner"><strong data-i18n="demoStrong">Design Preview</strong> — <span data-i18n="demoText">this is a UI/UX demonstration of the Staff Portal, not a live secure account. No real staff data is shown or stored, and no backend is connected.</span></div>
+
+<div class="portal-shell">
+  <aside class="sidebar" id="sidebar" aria-label="Staff portal navigation">
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">✕</button>
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 48 48" width="30" height="30" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
+      <span data-i18n="brandLabel">Staff Portal</span>
+    </div>
+    <nav id="navList">
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navOverview">Overview</div>
+        <button class="nav-item active" data-panel="dashboard" data-i18n="navDashboard">🏠 Dashboard</button>
+        <button class="nav-item" data-panel="staffid" data-i18n="navStaffId">Staff ID</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navAdminWorkspace">Administrative Workspace</div>
+        <button class="nav-item" data-panel="admissions" data-i18n="navAdmissions">Admissions</button>
+        <button class="nav-item" data-panel="registry" data-i18n="navRegistry">Registry</button>
+        <button class="nav-item" data-panel="academicaffairs" data-i18n="navAcademicAffairs">Academic Affairs</button>
+        <button class="nav-item" data-panel="hr" data-i18n="navHR">Human Resources</button>
+        <button class="nav-item" data-panel="finance" data-i18n="navFinance">Finance</button>
+        <button class="nav-item" data-panel="studentaffairs" data-i18n="navStudentAffairs">Student Affairs</button>
+        <button class="nav-item" data-panel="ict" data-i18n="navICT">ICT</button>
+        <button class="nav-item" data-panel="marketing" data-i18n="navMarketing">Marketing</button>
+        <button class="nav-item" data-panel="procurement" data-i18n="navProcurement">Procurement</button>
+        <button class="nav-item" data-panel="qa" data-i18n="navQA">Quality Assurance</button>
+        <button class="nav-item" data-panel="researchadmin" data-i18n="navResearchAdmin">Research Administration</button>
+        <button class="nav-item" data-panel="library" data-i18n="navLibrary">Library</button>
+        <button class="nav-item" data-panel="generaladmin" data-i18n="navGeneralAdmin">General Administration</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navTools">Tools</div>
+        <button class="nav-item" data-panel="documents" data-i18n="navDocuments">Document Management</button>
+        <button class="nav-item" data-panel="aiassistant" data-i18n="navAIAssistant">AI Administrative Assistant</button>
+        <button class="nav-item" data-panel="rbac" data-i18n="navRBAC">Roles &amp; Permissions</button>
+        <button class="nav-item" data-panel="platform" data-i18n="navPlatform">Platform &amp; Integration Readiness</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navAccount">Account</div>
+        <button class="nav-item" data-panel="profile" data-i18n="navProfile">Profile Settings</button>
+      </div>
+    </nav>
+  </aside>
+
+  <div>
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="#8891A6" stroke-width="1.4"/><path d="M11 11l3.5 3.5" stroke="#8891A6" stroke-width="1.4"/></svg>
+          <input type="text" id="searchInput" placeholder="Search staff, documents, tasks, reports...">
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" id="langToggle" aria-label="Switch language" style="font-size:12.5px; font-weight:700; color:var(--navy); width:auto; padding:8px 14px; border:1px solid var(--border); border-radius:999px;">العربية</button>
+        <button class="icon-btn" aria-label="Notifications"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 15c0-1 1-2 1-6a5 5 0 0110 0c0 4 1 5 1 6H4z" stroke="#4B5568" stroke-width="1.5"/><path d="M8 17.5a2 2 0 004 0" stroke="#4B5568" stroke-width="1.5"/></svg><span class="dot"></span></button>
+        <div class="profile-chip"><div class="profile-avatar">SF</div><span data-i18n="profileLabel">Staff Preview</span></div>
+      </div>
+    </header>
+
+    <main class="content" id="main">
+
+      <section class="panel active" data-panel-content="dashboard">
+        <div class="welcome-banner">
+          <div>
+            <h2 data-i18n="welcomeTitle">Welcome to your workspace</h2>
+            <p data-i18n="welcomeBody">This dashboard fills in with your real tasks, approvals, and department data once your staff account is active.</p>
+          </div>
+          <div class="welcome-meta">
+            <div><strong>—</strong><span data-i18n="metaPosition">Position</span></div>
+            <div><strong>—</strong><span data-i18n="metaDepartment">Department</span></div>
+            <div><strong>—</strong><span data-i18n="metaDirectorate">Directorate</span></div>
+            <div><strong data-i18n="metaPreview">Preview</strong><span data-i18n="metaStatus">Employment Status</span></div>
+          </div>
+        </div>
+        <div class="widget-grid">
+          <div class="widget"><div class="label" data-i18n="widgetTasks">Today's Tasks</div><div class="value">0</div><div class="sub" data-i18n="widgetTasksSub">Nothing assigned yet</div></div>
+          <div class="widget"><div class="label" data-i18n="widgetApprovals">Pending Approvals</div><div class="value">0</div><div class="sub" data-i18n="widgetApprovalsSub">None awaiting you</div></div>
+          <div class="widget"><div class="label" data-i18n="widgetNotifications">Notifications</div><div class="value">1</div><div class="sub" data-i18n="widgetNotificationsSub">Welcome message</div></div>
+          <div class="widget"><div class="label" data-i18n="widgetPerformance">Performance Indicators</div><div class="value">—</div><div class="sub" data-i18n="widgetPerformanceSub">Available once active</div></div>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="panel-card">
+              <h3 data-i18n="quickActionsTitle">Quick Actions</h3>
+              <div class="feature-chip-grid">
+                <span data-i18n="qa1">Upload Document</span><span data-i18n="qa2">Submit Report</span><span data-i18n="qa3">Request Leave</span><span data-i18n="qa4">View Calendar</span><span data-i18n="qa5">Contact ICT</span>
+              </div>
+            </div>
+            <div class="panel-card">
+              <h3 data-i18n="announcementsTitle">Institution Announcements</h3>
+              <p style="font-size:13px;" data-i18n="announcementsBody">No announcements published yet. Institutional announcements will appear here once posted by Administration.</p>
+            </div>
+          </div>
+          <div class="panel-card">
+            <h3 data-i18n="calendarTitle">Calendar</h3>
+            <div class="list-row"><span data-i18n="calendarEmpty">No upcoming meetings</span><span class="badge ok" data-i18n="badgeClear">Clear</span></div>
+            <div class="list-row"><span data-i18n="calendarAction">Complete your profile</span><span class="badge warn" data-i18n="badgeAction">Action</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="staffid">
+        <div class="module-header"><h2 data-i18n="staffIdTitle">Staff ID</h2><p data-i18n="staffIdLead">Your official digital staff identification.</p></div>
+        <div class="id-card">
+          <div class="id-row">
+            <div class="id-photo"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true"><circle cx="15" cy="11" r="5" stroke="#fff" stroke-width="1.4" opacity="0.6"/><path d="M4 26c1.5-7 6-10 11-10s9.5 3 11 10" stroke="#fff" stroke-width="1.4" opacity="0.6"/></svg></div>
+            <div><div class="id-field" data-i18n="idOrgName">Al-Balagh International Premium College</div><div class="id-value" style="font-size:16px;" data-i18n="idPreviewLabel">Staff ID Preview</div></div>
+          </div>
+          <div class="id-field" data-i18n="idFullName">Full Name</div><div class="id-value">—</div>
+          <div class="id-field" data-i18n="idStaffNumber">Staff ID Number</div><div class="id-value" data-i18n="idIssuedOnboarding">Issued upon onboarding</div>
+          <div class="id-field" data-i18n="idPositionDept">Position / Department</div><div class="id-value">—</div>
+          <div class="id-field" data-i18n="idContact">Office / Email / Telephone</div><div class="id-value">—</div>
+          <div class="qr" data-i18n="idQrPreview">QR<br>Preview</div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="rbac">
+        <div class="module-header"><h2 data-i18n="rbacTitle">Roles &amp; Permissions</h2><p data-i18n="rbacLead">Al-Balagh's Staff Portal is designed around configurable, role-based access — no role's permissions are hard-coded.</p></div>
+        <div class="feature-chip-grid" id="rbacChips">
+          <span>Super Administrator</span><span>President</span><span>Vice President</span><span>Registrar</span><span>Bursar</span><span>Director</span><span>Head of Department</span><span>HR Officer</span><span>ICT Officer</span><span>Admissions Officer</span><span>Student Affairs Officer</span><span>Library Officer</span><span>Marketing Officer</span><span>Administrative Staff</span>
+        </div>
+        <div class="rbac-note" data-i18n="rbacNote">Each department module in the sidebar is designed to load only for staff whose role grants access to it — this preview shows every module for demonstration purposes only.</div>
+      </section>
+
+      <section class="panel" data-panel-content="documents"></section>
+      <section class="panel" data-panel-content="aiassistant"></section>
+      <section class="panel" data-panel-content="platform"></section>
+      <section class="panel" data-panel-content="profile"></section>
+      <section class="panel" data-panel-content="admissions"></section>
+      <section class="panel" data-panel-content="registry"></section>
+      <section class="panel" data-panel-content="academicaffairs"></section>
+      <section class="panel" data-panel-content="hr"></section>
+      <section class="panel" data-panel-content="finance"></section>
+      <section class="panel" data-panel-content="studentaffairs"></section>
+      <section class="panel" data-panel-content="ict"></section>
+      <section class="panel" data-panel-content="marketing"></section>
+      <section class="panel" data-panel-content="procurement"></section>
+      <section class="panel" data-panel-content="qa"></section>
+      <section class="panel" data-panel-content="researchadmin"></section>
+      <section class="panel" data-panel-content="library"></section>
+      <section class="panel" data-panel-content="generaladmin"></section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+const genericModules = {
+  admissions: {
+    en:{title:"Admissions", desc:"Application review, screening, and admission decision workflows.", features:["Application Queue","Screening Tools","Offer Letters","Acceptance Monitoring"]},
+    ar:{title:"القبول", desc:"مراجعة الطلبات والفرز وسير عمل قرارات القبول.", features:["قائمة الطلبات","أدوات الفرز","خطابات القبول","متابعة القبول"]}
+  },
+  registry: {
+    en:{title:"Registry", desc:"Student records, enrolment, and academic record administration.", features:["Student Records","Enrolment Management","Transcripts","Statements of Result"]},
+    ar:{title:"السجل الأكاديمي", desc:"سجلات الطلاب والتسجيل وإدارة السجلات الأكاديمية.", features:["سجلات الطلاب","إدارة التسجيل","كشوف الدرجات","إفادات النتائج"]}
+  },
+  academicaffairs: {
+    en:{title:"Academic Affairs", desc:"Curriculum, timetables, and academic calendar administration.", features:["Curriculum Management","Timetables","Academic Calendar","Results Coordination"]},
+    ar:{title:"الشؤون الأكاديمية", desc:"إدارة المناهج والجداول الزمنية والتقويم الأكاديمي.", features:["إدارة المناهج","الجداول الزمنية","التقويم الأكاديمي","تنسيق النتائج"]}
+  },
+  hr: {
+    en:{title:"Human Resources", desc:"Staff records, recruitment, payroll, and leave management.", features:["Recruitment","Staff Records","Payroll","Leave","Promotions","Performance Reviews","Training"]},
+    ar:{title:"الموارد البشرية", desc:"سجلات الموظفين والتوظيف والرواتب وإدارة الإجازات.", features:["التوظيف","سجلات الموظفين","الرواتب","الإجازات","الترقيات","تقييم الأداء","التدريب"]}
+  },
+  finance: {
+    en:{title:"Finance", desc:"Institutional finance administration, where authorised.", features:["Tuition & Fees","Invoices","Receipts","Financial Reports","Regional Tuition Rules"]},
+    ar:{title:"المالية", desc:"إدارة الشؤون المالية المؤسسية، حيثما يُصرَّح بذلك.", features:["الرسوم الدراسية","الفواتير","الإيصالات","التقارير المالية","قواعد الرسوم الإقليمية"]}
+  },
+  studentaffairs: {
+    en:{title:"Student Affairs", desc:"Student welfare, conduct, and progress tracking.", features:["Welfare Cases","Conduct Records","Progress Tracking","Alumni Preparation"]},
+    ar:{title:"شؤون الطلاب", desc:"رعاية الطلاب والسلوك ومتابعة التقدم الدراسي.", features:["حالات الرعاية","سجلات السلوك","متابعة التقدم","إعداد الخريجين"]}
+  },
+  ict: {
+    en:{title:"ICT", desc:"Institutional technology systems and support.", features:["System Monitoring","Support Tickets","Access Management","Infrastructure"]},
+    ar:{title:"تقنية المعلومات", desc:"أنظمة التقنية المؤسسية والدعم الفني.", features:["مراقبة الأنظمة","تذاكر الدعم","إدارة الصلاحيات","البنية التحتية"]}
+  },
+  marketing: {
+    en:{title:"Marketing", desc:"Institutional marketing, content, and campaign coordination.", features:["Campaigns","Website Content Requests","Social Media Calendar","Analytics"]},
+    ar:{title:"التسويق", desc:"التسويق المؤسسي وتنسيق المحتوى والحملات.", features:["الحملات","طلبات محتوى الموقع","تقويم وسائل التواصل","التحليلات"]}
+  },
+  procurement: {
+    en:{title:"Procurement", desc:"Institutional purchasing and vendor management.", features:["Purchase Requests","Vendor Records","Approvals","Order Tracking"]},
+    ar:{title:"المشتريات", desc:"إدارة المشتريات المؤسسية والموردين.", features:["طلبات الشراء","سجلات الموردين","الموافقات","متابعة الطلبات"]}
+  },
+  qa: {
+    en:{title:"Quality Assurance", desc:"Institutional quality processes and review cycles.", features:["Review Cycles","Compliance Tracking","Audit Support","Reporting"]},
+    ar:{title:"ضمان الجودة", desc:"عمليات الجودة المؤسسية ودورات المراجعة.", features:["دورات المراجعة","متابعة الامتثال","دعم التدقيق","التقارير"]}
+  },
+  researchadmin: {
+    en:{title:"Research Administration", desc:"Administrative support for institutional research activity.", features:["Grant Records","Research Compliance","Publication Tracking","Reporting"]},
+    ar:{title:"إدارة البحث العلمي", desc:"دعم إداري للنشاط البحثي المؤسسي.", features:["سجلات المنح","الامتثال البحثي","متابعة المنشورات","التقارير"]}
+  },
+  library: {
+    en:{title:"Library", desc:"Digital and physical library administration.", features:["Catalogue Management","Borrowing Records","Digital Repository","Acquisitions"]},
+    ar:{title:"المكتبة", desc:"إدارة المكتبة الرقمية والمادية.", features:["إدارة الفهرس","سجلات الاستعارة","المستودع الرقمي","المقتنيات الجديدة"]}
+  },
+  generaladmin: {
+    en:{title:"General Administration", desc:"Cross-departmental administrative support.", features:["Correspondence","Meeting Minutes","General Records","Facilities"]},
+    ar:{title:"الإدارة العامة", desc:"دعم إداري عبر الأقسام المختلفة.", features:["المراسلات","محاضر الاجتماعات","السجلات العامة","المرافق"]}
+  },
+  documents: {
+    en:{title:"Document Management", desc:"Enterprise document handling with approval workflow and audit trail.", features:["Upload / Edit / Delete","Preview & Download","Version Control","Approval Workflow","Audit Trail","PDF / Word / Excel / PowerPoint / Images / Video Support"]},
+    ar:{title:"إدارة المستندات", desc:"إدارة مستندية مؤسسية مع سير موافقات وسجل تدقيق.", features:["رفع / تعديل / حذف","معاينة وتنزيل","ضبط الإصدارات","سير الموافقات","سجل التدقيق","دعم PDF / Word / Excel / PowerPoint / الصور / الفيديو"]}
+  },
+  aiassistant: {
+    en:{title:"AI Administrative Assistant", desc:"Planned AI support for institutional administration — not active on the current website.", features:["AI Policy Assistant","AI Letter Generator","AI Report Writer","AI Meeting Summary","AI Search","AI Workflow Assistant"]},
+    ar:{title:"المساعد الإداري بالذكاء الاصطناعي", desc:"دعم مخطط بالذكاء الاصطناعي للإدارة المؤسسية — غير مُفعَّل على الموقع الحالي.", features:["مساعد السياسات","مولّد الخطابات","كاتب التقارير","ملخص الاجتماعات","البحث الذكي","مساعد سير العمل"]}
+  },
+  platform: {
+    en:{title:"Platform & Integration Readiness", desc:"Architectural notes on how this portal is being prepared to connect to real institutional systems. These are engineering commitments guiding development — not active integrations today.", features:["Firebase Authentication (planned)","Cloud Firestore (planned)","Cloud Storage (planned)","Cloud Functions (planned)","Firebase Hosting (planned)","GitHub Version Control","CI/CD Pipeline (planned)","Role-Based Access Control","Security Rules & App Check (planned)","Audit Logging"]},
+    ar:{title:"جاهزية المنصة والتكامل", desc:"ملاحظات معمارية حول كيفية إعداد هذه البوابة للاتصال بالأنظمة المؤسسية الحقيقية. هذه التزامات هندسية توجّه التطوير — وليست تكاملات فعّالة حاليًا.", features:["مصادقة Firebase (مخطط)","Cloud Firestore (مخطط)","التخزين السحابي (مخطط)","الدوال السحابية (مخطط)","استضافة Firebase (مخطط)","ضبط إصدارات GitHub","خط أنابيب CI/CD (مخطط)","التحكم بالوصول حسب الدور","قواعد الأمان وApp Check (مخطط)","سجل التدقيق"]}
+  },
+  profile: {
+    en:{title:"Profile Settings", desc:"Update your personal details and account preferences.", features:["Personal Info","Contact Details","Password & Security","Notification Preferences"]},
+    ar:{title:"إعدادات الملف الشخصي", desc:"تحديث بياناتك الشخصية وتفضيلات الحساب.", features:["المعلومات الشخصية","بيانات التواصل","كلمة المرور والأمان","تفضيلات الإشعارات"]}
+  }
+};
+
+const statusMap = { documents:"planned", aiassistant:"planned", platform:"building", profile:"building" };
+
+function renderGenericModules(lang){
+  Object.keys(genericModules).forEach(key=>{
+    const m = genericModules[key][lang];
+    const status = statusMap[key] || "planned";
+    const el = document.querySelector(`[data-panel-content="${key}"]`);
+    if(!el) return;
+    const statusLabel = status === 'building' ? (lang==='ar' ? 'قيد التطوير' : 'Building') : (lang==='ar' ? 'مخطط' : 'Planned');
+    el.innerHTML = `
+      <div class="module-header">
+        <h2>${m.title}</h2>
+        <span class="module-status ${status}">${statusLabel}</span>
+        <p>${m.desc}</p>
+        <div class="feature-chip-grid">${m.features.map(f=>`<span>${f}</span>`).join('')}</div>
+      </div>`;
+  });
+}
+
+const i18n = {
+  en:{
+    demoStrong:"Design Preview", demoText:"this is a UI/UX demonstration of the Staff Portal, not a live secure account. No real staff data is shown or stored, and no backend is connected.",
+    skipLink:"Skip to main content", brandLabel:"Staff Portal",
+    navOverview:"Overview", navDashboard:"🏠 Dashboard", navStaffId:"Staff ID",
+    navAdminWorkspace:"Administrative Workspace", navAdmissions:"Admissions", navRegistry:"Registry", navAcademicAffairs:"Academic Affairs", navHR:"Human Resources", navFinance:"Finance", navStudentAffairs:"Student Affairs", navICT:"ICT", navMarketing:"Marketing", navProcurement:"Procurement", navQA:"Quality Assurance", navResearchAdmin:"Research Administration", navLibrary:"Library", navGeneralAdmin:"General Administration",
+    navTools:"Tools", navDocuments:"Document Management", navAIAssistant:"AI Administrative Assistant", navRBAC:"Roles & Permissions", navPlatform:"Platform & Integration Readiness",
+    navAccount:"Account", navProfile:"Profile Settings",
+    profileLabel:"Staff Preview",
+    welcomeTitle:"Welcome to your workspace", welcomeBody:"This dashboard fills in with your real tasks, approvals, and department data once your staff account is active.",
+    metaPosition:"Position", metaDepartment:"Department", metaDirectorate:"Directorate", metaPreview:"Preview", metaStatus:"Employment Status",
+    widgetTasks:"Today's Tasks", widgetTasksSub:"Nothing assigned yet", widgetApprovals:"Pending Approvals", widgetApprovalsSub:"None awaiting you", widgetNotifications:"Notifications", widgetNotificationsSub:"Welcome message", widgetPerformance:"Performance Indicators", widgetPerformanceSub:"Available once active",
+    quickActionsTitle:"Quick Actions", qa1:"Upload Document", qa2:"Submit Report", qa3:"Request Leave", qa4:"View Calendar", qa5:"Contact ICT",
+    announcementsTitle:"Institution Announcements", announcementsBody:"No announcements published yet. Institutional announcements will appear here once posted by Administration.",
+    calendarTitle:"Calendar", calendarEmpty:"No upcoming meetings", badgeClear:"Clear", calendarAction:"Complete your profile", badgeAction:"Action",
+    staffIdTitle:"Staff ID", staffIdLead:"Your official digital staff identification.",
+    idOrgName:"Al-Balagh International Premium College", idPreviewLabel:"Staff ID Preview", idFullName:"Full Name", idStaffNumber:"Staff ID Number", idIssuedOnboarding:"Issued upon onboarding", idPositionDept:"Position / Department", idContact:"Office / Email / Telephone", idQrPreview:"QR<br>Preview",
+    rbacTitle:"Roles & Permissions", rbacLead:"Al-Balagh's Staff Portal is designed around configurable, role-based access — no role's permissions are hard-coded.",
+    rbacNote:"Each department module in the sidebar is designed to load only for staff whose role grants access to it — this preview shows every module for demonstration purposes only.",
+    searchPlaceholder:"Search staff, documents, tasks, reports...", langToggleLabel:"العربية"
+  },
+  ar:{
+    demoStrong:"معاينة تصميمية", demoText:"هذه معاينة لتصميم بوابة الموظفين وليست حسابًا فعليًا آمنًا. لا تُعرض أو تُخزَّن بيانات موظفين حقيقية، ولا يوجد اتصال بأي خادم خلفي.",
+    skipLink:"تخطَّ إلى المحتوى الرئيسي", brandLabel:"بوابة الموظفين",
+    navOverview:"نظرة عامة", navDashboard:"🏠 لوحة التحكم", navStaffId:"بطاقة الموظف",
+    navAdminWorkspace:"مساحة العمل الإدارية", navAdmissions:"القبول", navRegistry:"السجل الأكاديمي", navAcademicAffairs:"الشؤون الأكاديمية", navHR:"الموارد البشرية", navFinance:"المالية", navStudentAffairs:"شؤون الطلاب", navICT:"تقنية المعلومات", navMarketing:"التسويق", navProcurement:"المشتريات", navQA:"ضمان الجودة", navResearchAdmin:"إدارة البحث العلمي", navLibrary:"المكتبة", navGeneralAdmin:"الإدارة العامة",
+    navTools:"أدوات", navDocuments:"إدارة المستندات", navAIAssistant:"المساعد الإداري بالذكاء الاصطناعي", navRBAC:"الأدوار والصلاحيات", navPlatform:"جاهزية المنصة والتكامل",
+    navAccount:"الحساب", navProfile:"إعدادات الملف الشخصي",
+    profileLabel:"معاينة موظف",
+    welcomeTitle:"مرحبًا بك في مساحة عملك", welcomeBody:"تُملأ هذه اللوحة بمهامك وموافقاتك وبيانات قسمك الحقيقية فور تفعيل حسابك الوظيفي.",
+    metaPosition:"المنصب", metaDepartment:"القسم", metaDirectorate:"الإدارة", metaPreview:"معاينة", metaStatus:"حالة التوظيف",
+    widgetTasks:"مهام اليوم", widgetTasksSub:"لا مهام مسندة بعد", widgetApprovals:"الموافقات المعلّقة", widgetApprovalsSub:"لا شيء بانتظارك", widgetNotifications:"الإشعارات", widgetNotificationsSub:"رسالة ترحيب", widgetPerformance:"مؤشرات الأداء", widgetPerformanceSub:"متاحة بعد التفعيل",
+    quickActionsTitle:"إجراءات سريعة", qa1:"رفع مستند", qa2:"إرسال تقرير", qa3:"طلب إجازة", qa4:"عرض التقويم", qa5:"التواصل مع تقنية المعلومات",
+    announcementsTitle:"إعلانات المؤسسة", announcementsBody:"لم تُنشر أي إعلانات بعد. ستظهر إعلانات المؤسسة هنا فور نشرها من قبل الإدارة.",
+    calendarTitle:"التقويم", calendarEmpty:"لا اجتماعات قادمة", badgeClear:"خالٍ", calendarAction:"أكمل ملفك الشخصي", badgeAction:"إجراء",
+    staffIdTitle:"بطاقة الموظف", staffIdLead:"هويتك الرقمية الرسمية كموظف.",
+    idOrgName:"كلية البلاغ الدولية المتميزة", idPreviewLabel:"معاينة بطاقة الموظف", idFullName:"الاسم الكامل", idStaffNumber:"رقم بطاقة الموظف", idIssuedOnboarding:"تُصدر عند التعيين", idPositionDept:"المنصب / القسم", idContact:"المكتب / البريد / الهاتف", idQrPreview:"رمز QR<br>معاينة",
+    rbacTitle:"الأدوار والصلاحيات", rbacLead:"صُممت بوابة موظفي البلاغ حول وصول قابل للتهيئة حسب الدور — لا صلاحيات ثابتة بالكود.",
+    rbacNote:"صُمم كل وحدة قسم في الشريط الجانبي لتحميلها فقط للموظفين الذين يمنحهم دورهم صلاحية الوصول إليها — تعرض هذه المعاينة كل الوحدات لأغراض العرض فقط.",
+    searchPlaceholder:"ابحث عن موظفين، مستندات، مهام، تقارير...", langToggleLabel:"English"
+  }
+};
+
+const rbacRoles = {
+  en:["Super Administrator","President","Vice President","Registrar","Bursar","Director","Head of Department","HR Officer","ICT Officer","Admissions Officer","Student Affairs Officer","Library Officer","Marketing Officer","Administrative Staff"],
+  ar:["المدير العام","الرئيس","نائب الرئيس","أمين التسجيل","أمين الصندوق","مدير","رئيس قسم","موظف موارد بشرية","موظف تقنية معلومات","موظف قبول","موظف شؤون طلاب","أمين مكتبة","موظف تسويق","موظف إداري"]
+};
+
+let currentLang = 'en';
+function applyLang(lang){
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(i18n[lang][key] !== undefined) el.innerHTML = i18n[lang][key];
+  });
+  document.getElementById('searchInput').placeholder = i18n[lang].searchPlaceholder;
+  document.getElementById('langToggle').textContent = i18n[lang].langToggleLabel;
+  document.getElementById('rbacChips').innerHTML = rbacRoles[lang].map(r=>`<span>${r}</span>`).join('');
+  renderGenericModules(lang);
+}
+document.getElementById('langToggle').addEventListener('click', ()=> applyLang(currentLang==='en' ? 'ar' : 'en'));
+
+applyLang('en');
+
+const navItems = document.querySelectorAll('.nav-item');
+const panels = document.querySelectorAll('.panel');
+navItems.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.panel;
+    navItems.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    panels.forEach(p=> p.classList.toggle('active', p.dataset.panelContent === target));
+    document.getElementById('main').scrollIntoView({behavior:'smooth', block:'start'});
+    if(window.innerWidth <= 900) closeSidebar();
+  });
+});
+
+const sidebar = document.getElementById('sidebar');
+const menuToggle = document.getElementById('menuToggle');
+const sidebarClose = document.getElementById('sidebarClose');
+function openSidebar(){ sidebar.classList.add('open'); }
+function closeSidebar(){ sidebar.classList.remove('open'); }
+menuToggle.addEventListener('click', openSidebar);
+sidebarClose.addEventListener('click', closeSidebar);
+</script>
+
+</body>
+</html>

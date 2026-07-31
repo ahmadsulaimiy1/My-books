@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Portal | Al-Balagh International Premium College</title>
+<meta name="description" content="The Student Portal of Al-Balagh International Premium College — academics, learning, finance, and student services in one place.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#173A63; --navy-dark:#0F2847; --gold:#BC9A4A; --gold-light:#D8C58C;
+    --manuscript:#F6F2E7; --surface:#FFFFFF; --ink:#1C2430; --ink-muted:#4B5568;
+    --border:#E1DACB; --border-dark:#2A3E5C; --emerald:#1E4C43;
+    --radius-sm:6px; --radius-md:8px; --radius-lg:16px;
+    --shadow-1:0 1px 3px rgba(15,40,71,0.08); --shadow-2:0 8px 24px rgba(15,40,71,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:'Inter',sans-serif; color:var(--ink); background:var(--manuscript); -webkit-font-smoothing:antialiased;}
+  [dir="rtl"] body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;}
+  h1,h2,h3{font-family:'Fraunces',serif; margin:0; color:var(--navy);}
+  [dir="rtl"] h1,[dir="rtl"] h2,[dir="rtl"] h3{font-family:'Amiri',serif;}
+  p{margin:0; color:var(--ink-muted); line-height:1.6;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--navy); outline-offset:2px;}
+  .skip-link{position:absolute; left:-999px; top:0; background:#fff; color:var(--navy); padding:12px 20px; z-index:1000;}
+  .skip-link:focus{left:0;}
+
+  .demo-banner{background:#8A6A2E; color:#fff; text-align:center; font-size:12.5px; font-weight:600; padding:8px 16px;}
+  .demo-banner strong{font-weight:700;}
+
+  .portal-shell{display:grid; grid-template-columns:250px 1fr; min-height:100vh;}
+  @media (max-width:900px){ .portal-shell{grid-template-columns:1fr;} }
+
+  .sidebar{background:var(--navy-dark); color:#fff; padding:20px 0; position:sticky; top:0; height:100vh; overflow-y:auto;}
+  @media (max-width:900px){ .sidebar{position:fixed; inset:0 20% 0 0; z-index:200; transform:translateX(-100%); transition:transform .25s ease; height:100vh;} [dir="rtl"] .sidebar{inset:0 0 0 20%; transform:translateX(100%);} .sidebar.open{transform:translateX(0);} }
+  .sidebar-brand{display:flex; align-items:center; gap:10px; padding:0 20px 20px; border-bottom:1px solid var(--border-dark); margin-bottom:14px;}
+  .sidebar-brand span{font-family:'Fraunces',serif; font-size:17px; font-weight:600;}
+  [dir="rtl"] .sidebar-brand span{font-family:'Amiri',serif;}
+  .nav-group{margin-bottom:6px;}
+  .nav-group-label{font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:#7C86A0; padding:14px 20px 6px; font-weight:700;}
+  .nav-item{display:flex; align-items:center; gap:10px; width:100%; text-align:start; background:none; border:none; color:#C7CEDC; padding:10px 20px; font-size:13.5px; font-weight:500; border-inline-start:3px solid transparent;}
+  .nav-item:hover{background:rgba(255,255,255,0.04); color:#fff;}
+  .nav-item.active{background:rgba(255,255,255,0.06); color:#fff; border-inline-start-color:var(--gold);}
+  .sidebar-close{display:none; background:none; border:none; color:#fff; font-size:22px; position:absolute; top:14px; inset-inline-end:14px;}
+  @media (max-width:900px){ .sidebar-close{display:block;} }
+
+  .topbar{background:var(--surface); border-bottom:1px solid var(--border); padding:14px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; position:sticky; top:0; z-index:50;}
+  .topbar-left{display:flex; align-items:center; gap:14px; flex:1;}
+  .menu-toggle{display:none; background:none; border:none; font-size:22px; color:var(--navy);}
+  @media (max-width:900px){ .menu-toggle{display:block;} }
+  .search-box{flex:1; max-width:380px; position:relative;}
+  .search-box input{width:100%; height:40px; border:1px solid var(--border); border-radius:999px; padding:0 16px 0 38px; font-size:13.5px; background:var(--manuscript);}
+  [dir="rtl"] .search-box input{padding:0 38px 0 16px;}
+  .search-box svg{position:absolute; left:14px; top:50%; transform:translateY(-50%);}
+  [dir="rtl"] .search-box svg{left:auto; right:14px;}
+  .topbar-right{display:flex; align-items:center; gap:16px;}
+  .icon-btn{position:relative; background:none; border:none; color:var(--ink-muted); padding:6px;}
+  .icon-btn .dot{position:absolute; top:2px; right:2px; width:8px; height:8px; border-radius:50%; background:#8C4A3A; border:1.5px solid #fff;}
+  .profile-chip{display:flex; align-items:center; gap:8px; padding:6px 12px 6px 6px; border-radius:999px; background:var(--manuscript); border:1px solid var(--border);}
+  [dir="rtl"] .profile-chip{padding:6px 6px 6px 12px;}
+  .profile-avatar{width:28px; height:28px; border-radius:50%; background:var(--navy); display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:700;}
+  .profile-chip span{font-size:12.5px; font-weight:600;}
+
+  .content{padding:32px;}
+  @media (max-width:600px){ .content{padding:20px;} }
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .welcome-banner{background:linear-gradient(135deg,var(--navy) 0%, var(--navy-dark) 100%); border-radius:var(--radius-lg); padding:32px; color:#fff; margin-bottom:28px; display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap;}
+  .welcome-banner h2{color:#fff; font-size:24px; margin-bottom:6px;}
+  .welcome-banner p{color:#C7CEDC; font-size:13.5px;}
+  .welcome-meta{display:flex; gap:24px; flex-wrap:wrap;}
+  .welcome-meta div{font-size:12px; color:#9AA5BD;}
+  .welcome-meta strong{display:block; color:#fff; font-size:14px; font-weight:600;}
+
+  .widget-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-bottom:28px;}
+  @media (max-width:960px){ .widget-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .widget-grid{grid-template-columns:1fr;} }
+  .widget{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px;}
+  .widget .label{font-size:11px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px;}
+  .widget .value{font-size:20px; font-weight:700; color:var(--ink);}
+  .widget .sub{font-size:11.5px; color:var(--ink-muted); margin-top:4px;}
+
+  .two-col{display:grid; grid-template-columns:1.4fr 1fr; gap:22px;}
+  @media (max-width:900px){ .two-col{grid-template-columns:1fr;} }
+  .panel-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:24px; margin-bottom:20px;}
+  .panel-card h3{font-size:17px; margin-bottom:16px;}
+  .list-row{display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); font-size:13.5px;}
+  .list-row:last-child{border-bottom:none;}
+  .badge{display:inline-block; font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:999px;}
+  .badge.ok{background:rgba(30,76,67,0.1); color:#1E4C43;}
+  .badge.warn{background:rgba(188,154,74,0.12); color:#8A6A2E;}
+
+  .module-header{margin-bottom:24px;}
+  .module-header h2{font-size:26px; margin-bottom:8px;}
+  .module-status{display:inline-block; font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px; margin-bottom:16px;}
+  .module-status.building{background:rgba(30,76,67,0.1); color:#1E4C43;}
+  .module-status.planned{background:rgba(188,154,74,0.12); color:#8A6A2E;}
+  .feature-chip-grid{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+  .feature-chip-grid span{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 16px; font-size:12.5px; font-weight:600; color:var(--ink-muted);}
+
+  table{width:100%; border-collapse:collapse;}
+  thead th{background:var(--navy); color:#fff; text-align:start; padding:12px 16px; font-size:11.5px; text-transform:uppercase; letter-spacing:0.03em;}
+  tbody td{padding:12px 16px; font-size:13px; border-bottom:1px solid var(--border); color:var(--ink-muted);}
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius-md);}
+
+  .id-card{background:linear-gradient(135deg,var(--navy) 0%, var(--navy-dark) 100%); border-radius:var(--radius-lg); padding:28px; color:#fff; max-width:420px; position:relative; overflow:hidden;}
+  .id-card .id-row{display:flex; gap:20px; align-items:center; margin-bottom:20px;}
+  .id-photo{width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.1); border:2px dashed rgba(255,255,255,0.4); display:flex; align-items:center; justify-content:center;}
+  .id-card .qr{width:70px; height:70px; background:#fff; border-radius:var(--radius-sm); margin-top:16px; display:flex; align-items:center; justify-content:center; color:var(--navy); font-size:9px; font-weight:700; text-align:center;}
+  .id-field{font-size:11px; color:#9AA5BD; margin-bottom:2px;}
+  .id-value{font-size:14px; font-weight:600; margin-bottom:10px;}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+<div class="demo-banner"><strong>Design Preview</strong> — this is a UI/UX demonstration of the Student Portal, not a live secure account. No real student data is shown or stored.</div>
+
+<div class="portal-shell">
+  <aside class="sidebar" id="sidebar" aria-label="Student portal navigation">
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">✕</button>
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 48 48" width="30" height="30" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
+      <span>Student Portal</span>
+    </div>
+    <nav id="navList">
+      <div class="nav-group">
+        <div class="nav-group-label">Overview</div>
+        <button class="nav-item active" data-panel="dashboard">🏠 Dashboard</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Academics</div>
+        <button class="nav-item" data-panel="registration">Course Registration</button>
+        <button class="nav-item" data-panel="records">Academic Records</button>
+        <button class="nav-item" data-panel="results">Results &amp; CGPA</button>
+        <button class="nav-item" data-panel="transcript">Transcript &amp; Statement</button>
+        <button class="nav-item" data-panel="calendar">Academic Calendar</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Learning</div>
+        <button class="nav-item" data-panel="courses">My Courses</button>
+        <button class="nav-item" data-panel="assignments">Assignments &amp; Quizzes</button>
+        <button class="nav-item" data-panel="exams">Online Examinations</button>
+        <button class="nav-item" data-panel="forums">Discussion Forums</button>
+        <button class="nav-item" data-panel="certificates">Certificates</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Finance</div>
+        <button class="nav-item" data-panel="finance">Finance Summary</button>
+        <button class="nav-item" data-panel="scholarships">Scholarships &amp; Aid</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Identity &amp; Services</div>
+        <button class="nav-item" data-panel="digitalid">Digital Student ID</button>
+        <button class="nav-item" data-panel="library">Library</button>
+        <button class="nav-item" data-panel="support">Help Centre &amp; AI Assistant</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Communication</div>
+        <button class="nav-item" data-panel="messages">Announcements &amp; Messages</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Account</div>
+        <button class="nav-item" data-panel="profile">Profile Settings</button>
+      </div>
+    </nav>
+  </aside>
+
+  <div>
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="#8891A6" stroke-width="1.4"/><path d="M11 11l3.5 3.5" stroke="#8891A6" stroke-width="1.4"/></svg>
+          <input type="text" placeholder="Search courses, results, payments, library, notices...">
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" aria-label="Notifications"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 15c0-1 1-2 1-6a5 5 0 0110 0c0 4 1 5 1 6H4z" stroke="#4B5568" stroke-width="1.5"/><path d="M8 17.5a2 2 0 004 0" stroke="#4B5568" stroke-width="1.5"/></svg><span class="dot"></span></button>
+        <div class="profile-chip"><div class="profile-avatar">ST</div><span>Applicant Preview</span></div>
+      </div>
+    </header>
+
+    <main class="content" id="main">
+
+      <section class="panel active" data-panel-content="dashboard">
+        <div class="welcome-banner">
+          <div>
+            <h2>Welcome back</h2>
+            <p>This dashboard fills in with your real academic and finance data once your account is fully active.</p>
+          </div>
+          <div class="welcome-meta">
+            <div><strong>—</strong>Matriculation No.</div>
+            <div><strong>—</strong>Programme</div>
+            <div><strong>—</strong>Academic Level</div>
+            <div><strong>Preview</strong>Academic Status</div>
+          </div>
+        </div>
+        <div class="widget-grid">
+          <div class="widget"><div class="label">Profile Completion</div><div class="value">40%</div><div class="sub">Complete registration to increase</div></div>
+          <div class="widget"><div class="label">Academic Progress</div><div class="value">0%</div><div class="sub">Begins once enrolled</div></div>
+          <div class="widget"><div class="label">Outstanding Balance</div><div class="value">—</div><div class="sub">See Finance Summary</div></div>
+          <div class="widget"><div class="label">Upcoming Classes</div><div class="value">0</div><div class="sub">None scheduled yet</div></div>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="panel-card">
+              <h3>Quick Actions</h3>
+              <div class="feature-chip-grid">
+                <span>Register for Courses</span><span>View Results</span><span>Download Transcript</span><span>Pay Tuition</span><span>Contact Support</span>
+              </div>
+            </div>
+            <div class="panel-card">
+              <h3>Examination Alerts</h3>
+              <p style="font-size:13px;">No examinations scheduled yet. Alerts will appear here as soon as an examination window is published.</p>
+            </div>
+          </div>
+          <div class="panel-card">
+            <h3>Notifications</h3>
+            <div class="list-row"><span>Welcome to your Student Portal preview</span><span class="badge ok">Info</span></div>
+            <div class="list-row"><span>Complete your profile to continue</span><span class="badge warn">Action</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="records">
+        <div class="module-header"><h2>Academic Records</h2><p>Your enrolment history and standing, once available.</p></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Session</th><th scope="col">Semester</th><th scope="col">Status</th><th scope="col">CGPA</th></tr></thead>
+            <tbody><tr><td colspan="4" style="text-align:center; padding:28px;">No academic records yet — records populate after your first semester.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="results">
+        <div class="module-header"><h2>Results &amp; CGPA</h2><p>Semester results and cumulative GPA summary.</p></div>
+        <div class="panel-card"><h3>Current CGPA</h3><p style="font-size:24px; color:var(--navy); font-weight:700; font-family:'Fraunces',serif;">—</p><p style="font-size:12.5px;">Available after your first semester's results are approved by the Academic Board.</p></div>
+      </section>
+
+      <section class="panel" data-panel-content="courses">
+        <div class="module-header"><h2>My Courses</h2><p>Course materials, recorded lectures, and live classes for your registered courses.</p></div>
+        <div class="panel-card"><p style="font-size:13.5px;">You have no registered courses yet. Once course registration opens, your enrolled courses will appear here with materials, recordings, and live class links.</p></div>
+      </section>
+
+      <section class="panel" data-panel-content="finance">
+        <div class="module-header"><h2>Finance Summary</h2><p>Tuition, balance, payment history, and receipts.</p></div>
+        <div class="widget-grid">
+          <div class="widget"><div class="label">Tuition (Programme)</div><div class="value">TBC</div></div>
+          <div class="widget"><div class="label">Outstanding Balance</div><div class="value">—</div></div>
+          <div class="widget"><div class="label">Last Payment</div><div class="value">—</div></div>
+          <div class="widget"><div class="label">Scholarship Applied</div><div class="value">None</div></div>
+        </div>
+        <div class="panel-card"><h3>Payment History</h3><p style="font-size:13px;">No payments recorded yet. See <a href="tuition-scholarships.html" style="color:var(--navy); text-decoration:underline;">Tuition &amp; Scholarships</a> for fee information.</p></div>
+      </section>
+
+      <section class="panel" data-panel-content="digitalid">
+        <div class="module-header"><h2>Digital Student ID</h2><p>Your official digital identification, issued upon registration.</p></div>
+        <div class="id-card">
+          <div class="id-row">
+            <div class="id-photo"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true"><circle cx="15" cy="11" r="5" stroke="#fff" stroke-width="1.4" opacity="0.6"/><path d="M4 26c1.5-7 6-10 11-10s9.5 3 11 10" stroke="#fff" stroke-width="1.4" opacity="0.6"/></svg></div>
+            <div><div class="id-field">Al-Balagh International Premium College</div><div class="id-value" style="font-size:16px;">Student ID Preview</div></div>
+          </div>
+          <div class="id-field">Full Name</div><div class="id-value">—</div>
+          <div class="id-field">Matriculation Number</div><div class="id-value">Issued upon registration</div>
+          <div class="id-field">Programme</div><div class="id-value">—</div>
+          <div class="qr">QR<br>Preview</div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="registration"></section>
+      <section class="panel" data-panel-content="transcript"></section>
+      <section class="panel" data-panel-content="calendar"></section>
+      <section class="panel" data-panel-content="assignments"></section>
+      <section class="panel" data-panel-content="exams"></section>
+      <section class="panel" data-panel-content="forums"></section>
+      <section class="panel" data-panel-content="certificates"></section>
+      <section class="panel" data-panel-content="scholarships"></section>
+      <section class="panel" data-panel-content="library"></section>
+      <section class="panel" data-panel-content="support"></section>
+      <section class="panel" data-panel-content="messages"></section>
+      <section class="panel" data-panel-content="profile"></section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+const genericModules = {
+  registration: {title:"Course Registration", desc:"Add and drop courses for the current semester once registration opens.", status:"planned", features:["Course Search","Add/Drop","Prerequisite Check","Registration Confirmation"]},
+  transcript: {title:"Transcript &amp; Statement of Result", desc:"Download your official academic transcript and statements of result.", status:"planned", features:["Academic Transcript","Statement of Result","Graduation Status","Download as PDF"]},
+  calendar: {title:"Academic Calendar", desc:"Key academic dates for your programme and session.", status:"building", features:["Semester Start/End","Examination Windows","Registration Deadlines","Holidays"]},
+  assignments: {title:"Assignments &amp; Quizzes", desc:"Submit coursework and track deadlines for every registered course.", status:"planned", features:["Submission Upload","Due Date Tracking","Feedback","Grade History"]},
+  exams: {title:"Online Examinations", desc:"Secure, time-bound examinations delivered through the LMS.", status:"planned", features:["Exam Schedule","Secure Exam Window","Result Release","Appeals Process"]},
+  forums: {title:"Discussion Forums", desc:"Course-based discussion spaces for questions and peer learning.", status:"planned", features:["Course Threads","Q&A with Lecturers","Peer Discussion","Moderation"]},
+  certificates: {title:"Certificates", desc:"Digital certificates issued upon successful programme completion.", status:"planned", features:["Digital Certificate","Verification Link","Download","Share"]},
+  scholarships: {title:"Scholarships &amp; Financial Aid", desc:"Apply for and track scholarship applications.", status:"planned", features:["Scholarship Categories","Application Status","Eligibility Check","Award Letter"]},
+  library: {title:"Library Access", desc:"Full-text resources, journals, and reference material.", status:"planned", features:["Digital Catalogue","E-Book Access","Journal Search","Borrowing History"]},
+  support: {title:"Help Centre &amp; AI Assistant", desc:"Support tickets and an AI assistant for common questions.", status:"planned", features:["Support Tickets","AI FAQ Assistant","Live Chat","Knowledge Base"]},
+  messages: {title:"Announcements &amp; Messages", desc:"Institutional announcements and secure messaging with lecturers and administration.", status:"planned", features:["Announcements","Lecturer Messages","Admin Messages","Email/SMS/WhatsApp Sync"]},
+  profile: {title:"Profile Settings", desc:"Update your personal details, emergency contact, and account preferences.", status:"building", features:["Personal Info","Emergency Contact","Password &amp; Security","Notification Preferences"]}
+};
+
+Object.keys(genericModules).forEach(key=>{
+  const m = genericModules[key];
+  const el = document.querySelector(`[data-panel-content="${key}"]`);
+  if(!el) return;
+  el.innerHTML = `
+    <div class="module-header">
+      <h2>${m.title}</h2>
+      <span class="module-status ${m.status}">${m.status === 'building' ? 'Building' : 'Planned'}</span>
+      <p>${m.desc}</p>
+      <div class="feature-chip-grid">${m.features.map(f=>`<span>${f}</span>`).join('')}</div>
+    </div>`;
+});
+
+const navItems = document.querySelectorAll('.nav-item');
+const panels = document.querySelectorAll('.panel');
+navItems.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.panel;
+    navItems.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    panels.forEach(p=> p.classList.toggle('active', p.dataset.panelContent === target));
+    document.getElementById('main').scrollIntoView({behavior:'smooth', block:'start'});
+    if(window.innerWidth <= 900) closeSidebar();
+  });
+});
+
+const sidebar = document.getElementById('sidebar');
+const menuToggle = document.getElementById('menuToggle');
+const sidebarClose = document.getElementById('sidebarClose');
+function openSidebar(){ sidebar.classList.add('open'); }
+function closeSidebar(){ sidebar.classList.remove('open'); }
+menuToggle.addEventListener('click', openSidebar);
+sidebarClose.addEventListener('click', closeSidebar);
+</script>
+
+</body>
+</html>

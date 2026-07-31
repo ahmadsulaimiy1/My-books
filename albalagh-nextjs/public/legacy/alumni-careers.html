@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alumni Network &amp; Career Services | Al-Balagh International Premium College</title>
+<meta name="description" content="Alumni Network, Career Services, and Employer Partnerships of Al-Balagh International Premium College.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#173A63; --navy-dark:#0F2847; --gold:#BC9A4A; --gold-light:#D8C58C;
+    --manuscript:#F6F2E7; --surface:#FFFFFF; --ink:#1C2430; --ink-muted:#4B5568;
+    --border:#E1DACB; --border-dark:#2A3E5C; --emerald:#1E4C43;
+    --radius-sm:6px; --radius-md:8px; --radius-lg:16px;
+    --shadow-1:0 1px 3px rgba(15,40,71,0.08); --shadow-2:0 8px 24px rgba(15,40,71,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:'Inter',sans-serif; color:var(--ink); background:var(--manuscript); -webkit-font-smoothing:antialiased;}
+  [dir="rtl"] body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;}
+  h1,h2,h3{font-family:'Fraunces',serif; margin:0; color:var(--navy);}
+  [dir="rtl"] h1,[dir="rtl"] h2,[dir="rtl"] h3{font-family:'Amiri',serif;}
+  p{margin:0; color:var(--ink-muted); line-height:1.6;}
+  a{color:inherit; text-decoration:none;}
+  button,input,select{font-family:inherit; cursor:pointer;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{outline:2px solid var(--navy); outline-offset:2px;}
+  .skip-link{position:absolute; left:-999px; top:0; background:#fff; color:var(--navy); padding:12px 20px; z-index:1000;}
+  .skip-link:focus{left:0;}
+
+  .demo-banner{background:#8A6A2E; color:#fff; text-align:center; font-size:12.5px; font-weight:600; padding:8px 16px;}
+  .demo-banner strong{font-weight:700;}
+
+  .portal-shell{display:grid; grid-template-columns:260px 1fr; min-height:100vh;}
+  @media (max-width:900px){ .portal-shell{grid-template-columns:1fr;} }
+
+  .sidebar{background:var(--navy-dark); color:#fff; padding:20px 0; position:sticky; top:0; height:100vh; overflow-y:auto;}
+  @media (max-width:900px){ .sidebar{position:fixed; inset:0 20% 0 0; z-index:200; transform:translateX(-100%); transition:transform .25s ease; height:100vh;} [dir="rtl"] .sidebar{inset:0 0 0 20%; transform:translateX(100%);} .sidebar.open{transform:translateX(0);} }
+  .sidebar-brand{display:flex; align-items:center; gap:10px; padding:0 20px 20px; border-bottom:1px solid var(--border-dark); margin-bottom:14px;}
+  .sidebar-brand span{font-family:'Fraunces',serif; font-size:16px; font-weight:600;}
+  [dir="rtl"] .sidebar-brand span{font-family:'Amiri',serif;}
+  .nav-group{margin-bottom:6px;}
+  .nav-group-label{font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:#7C86A0; padding:14px 20px 6px; font-weight:700;}
+  .nav-item{display:flex; align-items:center; gap:10px; width:100%; text-align:start; background:none; border:none; color:#C7CEDC; padding:10px 20px; font-size:13.5px; font-weight:500; border-inline-start:3px solid transparent;}
+  .nav-item:hover{background:rgba(255,255,255,0.04); color:#fff;}
+  .nav-item.active{background:rgba(255,255,255,0.06); color:#fff; border-inline-start-color:var(--gold);}
+  .sidebar-close{display:none; background:none; border:none; color:#fff; font-size:22px; position:absolute; top:14px; inset-inline-end:14px;}
+  @media (max-width:900px){ .sidebar-close{display:block;} }
+
+  .topbar{background:var(--surface); border-bottom:1px solid var(--border); padding:14px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; position:sticky; top:0; z-index:50;}
+  .topbar-left{display:flex; align-items:center; gap:14px; flex:1;}
+  .menu-toggle{display:none; background:none; border:none; font-size:22px; color:var(--navy);}
+  @media (max-width:900px){ .menu-toggle{display:block;} }
+  .search-box{flex:1; max-width:420px; position:relative;}
+  .search-box input{width:100%; height:40px; border:1px solid var(--border); border-radius:999px; padding:0 16px 0 38px; font-size:13.5px; background:var(--manuscript);}
+  [dir="rtl"] .search-box input{padding:0 38px 0 16px;}
+  .search-box svg{position:absolute; left:14px; top:50%; transform:translateY(-50%);}
+  [dir="rtl"] .search-box svg{left:auto; right:14px;}
+  .topbar-right{display:flex; align-items:center; gap:16px;}
+  .icon-btn{position:relative; background:none; border:none; color:var(--ink-muted); padding:6px;}
+  .icon-btn .dot{position:absolute; top:2px; right:2px; width:8px; height:8px; border-radius:50%; background:#8C4A3A; border:1.5px solid #fff;}
+  .profile-chip{display:flex; align-items:center; gap:8px; padding:6px 12px 6px 6px; border-radius:999px; background:var(--manuscript); border:1px solid var(--border);}
+  [dir="rtl"] .profile-chip{padding:6px 6px 6px 12px;}
+  .profile-avatar{width:28px; height:28px; border-radius:50%; background:var(--navy); display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:700;}
+  .profile-chip span{font-size:12.5px; font-weight:600;}
+  .lang-switch{background:none; border:1px solid var(--border); color:var(--navy); font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px;}
+
+  .content{padding:32px;}
+  @media (max-width:600px){ .content{padding:20px;} }
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .welcome-banner{background:linear-gradient(135deg,var(--navy) 0%, var(--navy-dark) 100%); border-radius:var(--radius-lg); padding:32px; color:#fff; margin-bottom:28px;}
+  .welcome-banner h2{color:#fff; font-size:24px; margin-bottom:6px;}
+  .welcome-banner p{color:#C7CEDC; font-size:13.5px;}
+
+  .widget-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-bottom:28px;}
+  @media (max-width:1100px){ .widget-grid{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:600px){ .widget-grid{grid-template-columns:repeat(2,1fr);} }
+  .widget{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:16px;}
+  .widget .label{font-size:10px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;}
+  .widget .value{font-size:20px; font-weight:700; color:var(--ink);}
+  .widget .sub{font-size:10.5px; color:var(--ink-muted); margin-top:4px;}
+
+  .two-col{display:grid; grid-template-columns:1.4fr 1fr; gap:22px;}
+  @media (max-width:900px){ .two-col{grid-template-columns:1fr;} }
+  .panel-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:24px; margin-bottom:20px;}
+  .panel-card h3{font-size:17px; margin-bottom:16px;}
+  .list-row{display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); font-size:13.5px;}
+  .list-row:last-child{border-bottom:none;}
+  .badge{display:inline-block; font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:999px;}
+  .badge.ok{background:rgba(30,76,67,0.1); color:#1E4C43;}
+  .badge.warn{background:rgba(188,154,74,0.12); color:#8A6A2E;}
+
+  .module-header{margin-bottom:24px;}
+  .module-header h2{font-size:26px; margin-bottom:8px;}
+  .module-status{display:inline-block; font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px; margin-bottom:16px; background:rgba(188,154,74,0.12); color:#8A6A2E;}
+  .subsection{margin-bottom:32px;}
+  .subsection h3{font-size:16px; margin-bottom:12px; color:var(--navy);}
+  .module-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); gap:12px;}
+  .module-tile{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; transition:box-shadow .15s;}
+  .module-tile:hover{box-shadow:var(--shadow-1);}
+  .module-tile h4{font-family:'Inter',sans-serif; font-size:12.5px; font-weight:600; color:var(--ink); margin-bottom:4px;}
+  [dir="rtl"] .module-tile h4{font-family:'IBM Plex Sans Arabic',sans-serif;}
+  .module-tile .crud{display:flex; gap:4px; flex-wrap:wrap; margin-top:6px;}
+  .module-tile .crud span{font-size:9px; font-weight:700; padding:2px 6px; border-radius:999px; background:var(--manuscript); color:var(--ink-muted);}
+
+  .search-form{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; margin-bottom:24px;}
+  .search-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px;}
+  @media (max-width:760px){ .search-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:500px){ .search-grid{grid-template-columns:1fr;} }
+  .search-field label{font-size:12px; font-weight:600; color:var(--ink); display:block; margin-bottom:6px;}
+  .search-field input, .search-field select{width:100%; height:42px; border:1px solid var(--border); border-radius:var(--radius-sm); padding:0 12px; font-size:13.5px; background:var(--manuscript);}
+  .empty-state{text-align:center; padding:56px 24px; background:var(--surface); border:1px dashed var(--border); border-radius:var(--radius-md);}
+  .empty-state svg{margin-bottom:16px;}
+  .empty-state h3{font-size:17px; margin-bottom:8px;}
+  .empty-state p{font-size:13.5px; max-width:460px; margin:0 auto;}
+
+  .profile-template{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; display:grid; grid-template-columns:140px 1fr; gap:26px;}
+  @media (max-width:600px){ .profile-template{grid-template-columns:1fr;} }
+  .profile-photo{aspect-ratio:1/1; background:var(--manuscript); border:1.5px dashed var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center;}
+  .rf{margin-bottom:10px;}
+  .rf-label{font-size:10.5px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.03em;}
+  .rf-value{font-size:14px; color:var(--ink); font-weight:500;}
+  .btn{display:inline-flex; align-items:center; gap:6px; padding:9px 16px; border-radius:var(--radius-sm); font-size:12.5px; font-weight:600; border:1.5px solid var(--navy); color:var(--navy); background:none;}
+  .btn.filled{background:var(--gold); border-color:var(--gold); color:var(--navy-dark);}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link" data-i18n="skipLink">Skip to main content</a>
+<div class="demo-banner"><strong data-i18n="demoStrong">Design Preview</strong> — <span data-i18n="demoText">this is a UI/UX demonstration of the Alumni Network & Career Services Portal, not a live system. No real alumni or employer data is shown or stored.</span></div>
+
+<div class="portal-shell">
+  <aside class="sidebar" id="sidebar" aria-label="Alumni portal navigation">
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">✕</button>
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 48 48" width="28" height="28" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
+      <span data-i18n="brandLabel">Alumni &amp; Careers</span>
+    </div>
+    <nav id="navList">
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navOverview">Overview</div>
+        <button class="nav-item active" data-panel="dashboard" data-i18n="navDashboard">🏠 Dashboard</button>
+        <button class="nav-item" data-panel="search" data-i18n="navSearch">Alumni Directory Search</button>
+        <button class="nav-item" data-panel="profile-template" data-i18n="navProfileTemplate">Sample Alumni Profile</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navGroupAlumni">Alumni Network</div>
+        <button class="nav-item" data-panel="alumniNetwork" data-i18n="navAlumniNetwork">Registration, Groups &amp; Chapters</button>
+        <button class="nav-item" data-panel="alumniEvents" data-i18n="navAlumniEvents">Events &amp; Recognition</button>
+        <button class="nav-item" data-panel="giving" data-i18n="navGiving">Giving &amp; Endowment</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navGroupCareer">Career Services</div>
+        <button class="nav-item" data-panel="jobs" data-i18n="navJobs">Job &amp; Internship Board</button>
+        <button class="nav-item" data-panel="mentorship" data-i18n="navMentorship">Mentorship Programme</button>
+        <button class="nav-item" data-panel="counselling" data-i18n="navCounselling">Career Counselling &amp; Resources</button>
+        <button class="nav-item" data-panel="employers" data-i18n="navEmployers">Employer Partnerships</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navGroupEngage">Engagement</div>
+        <button class="nav-item" data-panel="engagement" data-i18n="navEngagement">Stories, Newsletter &amp; Feedback</button>
+        <button class="nav-item" data-panel="insights" data-i18n="navInsights">Analytics &amp; AI Career Assistant</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navGroupSystem">System</div>
+        <button class="nav-item" data-panel="platform" data-i18n="navPlatform">Notifications &amp; Platform Readiness</button>
+        <button class="nav-item" data-panel="profileSettings" data-i18n="navProfileSettings">Profile Settings</button>
+      </div>
+    </nav>
+  </aside>
+
+  <div>
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="#8891A6" stroke-width="1.4"/><path d="M11 11l3.5 3.5" stroke="#8891A6" stroke-width="1.4"/></svg>
+          <input type="text" id="searchInput" placeholder="Search alumni, jobs, mentors, employers...">
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="lang-switch" id="langToggle">العربية</button>
+        <button class="icon-btn" aria-label="Notifications"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 15c0-1 1-2 1-6a5 5 0 0110 0c0 4 1 5 1 6H4z" stroke="#4B5568" stroke-width="1.5"/><path d="M8 17.5a2 2 0 004 0" stroke="#4B5568" stroke-width="1.5"/></svg><span class="dot"></span></button>
+        <div class="profile-chip"><div class="profile-avatar">AL</div><span data-i18n="profileLabel">Alumni Preview</span></div>
+      </div>
+    </header>
+
+    <main class="content" id="main">
+
+      <section class="panel active" data-panel-content="dashboard">
+        <div class="welcome-banner">
+          <h2 data-i18n="welcomeTitle">Alumni Network &amp; Career Services</h2>
+          <p data-i18n="welcomeBody">Connecting Al-Balagh graduates to each other, to employers, and to the College — for life, not just for graduation day.</p>
+        </div>
+        <div class="widget-grid">
+          <div class="widget"><div class="label" data-i18n="wAlumni">Registered Alumni</div><div class="value">0</div></div>
+          <div class="widget"><div class="label" data-i18n="wJobs">Open Job Listings</div><div class="value">0</div></div>
+          <div class="widget"><div class="label" data-i18n="wInternships">Internship Listings</div><div class="value">0</div></div>
+          <div class="widget"><div class="label" data-i18n="wMentors">Active Mentors</div><div class="value">0</div></div>
+          <div class="widget"><div class="label" data-i18n="wEmployers">Employer Partners</div><div class="value">0</div></div>
+          <div class="widget"><div class="label" data-i18n="wEvents">Upcoming Alumni Events</div><div class="value">0</div></div>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="panel-card">
+              <h3 data-i18n="spotlightTitle">Alumni Spotlight</h3>
+              <div class="empty-state">
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><circle cx="18" cy="13" r="6" stroke="#BC9A4A" stroke-width="1.6"/><path d="M6 30c2-8 7-11 12-11s10 3 12 11" stroke="#BC9A4A" stroke-width="1.6"/></svg>
+                <h3 data-i18n="noAlumniTitle">No alumni profiles published yet</h3>
+                <p data-i18n="noAlumniBody">Alumni Spotlight stories will appear here once graduates register and share their journeys — real stories only, never invented.</p>
+              </div>
+            </div>
+            <div class="panel-card">
+              <h3 data-i18n="latestJobsTitle">Latest Opportunities</h3>
+              <p style="font-size:13px;" data-i18n="latestJobsBody">No job or internship listings posted yet.</p>
+            </div>
+          </div>
+          <div class="panel-card">
+            <h3 data-i18n="myNetworkTitle">My Network</h3>
+            <div class="list-row"><span data-i18n="connections">Connections</span><span class="badge ok">0</span></div>
+            <div class="list-row"><span data-i18n="mentorshipRequests">Mentorship Requests</span><span class="badge ok">0</span></div>
+            <div class="list-row"><span data-i18n="setupTask">Complete your alumni profile</span><span class="badge warn" data-i18n="badgeAction">Action</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="search">
+        <div class="module-header"><h2 data-i18n="searchTitle">Alumni Directory Search</h2><p data-i18n="searchLead">Search graduates by name, programme, graduation year, location, industry, or employer.</p></div>
+        <div class="search-form">
+          <div class="search-grid">
+            <div class="search-field"><label data-i18n="fName">Name</label><input type="text"></div>
+            <div class="search-field"><label data-i18n="fProgramme">Programme</label><select><option data-i18n="fAny">Any</option></select></div>
+            <div class="search-field"><label data-i18n="fYear">Graduation Year</label><input type="text"></div>
+            <div class="search-field"><label data-i18n="fLocation">Location</label><input type="text"></div>
+            <div class="search-field"><label data-i18n="fIndustry">Industry</label><input type="text"></div>
+            <div class="search-field"><label data-i18n="fEmployer">Current Employer</label><input type="text"></div>
+          </div>
+          <button class="btn filled" type="button" id="runSearchBtn" data-i18n="searchBtn">Search Directory</button>
+        </div>
+        <div class="empty-state" id="searchEmptyState">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><circle cx="15" cy="15" r="9" stroke="#BC9A4A" stroke-width="1.6"/><path d="M22 22l7 7" stroke="#BC9A4A" stroke-width="1.6"/></svg>
+          <h3 data-i18n="noResultsTitle">No alumni records yet</h3>
+          <p data-i18n="noResultsBody">The directory activates as graduates register — filters and future AI-matched networking will work against real profiles once they exist.</p>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="profile-template">
+        <div class="module-header"><h2 data-i18n="profTemplateTitle">Sample Alumni Profile</h2><p data-i18n="profTemplateLead">This is a template showing every field an alumni profile will display — not a real graduate.</p></div>
+        <div class="profile-template">
+          <div class="profile-photo"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true"><circle cx="15" cy="11" r="5" stroke="#8891A6" stroke-width="1.4"/><path d="M4 26c1.5-7 6-10 11-10s9.5 3 11 10" stroke="#8891A6" stroke-width="1.4"/></svg></div>
+          <div>
+            <div class="rf"><div class="rf-label" data-i18n="rfName">Full Name</div><div class="rf-value">—</div></div>
+            <div class="rf"><div class="rf-label" data-i18n="rfProgramme">Programme &amp; Graduation Year</div><div class="rf-value">—</div></div>
+            <div class="rf"><div class="rf-label" data-i18n="rfDesignation">Graduate Designation</div><div class="rf-value">—</div></div>
+            <div class="rf"><div class="rf-label" data-i18n="rfCurrentRole">Current Role &amp; Employer</div><div class="rf-value">—</div></div>
+            <div class="rf"><div class="rf-label" data-i18n="rfStory">Journey / Story</div><div class="rf-value" style="font-weight:400; color:var(--ink-muted);" data-i18n="rfStoryVal">To be shared by the graduate upon profile completion.</div></div>
+            <div class="resource-actions" style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn" type="button" data-i18n="rfConnect">Connect</button>
+              <button class="btn filled" type="button" data-i18n="rfMentorRequest">Request Mentorship</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="profileSettings">
+        <div class="module-header"><h2 data-i18n="settingsTitle">Profile Settings</h2><p data-i18n="settingsBody">Manage your alumni profile, privacy settings, and notification preferences once your account is active.</p></div>
+      </section>
+
+      <section class="panel" data-panel-content="alumniNetwork"></section>
+      <section class="panel" data-panel-content="alumniEvents"></section>
+      <section class="panel" data-panel-content="giving"></section>
+      <section class="panel" data-panel-content="jobs"></section>
+      <section class="panel" data-panel-content="mentorship"></section>
+      <section class="panel" data-panel-content="counselling"></section>
+      <section class="panel" data-panel-content="employers"></section>
+      <section class="panel" data-panel-content="engagement"></section>
+      <section class="panel" data-panel-content="insights"></section>
+      <section class="panel" data-panel-content="platform"></section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+const CRUD = ["CRUD","Draft","Publish","Archive"];
+
+const categoryModules = {
+  alumniNetwork: {
+    en:{title:"Alumni Registration, Groups &amp; Chapters", desc:"How graduates join, organise, and stay connected.",
+      sections:[
+        {label:"Registration &amp; Profiles", items:["Alumni Registration","Profile Verification","Graduate Designation Display","Privacy Controls","Profile Completeness Score"]},
+        {label:"Groups &amp; Chapters", items:["Regional Chapters","School-Based Groups","Interest Groups","Class Year Groups","Group Discussions","Group Events","Group Leadership Roles"]}
+      ]},
+    ar:{title:"تسجيل الخريجين والمجموعات والفروع", desc:"كيف ينضم الخريجون وينظمون أنفسهم ويبقون على تواصل.",
+      sections:[
+        {label:"التسجيل والملفات", items:["تسجيل الخريجين","التحقق من الملف","عرض تسمية الخريج","إعدادات الخصوصية","مؤشر اكتمال الملف"]},
+        {label:"المجموعات والفروع", items:["الفروع الإقليمية","مجموعات الكليات","مجموعات الاهتمام","مجموعات سنة التخرج","نقاشات المجموعة","فعاليات المجموعة","أدوار قيادة المجموعة"]}
+      ]}
+  },
+  alumniEvents: {
+    en:{title:"Alumni Events &amp; Recognition", desc:"Reunions, homecomings, and honouring graduate achievement.",
+      sections:[
+        {label:"Events", items:["Reunions","Homecoming","Networking Mixers","Webinars","Regional Meetups","Event Registration","Event Calendar"]},
+        {label:"Recognition &amp; Awards", items:["Distinguished Alumni Award","Young Achiever Recognition","Community Service Recognition","Nomination Workflow","Awards Ceremony","Recognition Archive"]}
+      ]},
+    ar:{title:"فعاليات الخريجين والتقدير", desc:"لقاءات الخريجين واستضافتهم وتكريم إنجازاتهم.",
+      sections:[
+        {label:"الفعاليات", items:["لقاءات الخريجين","الاستضافة السنوية","لقاءات التواصل","الندوات عبر الإنترنت","لقاءات إقليمية","تسجيل الفعالية","تقويم الفعاليات"]},
+        {label:"التقدير والجوائز", items:["جائزة الخريج المتميز","تقدير الشباب المتفوقين","تقدير خدمة المجتمع","سير عمل الترشيح","حفل التكريم","أرشيف التقدير"]}
+      ]}
+  },
+  giving: {
+    en:{title:"Giving &amp; Endowment", desc:"How alumni give back — transparently and by choice.",
+      sections:[{label:"Modules", items:["Donation Campaigns","Scholarship Endowment Giving","Recurring Giving","Donor Recognition","Giving History","Impact Reporting","Corporate Matching (planned)"]}]},
+    ar:{title:"التبرعات والوقف", desc:"كيف يمكن للخريجين رد الجميل — بشفافية واختيار.",
+      sections:[{label:"الوحدات", items:["حملات التبرع","التبرع لوقف المنح الدراسية","التبرع المتكرر","تقدير المتبرعين","سجل التبرعات","تقارير الأثر","مطابقة الشركات (مخطط)"]}]}
+  },
+  jobs: {
+    en:{title:"Job &amp; Internship Board", desc:"A curated board connecting graduates and students to real opportunities.",
+      sections:[{label:"Modules", items:["Job Postings","Internship Postings","Application Tracking","Saved Listings","Employer Verification","Listing Moderation","Alerts by Field of Study","Remote &amp; On-Site Filters"]}]},
+    ar:{title:"لوحة الوظائف والتدريب", desc:"لوحة منسقة تربط الخريجين والطلاب بفرص حقيقية.",
+      sections:[{label:"الوحدات", items:["إعلانات الوظائف","إعلانات التدريب","تتبع الطلبات","القوائم المحفوظة","التحقق من صاحب العمل","الإشراف على الإعلانات","تنبيهات حسب مجال الدراسة","فلاتر العمل عن بُعد والحضوري"]}]}
+  },
+  mentorship: {
+    en:{title:"Mentorship Programme", desc:"Structured, opt-in mentoring between alumni and current students.",
+      sections:[{label:"Modules", items:["Mentor Registration","Mentee Matching","Mentorship Requests","Session Scheduling","Progress Tracking","Mentorship Feedback","Programme Completion Certificates"]}]},
+    ar:{title:"برنامج الإرشاد", desc:"إرشاد منظم وطوعي بين الخريجين والطلاب الحاليين.",
+      sections:[{label:"الوحدات", items:["تسجيل المرشدين","مطابقة المتدربين","طلبات الإرشاد","جدولة الجلسات","تتبع التقدم","تقييم الإرشاد","شهادات إتمام البرنامج"]}]}
+  },
+  counselling: {
+    en:{title:"Career Counselling &amp; Resources", desc:"Guidance and self-serve resources for career planning.",
+      sections:[{label:"Modules", items:["One-on-One Counselling Booking","Resume / CV Review","Interview Preparation","Career Assessment Tools","Workshops &amp; Webinars","Career Resource Library","Industry Guides"]}]},
+    ar:{title:"الإرشاد المهني والموارد", desc:"توجيه وموارد ذاتية الخدمة لتخطيط المسار المهني.",
+      sections:[{label:"الوحدات", items:["حجز جلسة إرشاد فردية","مراجعة السيرة الذاتية","التحضير للمقابلات","أدوات تقييم مهني","ورش وندوات","مكتبة الموارد المهنية","دلائل القطاعات"]}]}
+  },
+  employers: {
+    en:{title:"Employer Partnerships", desc:"Institutional relationships with organisations that hire our graduates.",
+      sections:[{label:"Modules", items:["Employer Registration","Partnership Agreements","Campus Recruitment Events","Employer Branding Pages","Talent Pipeline Reports","Partnership Renewal Tracking"]}]},
+    ar:{title:"شراكات أصحاب العمل", desc:"علاقات مؤسسية مع المنظمات التي توظف خريجينا.",
+      sections:[{label:"الوحدات", items:["تسجيل صاحب العمل","اتفاقيات الشراكة","فعاليات التوظيف الجامعي","صفحات العلامة التجارية لصاحب العمل","تقارير مسار المواهب","تتبع تجديد الشراكة"]}]}
+  },
+  engagement: {
+    en:{title:"Stories, Newsletter &amp; Feedback", desc:"Ongoing, honest engagement between the College and its graduates.",
+      sections:[
+        {label:"Alumni Stories", items:["Story Submission","Editorial Review","Publication","Featured Stories Archive"]},
+        {label:"Newsletter &amp; Communications", items:["Newsletter Subscription","Campaign Builder (Admin)","Announcement Broadcasts","Email / SMS / WhatsApp Sync"]},
+        {label:"Surveys &amp; Feedback", items:["Alumni Satisfaction Surveys","Career Outcome Surveys","Programme Feedback","Survey Analytics"]}
+      ]},
+    ar:{title:"القصص والنشرة والتقييم", desc:"تواصل مستمر وصادق بين الكلية وخريجيها.",
+      sections:[
+        {label:"قصص الخريجين", items:["تقديم القصة","المراجعة التحريرية","النشر","أرشيف القصص المميزة"]},
+        {label:"النشرة والتواصل", items:["الاشتراك في النشرة","منشئ الحملات (الإدارة)","بث الإعلانات","مزامنة البريد/الرسائل/واتساب"]},
+        {label:"الاستبيانات والتقييم", items:["استبيانات رضا الخريجين","استبيانات النتائج المهنية","تقييم البرنامج","تحليلات الاستبيانات"]}
+      ]}
+  },
+  insights: {
+    en:{title:"Analytics &amp; AI Career Assistant", desc:"Institutional insight and AI-ready career support — AI features are not active on the current website.",
+      sections:[
+        {label:"Alumni &amp; Employment Analytics", items:["Employment Rate Tracking","Employer Distribution","Salary Range Reporting (aggregate only)","Regional Distribution","Programme Outcome Comparison","Engagement Metrics"]},
+        {label:"AI Career Assistant (Planned)", items:["AI Job Matching","AI Resume Feedback","AI Interview Practice","AI Career Path Suggestions","AI Mentorship Matching"]}
+      ]},
+    ar:{title:"التحليلات والمساعد المهني الذكي", desc:"رؤية مؤسسية ودعم مهني جاهز للذكاء الاصطناعي — ميزات الذكاء الاصطناعي غير مفعّلة على الموقع الحالي.",
+      sections:[
+        {label:"تحليلات الخريجين والتوظيف", items:["تتبع معدل التوظيف","توزيع أصحاب العمل","تقارير نطاق الراتب (إجمالي فقط)","التوزيع الإقليمي","مقارنة نتائج البرامج","مقاييس التفاعل"]},
+        {label:"المساعد المهني الذكي (مخطط)", items:["مطابقة الوظائف الذكية","تقييم السيرة الذاتية","تدريب المقابلات","اقتراحات المسار المهني","مطابقة الإرشاد"]}
+      ]}
+  },
+  platform: {
+    en:{title:"Notifications &amp; Platform Readiness", desc:"Engineering commitments guiding development — not active integrations today.",
+      sections:[
+        {label:"Notification Centre", items:["In-App Notifications","Email","SMS","WhatsApp","Push Notifications"]},
+        {label:"Platform &amp; Integration Readiness", items:["Firebase Authentication (planned)","Cloud Firestore (planned)","Cloud Storage (planned)","Cloud Functions (planned)","Firebase Hosting (planned)","Payment Gateway for Giving (planned)","REST APIs (planned)","GitHub Version Control","Audit Trail","Backup &amp; Disaster Recovery (planned)"]}
+      ]},
+    ar:{title:"الإشعارات وجاهزية المنصة", desc:"التزامات هندسية توجّه التطوير — وليست تكاملات فعلية حاليًا.",
+      sections:[
+        {label:"مركز الإشعارات", items:["إشعارات داخل التطبيق","البريد الإلكتروني","الرسائل النصية","واتساب","الإشعارات الفورية"]},
+        {label:"جاهزية المنصة والتكامل", items:["مصادقة Firebase (مخطط)","Cloud Firestore (مخطط)","تخزين Firebase (مخطط)","Cloud Functions (مخطط)","استضافة Firebase (مخطط)","بوابة دفع للتبرعات (مخطط)","واجهات REST (مخطط)","التحكم بالإصدارات عبر GitHub","سجل التدقيق","النسخ الاحتياطي والتعافي من الكوارث (مخطط)"]}
+      ]}
+  }
+};
+
+function renderCategoryModules(lang){
+  Object.keys(categoryModules).forEach(key=>{
+    const m = categoryModules[key][lang];
+    const el = document.querySelector(`[data-panel-content="${key}"]`);
+    if(!el) return;
+    el.innerHTML = `
+      <div class="module-header">
+        <h2>${m.title}</h2>
+        <span class="module-status">${lang==='ar' ? 'قيد الإعداد' : 'In Development'}</span>
+        <p>${m.desc}</p>
+      </div>
+      ${m.sections.map(s=>`
+        <div class="subsection">
+          <h3>${s.label}</h3>
+          <div class="module-grid">${s.items.map(i=>`<div class="module-tile"><h4>${i}</h4><div class="crud">${CRUD.map(c=>`<span>${c}</span>`).join('')}</div></div>`).join('')}</div>
+        </div>`).join('')}`;
+  });
+}
+
+const i18n = {
+  en:{
+    demoStrong:"Design Preview", demoText:"this is a UI/UX demonstration of the Alumni Network & Career Services Portal, not a live system. No real alumni or employer data is shown or stored.",
+    skipLink:"Skip to main content", brandLabel:"Alumni & Careers",
+    navOverview:"Overview", navDashboard:"🏠 Dashboard", navSearch:"Alumni Directory Search", navProfileTemplate:"Sample Alumni Profile",
+    navGroupAlumni:"Alumni Network", navAlumniNetwork:"Registration, Groups & Chapters", navAlumniEvents:"Events & Recognition", navGiving:"Giving & Endowment",
+    navGroupCareer:"Career Services", navJobs:"Job & Internship Board", navMentorship:"Mentorship Programme", navCounselling:"Career Counselling & Resources", navEmployers:"Employer Partnerships",
+    navGroupEngage:"Engagement", navEngagement:"Stories, Newsletter & Feedback", navInsights:"Analytics & AI Career Assistant",
+    navGroupSystem:"System", navPlatform:"Notifications & Platform Readiness", navProfileSettings:"Profile Settings",
+    profileLabel:"Alumni Preview",
+    welcomeTitle:"Alumni Network & Career Services", welcomeBody:"Connecting Al-Balagh graduates to each other, to employers, and to the College — for life, not just for graduation day.",
+    wAlumni:"Registered Alumni", wJobs:"Open Job Listings", wInternships:"Internship Listings", wMentors:"Active Mentors", wEmployers:"Employer Partners", wEvents:"Upcoming Alumni Events",
+    spotlightTitle:"Alumni Spotlight", noAlumniTitle:"No alumni profiles published yet", noAlumniBody:"Alumni Spotlight stories will appear here once graduates register and share their journeys — real stories only, never invented.",
+    latestJobsTitle:"Latest Opportunities", latestJobsBody:"No job or internship listings posted yet.",
+    myNetworkTitle:"My Network", connections:"Connections", mentorshipRequests:"Mentorship Requests", setupTask:"Complete your alumni profile", badgeAction:"Action",
+    searchTitle:"Alumni Directory Search", searchLead:"Search graduates by name, programme, graduation year, location, industry, or employer.",
+    fName:"Name", fProgramme:"Programme", fYear:"Graduation Year", fLocation:"Location", fIndustry:"Industry", fEmployer:"Current Employer", fAny:"Any",
+    searchBtn:"Search Directory", noResultsTitle:"No alumni records yet", noResultsBody:"The directory activates as graduates register — filters and future AI-matched networking will work against real profiles once they exist.",
+    profTemplateTitle:"Sample Alumni Profile", profTemplateLead:"This is a template showing every field an alumni profile will display — not a real graduate.",
+    rfName:"Full Name", rfProgramme:"Programme & Graduation Year", rfDesignation:"Graduate Designation", rfCurrentRole:"Current Role & Employer", rfStory:"Journey / Story", rfStoryVal:"To be shared by the graduate upon profile completion.",
+    rfConnect:"Connect", rfMentorRequest:"Request Mentorship",
+    settingsTitle:"Profile Settings", settingsBody:"Manage your alumni profile, privacy settings, and notification preferences once your account is active.",
+    searchPlaceholder:"Search alumni, jobs, mentors, employers...", langToggleLabel:"العربية"
+  },
+  ar:{
+    demoStrong:"معاينة تصميمية", demoText:"هذه معاينة لتصميم بوابة الخريجين والخدمات المهنية وليست نظامًا فعليًا. لا توجد بيانات خريجين أو أصحاب عمل حقيقية معروضة أو مخزَّنة.",
+    skipLink:"تخطَّ إلى المحتوى الرئيسي", brandLabel:"الخريجون والمهن",
+    navOverview:"نظرة عامة", navDashboard:"🏠 لوحة التحكم", navSearch:"دليل الخريجين", navProfileTemplate:"نموذج ملف خريج",
+    navGroupAlumni:"شبكة الخريجين", navAlumniNetwork:"التسجيل والمجموعات والفروع", navAlumniEvents:"الفعاليات والتقدير", navGiving:"التبرعات والوقف",
+    navGroupCareer:"الخدمات المهنية", navJobs:"لوحة الوظائف والتدريب", navMentorship:"برنامج الإرشاد", navCounselling:"الإرشاد المهني والموارد", navEmployers:"شراكات أصحاب العمل",
+    navGroupEngage:"التفاعل", navEngagement:"القصص والنشرة والتقييم", navInsights:"التحليلات والمساعد المهني الذكي",
+    navGroupSystem:"النظام", navPlatform:"الإشعارات وجاهزية المنصة", navProfileSettings:"إعدادات الملف الشخصي",
+    profileLabel:"معاينة الخريجين",
+    welcomeTitle:"شبكة الخريجين والخدمات المهنية", welcomeBody:"ربط خريجي البلاغ ببعضهم، وبأصحاب العمل، وبالكلية — مدى الحياة، لا في يوم التخرج فقط.",
+    wAlumni:"الخريجون المسجلون", wJobs:"إعلانات الوظائف المفتوحة", wInternships:"إعلانات التدريب", wMentors:"المرشدون النشطون", wEmployers:"شركاء أصحاب العمل", wEvents:"فعاليات الخريجين القادمة",
+    spotlightTitle:"أضواء على الخريجين", noAlumniTitle:"لم تُنشر ملفات خريجين بعد", noAlumniBody:"ستظهر قصص الخريجين هنا فور تسجيلهم ومشاركة رحلاتهم — قصص حقيقية فقط، لا مُختلقة أبدًا.",
+    latestJobsTitle:"أحدث الفرص", latestJobsBody:"لا توجد إعلانات وظائف أو تدريب بعد.",
+    myNetworkTitle:"شبكتي", connections:"الروابط", mentorshipRequests:"طلبات الإرشاد", setupTask:"أكمل ملفك الشخصي كخريج", badgeAction:"إجراء",
+    searchTitle:"دليل الخريجين", searchLead:"ابحث عن الخريجين بالاسم أو البرنامج أو سنة التخرج أو الموقع أو القطاع أو صاحب العمل.",
+    fName:"الاسم", fProgramme:"البرنامج", fYear:"سنة التخرج", fLocation:"الموقع", fIndustry:"القطاع", fEmployer:"صاحب العمل الحالي", fAny:"أي",
+    searchBtn:"بحث في الدليل", noResultsTitle:"لا توجد سجلات خريجين بعد", noResultsBody:"يُفعَّل الدليل فور تسجيل الخريجين — ستعمل الفلاتر والتواصل المستقبلي بمطابقة الذكاء الاصطناعي على ملفات حقيقية فور وجودها.",
+    profTemplateTitle:"نموذج ملف خريج", profTemplateLead:"هذا نموذج يوضّح كل حقل سيعرضه ملف الخريج — وليس خريجًا فعليًا.",
+    rfName:"الاسم الكامل", rfProgramme:"البرنامج وسنة التخرج", rfDesignation:"تسمية الخريج", rfCurrentRole:"الدور الحالي وصاحب العمل", rfStory:"الرحلة / القصة", rfStoryVal:"ستُشارك من قبل الخريج عند اكتمال الملف.",
+    rfConnect:"تواصل", rfMentorRequest:"طلب إرشاد",
+    settingsTitle:"إعدادات الملف الشخصي", settingsBody:"إدارة ملفك كخريج وإعدادات الخصوصية وتفضيلات الإشعارات فور تفعيل حسابك.",
+    searchPlaceholder:"ابحث عن خريجين، وظائف، مرشدين، أصحاب عمل...", langToggleLabel:"English"
+  }
+};
+
+let currentLang = 'en';
+function applyLang(lang){
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(i18n[lang][key] !== undefined) el.innerHTML = i18n[lang][key];
+  });
+  document.getElementById('searchInput').placeholder = i18n[lang].searchPlaceholder;
+  document.getElementById('langToggle').textContent = i18n[lang].langToggleLabel;
+  renderCategoryModules(lang);
+}
+document.getElementById('langToggle').addEventListener('click', ()=> applyLang(currentLang==='en' ? 'ar' : 'en'));
+applyLang('en');
+
+document.getElementById('runSearchBtn').addEventListener('click', ()=>{
+  document.getElementById('searchEmptyState').scrollIntoView({behavior:'smooth', block:'center'});
+});
+
+const navItems = document.querySelectorAll('.nav-item');
+const panels = document.querySelectorAll('.panel');
+navItems.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.panel;
+    navItems.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    panels.forEach(p=> p.classList.toggle('active', p.dataset.panelContent === target));
+    document.getElementById('main').scrollIntoView({behavior:'smooth', block:'start'});
+    if(window.innerWidth <= 900) closeSidebar();
+  });
+});
+
+const sidebar = document.getElementById('sidebar');
+const menuToggle = document.getElementById('menuToggle');
+const sidebarClose = document.getElementById('sidebarClose');
+function openSidebar(){ sidebar.classList.add('open'); }
+function closeSidebar(){ sidebar.classList.remove('open'); }
+menuToggle.addEventListener('click', openSidebar);
+sidebarClose.addEventListener('click', closeSidebar);
+</script>
+
+</body>
+</html>

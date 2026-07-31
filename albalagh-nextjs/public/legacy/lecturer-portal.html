@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecturer Portal | Al-Balagh International Premium College</title>
+<meta name="description" content="The Lecturer Portal of Al-Balagh International Premium College — teaching, assessment, communication, and research in one workspace.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#173A63; --navy-dark:#0F2847; --gold:#BC9A4A; --gold-light:#D8C58C;
+    --manuscript:#F6F2E7; --surface:#FFFFFF; --ink:#1C2430; --ink-muted:#4B5568;
+    --border:#E1DACB; --border-dark:#2A3E5C; --emerald:#1E4C43;
+    --radius-sm:6px; --radius-md:8px; --radius-lg:16px;
+    --shadow-1:0 1px 3px rgba(15,40,71,0.08); --shadow-2:0 8px 24px rgba(15,40,71,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:'Inter',sans-serif; color:var(--ink); background:var(--manuscript); -webkit-font-smoothing:antialiased;}
+  [dir="rtl"] body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;}
+  h1,h2,h3{font-family:'Fraunces',serif; margin:0; color:var(--navy);}
+  [dir="rtl"] h1,[dir="rtl"] h2,[dir="rtl"] h3{font-family:'Amiri',serif;}
+  p{margin:0; color:var(--ink-muted); line-height:1.6;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--navy); outline-offset:2px;}
+  .skip-link{position:absolute; left:-999px; top:0; background:#fff; color:var(--navy); padding:12px 20px; z-index:1000;}
+  .skip-link:focus{left:0;}
+
+  .demo-banner{background:#8A6A2E; color:#fff; text-align:center; font-size:12.5px; font-weight:600; padding:8px 16px;}
+  .demo-banner strong{font-weight:700;}
+
+  .portal-shell{display:grid; grid-template-columns:250px 1fr; min-height:100vh;}
+  @media (max-width:900px){ .portal-shell{grid-template-columns:1fr;} }
+
+  .sidebar{background:var(--navy-dark); color:#fff; padding:20px 0; position:sticky; top:0; height:100vh; overflow-y:auto;}
+  @media (max-width:900px){ .sidebar{position:fixed; inset:0 20% 0 0; z-index:200; transform:translateX(-100%); transition:transform .25s ease; height:100vh;} [dir="rtl"] .sidebar{inset:0 0 0 20%; transform:translateX(100%);} .sidebar.open{transform:translateX(0);} }
+  .sidebar-brand{display:flex; align-items:center; gap:10px; padding:0 20px 20px; border-bottom:1px solid var(--border-dark); margin-bottom:14px;}
+  .sidebar-brand span{font-family:'Fraunces',serif; font-size:17px; font-weight:600;}
+  [dir="rtl"] .sidebar-brand span{font-family:'Amiri',serif;}
+  .nav-group{margin-bottom:6px;}
+  .nav-group-label{font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:#7C86A0; padding:14px 20px 6px; font-weight:700;}
+  .nav-item{display:flex; align-items:center; gap:10px; width:100%; text-align:start; background:none; border:none; color:#C7CEDC; padding:10px 20px; font-size:13.5px; font-weight:500; border-inline-start:3px solid transparent;}
+  .nav-item:hover{background:rgba(255,255,255,0.04); color:#fff;}
+  .nav-item.active{background:rgba(255,255,255,0.06); color:#fff; border-inline-start-color:var(--gold);}
+  .sidebar-close{display:none; background:none; border:none; color:#fff; font-size:22px; position:absolute; top:14px; inset-inline-end:14px;}
+  @media (max-width:900px){ .sidebar-close{display:block;} }
+
+  .topbar{background:var(--surface); border-bottom:1px solid var(--border); padding:14px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; position:sticky; top:0; z-index:50;}
+  .topbar-left{display:flex; align-items:center; gap:14px; flex:1;}
+  .menu-toggle{display:none; background:none; border:none; font-size:22px; color:var(--navy);}
+  @media (max-width:900px){ .menu-toggle{display:block;} }
+  .search-box{flex:1; max-width:380px; position:relative;}
+  .search-box input{width:100%; height:40px; border:1px solid var(--border); border-radius:999px; padding:0 16px 0 38px; font-size:13.5px; background:var(--manuscript);}
+  [dir="rtl"] .search-box input{padding:0 38px 0 16px;}
+  .search-box svg{position:absolute; left:14px; top:50%; transform:translateY(-50%);}
+  [dir="rtl"] .search-box svg{left:auto; right:14px;}
+  .topbar-right{display:flex; align-items:center; gap:16px;}
+  .icon-btn{position:relative; background:none; border:none; color:var(--ink-muted); padding:6px;}
+  .icon-btn .dot{position:absolute; top:2px; right:2px; width:8px; height:8px; border-radius:50%; background:#8C4A3A; border:1.5px solid #fff;}
+  .profile-chip{display:flex; align-items:center; gap:8px; padding:6px 12px 6px 6px; border-radius:999px; background:var(--manuscript); border:1px solid var(--border);}
+  [dir="rtl"] .profile-chip{padding:6px 6px 6px 12px;}
+  .profile-avatar{width:28px; height:28px; border-radius:50%; background:var(--navy); display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:700;}
+  .profile-chip span{font-size:12.5px; font-weight:600;}
+
+  .content{padding:32px;}
+  @media (max-width:600px){ .content{padding:20px;} }
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .welcome-banner{background:linear-gradient(135deg,var(--navy) 0%, var(--navy-dark) 100%); border-radius:var(--radius-lg); padding:32px; color:#fff; margin-bottom:28px; display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap;}
+  .welcome-banner h2{color:#fff; font-size:24px; margin-bottom:6px;}
+  .welcome-banner p{color:#C7CEDC; font-size:13.5px;}
+  .welcome-meta{display:flex; gap:24px; flex-wrap:wrap;}
+  .welcome-meta div{font-size:12px; color:#9AA5BD;}
+  .welcome-meta strong{display:block; color:#fff; font-size:14px; font-weight:600;}
+
+  .widget-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-bottom:28px;}
+  @media (max-width:960px){ .widget-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .widget-grid{grid-template-columns:1fr;} }
+  .widget{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px;}
+  .widget .label{font-size:11px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px;}
+  .widget .value{font-size:20px; font-weight:700; color:var(--ink);}
+  .widget .sub{font-size:11.5px; color:var(--ink-muted); margin-top:4px;}
+
+  .two-col{display:grid; grid-template-columns:1.4fr 1fr; gap:22px;}
+  @media (max-width:900px){ .two-col{grid-template-columns:1fr;} }
+  .panel-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:24px; margin-bottom:20px;}
+  .panel-card h3{font-size:17px; margin-bottom:16px;}
+  .list-row{display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); font-size:13.5px;}
+  .list-row:last-child{border-bottom:none;}
+  .badge{display:inline-block; font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:999px;}
+  .badge.ok{background:rgba(30,76,67,0.1); color:#1E4C43;}
+  .badge.warn{background:rgba(188,154,74,0.12); color:#8A6A2E;}
+
+  .module-header{margin-bottom:24px;}
+  .module-header h2{font-size:26px; margin-bottom:8px;}
+  .module-status{display:inline-block; font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px; margin-bottom:16px;}
+  .module-status.building{background:rgba(30,76,67,0.1); color:#1E4C43;}
+  .module-status.planned{background:rgba(188,154,74,0.12); color:#8A6A2E;}
+  .feature-chip-grid{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+  .feature-chip-grid span{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 16px; font-size:12.5px; font-weight:600; color:var(--ink-muted);}
+
+  table{width:100%; border-collapse:collapse;}
+  thead th{background:var(--navy); color:#fff; text-align:start; padding:12px 16px; font-size:11.5px; text-transform:uppercase; letter-spacing:0.03em;}
+  tbody td{padding:12px 16px; font-size:13px; border-bottom:1px solid var(--border); color:var(--ink-muted);}
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius-md);}
+
+  .profile-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; max-width:480px;}
+  .profile-photo{width:70px; height:70px; border-radius:50%; background:var(--manuscript); border:2px dashed var(--border); display:flex; align-items:center; justify-content:center; margin-bottom:18px;}
+  .profile-field{font-size:11px; color:var(--ink-muted); margin-bottom:2px;}
+  .profile-value{font-size:14px; font-weight:600; color:var(--ink); margin-bottom:12px;}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+<div class="demo-banner"><strong>Design Preview</strong> — this is a UI/UX demonstration of the Lecturer Portal, not a live secure account. No real faculty or student data is shown or stored.</div>
+
+<div class="portal-shell">
+  <aside class="sidebar" id="sidebar" aria-label="Lecturer portal navigation">
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">✕</button>
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 48 48" width="30" height="30" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
+      <span>Lecturer Portal</span>
+    </div>
+    <nav id="navList">
+      <div class="nav-group">
+        <div class="nav-group-label">Overview</div>
+        <button class="nav-item active" data-panel="dashboard">🏠 Dashboard</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Teaching &amp; Courses</div>
+        <button class="nav-item" data-panel="mycourses">My Courses</button>
+        <button class="nav-item" data-panel="teachingplans">Course Outline &amp; Teaching Plans</button>
+        <button class="nav-item" data-panel="materials">Learning Materials Upload</button>
+        <button class="nav-item" data-panel="virtualclass">Live Virtual Classes</button>
+        <button class="nav-item" data-panel="attendance">Attendance Management</button>
+        <button class="nav-item" data-panel="enrolment">Student Enrolment Lists</button>
+        <button class="nav-item" data-panel="advancedcourses">Advanced Course Management</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Assessment &amp; Grading</div>
+        <button class="nav-item" data-panel="assignments">Assignment &amp; Quiz Creation</button>
+        <button class="nav-item" data-panel="examinations">Examination Management</button>
+        <button class="nav-item" data-panel="gradebook">Grade Entry &amp; Gradebook</button>
+        <button class="nav-item" data-panel="moderation">Result Moderation</button>
+        <button class="nav-item" data-panel="analytics">Grade Analytics</button>
+        <button class="nav-item" data-panel="assessmentecosystem">Digital Assessment Ecosystem</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Communication</div>
+        <button class="nav-item" data-panel="announcements">Course Announcements</button>
+        <button class="nav-item" data-panel="messaging">Messaging &amp; Advising</button>
+        <button class="nav-item" data-panel="officehours">Office Hours</button>
+        <button class="nav-item" data-panel="collaboration">Collaboration &amp; Meetings</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Research &amp; Development</div>
+        <button class="nav-item" data-panel="research">Research Projects &amp; Supervision</button>
+        <button class="nav-item" data-panel="publications">Publications, Conferences &amp; ORCID</button>
+        <button class="nav-item" data-panel="profdev">Professional Development</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Documents &amp; Analytics</div>
+        <button class="nav-item" data-panel="documents">Document Management</button>
+        <button class="nav-item" data-panel="reporting">Analytics &amp; Reporting</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Digital Services</div>
+        <button class="nav-item" data-panel="library">Digital Library</button>
+        <button class="nav-item" data-panel="aiteaching">AI-Enhanced Teaching</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Enterprise &amp; Platform</div>
+        <button class="nav-item" data-panel="platform">Platform &amp; Integration Readiness</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Account</div>
+        <button class="nav-item" data-panel="profile">Academic Profile</button>
+      </div>
+    </nav>
+  </aside>
+
+  <div>
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="#8891A6" stroke-width="1.4"/><path d="M11 11l3.5 3.5" stroke="#8891A6" stroke-width="1.4"/></svg>
+          <input type="text" placeholder="Search courses, students, materials, announcements...">
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" aria-label="Notifications"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 15c0-1 1-2 1-6a5 5 0 0110 0c0 4 1 5 1 6H4z" stroke="#4B5568" stroke-width="1.5"/><path d="M8 17.5a2 2 0 004 0" stroke="#4B5568" stroke-width="1.5"/></svg><span class="dot"></span></button>
+        <div class="profile-chip"><div class="profile-avatar">LC</div><span>Faculty Preview</span></div>
+      </div>
+    </header>
+
+    <main class="content" id="main">
+
+      <section class="panel active" data-panel-content="dashboard">
+        <div class="welcome-banner">
+          <div>
+            <h2>Welcome to your teaching workspace</h2>
+            <p>This dashboard fills in with your real course assignments and student activity once your faculty account is active.</p>
+          </div>
+          <div class="welcome-meta">
+            <div><strong>—</strong>Academic Rank</div>
+            <div><strong>—</strong>Department</div>
+            <div><strong>—</strong>Current Semester</div>
+            <div><strong>Preview</strong>Status</div>
+          </div>
+        </div>
+        <div class="widget-grid">
+          <div class="widget"><div class="label">Courses Assigned</div><div class="value">0</div><div class="sub">Assigned upon appointment</div></div>
+          <div class="widget"><div class="label">Pending Assessments</div><div class="value">0</div><div class="sub">Nothing awaiting review</div></div>
+          <div class="widget"><div class="label">Today's Classes</div><div class="value">0</div><div class="sub">None scheduled yet</div></div>
+          <div class="widget"><div class="label">Upcoming Deadlines</div><div class="value">0</div><div class="sub">None set yet</div></div>
+          <div class="widget"><div class="label">Teaching Workload</div><div class="value">—</div><div class="sub">Hours/week, once assigned</div></div>
+          <div class="widget"><div class="label">Student Engagement</div><div class="value">—</div><div class="sub">Appears once courses are live</div></div>
+          <div class="widget"><div class="label">Course Completion</div><div class="value">0%</div><div class="sub">Across assigned courses</div></div>
+          <div class="widget"><div class="label">Research Activity</div><div class="value">—</div><div class="sub">See Research &amp; Development</div></div>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="panel-card">
+              <h3>Quick Actions</h3>
+              <div class="feature-chip-grid">
+                <span>Upload Materials</span><span>Create Assignment</span><span>Enter Grades</span><span>Post Announcement</span><span>Schedule Office Hours</span>
+              </div>
+            </div>
+            <div class="panel-card">
+              <h3>Teaching Schedule</h3>
+              <p style="font-size:13px;">No classes scheduled yet. Your teaching schedule will appear here once courses are assigned for the semester.</p>
+            </div>
+          </div>
+          <div class="panel-card">
+            <h3>Notifications</h3>
+            <div class="list-row"><span>Welcome to your Lecturer Portal preview</span><span class="badge ok">Info</span></div>
+            <div class="list-row"><span>Complete your academic profile</span><span class="badge warn">Action</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="mycourses">
+        <div class="module-header"><h2>My Courses</h2><p>Courses assigned to you for the current semester.</p></div>
+        <div class="panel-card"><p style="font-size:13.5px;">No courses assigned yet. Once the Academic Board confirms your teaching load, assigned courses will appear here with rosters, materials, and grading tools.</p></div>
+      </section>
+
+      <section class="panel" data-panel-content="gradebook">
+        <div class="module-header"><h2>Grade Entry &amp; Gradebook</h2><p>Enter and manage continuous assessment and examination scores.</p></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Student</th><th scope="col">Course</th><th scope="col">Continuous Assessment</th><th scope="col">Examination</th><th scope="col">Final Grade</th></tr></thead>
+            <tbody><tr><td colspan="5" style="text-align:center; padding:28px;">No grade records yet — the gradebook populates once you have an assigned course roster.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="profile">
+        <div class="module-header"><h2>Academic Profile</h2><p>Your public-facing faculty profile, shown on School and Department pages once published.</p></div>
+        <div class="profile-card">
+          <div class="profile-photo"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true"><circle cx="15" cy="11" r="5" stroke="#8891A6" stroke-width="1.4"/><path d="M4 26c1.5-7 6-10 11-10s9.5 3 11 10" stroke="#8891A6" stroke-width="1.4"/></svg></div>
+          <div class="profile-field">Full Name</div><div class="profile-value">—</div>
+          <div class="profile-field">Academic Rank</div><div class="profile-value">—</div>
+          <div class="profile-field">Department</div><div class="profile-value">—</div>
+          <div class="profile-field">Biography</div><div class="profile-value" style="font-weight:400; color:var(--ink-muted);">To be published upon appointment.</div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="teachingplans"></section>
+      <section class="panel" data-panel-content="materials"></section>
+      <section class="panel" data-panel-content="virtualclass"></section>
+      <section class="panel" data-panel-content="attendance"></section>
+      <section class="panel" data-panel-content="enrolment"></section>
+      <section class="panel" data-panel-content="advancedcourses"></section>
+      <section class="panel" data-panel-content="assignments"></section>
+      <section class="panel" data-panel-content="examinations"></section>
+      <section class="panel" data-panel-content="moderation"></section>
+      <section class="panel" data-panel-content="analytics"></section>
+      <section class="panel" data-panel-content="assessmentecosystem"></section>
+      <section class="panel" data-panel-content="announcements"></section>
+      <section class="panel" data-panel-content="messaging"></section>
+      <section class="panel" data-panel-content="officehours"></section>
+      <section class="panel" data-panel-content="collaboration"></section>
+      <section class="panel" data-panel-content="research"></section>
+      <section class="panel" data-panel-content="publications"></section>
+      <section class="panel" data-panel-content="profdev"></section>
+      <section class="panel" data-panel-content="documents"></section>
+      <section class="panel" data-panel-content="reporting"></section>
+      <section class="panel" data-panel-content="library"></section>
+      <section class="panel" data-panel-content="aiteaching"></section>
+      <section class="panel" data-panel-content="platform"></section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+const genericModules = {
+  teachingplans: {title:"Course Outline &amp; Teaching Plans", desc:"Weekly teaching plans and course outlines for each assigned course.", status:"planned", features:["Course Outline","Weekly Plans","Learning Objectives","Lesson Scheduling","Curriculum Mapping","Lesson Version History"]},
+  materials: {title:"Learning Materials Upload", desc:"Upload readings, slides, and multimedia lessons for your courses.", status:"planned", features:["File Upload","Multimedia Lessons","Downloadable Resources","Version Control"]},
+  virtualclass: {title:"Live Virtual Classes", desc:"Manage and host live virtual classroom sessions.", status:"planned", features:["Classroom Scheduling","Screen Sharing","Recording","Attendance Capture"]},
+  attendance: {title:"Attendance Management", desc:"Track and manage attendance across your courses.", status:"planned", features:["Session Attendance","Attendance Reports","Absence Flags","Attendance Insights (AI)","Export"]},
+  enrolment: {title:"Student Enrolment Lists", desc:"View enrolled students per course, once course registration is active.", status:"planned", features:["Course Roster","Student Contact Info","Enrolment Status","Export"]},
+  advancedcourses: {title:"Advanced Course Management", desc:"Manage courses across semesters, sessions, and programme assignments.", status:"planned", features:["Course Creation","Activation/Deactivation","Multiple Semesters","Multiple Sessions","Multiple Programme Assignments","Graduate Attributes Mapping"]},
+  assignments: {title:"Assignment &amp; Quiz Creation", desc:"Create and manage assignments and quizzes for your courses.", status:"planned", features:["Assignment Builder","Quiz Builder","Deadline Management","Rubrics"]},
+  examinations: {title:"Examination Management", desc:"Set up and manage online examinations for your courses.", status:"planned", features:["Exam Builder","Time Windows","Question Banks","Result Release"]},
+  moderation: {title:"Result Moderation", desc:"Where authorised, review and moderate results before submission.", status:"planned", features:["Moderation Queue","Comparison View","Sign-Off","Escalation"]},
+  analytics: {title:"Grade Analytics", desc:"Performance trends across your courses and cohorts.", status:"planned", features:["Grade Distribution","Trend Analysis","At-Risk Flags","Export Reports"]},
+  assessmentecosystem: {title:"Digital Assessment Ecosystem", desc:"A complete, fair, and auditable assessment workflow.", status:"planned", features:["Rubric Builder","Anonymous Marking","Grade Moderation Workflow","Internal Verification","External Examiner Review","Assessment Analytics","Academic Integrity Checks","Plagiarism Detection Integration","Grade Appeals Workflow","Digital Mark Sheets","Bulk Grade Upload","Version Tracking"]},
+  announcements: {title:"Course Announcements", desc:"Post announcements to students enrolled in your courses.", status:"planned", features:["Course-Wide Posts","Scheduling","Pinned Notices","Read Receipts"]},
+  messaging: {title:"Messaging &amp; Academic Advising", desc:"Secure messaging with students and academic advising tools.", status:"planned", features:["Internal Messaging","Advising Notes","Email Sync","SMS/WhatsApp Sync"]},
+  officehours: {title:"Office Hours Scheduling", desc:"Set and manage available office hours for student consultations.", status:"planned", features:["Availability Calendar","Booking","Reminders","Cancellation","Calendar Synchronisation"]},
+  collaboration: {title:"Collaboration &amp; Meetings", desc:"Virtual meeting and collaboration tools for teaching and academic committees.", status:"planned", features:["Virtual Meetings","Microsoft Teams (planned)","Google Meet (planned)","Zoom (planned)","Discussion Boards"]},
+  research: {title:"Research Projects &amp; Supervision", desc:"Manage your active research projects, grants, and student supervision.", status:"planned", features:["Project Tracking","Postgraduate Supervision","Grant Applications","Research Collaboration","Institutional Support"]},
+  publications: {title:"Publications, Conferences &amp; ORCID", desc:"Track your publications, journal submissions, conference activity, and researcher identifiers.", status:"planned", features:["Publication Record","Journal Submissions","Conference Log","Citation Tracking","ORCID Integration","Google Scholar Integration","Publication Repository"]},
+  profdev: {title:"Professional Development", desc:"Training, certifications, and professional growth activity.", status:"planned", features:["Training Log","Certifications","Development Plan","Institutional Support"]},
+  documents: {title:"Document Management", desc:"Secure management of course and research documents.", status:"planned", features:["Course Outlines","Lecture Notes","Curriculum Files","Assignment Templates","Examination Papers","Moderation Reports","Version Control","File Approval Workflow","Secure Download Permissions"]},
+  reporting: {title:"Analytics &amp; Reporting", desc:"Institutional-grade reporting across your teaching activity.", status:"planned", features:["Teaching Performance","Student Engagement","Assessment Completion","Course Analytics","Attendance Analytics","Learning Analytics","Programme Statistics","Department Statistics"]},
+  library: {title:"Digital Library", desc:"Full access to the College's digital library and research collections.", status:"planned", features:["Digital Catalogue","Journal Access","Research Collections","Borrowing"]},
+  aiteaching: {title:"AI-Enhanced Teaching", desc:"Planned AI support across the teaching lifecycle — not active on the current website.", status:"planned", features:["AI Lesson Planner","AI Curriculum Assistant","AI Quiz Generator","AI Examination Generator","AI Rubric Generator","AI Assignment Feedback","AI Learning Analytics","AI Student Risk Detection","AI Academic Writing Assistant","AI Translation Assistant","Academic Integrity Review"]},
+  platform: {title:"Platform &amp; Integration Readiness", desc:"Architectural notes on how this portal is being prepared to connect to real institutional systems. These are engineering commitments guiding development — not active integrations today.", status:"building", features:["Firebase Authentication (planned)","Firestore (planned)","Cloud Storage (planned)","Cloud Functions (planned)","Firebase Hosting (planned)","GitHub Version Control","CI/CD Pipeline (planned)","Role-Based Access Control","Single Sign-On Readiness","Multi-Factor Authentication (planned)","Offline/PWA Readiness","Multilingual Readiness (EN → AR)"]}
+};
+
+Object.keys(genericModules).forEach(key=>{
+  const m = genericModules[key];
+  const el = document.querySelector(`[data-panel-content="${key}"]`);
+  if(!el) return;
+  el.innerHTML = `
+    <div class="module-header">
+      <h2>${m.title}</h2>
+      <span class="module-status ${m.status}">${m.status === 'building' ? 'Building' : 'Planned'}</span>
+      <p>${m.desc}</p>
+      <div class="feature-chip-grid">${m.features.map(f=>`<span>${f}</span>`).join('')}</div>
+    </div>`;
+});
+
+const navItems = document.querySelectorAll('.nav-item');
+const panels = document.querySelectorAll('.panel');
+navItems.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.panel;
+    navItems.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    panels.forEach(p=> p.classList.toggle('active', p.dataset.panelContent === target));
+    document.getElementById('main').scrollIntoView({behavior:'smooth', block:'start'});
+    if(window.innerWidth <= 900) closeSidebar();
+  });
+});
+
+const sidebar = document.getElementById('sidebar');
+const menuToggle = document.getElementById('menuToggle');
+const sidebarClose = document.getElementById('sidebarClose');
+function openSidebar(){ sidebar.classList.add('open'); }
+function closeSidebar(){ sidebar.classList.remove('open'); }
+menuToggle.addEventListener('click', openSidebar);
+sidebarClose.addEventListener('click', closeSidebar);
+</script>
+
+</body>
+</html>

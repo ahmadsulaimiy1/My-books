@@ -1,0 +1,39 @@
+/*
+  Al-Balagh Global Design System — Design Tokens
+  Single source of truth for colour, spacing, radius, and shadow values.
+  Every component should reference these variables rather than hard-coding values,
+  so the whole site stays visually consistent and easy to re-theme later.
+*/
+
+:root {
+  /* Colour palette */
+  --navy: #173A63;
+  --navy-dark: #0F2847;
+  --gold: #BC9A4A;
+  --gold-light: #D8C58C;
+  --manuscript: #F6F2E7;
+  --surface: #FFFFFF;
+  --ink: #1C2430;
+  --ink-muted: #4B5568;
+  --border: #E1DACB;
+  --border-dark: #2A3E5C;
+  --emerald: #1E4C43;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  /* Shadows */
+  --shadow-1: 0 1px 3px rgba(15, 40, 71, 0.08);
+  --shadow-2: 0 8px 24px rgba(15, 40, 71, 0.12);
+  --shadow-3: 0 16px 48px rgba(15, 40, 71, 0.18);
+
+  /* Spacing scale (8px base) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+  --space-6: 64px;
+}

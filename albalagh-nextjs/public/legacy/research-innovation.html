@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research &amp; Innovation | Al-Balagh International Premium College</title>
+<meta name="description" content="Research Centre, Publications, and Innovation Hub of Al-Balagh International Premium College.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#173A63; --navy-dark:#0F2847; --gold:#BC9A4A; --gold-light:#D8C58C;
+    --manuscript:#F6F2E7; --surface:#FFFFFF; --ink:#1C2430; --ink-muted:#4B5568;
+    --border:#E1DACB; --border-dark:#2A3E5C; --emerald:#1E4C43;
+    --radius-sm:6px; --radius-md:8px; --radius-lg:16px;
+    --shadow-1:0 1px 3px rgba(15,40,71,0.08); --shadow-2:0 8px 24px rgba(15,40,71,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:'Inter',sans-serif; color:var(--ink); background:var(--manuscript); -webkit-font-smoothing:antialiased;}
+  [dir="rtl"] body{font-family:'IBM Plex Sans Arabic','Inter',sans-serif;}
+  h1,h2,h3{font-family:'Fraunces',serif; margin:0; color:var(--navy);}
+  [dir="rtl"] h1,[dir="rtl"] h2,[dir="rtl"] h3{font-family:'Amiri',serif;}
+  p{margin:0; color:var(--ink-muted); line-height:1.6;}
+  a{color:inherit; text-decoration:none;}
+  button,input,select{font-family:inherit; cursor:pointer;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{outline:2px solid var(--navy); outline-offset:2px;}
+  .skip-link{position:absolute; left:-999px; top:0; background:#fff; color:var(--navy); padding:12px 20px; z-index:1000;}
+  .skip-link:focus{left:0;}
+
+  .demo-banner{background:#8A6A2E; color:#fff; text-align:center; font-size:12.5px; font-weight:600; padding:8px 16px;}
+  .demo-banner strong{font-weight:700;}
+
+  .portal-shell{display:grid; grid-template-columns:260px 1fr; min-height:100vh;}
+  @media (max-width:900px){ .portal-shell{grid-template-columns:1fr;} }
+
+  .sidebar{background:var(--navy-dark); color:#fff; padding:20px 0; position:sticky; top:0; height:100vh; overflow-y:auto;}
+  @media (max-width:900px){ .sidebar{position:fixed; inset:0 20% 0 0; z-index:200; transform:translateX(-100%); transition:transform .25s ease; height:100vh;} [dir="rtl"] .sidebar{inset:0 0 0 20%; transform:translateX(100%);} .sidebar.open{transform:translateX(0);} }
+  .sidebar-brand{display:flex; align-items:center; gap:10px; padding:0 20px 20px; border-bottom:1px solid var(--border-dark); margin-bottom:14px;}
+  .sidebar-brand span{font-family:'Fraunces',serif; font-size:16px; font-weight:600;}
+  [dir="rtl"] .sidebar-brand span{font-family:'Amiri',serif;}
+  .nav-group{margin-bottom:6px;}
+  .nav-group-label{font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:#7C86A0; padding:14px 20px 6px; font-weight:700;}
+  .nav-item{display:flex; align-items:center; gap:10px; width:100%; text-align:start; background:none; border:none; color:#C7CEDC; padding:10px 20px; font-size:13.5px; font-weight:500; border-inline-start:3px solid transparent;}
+  .nav-item:hover{background:rgba(255,255,255,0.04); color:#fff;}
+  .nav-item.active{background:rgba(255,255,255,0.06); color:#fff; border-inline-start-color:var(--gold);}
+  .sidebar-close{display:none; background:none; border:none; color:#fff; font-size:22px; position:absolute; top:14px; inset-inline-end:14px;}
+  @media (max-width:900px){ .sidebar-close{display:block;} }
+
+  .topbar{background:var(--surface); border-bottom:1px solid var(--border); padding:14px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; position:sticky; top:0; z-index:50;}
+  .topbar-left{display:flex; align-items:center; gap:14px; flex:1;}
+  .menu-toggle{display:none; background:none; border:none; font-size:22px; color:var(--navy);}
+  @media (max-width:900px){ .menu-toggle{display:block;} }
+  .search-box{flex:1; max-width:420px; position:relative;}
+  .search-box input{width:100%; height:40px; border:1px solid var(--border); border-radius:999px; padding:0 16px 0 38px; font-size:13.5px; background:var(--manuscript);}
+  [dir="rtl"] .search-box input{padding:0 38px 0 16px;}
+  .search-box svg{position:absolute; left:14px; top:50%; transform:translateY(-50%);}
+  [dir="rtl"] .search-box svg{left:auto; right:14px;}
+  .topbar-right{display:flex; align-items:center; gap:16px;}
+  .icon-btn{position:relative; background:none; border:none; color:var(--ink-muted); padding:6px;}
+  .icon-btn .dot{position:absolute; top:2px; right:2px; width:8px; height:8px; border-radius:50%; background:#8C4A3A; border:1.5px solid #fff;}
+  .profile-chip{display:flex; align-items:center; gap:8px; padding:6px 12px 6px 6px; border-radius:999px; background:var(--manuscript); border:1px solid var(--border);}
+  [dir="rtl"] .profile-chip{padding:6px 6px 6px 12px;}
+  .profile-avatar{width:28px; height:28px; border-radius:50%; background:var(--navy); display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:700;}
+  .profile-chip span{font-size:12.5px; font-weight:600;}
+  .lang-switch{background:none; border:1px solid var(--border); color:var(--navy); font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px;}
+
+  .content{padding:32px;}
+  @media (max-width:600px){ .content{padding:20px;} }
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .welcome-banner{background:linear-gradient(135deg,var(--navy) 0%, var(--navy-dark) 100%); border-radius:var(--radius-lg); padding:32px; color:#fff; margin-bottom:28px;}
+  .welcome-banner h2{color:#fff; font-size:24px; margin-bottom:6px;}
+  .welcome-banner p{color:#C7CEDC; font-size:13.5px;}
+
+  .widget-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-bottom:28px;}
+  @media (max-width:1100px){ .widget-grid{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:600px){ .widget-grid{grid-template-columns:repeat(2,1fr);} }
+  .widget{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:16px;}
+  .widget .label{font-size:10px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;}
+  .widget .value{font-size:20px; font-weight:700; color:var(--ink);}
+  .widget .sub{font-size:10.5px; color:var(--ink-muted); margin-top:4px;}
+  .widget.real .value{color:var(--emerald);}
+
+  .two-col{display:grid; grid-template-columns:1.4fr 1fr; gap:22px;}
+  @media (max-width:900px){ .two-col{grid-template-columns:1fr;} }
+  .panel-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:24px; margin-bottom:20px;}
+  .panel-card h3{font-size:17px; margin-bottom:16px;}
+  .list-row{display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); font-size:13.5px;}
+  .list-row:last-child{border-bottom:none;}
+  .badge{display:inline-block; font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:999px;}
+  .badge.ok{background:rgba(30,76,67,0.1); color:#1E4C43;}
+  .badge.warn{background:rgba(188,154,74,0.12); color:#8A6A2E;}
+
+  .module-header{margin-bottom:24px;}
+  .module-header h2{font-size:26px; margin-bottom:8px;}
+  .module-status{display:inline-block; font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px; margin-bottom:16px; background:rgba(188,154,74,0.12); color:#8A6A2E;}
+  .subsection{margin-bottom:32px;}
+  .subsection h3{font-size:16px; margin-bottom:12px; color:var(--navy);}
+  .module-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); gap:12px;}
+  .module-tile{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; transition:box-shadow .15s;}
+  .module-tile:hover{box-shadow:var(--shadow-1);}
+  .module-tile h4{font-family:'Inter',sans-serif; font-size:12.5px; font-weight:600; color:var(--ink); margin-bottom:4px;}
+  [dir="rtl"] .module-tile h4{font-family:'IBM Plex Sans Arabic',sans-serif;}
+  .module-tile .crud{display:flex; gap:4px; flex-wrap:wrap; margin-top:6px;}
+  .module-tile .crud span{font-size:9px; font-weight:700; padding:2px 6px; border-radius:999px; background:var(--manuscript); color:var(--ink-muted);}
+
+  .search-form{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; margin-bottom:24px;}
+  .search-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px;}
+  @media (max-width:760px){ .search-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:500px){ .search-grid{grid-template-columns:1fr;} }
+  .search-field label{font-size:12px; font-weight:600; color:var(--ink); display:block; margin-bottom:6px;}
+  .search-field input, .search-field select{width:100%; height:42px; border:1px solid var(--border); border-radius:var(--radius-sm); padding:0 12px; font-size:13.5px; background:var(--manuscript);}
+  .empty-state{text-align:center; padding:56px 24px; background:var(--surface); border:1px dashed var(--border); border-radius:var(--radius-md);}
+  .empty-state svg{margin-bottom:16px;}
+  .empty-state h3{font-size:17px; margin-bottom:8px;}
+  .empty-state p{font-size:13.5px; max-width:460px; margin:0 auto;}
+
+  .profile-template{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; display:grid; grid-template-columns:140px 1fr; gap:26px;}
+  @media (max-width:600px){ .profile-template{grid-template-columns:1fr;} }
+  .profile-photo{aspect-ratio:1/1; background:var(--manuscript); border:1.5px dashed var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center;}
+  .rf{margin-bottom:10px;}
+  .rf-label{font-size:10.5px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.03em;}
+  .rf-value{font-size:14px; color:var(--ink); font-weight:500;}
+  .btn{display:inline-flex; align-items:center; gap:6px; padding:9px 16px; border-radius:var(--radius-sm); font-size:12.5px; font-weight:600; border:1.5px solid var(--navy); color:var(--navy); background:none;}
+  .btn.filled{background:var(--gold); border-color:var(--gold); color:var(--navy-dark);}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link" data-i18n="skipLink">Skip to main content</a>
+<div class="demo-banner"><strong data-i18n="demoStrong">Design Preview</strong> — <span data-i18n="demoText">this is a UI/UX demonstration of the Research &amp; Innovation Portal, not a live system. No real research data is shown or stored.</span></div>
+
+<div class="portal-shell">
+  <aside class="sidebar" id="sidebar" aria-label="Research portal navigation">
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">✕</button>
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 48 48" width="28" height="28" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
+      <span data-i18n="brandLabel">Research &amp; Innovation</span>
+    </div>
+    <nav id="navList">
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navOverview">Overview</div>
+        <button class="nav-item active" data-panel="dashboard" data-i18n="navDashboard">🏠 Dashboard</button>
+        <button class="nav-item" data-panel="search" data-i18n="navSearch">Advanced Search</button>
+        <button class="nav-item" data-panel="profile-template" data-i18n="navProfileTemplate">Researcher Profile Template</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navGroupResearch">Research</div>
+        <button class="nav-item" data-panel="adminGov" data-i18n="navAdminGov">Administration &amp; Governance</button>
+        <button class="nav-item" data-panel="projectsRepo" data-i18n="navProjectsRepo">Projects &amp; Repository</button>
+        <button class="nav-item" data-panel="pubJournals" data-i18n="navPubJournals">Publications &amp; Journals</button>
+        <button class="nav-item" data-panel="conferences" data-i18n="navConferences">Conferences &amp; Events</button>
+        <button class="nav-item" data-panel="innovation" data-i18n="navInnovation">Innovation Hub</button>
+        <button class="nav-item" data-panel="funding" data-i18n="navFunding">Funding &amp; Grants</button>
+        <button class="nav-item" data-panel="collabCentres" data-i18n="navCollabCentres">Collaboration &amp; Research Centres</button>
+        <button class="nav-item" data-panel="postgrad" data-i18n="navPostgrad">Postgraduate Research (Future)</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navGroupInsight">Insight</div>
+        <button class="nav-item" data-panel="analyticsRankAI" data-i18n="navAnalyticsRankAI">Analytics, Rankings &amp; AI Assistant</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label" data-i18n="navGroupSystem">System</div>
+        <button class="nav-item" data-panel="platform" data-i18n="navPlatform">Notifications &amp; Platform Readiness</button>
+        <button class="nav-item" data-panel="profileSettings" data-i18n="navProfileSettings">Profile Settings</button>
+      </div>
+    </nav>
+  </aside>
+
+  <div>
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="#8891A6" stroke-width="1.4"/><path d="M11 11l3.5 3.5" stroke="#8891A6" stroke-width="1.4"/></svg>
+          <input type="text" id="searchInput" placeholder="Search publications, researchers, projects, grants...">
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="lang-switch" id="langToggle">العربية</button>
+        <button class="icon-btn" aria-label="Notifications"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 15c0-1 1-2 1-6a5 5 0 0110 0c0 4 1 5 1 6H4z" stroke="#4B5568" stroke-width="1.5"/><path d="M8 17.5a2 2 0 004 0" stroke="#4B5568" stroke-width="1.5"/></svg><span class="dot"></span></button>
+        <div class="profile-chip"><div class="profile-avatar">RI</div><span data-i18n="profileLabel">Research Preview</span></div>
+      </div>
+    </header>
+
+    <main class="content" id="main">
+
+      <section class="panel active" data-panel-content="dashboard">
+        <div class="welcome-banner">
+          <h2 data-i18n="welcomeTitle">Research &amp; Innovation</h2>
+          <p data-i18n="welcomeBody">Research Centre • Publications • Innovation Hub — the institution's platform for research administration, scholarly publishing, and innovation.</p>
+        </div>
+        <div class="widget-grid">
+          <div class="widget"><div class="label" data-i18n="wProjects">Active Research Projects</div><div class="value">0</div></div>
+          <div class="widget"><div class="label" data-i18n="wPapers">Published Papers</div><div class="value">0</div></div>
+          <div class="widget"><div class="label" data-i18n="wGrants">Research Grants</div><div class="value">0</div></div>
+          <div class="widget"><div class="label" data-i18n="wInnovation">Innovation Projects</div><div class="value">0</div></div>
+          <div class="widget"><div class="label" data-i18n="wJournals">Institutional Journals</div><div class="value">0</div></div>
+          <div class="widget"><div class="label" data-i18n="wConferences">Conferences</div><div class="value">0</div></div>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="panel-card">
+              <h3 data-i18n="featuredTitle">Featured Researchers</h3>
+              <div class="empty-state">
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><circle cx="18" cy="13" r="6" stroke="#BC9A4A" stroke-width="1.6"/><path d="M6 30c2-8 7-11 12-11s10 3 12 11" stroke="#BC9A4A" stroke-width="1.6"/></svg>
+                <h3 data-i18n="noResearchersTitle">No researcher profiles published yet</h3>
+                <p data-i18n="noResearchersBody">Profiles will appear here as faculty research activity is catalogued.</p>
+              </div>
+            </div>
+            <div class="panel-card">
+              <h3 data-i18n="upcomingEventsTitle">Upcoming Events &amp; Research Calendar</h3>
+              <p style="font-size:13px;" data-i18n="upcomingEventsBody">No conferences or research events scheduled yet.</p>
+            </div>
+          </div>
+          <div class="panel-card">
+            <h3 data-i18n="collabTitle">Collaboration Requests</h3>
+            <div class="list-row"><span data-i18n="noCollab">None pending</span><span class="badge ok">0</span></div>
+            <div class="list-row"><span data-i18n="setupTask">Complete research profile setup</span><span class="badge warn" data-i18n="badgeAction">Action</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="search">
+        <div class="module-header"><h2 data-i18n="searchTitle">Advanced Search</h2><p data-i18n="searchLead">Search publications, researchers, projects, grants, journals, conferences, innovation projects, reports, policies, and datasets.</p></div>
+        <div class="search-form">
+          <div class="search-grid">
+            <div class="search-field"><label data-i18n="fKeyword">Keyword / Title</label><input type="text"></div>
+            <div class="search-field"><label data-i18n="fAuthor">Researcher / Author</label><input type="text"></div>
+            <div class="search-field"><label data-i18n="fType">Resource Type</label><select><option data-i18n="fAny">Any</option></select></div>
+            <div class="search-field"><label data-i18n="fCentre">Research Centre</label><select><option data-i18n="fAny">Any</option></select></div>
+            <div class="search-field"><label data-i18n="fYear">Year</label><input type="text"></div>
+            <div class="search-field"><label data-i18n="fStatus">Status</label><select><option data-i18n="fAny">Any</option></select></div>
+          </div>
+          <button class="btn filled" type="button" id="runSearchBtn" data-i18n="searchBtn">Search</button>
+        </div>
+        <div class="empty-state" id="searchEmptyState">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true"><circle cx="15" cy="15" r="9" stroke="#BC9A4A" stroke-width="1.6"/><path d="M22 22l7 7" stroke="#BC9A4A" stroke-width="1.6"/></svg>
+          <h3 data-i18n="noResultsTitle">No research records indexed yet</h3>
+          <p data-i18n="noResultsBody">The search architecture is ready — filters, sorting, and future AI semantic search will work against real records once research output is catalogued.</p>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="profile-template">
+        <div class="module-header"><h2 data-i18n="profTemplateTitle">Researcher Profile Template</h2><p data-i18n="profTemplateLead">This is a template showing every field a researcher profile will display — not a real profile.</p></div>
+        <div class="profile-template">
+          <div class="profile-photo"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true"><circle cx="15" cy="11" r="5" stroke="#8891A6" stroke-width="1.4"/><path d="M4 26c1.5-7 6-10 11-10s9.5 3 11 10" stroke="#8891A6" stroke-width="1.4"/></svg></div>
+          <div>
+            <div class="rf"><div class="rf-label" data-i18n="rfName">Full Name</div><div class="rf-value">—</div></div>
+            <div class="rf"><div class="rf-label" data-i18n="rfRank">Academic Rank</div><div class="rf-value">—</div></div>
+            <div class="rf"><div class="rf-label" data-i18n="rfQual">Qualifications</div><div class="rf-value">—</div></div>
+            <div class="rf"><div class="rf-label" data-i18n="rfInterests">Research Interests</div><div class="rf-value">—</div></div>
+            <div class="rf"><div class="rf-label" data-i18n="rfOrcid">ORCID</div><div class="rf-value" style="font-weight:400; color:var(--ink-muted);" data-i18n="rfOrcidVal">Not linked yet</div></div>
+            <div class="rf"><div class="rf-label" data-i18n="rfBio">Biography</div><div class="rf-value" style="font-weight:400; color:var(--ink-muted);" data-i18n="rfBioVal">To be published upon appointment.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel-content="profileSettings">
+        <div class="module-header"><h2 data-i18n="settingsTitle">Profile Settings</h2><p data-i18n="settingsBody">Manage your researcher profile, notification preferences, and account security once your account is active.</p></div>
+      </section>
+
+      <section class="panel" data-panel-content="adminGov"></section>
+      <section class="panel" data-panel-content="projectsRepo"></section>
+      <section class="panel" data-panel-content="pubJournals"></section>
+      <section class="panel" data-panel-content="conferences"></section>
+      <section class="panel" data-panel-content="innovation"></section>
+      <section class="panel" data-panel-content="funding"></section>
+      <section class="panel" data-panel-content="collabCentres"></section>
+      <section class="panel" data-panel-content="postgrad"></section>
+      <section class="panel" data-panel-content="analyticsRankAI"></section>
+      <section class="panel" data-panel-content="platform"></section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+const CRUD = ["CRUD","Draft","Publish","Archive"];
+
+const categoryModules = {
+  adminGov: {
+    en:{title:"Administration &amp; Governance", desc:"Configurable research workflows, institutional policy, and ethics oversight.",
+      sections:[
+        {label:"Research Administration Workflow", items:["Proposal Submission","Proposal Review","Ethics Approval","Institutional Approval","Research Monitoring","Progress Reports","Final Reports","Compliance","Annual Reporting","Policy Management","Documentation","Administrative Approvals"]},
+        {label:"Research Governance", items:["Research Policies","Institutional Research Strategy","Research Priorities","Research Roadmaps","Ethical Guidelines","Intellectual Property Policies","Copyright Policies","Open Access Policies","Data Protection Policies","Research Compliance Framework"]},
+        {label:"Research Ethics Committee", items:["Ethics Applications","Ethical Clearance","Human Subject Research","Animal Research","Conflict of Interest Declarations","Reviewer Assignment","Ethics Decisions","Approval Certificates","Expiry Monitoring","Renewal Requests"]}
+      ]},
+    ar:{title:"الإدارة والحوكمة", desc:"سير عمل بحثي قابل للتهيئة، وسياسة مؤسسية، وإشراف أخلاقي.",
+      sections:[
+        {label:"سير عمل الإدارة البحثية", items:["تقديم المقترح","مراجعة المقترح","الموافقة الأخلاقية","الموافقة المؤسسية","متابعة البحث","تقارير التقدم","التقارير النهائية","الامتثال","التقرير السنوي","إدارة السياسات","التوثيق","الموافقات الإدارية"]},
+        {label:"حوكمة البحث العلمي", items:["سياسات البحث","استراتيجية البحث المؤسسية","أولويات البحث","خرائط طريق البحث","الإرشادات الأخلاقية","سياسات الملكية الفكرية","سياسات حقوق النشر","سياسات الوصول المفتوح","سياسات حماية البيانات","إطار الامتثال البحثي"]},
+        {label:"لجنة أخلاقيات البحث", items:["طلبات الأخلاقيات","التصريح الأخلاقي","بحوث البشر","بحوث الحيوانات","إقرارات تضارب المصالح","تعيين المراجعين","القرارات الأخلاقية","شهادات الموافقة","مراقبة الانتهاء","طلبات التجديد"]}
+      ]}
+  },
+  projectsRepo: {
+    en:{title:"Research Projects &amp; Repository", desc:"Full project lifecycle management, plus the institutional scholarly output repository.",
+      sections:[
+        {label:"Project Lifecycle", items:["Proposal","Draft","Submission","Review","Approval","Funding","Team Management","Milestones","Deliverables","Completion","Archive"]},
+        {label:"Project Roles", items:["Principal Investigator","Co-Investigators","Research Assistants","Supervisors","Collaborators"]},
+        {label:"Research Repository", items:["Theses","Dissertations","Faculty Publications","Student Publications","Conference Papers","Working Papers","Research Datasets","Technical Reports","Policy Papers","White Papers"]}
+      ]},
+    ar:{title:"المشاريع البحثية والمستودع", desc:"إدارة كاملة لدورة حياة المشروع، إلى جانب مستودع المخرجات العلمية المؤسسية.",
+      sections:[
+        {label:"دورة حياة المشروع", items:["المقترح","المسودة","التقديم","المراجعة","الموافقة","التمويل","إدارة الفريق","المعالم","المخرجات","الإنجاز","الأرشفة"]},
+        {label:"أدوار المشروع", items:["الباحث الرئيسي","الباحثون المشاركون","مساعدو البحث","المشرفون","المتعاونون"]},
+        {label:"مستودع البحث", items:["الرسائل العلمية","الأطروحات","منشورات الأساتذة","منشورات الطلاب","أوراق المؤتمرات","أوراق عمل","مجموعات بيانات بحثية","تقارير تقنية","أوراق سياسات","أوراق بيضاء"]}
+      ]}
+  },
+  pubJournals: {
+    en:{title:"Academic Publications &amp; Institutional Journals", desc:"Institutional publishing and a full journal management system.",
+      sections:[
+        {label:"Publication Types", items:["Journals","Books","Book Chapters","Conference Proceedings","Annual Reports","Newsletters","Digital Magazines","Editorial Publications"]},
+        {label:"Publishing Workflow", items:["Draft","Peer Review","Revision","Approval","Publication","Archive","Withdrawal (where authorised)"]},
+        {label:"Institutional Journal Management", items:["Multiple Journals","Volumes &amp; Issues","Editorial Boards","Editors &amp; Reviewers","Manuscript Submission","Blind / Double-Blind Review","Revision Requests","Acceptance / Rejection","Copy Editing","DOI Placeholder","Citation Export","Download Statistics"]}
+      ]},
+    ar:{title:"المنشورات الأكاديمية والمجلات المؤسسية", desc:"نشر مؤسسي ونظام إدارة مجلات متكامل.",
+      sections:[
+        {label:"أنواع المنشورات", items:["المجلات","الكتب","فصول الكتب","وقائع المؤتمرات","التقارير السنوية","النشرات الإخبارية","المجلات الرقمية","المنشورات التحريرية"]},
+        {label:"سير عمل النشر", items:["مسودة","مراجعة الأقران","التنقيح","الموافقة","النشر","الأرشفة","السحب (عند التفويض)"]},
+        {label:"إدارة المجلات المؤسسية", items:["مجلات متعددة","المجلدات والأعداد","هيئات التحرير","المحررون والمراجعون","تقديم المخطوطات","مراجعة عمياء / مزدوجة","طلبات التنقيح","القبول / الرفض","التحرير النسخي","معرّف DOI (نائب)","تصدير الاستشهادات","إحصاءات التنزيل"]}
+      ]}
+  },
+  conferences: {
+    en:{title:"Conferences &amp; Events", desc:"An enterprise conference management system.",
+      sections:[
+        {label:"Event Types", items:["International Conferences","National Conferences","Workshops","Seminars","Public Lectures","Webinars","Research Colloquia","Symposiums"]},
+        {label:"Features", items:["Event Registration","Abstract Submission","Paper Submission","Review Process","Conference Programme","Speaker Profiles","Certificates","Attendance Tracking","Virtual Conference Integration"]}
+      ]},
+    ar:{title:"المؤتمرات والفعاليات", desc:"نظام إدارة مؤتمرات مؤسسي.",
+      sections:[
+        {label:"أنواع الفعاليات", items:["مؤتمرات دولية","مؤتمرات وطنية","ورش عمل","ندوات","محاضرات عامة","ندوات عبر الإنترنت","ندوات بحثية","ملتقيات علمية"]},
+        {label:"المزايا", items:["تسجيل الفعالية","تقديم الملخصات","تقديم الأوراق","عملية المراجعة","برنامج المؤتمر","ملفات المتحدثين","الشهادات","تتبع الحضور","تكامل المؤتمرات الافتراضية"]}
+      ]}
+  },
+  innovation: {
+    en:{title:"Innovation Hub", desc:"A platform for innovation, incubation, and industry collaboration.",
+      sections:[{label:"Modules", items:["Student Innovation Projects","Faculty Innovation","Community Innovation","Innovation Challenges","Startup Incubation","Technology Demonstrations","Entrepreneurship Support","Innovation Showcase","Industry Collaboration","Commercialisation Opportunities"]}]},
+    ar:{title:"مركز الابتكار", desc:"منصة للابتكار والاحتضان والتعاون الصناعي.",
+      sections:[{label:"الوحدات", items:["مشاريع ابتكار الطلاب","ابتكار الأساتذة","الابتكار المجتمعي","تحديات الابتكار","احتضان الشركات الناشئة","العروض التقنية","دعم ريادة الأعمال","معرض الابتكار","التعاون الصناعي","فرص التسويق التجاري"]}]}
+  },
+  funding: {
+    en:{title:"Research Funding &amp; Grants", desc:"End-to-end grant management, from application to award tracking.",
+      sections:[{label:"Modules", items:["Internal Grants","External Grants","Sponsored Research","Grant Applications","Grant Reviews","Award Tracking","Financial Reporting","Grant Milestones"]}]},
+    ar:{title:"تمويل البحث والمنح", desc:"إدارة شاملة للمنح، من التقديم إلى متابعة المنح الممنوحة.",
+      sections:[{label:"الوحدات", items:["منح داخلية","منح خارجية","بحث ممول","طلبات المنح","مراجعة المنح","متابعة المنح","التقارير المالية","معالم المنحة"]}]}
+  },
+  collabCentres: {
+    en:{title:"Collaboration &amp; Research Centres", desc:"Partnership management and an expandable directory of research centres.",
+      sections:[
+        {label:"Collaboration Partners", items:["International Universities","Islamic Universities","Arabic Colleges","Madāris","Research Institutes","Government Agencies","NGOs","Industry Partners","International Organisations"]},
+        {label:"Collaboration Tools", items:["MoUs","Joint Research","Visiting Scholars","Exchange Programmes","Collaborative Publications"]},
+        {label:"Research Centre Profile Fields", items:["Name","Description","Director","Coordinators","Research Areas","Publications","Projects","Staff","Funding","News","Events","Gallery","Contact Information"]}
+      ]},
+    ar:{title:"التعاون ومراكز البحث", desc:"إدارة الشراكات ودليل قابل للتوسع لمراكز البحث.",
+      sections:[
+        {label:"شركاء التعاون", items:["جامعات دولية","جامعات إسلامية","كليات عربية","مدارس دينية","معاهد بحثية","جهات حكومية","منظمات غير حكومية","شركاء صناعيون","منظمات دولية"]},
+        {label:"أدوات التعاون", items:["مذكرات تفاهم","بحث مشترك","علماء زائرون","برامج التبادل","منشورات مشتركة"]},
+        {label:"حقول ملف مركز البحث", items:["الاسم","الوصف","المدير","المنسقون","مجالات البحث","المنشورات","المشاريع","الموظفون","التمويل","الأخبار","الفعاليات","المعرض","معلومات التواصل"]}
+      ]}
+  },
+  postgrad: {
+    en:{title:"Postgraduate Research (Future-Ready)", desc:"Al-Balagh currently offers Professional Diploma programmes only. This architecture is prepared now so postgraduate research support requires no future redesign.",
+      sections:[
+        {label:"Programme Types", items:["Master's Research","M.Phil. Research","PhD Research","Postdoctoral Research","Visiting Researchers"]},
+        {label:"Supervision &amp; Examination", items:["Supervisors","Co-Supervisors","Progress Reports","Thesis Tracking","Viva Scheduling","Examination Workflow"]}
+      ]},
+    ar:{title:"البحث العلمي للدراسات العليا (جاهزية مستقبلية)", desc:"تقدّم البلاغ حاليًا برامج الدبلوم المهني فقط. جُهّزت هذه البنية الآن حتى لا يتطلب دعم الدراسات العليا مستقبلًا إعادة تصميم.",
+      sections:[
+        {label:"أنواع البرامج", items:["بحث الماجستير","بحث الماجستير الفلسفي","بحث الدكتوراه","بحث ما بعد الدكتوراه","الباحثون الزائرون"]},
+        {label:"الإشراف والامتحان", items:["المشرفون","المشرفون المشاركون","تقارير التقدم","متابعة الرسالة","جدولة المناقشة","سير عمل الامتحان"]}
+      ]}
+  },
+  analyticsRankAI: {
+    en:{title:"Analytics, Rankings &amp; AI Research Assistant", desc:"Executive insight and AI-ready research support — AI features are not active on the current website.",
+      sections:[
+        {label:"Research Analytics", items:["Active Projects","Publications","Downloads","Citations","Grant Income","Innovation Projects","Conference Attendance","Repository Usage","User Activity","AI Usage","Digital Library Usage"]},
+        {label:"International Rankings &amp; Benchmarking", items:["Institutional Rankings","Research Impact","Publication Metrics","Citation Statistics","International Collaborations","Research Excellence Indicators","Sustainable Development Goals (SDGs)"]},
+        {label:"AI Research Assistant (Planned)", items:["Literature Discovery","Research Topic Suggestions","Citation Assistance","Academic Writing Support","Research Summarisation","Translation Support","Semantic Search","Knowledge Graph","Intelligent Recommendations"]}
+      ]},
+    ar:{title:"التحليلات والتصنيفات والمساعد البحثي الذكي", desc:"رؤية تنفيذية ودعم بحثي جاهز للذكاء الاصطناعي — ميزات الذكاء الاصطناعي غير مفعّلة على الموقع الحالي.",
+      sections:[
+        {label:"تحليلات البحث", items:["المشاريع النشطة","المنشورات","التنزيلات","الاستشهادات","دخل المنح","مشاريع الابتكار","حضور المؤتمرات","استخدام المستودع","نشاط المستخدمين","استخدام الذكاء الاصطناعي","استخدام المكتبة الرقمية"]},
+        {label:"التصنيفات الدولية والمقارنة المرجعية", items:["التصنيفات المؤسسية","الأثر البحثي","مقاييس المنشورات","إحصاءات الاستشهاد","التعاون الدولي","مؤشرات التميز البحثي","أهداف التنمية المستدامة"]},
+        {label:"المساعد البحثي الذكي (مخطط)", items:["اكتشاف الأدبيات","اقتراح مواضيع بحثية","المساعدة في الاستشهاد","دعم الكتابة الأكاديمية","تلخيص البحث","دعم الترجمة","البحث الدلالي","خريطة المعرفة","التوصيات الذكية"]}
+      ]}
+  },
+  platform: {
+    en:{title:"Notifications &amp; Platform Readiness", desc:"Engineering commitments guiding development — not active integrations today.",
+      sections:[
+        {label:"Notification Centre", items:["In-App Notifications","Email","SMS","WhatsApp","Push Notifications"]},
+        {label:"Platform &amp; Integration Readiness", items:["Firebase Authentication (planned)","Cloud Firestore (planned)","Firebase Storage (planned)","Cloud Functions (planned)","Firebase Hosting (planned)","REST APIs (planned)","GitHub Version Control","DOI Integration (planned)","Backup &amp; Disaster Recovery (planned)","Audit Trail (User, Timestamp, Action, Outcome)"]}
+      ]},
+    ar:{title:"الإشعارات وجاهزية المنصة", desc:"التزامات هندسية توجّه التطوير — وليست تكاملات فعلية حاليًا.",
+      sections:[
+        {label:"مركز الإشعارات", items:["إشعارات داخل التطبيق","البريد الإلكتروني","الرسائل النصية","واتساب","الإشعارات الفورية"]},
+        {label:"جاهزية المنصة والتكامل", items:["مصادقة Firebase (مخطط)","Cloud Firestore (مخطط)","تخزين Firebase (مخطط)","Cloud Functions (مخطط)","استضافة Firebase (مخطط)","واجهات REST (مخطط)","التحكم بالإصدارات عبر GitHub","تكامل DOI (مخطط)","النسخ الاحتياطي والتعافي من الكوارث (مخطط)","سجل التدقيق (المستخدم، الوقت، الإجراء، النتيجة)"]}
+      ]}
+  }
+};
+
+function renderCategoryModules(lang){
+  Object.keys(categoryModules).forEach(key=>{
+    const m = categoryModules[key][lang];
+    const el = document.querySelector(`[data-panel-content="${key}"]`);
+    if(!el) return;
+    el.innerHTML = `
+      <div class="module-header">
+        <h2>${m.title}</h2>
+        <span class="module-status">${lang==='ar' ? 'قيد الإعداد' : 'In Development'}</span>
+        <p>${m.desc}</p>
+      </div>
+      ${m.sections.map(s=>`
+        <div class="subsection">
+          <h3>${s.label}</h3>
+          <div class="module-grid">${s.items.map(i=>`<div class="module-tile"><h4>${i}</h4><div class="crud">${CRUD.map(c=>`<span>${c}</span>`).join('')}</div></div>`).join('')}</div>
+        </div>`).join('')}`;
+  });
+}
+
+const i18n = {
+  en:{
+    demoStrong:"Design Preview", demoText:"this is a UI/UX demonstration of the Research & Innovation Portal, not a live system. No real research data is shown or stored.",
+    skipLink:"Skip to main content", brandLabel:"Research & Innovation",
+    navOverview:"Overview", navDashboard:"🏠 Dashboard", navSearch:"Advanced Search", navProfileTemplate:"Researcher Profile Template",
+    navGroupResearch:"Research", navAdminGov:"Administration & Governance", navProjectsRepo:"Projects & Repository", navPubJournals:"Publications & Journals", navConferences:"Conferences & Events", navInnovation:"Innovation Hub", navFunding:"Funding & Grants", navCollabCentres:"Collaboration & Research Centres", navPostgrad:"Postgraduate Research (Future)",
+    navGroupInsight:"Insight", navAnalyticsRankAI:"Analytics, Rankings & AI Assistant",
+    navGroupSystem:"System", navPlatform:"Notifications & Platform Readiness", navProfileSettings:"Profile Settings",
+    profileLabel:"Research Preview",
+    welcomeTitle:"Research & Innovation", welcomeBody:"Research Centre • Publications • Innovation Hub — the institution's platform for research administration, scholarly publishing, and innovation.",
+    wProjects:"Active Research Projects", wPapers:"Published Papers", wGrants:"Research Grants", wInnovation:"Innovation Projects", wJournals:"Institutional Journals", wConferences:"Conferences",
+    featuredTitle:"Featured Researchers", noResearchersTitle:"No researcher profiles published yet", noResearchersBody:"Profiles will appear here as faculty research activity is catalogued.",
+    upcomingEventsTitle:"Upcoming Events & Research Calendar", upcomingEventsBody:"No conferences or research events scheduled yet.",
+    collabTitle:"Collaboration Requests", noCollab:"None pending", setupTask:"Complete research profile setup", badgeAction:"Action",
+    searchTitle:"Advanced Search", searchLead:"Search publications, researchers, projects, grants, journals, conferences, innovation projects, reports, policies, and datasets.",
+    fKeyword:"Keyword / Title", fAuthor:"Researcher / Author", fType:"Resource Type", fCentre:"Research Centre", fYear:"Year", fStatus:"Status", fAny:"Any",
+    searchBtn:"Search", noResultsTitle:"No research records indexed yet", noResultsBody:"The search architecture is ready — filters, sorting, and future AI semantic search will work against real records once research output is catalogued.",
+    profTemplateTitle:"Researcher Profile Template", profTemplateLead:"This is a template showing every field a researcher profile will display — not a real profile.",
+    rfName:"Full Name", rfRank:"Academic Rank", rfQual:"Qualifications", rfInterests:"Research Interests", rfOrcid:"ORCID", rfOrcidVal:"Not linked yet", rfBio:"Biography", rfBioVal:"To be published upon appointment.",
+    settingsTitle:"Profile Settings", settingsBody:"Manage your researcher profile, notification preferences, and account security once your account is active.",
+    searchPlaceholder:"Search publications, researchers, projects, grants...", langToggleLabel:"العربية"
+  },
+  ar:{
+    demoStrong:"معاينة تصميمية", demoText:"هذه معاينة لتصميم بوابة البحث والابتكار وليست نظامًا فعليًا. لا توجد بيانات بحثية حقيقية معروضة أو مخزَّنة.",
+    skipLink:"تخطَّ إلى المحتوى الرئيسي", brandLabel:"البحث والابتكار",
+    navOverview:"نظرة عامة", navDashboard:"🏠 لوحة التحكم", navSearch:"البحث المتقدم", navProfileTemplate:"نموذج ملف باحث",
+    navGroupResearch:"البحث العلمي", navAdminGov:"الإدارة والحوكمة", navProjectsRepo:"المشاريع والمستودع", navPubJournals:"المنشورات والمجلات", navConferences:"المؤتمرات والفعاليات", navInnovation:"مركز الابتكار", navFunding:"التمويل والمنح", navCollabCentres:"التعاون ومراكز البحث", navPostgrad:"بحث الدراسات العليا (مستقبلًا)",
+    navGroupInsight:"الرؤى", navAnalyticsRankAI:"التحليلات والتصنيفات والمساعد الذكي",
+    navGroupSystem:"النظام", navPlatform:"الإشعارات وجاهزية المنصة", navProfileSettings:"إعدادات الملف الشخصي",
+    profileLabel:"معاينة البحث",
+    welcomeTitle:"البحث والابتكار", welcomeBody:"مركز البحث • المنشورات • مركز الابتكار — منصة المؤسسة لإدارة البحث والنشر العلمي والابتكار.",
+    wProjects:"المشاريع البحثية النشطة", wPapers:"الأوراق المنشورة", wGrants:"المنح البحثية", wInnovation:"مشاريع الابتكار", wJournals:"المجلات المؤسسية", wConferences:"المؤتمرات",
+    featuredTitle:"باحثون مميزون", noResearchersTitle:"لم تُنشر ملفات باحثين بعد", noResearchersBody:"ستظهر الملفات هنا فور فهرسة نشاط البحث الأكاديمي.",
+    upcomingEventsTitle:"الفعاليات القادمة وتقويم البحث", upcomingEventsBody:"لا توجد مؤتمرات أو فعاليات بحثية مجدولة بعد.",
+    collabTitle:"طلبات التعاون", noCollab:"لا يوجد معلّق", setupTask:"إكمال إعداد الملف البحثي", badgeAction:"إجراء",
+    searchTitle:"البحث المتقدم", searchLead:"ابحث في المنشورات والباحثين والمشاريع والمنح والمجلات والمؤتمرات ومشاريع الابتكار والتقارير والسياسات ومجموعات البيانات.",
+    fKeyword:"الكلمة المفتاحية / العنوان", fAuthor:"الباحث / المؤلف", fType:"نوع المورد", fCentre:"مركز البحث", fYear:"السنة", fStatus:"الحالة", fAny:"أي",
+    searchBtn:"بحث", noResultsTitle:"لا توجد سجلات بحثية مفهرسة بعد", noResultsBody:"بنية البحث جاهزة — ستعمل الفلاتر والفرز والبحث الدلالي المستقبلي بالذكاء الاصطناعي على سجلات حقيقية فور فهرسة المخرجات البحثية.",
+    profTemplateTitle:"نموذج ملف باحث", profTemplateLead:"هذا نموذج يوضّح كل حقل سيعرضه ملف الباحث — وليس ملفًا فعليًا.",
+    rfName:"الاسم الكامل", rfRank:"الرتبة الأكاديمية", rfQual:"المؤهلات", rfInterests:"اهتمامات البحث", rfOrcid:"ORCID", rfOrcidVal:"غير مرتبط بعد", rfBio:"السيرة الذاتية", rfBioVal:"ستُنشر عند التعيين.",
+    settingsTitle:"إعدادات الملف الشخصي", settingsBody:"إدارة ملف الباحث وتفضيلات الإشعارات وأمان الحساب فور تفعيل حسابك.",
+    searchPlaceholder:"ابحث في المنشورات والباحثين والمشاريع والمنح...", langToggleLabel:"English"
+  }
+};
+
+let currentLang = 'en';
+function applyLang(lang){
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(i18n[lang][key] !== undefined) el.innerHTML = i18n[lang][key];
+  });
+  document.getElementById('searchInput').placeholder = i18n[lang].searchPlaceholder;
+  document.getElementById('langToggle').textContent = i18n[lang].langToggleLabel;
+  renderCategoryModules(lang);
+}
+document.getElementById('langToggle').addEventListener('click', ()=> applyLang(currentLang==='en' ? 'ar' : 'en'));
+applyLang('en');
+
+document.getElementById('runSearchBtn').addEventListener('click', ()=>{
+  document.getElementById('searchEmptyState').scrollIntoView({behavior:'smooth', block:'center'});
+});
+
+const navItems = document.querySelectorAll('.nav-item');
+const panels = document.querySelectorAll('.panel');
+navItems.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.panel;
+    navItems.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    panels.forEach(p=> p.classList.toggle('active', p.dataset.panelContent === target));
+    document.getElementById('main').scrollIntoView({behavior:'smooth', block:'start'});
+    if(window.innerWidth <= 900) closeSidebar();
+  });
+});
+
+const sidebar = document.getElementById('sidebar');
+const menuToggle = document.getElementById('menuToggle');
+const sidebarClose = document.getElementById('sidebarClose');
+function openSidebar(){ sidebar.classList.add('open'); }
+function closeSidebar(){ sidebar.classList.remove('open'); }
+menuToggle.addEventListener('click', openSidebar);
+sidebarClose.addEventListener('click', closeSidebar);
+</script>
+
+</body>
+</html>
