@@ -13,12 +13,18 @@ what is planned, and [`docs/PHASE3_RELEASE_READINESS.md`](docs/PHASE3_RELEASE_RE
 the current, evidence-based release-readiness status (build verification, device/version
 compatibility, and a release decision — currently **Not Ready For Release**, primarily because
 no build has ever successfully compiled in any environment this project has been developed in
-so far). [`docs/PHASE4_BUILD_AND_DEVICE_VALIDATION.md`](docs/PHASE4_BUILD_AND_DEVICE_VALIDATION.md)
-is the handoff package for whoever picks this up next — exact toolchain versions, build
-commands, a compilation checklist, a device test checklist per feature, a bug-severity
-framework, an RC1 report template, and the Go/No-Go release gate (currently 0 of 8 items
-checked, for the same reason). Play Store draft materials (privacy policy, terms of service,
-data safety form, store listing copy) live in [`docs/store/`](docs/store/).
+so far).
+
+**Picking this project up with real Android Studio/SDK/device access? Start at
+[`docs/handoff/README.md`](docs/handoff/README.md)** — a complete engineering briefing, a known
+issues register, a first-build playbook, a first-device-test playbook, a ranked risk register,
+an independent audit package, and a conservative final status classification
+(**C — Advanced Prototype**, as of this writing), all cross-referenced against the detailed
+audit reports in [`docs/PHASE3_RELEASE_READINESS.md`](docs/PHASE3_RELEASE_READINESS.md) and
+[`docs/PHASE4_BUILD_AND_DEVICE_VALIDATION.md`](docs/PHASE4_BUILD_AND_DEVICE_VALIDATION.md).
+
+Play Store draft materials (privacy policy, terms of service, data safety form, store listing
+copy) live in [`docs/store/`](docs/store/).
 
 ## What's implemented (real, working code)
 
