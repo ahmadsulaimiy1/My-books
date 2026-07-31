@@ -29,11 +29,16 @@ data class VoiceCheckResult(
  */
 object VoiceDataManager {
 
+    // The Android SDK has no TextToSpeech.Engine.ACTION_TTS_SETTINGS constant (unlike
+    // ACTION_CHECK_TTS_DATA/ACTION_INSTALL_TTS_DATA, which are real Engine constants) — this is
+    // the actual, long-stable action string apps use to open the system TTS settings screen.
+    private const val ACTION_TTS_SETTINGS = "com.android.settings.TTS_SETTINGS"
+
     fun checkTtsDataIntent(): Intent = Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA)
 
     fun installTtsDataIntent(): Intent = Intent(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA)
 
-    fun ttsSettingsIntent(): Intent = Intent(TextToSpeech.Engine.ACTION_TTS_SETTINGS)
+    fun ttsSettingsIntent(): Intent = Intent(ACTION_TTS_SETTINGS)
 
     /** Maps a raw [TextToSpeech.isLanguageAvailable] result to a UI-friendly readiness state. */
     fun readinessFor(languageAvailability: Int): VoiceReadiness = when (languageAvailability) {

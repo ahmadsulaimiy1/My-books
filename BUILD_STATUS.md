@@ -72,31 +72,70 @@ different delivery mechanism.
 
 ## Current status
 
-**As of the commit that introduced this pipeline, no workflow run has completed yet — this
-section will be updated with the real result of the first run once GitHub Actions has actually
-executed it**, following this project's standing rule of never reporting an untested outcome as
-if it were verified. Do not treat the sections below as predictions of success; they're the
-categories this file will be filled in against once real run data exists.
+**Last updated:** after the pipeline's first real runs (commit `2e03ab0`) and the fix commit that
+followed it. This is real, evidence-based CI output — the first this project has ever had — not a
+prediction.
 
 ### Build success
 
-*(To be filled in from the actual run.)* A successful run means: the job completed with a green
+Not yet observed as of this writing. A successful run means: the job completed with a green
 check, the named artifact appears in the run's Artifacts section, and downloading it produces a
-valid, non-empty `.apk`/`.aab` file.
+valid, non-empty `.apk`/`.aab` file. The fix below has been pushed and a fresh set of runs is in
+flight; this section will be updated again once one actually finishes green.
 
 ### Build failure
 
-*(To be filled in from the actual run, if it occurs.)* A failed run means the job stopped with a
-red X before producing an artifact — the Gradle command's `--stacktrace` output (enabled in all
-three workflows) will be in that step's log.
+**Observed, real, all three workflows, first run (commit `2e03ab0`):**
+
+| Workflow | Run | Conclusion |
+|---|---|---|
+| Debug APK Build | [run 30645057982](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30645057982) | ❌ failure |
+| Release APK Build | [run 30645058072](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30645058072) | ❌ failure |
+| Release AAB Build | [run 30645058137](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30645058137) | ❌ failure |
+
+All three failed at the same step — `:app:compileDebugKotlin` / `:app:compileReleaseKotlin` —
+with the identical two Kotlin errors (confirmed by reading each run's actual job logs via the
+GitHub API, not inferred). This is the very first real compiler feedback this codebase has ever
+received in its entire history; static analysis across every prior audit phase
+(`docs/handoff/`) could reason about the API surface but could not have caught these with
+certainty without a real compiler, which is exactly what happened here.
 
 ### Errors encountered
 
-*(To be filled in with the exact error text from the first real run, if any — not a guess.)*
+Exact text from the real job logs:
+
+```
+e: file:///home/runner/work/My-books/My-books/app/src/main/java/com/sultan/arabicai/tts/VoiceDataManager.kt:36:66 Unresolved reference 'ACTION_TTS_SETTINGS'.
+e: file:///home/runner/work/My-books/My-books/app/src/main/java/com/sultan/arabicai/ui/screens/lessons/LessonDetailScreen.kt:13:41 Unresolved reference 'item'.
+```
+
+**Root cause 1 — `VoiceDataManager.kt:36`:** the code called
+`Intent(TextToSpeech.Engine.ACTION_TTS_SETTINGS)`, but `TextToSpeech.Engine` in the real Android
+SDK only defines `ACTION_CHECK_TTS_DATA` and `ACTION_INSTALL_TTS_DATA` — there is no
+`ACTION_TTS_SETTINGS` constant anywhere in the platform. This was a genuine invalid API reference
+introduced in an earlier phase of this project and never caught, because no compiler had ever run
+against this file until now.
+
+**Root cause 2 — `LessonDetailScreen.kt:13`:** the code had `import
+androidx.compose.foundation.lazy.item`. `item(...)` is a **member function of the `LazyListScope`
+interface**, not a top-level extension function like its plural sibling `items(...)` — it has no
+package-level symbol to import at all, so the import statement itself was invalid. (It compiled
+fine as *usage* at line 124 inside `LazyColumn { item { ... } } }`, which resolves `item` through
+the implicit `LazyListScope` receiver — the bad import was simply dead weight that happened to
+also be wrong.)
 
 ### Required fixes
 
-*(To be filled in with the exact fix applied for each error above, once diagnosed against real
-CI output — this project's whole prior audit history was static-analysis-only precisely because
-no real compiler output existed anywhere; this is the first opportunity to close that gap for
-real.)*
+Both applied directly (commit following `2e03ab0`), since these are genuine defects blocking any
+build — not new features or functionality changes:
+
+1. **`VoiceDataManager.kt`**: replaced `TextToSpeech.Engine.ACTION_TTS_SETTINGS` with a local
+   `private const val ACTION_TTS_SETTINGS = "com.android.settings.TTS_SETTINGS"` — the real,
+   long-stable (if undocumented) intent action Android apps use to open system TTS settings —
+   and construct the intent from that instead.
+2. **`LessonDetailScreen.kt`**: removed the invalid `import
+   androidx.compose.foundation.lazy.item` line entirely. No behavior change — `item { ... }` at
+   line 124 already resolves correctly via its `LazyListScope` receiver without any import.
+
+A fresh push containing both fixes has been made; this file will be updated again with the result
+of the next run once it completes.
