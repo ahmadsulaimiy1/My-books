@@ -26,6 +26,14 @@ audit reports in [`docs/PHASE3_RELEASE_READINESS.md`](docs/PHASE3_RELEASE_READIN
 Play Store draft materials (privacy policy, terms of service, data safety form, store listing
 copy) live in [`docs/store/`](docs/store/).
 
+**Planning the next 30 features?** See
+[`docs/PHASE6_FLAGSHIP_ROADMAP.md`](docs/PHASE6_FLAGSHIP_ROADMAP.md) — implementation plans
+(architecture, database changes, dependencies, offline strategy, storage, security, sequencing,
+complexity) for every requested flagship capability, grouped into four delivery tiers (MVP
+Expansion / Professional / Enterprise / Saudi Flagship Edition) and grounded in this repository's
+actual current code, not generic feature descriptions. Planning documentation only — no code
+changes accompany it, and it does not change the classification above.
+
 ## What's implemented (real, working code)
 
 - **Premium design system** — Royal Navy Blue / Royal Gold / Platinum flagship theme, luxury
