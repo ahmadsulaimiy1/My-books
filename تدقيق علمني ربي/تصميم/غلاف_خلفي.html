@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>الغلاف الخلفي</title>
+<style>
+:root{
+  --navy:#101E36; --navy-2:#0B1729; --ivory:#F6F1E6; --ivory-dim:#D9CFB8;
+  --gold:#A6813F; --gold-dim:#8A6C39; --line: rgba(166,129,63,0.55);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{display:flex;justify-content:center;align-items:center;background:#1a1a1a;min-height:100vh;}
+.cover{
+  position:relative;width:1748px;height:2480px;overflow:hidden;
+  background:linear-gradient(175deg,var(--navy) 0%, var(--navy-2) 100%);
+  font-family:'Amiri',serif;color:var(--ivory);
+}
+.keyline{position:absolute;inset:96px;border:1px solid var(--line);}
+
+.mark{position:absolute;top:250px;left:0;right:0;text-align:center;}
+.mark .lozenge{display:inline-block;width:13px;height:13px;border:1.4px solid var(--gold);transform:rotate(45deg);}
+
+.blurb{
+  position:absolute;top:430px;left:0;right:0;text-align:center;padding:0 260px;
+  font-size:30px;line-height:2.05;color:var(--ivory-dim);
+}
+.blurb b{color:var(--ivory);font-weight:700;}
+
+.pull-wrap{position:absolute;top:1020px;left:0;right:0;text-align:center;padding:0 300px;}
+.pull-rule{width:70px;height:1px;background:var(--line);margin:0 auto 34px;}
+.pull{font-family:'Amiri Quran','Amiri',serif;font-size:30px;line-height:1.9;color:var(--gold);}
+.pull-source{margin-top:20px;font-family:'Vazirmatn',sans-serif;font-size:17px;letter-spacing:2px;color:var(--gold-dim);}
+
+.themes{
+  position:absolute;top:1330px;left:0;right:0;text-align:center;padding:0 250px;
+  font-family:'Vazirmatn',sans-serif;font-weight:400;font-size:19px;letter-spacing:1px;color:var(--ivory-dim);line-height:2.4;
+}
+
+.colophon{
+  position:absolute;bottom:150px;left:150px;right:150px;
+  border-top:1px solid var(--line);padding-top:34px;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  font-family:'Vazirmatn',sans-serif;color:var(--gold-dim);
+}
+.colophon .side{font-size:17px;letter-spacing:1.5px;line-height:2;}
+.colophon .isbn-box{border:1px solid var(--line);padding:14px 22px;font-size:15px;letter-spacing:1px;color:var(--ivory-dim);}
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="keyline"></div>
+
+  <div class="mark"><span class="lozenge"></span></div>
+
+  <div class="blurb">
+    كتابٌ في القيم الأخلاقية والتزكية الإسلامية، يجمع بين <b>الأدلة النقلية</b> من القرآن والسنة، و<b>الأدلة العقلية</b> من الشعر والحكمة وسِيَر الأنبياء والصحابة، في سياقٍ يجمع بين أصالة الطرح وحُسن العرض المعاصر.
+  </div>
+
+  <div class="pull-wrap">
+    <div class="pull-rule"></div>
+    <div class="pull">"اذْهَبُوا فَأَنْتُمُ الطُّلَقَاءُ"</div>
+    <div class="pull-source">من سيرة النبي ﷺ يوم فتح مكة</div>
+  </div>
+
+  <div class="themes">أهوال يوم القيامة  ·  صفة الجنة والنار  ·  آداب الأخلاق<br/>العفو والشكر والإحسان والتواضع  ·  بِرّ الوالدين وصلة الأرحام</div>
+
+  <div class="colophon">
+    <div class="side">دار السلام للنشر<br/>الطائف — المملكة العربية السعودية</div>
+    <div class="isbn-box">الترقيم الدولي: يُستكمل عند الإيداع</div>
+  </div>
+</div>
+</body>
+</html>

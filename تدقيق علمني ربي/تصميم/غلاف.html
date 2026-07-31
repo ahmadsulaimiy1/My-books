@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>غلاف</title>
+<style>
+:root{
+  --navy:#101E36;
+  --navy-2:#0B1729;
+  --ivory:#F6F1E6;
+  --ivory-dim:#D9CFB8;
+  --gold:#A6813F;
+  --gold-dim:#8A6C39;
+  --line: rgba(166,129,63,0.55);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{display:flex;justify-content:center;align-items:center;background:#1a1a1a;min-height:100vh;}
+.cover{
+  position:relative;width:1748px;height:2480px;overflow:hidden;
+  background:linear-gradient(175deg,var(--navy) 0%, var(--navy-2) 100%);
+  font-family:'Amiri',serif;color:var(--ivory);
+}
+.keyline{position:absolute;inset:96px;border:1px solid var(--line);}
+
+.kicker{
+  position:absolute;top:250px;left:0;right:0;text-align:center;
+  font-family:'Vazirmatn',sans-serif;font-weight:500;font-size:21px;letter-spacing:5px;color:var(--gold);
+}
+.kicker-rule{width:70px;height:1px;background:var(--line);margin:28px auto 0;}
+
+.epigraph{
+  position:absolute;top:372px;left:0;right:0;text-align:center;
+  font-family:'Amiri Quran','Amiri',serif;font-size:32px;color:var(--ivory-dim);
+  padding:0 300px;letter-spacing:0.5px;
+}
+
+.title-wrap{position:absolute;top:900px;left:0;right:0;text-align:center;padding:0 190px;}
+.title-line1{font-weight:400;font-size:52px;color:var(--ivory-dim);margin-bottom:8px;}
+.title-line2{font-weight:700;font-size:92px;line-height:1.28;color:var(--ivory);}
+.title-line2 .gold{color:var(--gold);}
+.subtitle{margin-top:38px;font-style:italic;font-weight:400;font-size:38px;color:var(--gold);}
+
+.device{position:absolute;top:1560px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;}
+.device .rule{width:150px;height:1px;background:var(--line);}
+.device .lozenge{width:12px;height:12px;border:1.4px solid var(--gold);transform:rotate(45deg);}
+
+.author-block{position:absolute;bottom:300px;left:0;right:0;text-align:center;}
+.author-label{font-family:'Vazirmatn',sans-serif;font-weight:400;font-size:19px;letter-spacing:5px;color:var(--gold-dim);margin-bottom:22px;}
+.author-name{font-weight:700;font-size:44px;color:var(--ivory);}
+
+.publisher{position:absolute;bottom:150px;left:0;right:0;text-align:center;font-family:'Vazirmatn',sans-serif;font-weight:400;font-size:18px;letter-spacing:4px;color:var(--gold-dim);}
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="keyline"></div>
+
+  <div class="kicker">في الأخلاق والتزكية الإسلامية<div class="kicker-rule"></div></div>
+
+  <div class="epigraph">﴿ ذَٰلِكُمَا مِمَّا عَلَّمَنِي رَبِّي ﴾</div>
+
+  <div class="title-wrap">
+    <div class="title-line1">بذلكما مما</div>
+    <div class="title-line2"><span class="gold">عَلَّمَني</span> ربي</div>
+    <div class="subtitle">حتى كنت كريمًا بين الورى</div>
+  </div>
+
+  <div class="device"><span class="rule"></span><span class="lozenge"></span><span class="rule"></span></div>
+
+  <div class="author-block">
+    <div class="author-label">تأليف</div>
+    <div class="author-name">أحمد بن إبراهيم السليمي</div>
+  </div>
+
+  <div class="publisher">دار السلام للنشر</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>صفحة متن</title>
+<style>
+:root{
+  --navy:#101E36; --ivory:#F6F1E6; --charcoal:#2A2620; --muted:#8A7F68;
+  --gold:#8A6C39; --rule: rgba(138,108,57,0.35);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{display:flex;justify-content:center;align-items:center;background:#1a1a1a;min-height:100vh;}
+.page{
+  position:relative;width:1748px;height:2480px;overflow:hidden;
+  background:var(--ivory);color:var(--charcoal);font-family:'Amiri',serif;
+}
+
+.running{
+  position:absolute;top:110px;left:190px;right:190px;
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:'Vazirmatn',sans-serif;font-weight:400;font-size:16px;letter-spacing:1.5px;color:var(--muted);
+  border-bottom:1px solid var(--rule);padding-bottom:16px;
+}
+
+.content{position:absolute;top:230px;left:190px;right:190px;bottom:210px;}
+
+.h2{font-weight:700;font-size:34px;color:var(--navy);margin-bottom:36px;}
+
+.body-text{font-size:26px;line-height:2.05;color:var(--charcoal);text-align:justify;margin-bottom:38px;}
+.body-text b{color:var(--navy);font-weight:700;}
+
+.hadith{margin:44px 0;padding:0 60px;text-align:center;}
+.hadith-text{font-style:italic;font-size:27px;line-height:1.95;color:var(--navy);}
+.hadith-source{margin-top:16px;font-family:'Vazirmatn',sans-serif;font-size:15px;letter-spacing:2px;color:var(--muted);}
+.hadith-rule{width:44px;height:1px;background:var(--rule);margin:26px auto;}
+
+.folio{position:absolute;bottom:110px;left:0;right:0;text-align:center;font-family:'Vazirmatn',sans-serif;font-size:16px;letter-spacing:1px;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="running"><span>المبحث الخامس والثلاثون — الصبر</span><span>بذلكما مما علمني ربي</span></div>
+
+  <div class="content">
+    <div class="h2">مفهوم الصبر</div>
+    <div class="body-text">
+      الصبرُ خُلُقٌ عظيمٌ يُثبِّتُ القلبَ عند نزول المكاره، ويَكبَحُ جماحَ النفسِ عن التسخّط والجزع. وهو <b>حَبْسُ النفسِ على ما تكره</b> امتثالًا لأمر الله، ورضًا بقضائه وقدره، ويقظةً من الغفلة التي تُعمي القلبَ عن الحكمة الكامنة خلف كلِّ ابتلاء.
+    </div>
+
+    <div class="hadith">
+      <div class="hadith-rule"></div>
+      <div class="hadith-text">"عَجَبًا لِأَمْرِ الْمُؤْمِنِ، إِنَّ أَمْرَهُ كُلَّهُ خَيْرٌ، وَلَيْسَ ذَاكَ لِأَحَدٍ إِلَّا لِلْمُؤْمِنِ"</div>
+      <div class="hadith-source">رواه مسلم</div>
+      <div class="hadith-rule"></div>
+    </div>
+
+    <div class="body-text">
+      وليس الصبرُ استسلامًا سلبيًّا كما يُظنّ، بل هو موقفٌ إيجابيٌّ فَعّال يُترجَمُ سعيًا حكيمًا وثباتًا في مواجهة الشدائد، حتى يُبدّلَ اللهُ العُسرَ يُسرًا، والضيقَ فَرَجًا.
+    </div>
+  </div>
+
+  <div class="folio">١٥٠</div>
+</div>
+</body>
+</html>
