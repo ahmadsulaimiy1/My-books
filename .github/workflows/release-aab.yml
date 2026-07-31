@@ -1,0 +1,85 @@
+name: Release AAB Build
+
+# Builds a release Android App Bundle (.aab, the format Play Store requires) on every push to any
+# branch. Same optional-signing behavior as release-apk.yml — see that file's header comment and
+# BUILD_STATUS.md for the exact secrets required to produce a signed bundle. Without them, this
+# still produces app-release.aab, just unsigned (Play App Signing can also apply signing to an
+# unsigned upload separately, outside this pipeline, if that's the intended distribution path).
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-release-aab:
+    name: Build release AAB
+    runs-on: ubuntu-latest
+    env:
+      HAS_SIGNING_SECRETS: ${{ secrets.KEYSTORE_BASE64 != '' && secrets.KEYSTORE_PASSWORD != '' && secrets.KEY_ALIAS != '' && secrets.KEY_PASSWORD != '' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK platform 35 + build-tools
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Decode release signing keystore (optional)
+        if: env.HAS_SIGNING_SECRETS == 'true'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > "${{ github.workspace }}/release.keystore"
+          cat > "${{ github.workspace }}/keystore.properties" <<EOF
+          storeFile=${{ github.workspace }}/release.keystore
+          storePassword=$KEYSTORE_PASSWORD
+          keyAlias=$KEY_ALIAS
+          keyPassword=$KEY_PASSWORD
+          EOF
+
+      - name: Build release AAB
+        run: ./gradlew bundleRelease --no-daemon --stacktrace
+
+      - name: Remove decoded keystore
+        if: always()
+        run: rm -f "${{ github.workspace }}/release.keystore" "${{ github.workspace }}/keystore.properties"
+
+      - name: Report signing status
+        if: always()
+        run: |
+          if [ "$HAS_SIGNING_SECRETS" = "true" ]; then
+            echo "### Release AAB: signing secrets were present — build attempted a signed bundle." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### Release AAB: no signing secrets configured — build produced an UNSIGNED bundle. See BUILD_STATUS.md to add real signing secrets." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload release AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: app/build/outputs/bundle/release/*.aab
+          if-no-files-found: error
+          retention-days: 30

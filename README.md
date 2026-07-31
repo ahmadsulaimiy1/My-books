@@ -105,6 +105,22 @@ app/src/main/java/com/sultan/arabicai/
 └── MainActivity.kt / SultanApplication.kt
 ```
 
+## Automated builds (GitHub Actions)
+
+Every push to any branch triggers three CI workflows in `.github/workflows/` that build this
+project on GitHub's own runners — which have normal internet access, unlike every environment
+this project was previously developed in — producing downloadable APK/AAB artifacts automatically:
+
+| Workflow | Produces |
+|---|---|
+| [`debug-apk.yml`](.github/workflows/debug-apk.yml) | `app-debug.apk` (auto-signed debug build) |
+| [`release-apk.yml`](.github/workflows/release-apk.yml) | `app-release.apk` (signed if keystore secrets are configured, otherwise unsigned) |
+| [`release-aab.yml`](.github/workflows/release-aab.yml) | `app-release.aab` (Play Store bundle) |
+
+Find the downloadable files under each run's **Artifacts** section on the repository's **Actions**
+tab. See [`BUILD_STATUS.md`](BUILD_STATUS.md) for the real, evidence-based status of the most
+recent run, exactly what each workflow does, and how to add real release-signing secrets.
+
 ## Building
 
 **Requirements** (exact versions this project is pinned to — see `build.gradle.kts` /
