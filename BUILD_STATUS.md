@@ -72,21 +72,33 @@ different delivery mechanism.
 
 ## Current status
 
-**Last updated:** after round 2 of real runs (commit `1d4fbeb`, the fix for round 1's errors).
-Every claim below is read directly from actual GitHub Actions job logs via the GitHub API — not
-inferred, not predicted.
+**Last updated:** after round 3 of real runs (commit `dc9d72a`, the fix for round 2's R8 error).
+**All three workflows are green.** Every claim below is read directly from actual GitHub Actions
+job logs and artifact metadata via the GitHub API — not inferred, not predicted.
 
 ### Build success
 
-**Real, confirmed — Debug APK Build, round 2 (commit `1d4fbeb`):**
-[run 30646062526](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30646062526) — ✅
-**success**. This is the first successful compile-and-package of this codebase in its entire
-history. Confirmed via the GitHub API, not just the green check: the `app-debug-apk` artifact
-exists, is **22,578,453 bytes**, with a real SHA-256 digest
-(`48595f8f6011009bd0351a81703ce89d5efae98fa61c07619d65b9b452e0a879`), expiring
-2026-08-30. Download it from that run's page → **Artifacts** section.
+**Real, confirmed — all three workflows, round 3 (commit `dc9d72a`):**
 
-Release APK/AAB were not yet successful in round 2 — see below.
+| Workflow | Run | Artifact | Size | SHA-256 |
+|---|---|---|---|---|
+| Debug APK Build | [run 30646718591](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30646718591) | `app-debug-apk` | 22,578,451 bytes | `3c7a1ca93bac46f37ed83ae9a00e1f1fe4358b50adbb00c1e4ee6ab14892d950` |
+| Release APK Build | [run 30646720410](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30646720410) | `app-release-apk` | 5,697,383 bytes | `d99b90e77342a82ba10a757adc74e57d1661a525966ab56f320cfea858011866` |
+| Release AAB Build | [run 30646718605](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30646718605) | `app-release-aab` | 8,370,745 bytes | `e00bb1e88cd01eafb023ebb4e464dc19c0dda6f7532f2850161df78f53e79230` |
+
+This is the first time in this project's entire history that a complete, real
+compile-shrink-package cycle has succeeded for all three build variants. All artifacts expire
+2026-08-30 (30-day retention) — download from each run's page → **Artifacts** section before then,
+or just push again to regenerate them.
+
+**Signing status:** the release APK/AAB are **unsigned** — no `KEYSTORE_BASE64`/
+`KEYSTORE_PASSWORD`/`KEY_ALIAS`/`KEY_PASSWORD` secrets have been added to this repository (see
+"Signing status" section above for exactly how to add them). This is expected, not an error —
+`app/build.gradle.kts`'s existing conditional logic falls back to unsigned automatically when
+`keystore.properties` doesn't exist, and the same is true here.
+
+It took three rounds of real, evidence-based fixes to get here — each one a genuine defect this
+project's years of static-analysis-only audits could describe as *possible* but never *confirm*:
 
 ### Build failure
 
@@ -153,7 +165,25 @@ Applied directly (commit following `1d4fbeb`):
    classes are safe to ignore (they're never invoked at runtime, only referenced in Tink's source
    for static analysis tooling that isn't present here either).
 
-A fresh push containing this fix has been made; this file will be updated again with round 3's
-real result once it completes — specifically checking that both release artifacts now build and
-that `-dontwarn`-ing these classes didn't silently break anything else, by confirming the
-resulting APK/AAB files exist and have plausible non-zero sizes.
+**Round 3 (commit `dc9d72a`) confirmed the fix worked** — see "Build success" above. The
+`-dontwarn` rules didn't silently break anything else: both release artifacts exist with
+plausible, non-trivial sizes (5.7MB APK, 8.4MB AAB), not zero-byte or truncated files.
+
+## What this proves, and what it still doesn't
+
+**Proven, for real, for the first time in this project's history:** this codebase compiles, its
+Kotlin is valid, its Compose UI graph resolves, its R8/minification configuration is complete
+enough to produce a real shrunk release build, and its Gradle/AGP/dependency configuration is
+internally consistent end to end on a normal, unrestricted-network machine (a GitHub-hosted
+runner). That directly answers the open question at the top of
+`docs/handoff/06_INDEPENDENT_AUDIT_PACKAGE.md` Q1 ("Does it compile?") — yes, confirmed, with a
+real artifact and a real SHA-256 digest as evidence, not an estimate.
+
+**Still not proven — CI compiling successfully is not the same as the app working:** nothing
+here confirms the app installs, launches, or behaves correctly on a device or emulator (Q2/Q3 in
+that same document), nor does it touch accessibility, performance, or security testing status
+(Q4/Q5). `docs/handoff/07_FINAL_STATUS_REPORT.md`'s classification should be revisited in light of
+this — compiling for the first time is real, positive evidence, but the report's own bar for
+reclassifying to **D (Production Candidate)** is "one clean install-and-launch on a physical
+device," which this CI pipeline does not and cannot provide (GitHub Actions runners have no
+Android device/emulator attached in this configuration). That remains the next real milestone.
