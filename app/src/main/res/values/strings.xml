@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sultan Arabic AI</string>
+    <string name="app_tagline">Saudi Ultimate Language Training</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">A Flagship Standard of Arabic Mastery</string>
+    <string name="onboarding_welcome_subtitle">Inspired by the ambition of Vision 2030</string>
+    <string name="onboarding_cta_begin">Begin Your Journey</string>
+
+    <!-- Auth -->
+    <string name="auth_biometric_title">Unlock Sultan Arabic AI</string>
+    <string name="auth_biometric_subtitle">Use your fingerprint or face to continue</string>
+    <string name="auth_biometric_negative">Use passcode instead</string>
+    <string name="auth_biometric_not_available">Biometric authentication is not available on this device. Continuing with standard access.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Executive Overview</string>
+    <string name="dashboard_learning_hours">Learning Hours</string>
+    <string name="dashboard_lessons_completed">Lessons Completed</string>
+    <string name="dashboard_vocabulary_mastered">Vocabulary Mastered</string>
+    <string name="dashboard_speaking_score">Speaking Score</string>
+    <string name="dashboard_listening_score">Listening Score</string>
+    <string name="dashboard_grammar_score">Grammar Score</string>
+
+    <!-- Library -->
+    <string name="library_title">Digital Library</string>
+    <string name="library_book_sultan_2">SULTAN: Intermediate Book 2</string>
+    <string name="library_book_sultan_2_author">Ahmad Sulaimiy</string>
+
+    <!-- Vocabulary -->
+    <string name="vocabulary_title">Vocabulary Bank</string>
+    <string name="flashcards_title">Flashcards</string>
+
+    <!-- Quiz -->
+    <string name="quiz_title">Assessment Centre</string>
+
+    <!-- Speaking Lab -->
+    <string name="speaking_lab_title">Speaking Lab</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Scholar Profile</string>
+    <string name="rank_beginner">Beginner</string>
+    <string name="rank_student">Student</string>
+    <string name="rank_scholar">Scholar</string>
+    <string name="rank_researcher">Researcher</string>
+    <string name="rank_expert">Expert</string>
+    <string name="rank_master">Master</string>
+    <string name="rank_ambassador">Ambassador</string>
+    <string name="rank_elite_scholar">Elite Scholar</string>
+    <string name="rank_grand_scholar">Grand Scholar</string>
+
+    <!-- Certificates -->
+    <string name="certificates_title">Certificates of Honour</string>
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">سلطان: الذكاء الاصطناعي للغة العربية</string>
+    <string name="app_tagline">التدريب السعودي المتكامل للغة العربية</string>
+
+    <string name="onboarding_welcome_title">معيار رائد لإتقان اللغة العربية</string>
+    <string name="onboarding_welcome_subtitle">مستوحى من طموح رؤية 2030</string>
+    <string name="onboarding_cta_begin">ابدأ رحلتك</string>
+
+    <string name="auth_biometric_title">افتح سلطان للذكاء الاصطناعي</string>
+    <string name="auth_biometric_subtitle">استخدم بصمتك أو وجهك للمتابعة</string>
+    <string name="auth_biometric_negative">استخدام كلمة المرور بدلاً من ذلك</string>
+    <string name="auth_biometric_not_available">المصادقة البيومترية غير متاحة على هذا الجهاز. سيتم المتابعة بالوصول القياسي.</string>
+
+    <string name="dashboard_title">نظرة تنفيذية عامة</string>
+    <string name="dashboard_learning_hours">ساعات التعلم</string>
+    <string name="dashboard_lessons_completed">الدروس المكتملة</string>
+    <string name="dashboard_vocabulary_mastered">المفردات المتقنة</string>
+    <string name="dashboard_speaking_score">درجة التحدث</string>
+    <string name="dashboard_listening_score">درجة الاستماع</string>
+    <string name="dashboard_grammar_score">درجة القواعد</string>
+
+    <string name="library_title">المكتبة الرقمية</string>
+    <string name="library_book_sultan_2">سلطان: الكتاب المتوسط الثاني</string>
+    <string name="library_book_sultan_2_author">أحمد سليمي</string>
+
+    <string name="vocabulary_title">بنك المفردات</string>
+    <string name="flashcards_title">البطاقات التعليمية</string>
+
+    <string name="quiz_title">مركز التقييم</string>
+
+    <string name="speaking_lab_title">مختبر التحدث</string>
+
+    <string name="profile_title">الملف الشخصي للدارس</string>
+    <string name="rank_beginner">مبتدئ</string>
+    <string name="rank_student">طالب</string>
+    <string name="rank_scholar">دارس</string>
+    <string name="rank_researcher">باحث</string>
+    <string name="rank_expert">خبير</string>
+    <string name="rank_master">متمكن</string>
+    <string name="rank_ambassador">سفير</string>
+    <string name="rank_elite_scholar">دارس النخبة</string>
+    <string name="rank_grand_scholar">الدارس الأكبر</string>
+
+    <string name="certificates_title">شهادات التكريم</string>
+</resources>

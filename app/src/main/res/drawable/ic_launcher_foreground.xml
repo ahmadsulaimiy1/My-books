@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Eight-pointed star (khatim) monogram — the flagship seal motif reused across
+     splash, certificates, and achievement badges. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:pathData="M 54,24 L 58.97,41.99 L 75.21,32.79 L 66.01,49.03 L 84,54 L 66.01,58.97 L 75.21,75.21 L 58.97,66.01 L 54,84 L 49.03,66.01 L 32.79,75.21 L 41.99,58.97 L 24,54 L 41.99,49.03 L 32.79,32.79 L 49.03,41.99 Z"
+        android:fillColor="#C9A961" />
+    <path
+        android:pathData="M54,44 a10,10 0 1,0 0.01,0 Z"
+        android:fillColor="#082A66" />
+</vector>

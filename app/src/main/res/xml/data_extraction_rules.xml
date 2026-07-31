@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <!-- Progress/vocabulary DB is eligible for encrypted cloud backup + multi-device sync;
+             biometric/session secrets never leave the device. -->
+        <exclude domain="sharedpref" path="secure_prefs.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="secure_prefs.xml" />
+    </device-transfer>
+</data-extraction-rules>
