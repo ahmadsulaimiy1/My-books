@@ -17,3 +17,12 @@
 
 # ZXing's format-detection path uses reflection internally.
 -keep class com.google.zxing.** { *; }
+
+# androidx.security:security-crypto pulls in Google Tink, which references compile-time-only
+# annotation classes (error-prone, JSR-305) that are never present at runtime and never shipped
+# as a real dependency of this app. R8 fails minifyReleaseWithR8 on these as "missing classes"
+# unless told they're safe to ignore — confirmed by a real R8 run (GitHub Actions release build),
+# not a guess; this is Tink's own documented R8 caveat, not a bug in this app's code.
+-dontwarn com.google.errorprone.annotations.**
+-dontwarn javax.annotation.**
+-dontwarn javax.annotation.concurrent.**

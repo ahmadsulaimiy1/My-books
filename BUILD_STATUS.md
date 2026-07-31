@@ -72,70 +72,88 @@ different delivery mechanism.
 
 ## Current status
 
-**Last updated:** after the pipeline's first real runs (commit `2e03ab0`) and the fix commit that
-followed it. This is real, evidence-based CI output — the first this project has ever had — not a
-prediction.
+**Last updated:** after round 2 of real runs (commit `1d4fbeb`, the fix for round 1's errors).
+Every claim below is read directly from actual GitHub Actions job logs via the GitHub API — not
+inferred, not predicted.
 
 ### Build success
 
-Not yet observed as of this writing. A successful run means: the job completed with a green
-check, the named artifact appears in the run's Artifacts section, and downloading it produces a
-valid, non-empty `.apk`/`.aab` file. The fix below has been pushed and a fresh set of runs is in
-flight; this section will be updated again once one actually finishes green.
+**Real, confirmed — Debug APK Build, round 2 (commit `1d4fbeb`):**
+[run 30646062526](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30646062526) — ✅
+**success**. This is the first successful compile-and-package of this codebase in its entire
+history. Confirmed via the GitHub API, not just the green check: the `app-debug-apk` artifact
+exists, is **22,578,453 bytes**, with a real SHA-256 digest
+(`48595f8f6011009bd0351a81703ce89d5efae98fa61c07619d65b9b452e0a879`), expiring
+2026-08-30. Download it from that run's page → **Artifacts** section.
+
+Release APK/AAB were not yet successful in round 2 — see below.
 
 ### Build failure
 
-**Observed, real, all three workflows, first run (commit `2e03ab0`):**
+**Round 1 (commit `2e03ab0`) — all three workflows failed identically** at
+`:app:compileDebugKotlin` / `:app:compileReleaseKotlin` with two real Kotlin errors (unresolved
+`TextToSpeech.Engine.ACTION_TTS_SETTINGS` and an invalid `import
+androidx.compose.foundation.lazy.item`) — full detail in git history of this file, fixed in commit
+`1d4fbeb`.
+
+**Round 2 (commit `1d4fbeb`) — Release APK and Release AAB still failed, Kotlin compilation now
+passes cleanly on all three:**
 
 | Workflow | Run | Conclusion |
 |---|---|---|
-| Debug APK Build | [run 30645057982](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30645057982) | ❌ failure |
-| Release APK Build | [run 30645058072](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30645058072) | ❌ failure |
-| Release AAB Build | [run 30645058137](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30645058137) | ❌ failure |
+| Debug APK Build | [run 30646062526](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30646062526) | ✅ success |
+| Release APK Build | [run 30646060542](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30646060542) | ❌ failure |
+| Release AAB Build | [run 30646061495](https://github.com/ahmadsulaimiy1/My-books/actions/runs/30646061495) | ❌ failure |
 
-All three failed at the same step — `:app:compileDebugKotlin` / `:app:compileReleaseKotlin` —
-with the identical two Kotlin errors (confirmed by reading each run's actual job logs via the
-GitHub API, not inferred). This is the very first real compiler feedback this codebase has ever
-received in its entire history; static analysis across every prior audit phase
-(`docs/handoff/`) could reason about the API surface but could not have caught these with
-certainty without a real compiler, which is exactly what happened here.
+Both release workflows got past Kotlin compilation this time and failed at a later step,
+`:app:minifyReleaseWithR8` — real, measurable progress from round 1, not a new unrelated problem.
 
 ### Errors encountered
 
-Exact text from the real job logs:
+Exact text from the real job logs (identical in both Release APK and Release AAB runs):
 
 ```
-e: file:///home/runner/work/My-books/My-books/app/src/main/java/com/sultan/arabicai/tts/VoiceDataManager.kt:36:66 Unresolved reference 'ACTION_TTS_SETTINGS'.
-e: file:///home/runner/work/My-books/My-books/app/src/main/java/com/sultan/arabicai/ui/screens/lessons/LessonDetailScreen.kt:13:41 Unresolved reference 'item'.
+> Task :app:minifyReleaseWithR8 FAILED
+ERROR: Missing classes detected while running R8. Please add the missing classes or apply
+additional keep rules that are generated in .../app/build/outputs/mapping/release/missing_rules.txt.
+ERROR: R8: Missing class com.google.errorprone.annotations.CanIgnoreReturnValue (referenced from:
+  com.google.crypto.tink.KeysetManager ... and 52 other contexts)
+Missing class com.google.errorprone.annotations.CheckReturnValue (referenced from:
+  com.google.crypto.tink.InsecureSecretKeyAccess and 1 other context)
+Missing class com.google.errorprone.annotations.Immutable (referenced from:
+  com.google.crypto.tink.InsecureSecretKeyAccess and 40 other contexts)
+Missing class com.google.errorprone.annotations.RestrictedApi (referenced from:
+  com.google.crypto.tink.aead.AesEaxKey$Builder ... and 6 other contexts)
+Missing class javax.annotation.Nullable (referenced from:
+  java.lang.Object com.google.crypto.tink.PrimitiveSet$Entry.fullPrimitive and 86 other contexts)
+Missing class javax.annotation.concurrent.GuardedBy (referenced from:
+  com.google.crypto.tink.proto.Keyset$Builder ... and 3 other contexts)
+com.android.tools.r8.CompilationFailedException: Compilation failed to complete
 ```
 
-**Root cause 1 — `VoiceDataManager.kt:36`:** the code called
-`Intent(TextToSpeech.Engine.ACTION_TTS_SETTINGS)`, but `TextToSpeech.Engine` in the real Android
-SDK only defines `ACTION_CHECK_TTS_DATA` and `ACTION_INSTALL_TTS_DATA` — there is no
-`ACTION_TTS_SETTINGS` constant anywhere in the platform. This was a genuine invalid API reference
-introduced in an earlier phase of this project and never caught, because no compiler had ever run
-against this file until now.
-
-**Root cause 2 — `LessonDetailScreen.kt:13`:** the code had `import
-androidx.compose.foundation.lazy.item`. `item(...)` is a **member function of the `LazyListScope`
-interface**, not a top-level extension function like its plural sibling `items(...)` — it has no
-package-level symbol to import at all, so the import statement itself was invalid. (It compiled
-fine as *usage* at line 124 inside `LazyColumn { item { ... } } }`, which resolves `item` through
-the implicit `LazyListScope` receiver — the bad import was simply dead weight that happened to
-also be wrong.)
+**Root cause:** `androidx.security:security-crypto` (used for `EncryptedSharedPreferences`, see
+`security/` in `01_ENGINEERING_BRIEFING.md`) pulls in Google Tink as a transitive dependency, and
+Tink's own code references several compile-time-only annotation classes
+(`com.google.errorprone.annotations.*`, `javax.annotation.Nullable`,
+`javax.annotation.concurrent.GuardedBy`) that are never actually present at runtime and are not a
+real dependency of this app. R8 treats any referenced-but-absent class as a hard error unless
+told it's safe to ignore. This is a well-documented, standard caveat of shipping Tink through R8
+— not a bug introduced by this project — but `app/proguard-rules.pro` never had the corresponding
+`-dontwarn` rules, because (per that file's own header comment) **it had never been run through a
+real R8 pass until this CI run**. This is exactly the gap that comment predicted, now closed with
+real evidence instead of a guess.
 
 ### Required fixes
 
-Both applied directly (commit following `2e03ab0`), since these are genuine defects blocking any
-build — not new features or functionality changes:
+Applied directly (commit following `1d4fbeb`):
 
-1. **`VoiceDataManager.kt`**: replaced `TextToSpeech.Engine.ACTION_TTS_SETTINGS` with a local
-   `private const val ACTION_TTS_SETTINGS = "com.android.settings.TTS_SETTINGS"` — the real,
-   long-stable (if undocumented) intent action Android apps use to open system TTS settings —
-   and construct the intent from that instead.
-2. **`LessonDetailScreen.kt`**: removed the invalid `import
-   androidx.compose.foundation.lazy.item` line entirely. No behavior change — `item { ... }` at
-   line 124 already resolves correctly via its `LazyListScope` receiver without any import.
+1. **`app/proguard-rules.pro`**: added
+   `-dontwarn com.google.errorprone.annotations.**`, `-dontwarn javax.annotation.**`, and
+   `-dontwarn javax.annotation.concurrent.**` — telling R8 these specific missing annotation
+   classes are safe to ignore (they're never invoked at runtime, only referenced in Tink's source
+   for static analysis tooling that isn't present here either).
 
-A fresh push containing both fixes has been made; this file will be updated again with the result
-of the next run once it completes.
+A fresh push containing this fix has been made; this file will be updated again with round 3's
+real result once it completes — specifically checking that both release artifacts now build and
+that `-dontwarn`-ing these classes didn't silently break anything else, by confirming the
+resulting APK/AAB files exist and have plausible non-zero sizes.
