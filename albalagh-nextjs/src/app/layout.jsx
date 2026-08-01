@@ -1,9 +1,36 @@
 import './globals.css';
 
+const SITE_URL = 'https://www.albalagh.edu';
+const TITLE = 'Al-Balagh International Premium College';
+const DESCRIPTION =
+  'Al-Balagh International Premium College for Islamic Sciences and Modern Civilization — official Digital Campus.';
+
 export const metadata = {
-  title: 'Al-Balagh International Premium College',
-  description:
-    'Al-Balagh International Premium College for Islamic Sciences and Modern Civilization — official Digital Campus.',
+  metadataBase: new URL(SITE_URL),
+  title: { default: TITLE, template: `%s | ${TITLE}` },
+  description: DESCRIPTION,
+  applicationName: 'Al-Balagh',
+  manifest: '/site.webmanifest',
+  icons: {
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+    apple: '/apple-touch-icon.png',
+  },
+  openGraph: {
+    type: 'website',
+    siteName: TITLE,
+    title: TITLE,
+    description: DESCRIPTION,
+    url: SITE_URL,
+  },
+  twitter: {
+    card: 'summary',
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+};
+
+export const viewport = {
+  themeColor: '#0F2847',
 };
 
 // Root layout: intentionally minimal. Language direction (lang/dir) is set
