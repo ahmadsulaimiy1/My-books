@@ -212,6 +212,18 @@
   .feat-tile h3{font-family:'Inter',sans-serif; font-size:13.5px; font-weight:600; color:var(--ink);}
   [dir="rtl"] .feat-tile h3{font-family:'IBM Plex Sans Arabic',sans-serif;}
 
+  /* CREDIT UNIT POLICY */
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius-md); background:var(--surface); max-width:820px; margin-top:8px;}
+  .table-wrap table{width:100%; border-collapse:collapse; min-width:520px;}
+  .table-wrap thead th{background:var(--navy); color:#fff; text-align:start; padding:12px 16px; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.03em;}
+  .table-wrap tbody td{padding:12px 16px; font-size:13px; border-bottom:1px solid var(--border); color:var(--ink-muted);}
+  .table-wrap tbody tr:last-child td{border-bottom:none;}
+  .table-wrap td.prog-name{color:var(--ink); font-weight:600;}
+  .plain-list{margin:0; padding-inline-start:20px; display:grid; gap:8px; max-width:820px;}
+  [dir="rtl"] .plain-list{padding-inline-start:0; padding-inline-end:20px;}
+  .plain-list li{font-size:13.5px; color:var(--ink-muted); line-height:1.6;}
+  .plain-list a{color:var(--navy); text-decoration:underline; font-weight:600;}
+
   .faq-list{max-width:820px; margin:0 auto; display:grid; gap:1px; background:var(--border); border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden;}
   .faq-item{background:var(--surface);}
   .faq-q{width:100%; text-align:start; background:none; border:none; padding:18px 20px; display:flex; justify-content:space-between; align-items:center; gap:16px; cursor:pointer; font-size:15px; font-weight:600; color:var(--ink);}
@@ -648,6 +660,49 @@
   </div>
 </section>
 
+<section id="credit-units" style="background:var(--surface); border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="cuEyebrow">Academic Policy</span>
+      <h2 data-i18n="cuTitle">Institutional Credit Unit and Student Workload Policy</h2>
+    </div>
+    <div class="school-integration-grid reveal">
+      <div class="integ-card"><h3 data-i18n="cu1t">Purpose</h3><p data-i18n="cu1d">The Albalagh Credit Unit System provides a standardised framework for measuring the academic workload, instructional time, independent learning, assessment, and graduation requirements for all academic programmes offered by the College. It ensures consistency, transparency, quality assurance, and academic excellence across all Schools and Departments.</p></div>
+      <div class="integ-card"><h3 data-i18n="cu2t">Definition</h3><p data-i18n="cu2d">A Credit Unit (CU) is the academic value assigned to a course based on the amount of learning required to achieve the prescribed learning outcomes, reflecting the combined expectations of classroom instruction, guided learning, independent study, practical activities, and assessment.</p></div>
+      <div class="integ-card"><h3 data-i18n="cu3t">Contact Hours</h3><p data-i18n="cu3d">Structured learning under supervision, including: live online lectures, interactive tutorials, seminars, practical demonstrations, supervised workshops, oral presentations, academic consultations, and approved virtual laboratory or simulation sessions.</p></div>
+      <div class="integ-card"><h3 data-i18n="cu4t">Independent Learning Hours</h3><p data-i18n="cu4d">Self-directed activity outside class, including: reading prescribed textbooks, reviewing lecture notes, library or online research, assignment preparation, Qur'an memorisation (where applicable), Murāja'ah (revision), project work, case studies, group discussions, and examination preparation.</p></div>
+      <div class="integ-card"><h3 data-i18n="cu5t">Credit Allocation</h3><p data-i18n="cu5d">Courses normally carry 1 to 4 Credit Units; research projects, industrial attachments, internships, and professional practice may carry higher values as approved by the Academic Board.</p></div>
+      <div class="integ-card"><h3 data-i18n="cu6t">Semester Workload</h3><p data-i18n="cu6d">Minimum 20 Credit Units per Semester; recommended 22–24 Credit Units; maximum 26 Credit Units, with approval.</p></div>
+      <div class="integ-card"><h3 data-i18n="cu7t">Programme Credit Requirements</h3><p data-i18n="cu7d">The Professional Diploma in Advanced Islamic Sciences and Modern Civilization Studies normally requires approximately 66–72 Credit Units, in addition to compulsory non-credit graduation requirements where applicable.</p></div>
+      <div class="integ-card"><h3 data-i18n="cu8t">Institutional Policy</h3><p data-i18n="cu8d">Albalagh Global reviews its Credit Unit Framework periodically to ensure alignment with recognised quality assurance practices, educational developments, and the needs of its academic programmes, while preserving its Islamic educational philosophy.</p></div>
+    </div>
+
+    <h3 class="reveal" style="font-size:18px; margin:36px 0 6px;" data-i18n="cuFwTitle">Credit Unit Framework</h3>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th data-i18n="cuFwH1">Credit Units</th><th data-i18n="cuFwH2">Contact Hours</th><th data-i18n="cuFwH3">Independent Learning Hours</th><th data-i18n="cuFwH4">Total Student Learning Time</th></tr></thead>
+        <tbody>
+          <tr><td class="prog-name" data-i18n="cuFwR1a">1 Credit Unit</td><td data-i18n="cuFwR1b">15 Contact Hours</td><td data-i18n="cuFwR1c">Approx. 15–30 Hours</td><td data-i18n="cuFwR1d">30–45 Hours</td></tr>
+          <tr><td class="prog-name" data-i18n="cuFwR2a">2 Credit Units</td><td data-i18n="cuFwR2b">30 Contact Hours</td><td data-i18n="cuFwR2c">Approx. 30–60 Hours</td><td data-i18n="cuFwR2d">60–90 Hours</td></tr>
+          <tr><td class="prog-name" data-i18n="cuFwR3a">3 Credit Units</td><td data-i18n="cuFwR3b">45 Contact Hours</td><td data-i18n="cuFwR3c">Approx. 45–90 Hours</td><td data-i18n="cuFwR3d">90–135 Hours</td></tr>
+          <tr><td class="prog-name" data-i18n="cuFwR4a">4 Credit Units</td><td data-i18n="cuFwR4b">60 Contact Hours</td><td data-i18n="cuFwR4c">Approx. 60–120 Hours</td><td data-i18n="cuFwR4d">120–180 Hours</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="reveal" style="font-size:18px; margin:36px 0 6px;" data-i18n="cuNcTitle">Non-Credit Graduation Requirements</h3>
+    <p class="reveal" style="margin-bottom:14px; font-size:13.5px;" data-i18n="cuNcLead">Compulsory for graduation but not carrying academic credit:</p>
+    <ul class="plain-list reveal">
+      <li data-i18n="cuNc1">Qur'an Memorisation and Murāja'ah</li>
+      <li data-i18n="cuNc2">The <a href="institute-professional-studies.html">Professional Competency and Practice Programme (AIPS)</a></li>
+      <li data-i18n="cuNc3">Community Service</li>
+      <li data-i18n="cuNc4">Institutional Character and Leadership Development</li>
+      <li data-i18n="cuNc5">Exit Oral Assessment</li>
+      <li data-i18n="cuNc6">Convocation Requirements</li>
+    </ul>
+  </div>
+</section>
+
 <section id="faq">
   <div class="container">
     <div class="section-head center reveal">
@@ -874,6 +929,25 @@ const i18n = {
     res1:"Curriculum (PDF)", res2:"Programme Handbook", res3:"Course Catalogue", res4:"Course Specifications", res5:"Academic Regulations", res6:"Student Handbook", res7:"Assessment Guide", res8:"Practical Manual", res9:"Internship Guide", res10:"Faculty Profiles", res11:"Head of Department Profile", res12:"Gallery", res13:"Research Publications", res14:"Downloads",
     featEyebrow:"Programme Features", featTitle:"What's built into every programme",
     f1:"Flexible Online Learning", f2:"Live Interactive Classes", f3:"Recorded Lectures", f4:"AI-Assisted Learning", f5:"Digital Library", f6:"Practical Projects", f7:"Professional Competency & Practice Programme (PCPP)", f8:"Industrial Attachment", f9:"Career Readiness",
+    cuEyebrow:"Academic Policy", cuTitle:"Institutional Credit Unit and Student Workload Policy",
+    cu1t:"Purpose", cu1d:"The Albalagh Credit Unit System provides a standardised framework for measuring the academic workload, instructional time, independent learning, assessment, and graduation requirements for all academic programmes offered by the College. It ensures consistency, transparency, quality assurance, and academic excellence across all Schools and Departments.",
+    cu2t:"Definition", cu2d:"A Credit Unit (CU) is the academic value assigned to a course based on the amount of learning required to achieve the prescribed learning outcomes, reflecting the combined expectations of classroom instruction, guided learning, independent study, practical activities, and assessment.",
+    cu3t:"Contact Hours", cu3d:"Structured learning under supervision, including: live online lectures, interactive tutorials, seminars, practical demonstrations, supervised workshops, oral presentations, academic consultations, and approved virtual laboratory or simulation sessions.",
+    cu4t:"Independent Learning Hours", cu4d:"Self-directed activity outside class, including: reading prescribed textbooks, reviewing lecture notes, library or online research, assignment preparation, Qur'an memorisation (where applicable), Murāja'ah (revision), project work, case studies, group discussions, and examination preparation.",
+    cu5t:"Credit Allocation", cu5d:"Courses normally carry 1 to 4 Credit Units; research projects, industrial attachments, internships, and professional practice may carry higher values as approved by the Academic Board.",
+    cu6t:"Semester Workload", cu6d:"Minimum 20 Credit Units per Semester; recommended 22–24 Credit Units; maximum 26 Credit Units, with approval.",
+    cu7t:"Programme Credit Requirements", cu7d:"The Professional Diploma in Advanced Islamic Sciences and Modern Civilization Studies normally requires approximately 66–72 Credit Units, in addition to compulsory non-credit graduation requirements where applicable.",
+    cu8t:"Institutional Policy", cu8d:"Albalagh Global reviews its Credit Unit Framework periodically to ensure alignment with recognised quality assurance practices, educational developments, and the needs of its academic programmes, while preserving its Islamic educational philosophy.",
+    cuFwTitle:"Credit Unit Framework",
+    cuFwH1:"Credit Units", cuFwH2:"Contact Hours", cuFwH3:"Independent Learning Hours", cuFwH4:"Total Student Learning Time",
+    cuFwR1a:"1 Credit Unit", cuFwR1b:"15 Contact Hours", cuFwR1c:"Approx. 15–30 Hours", cuFwR1d:"30–45 Hours",
+    cuFwR2a:"2 Credit Units", cuFwR2b:"30 Contact Hours", cuFwR2c:"Approx. 30–60 Hours", cuFwR2d:"60–90 Hours",
+    cuFwR3a:"3 Credit Units", cuFwR3b:"45 Contact Hours", cuFwR3c:"Approx. 45–90 Hours", cuFwR3d:"90–135 Hours",
+    cuFwR4a:"4 Credit Units", cuFwR4b:"60 Contact Hours", cuFwR4c:"Approx. 60–120 Hours", cuFwR4d:"120–180 Hours",
+    cuNcTitle:"Non-Credit Graduation Requirements", cuNcLead:"Compulsory for graduation but not carrying academic credit:",
+    cuNc1:"Qur'an Memorisation and Murāja'ah",
+    cuNc2:"The <a href=\"institute-professional-studies.html\">Professional Competency and Practice Programme (AIPS)</a>",
+    cuNc3:"Community Service", cuNc4:"Institutional Character and Leadership Development", cuNc5:"Exit Oral Assessment", cuNc6:"Convocation Requirements",
     faqEyebrow:"Frequently Asked Questions", faqTitle:"Common questions about our programmes",
     faq1q:"How many Schools and Departments does Albalagh have?", faq1a:"Albalagh has four Schools comprising eight Departments in total, two per School.",
     faq2q:"What is the Albalagh Professional Graduate Development Model (APGDM)?", faq2a:"The APGDM is the structured pathway every Professional Diploma student follows, combining academic study, industrial attachment, the AIPS Professional Competency and Practice Programme, and formal conferment of an institutional Graduate Designation.",
@@ -988,6 +1062,25 @@ const i18n = {
     res1:"المنهج (PDF)", res2:"دليل البرنامج", res3:"دليل المقررات", res4:"مواصفات المقررات", res5:"اللوائح الأكاديمية", res6:"دليل الطالب", res7:"دليل التقييم", res8:"الدليل العملي", res9:"دليل التدريب", res10:"ملفات أعضاء هيئة التدريس", res11:"ملف رئيس القسم", res12:"معرض الصور", res13:"المنشورات البحثية", res14:"التنزيلات",
     featEyebrow:"مزايا البرنامج", featTitle:"ما هو مدمج في كل برنامج",
     f1:"تعلّم إلكتروني مرن", f2:"دروس تفاعلية مباشرة", f3:"محاضرات مسجلة", f4:"تعلّم معزز بالذكاء الاصطناعي", f5:"مكتبة رقمية", f6:"مشاريع عملية", f7:"برنامج الكفاءة والممارسة المهنية (PCPP)", f8:"التدريب الصناعي", f9:"الجاهزية المهنية",
+    cuEyebrow:"السياسة الأكاديمية", cuTitle:"سياسة الوحدة الدراسية المؤسسية وعبء العمل الطلابي",
+    cu1t:"الغرض", cu1d:"يوفر نظام الوحدات الدراسية في البلاغ إطارًا موحدًا لقياس العبء الأكاديمي ووقت التدريس والتعلّم المستقل والتقييم ومتطلبات التخرج لجميع البرامج الأكاديمية التي تقدمها الكلية. ويضمن هذا النظام الاتساق والشفافية وضمان الجودة والتميز الأكاديمي عبر جميع الكليات والأقسام.",
+    cu2t:"التعريف", cu2d:"الوحدة الدراسية (CU) هي القيمة الأكاديمية المخصصة لمقرر ما بناءً على مقدار التعلّم المطلوب لتحقيق مخرجات التعلّم المقررة، بما يعكس المتطلبات المجمّعة للتدريس الصفي والتعلّم الموجّه والدراسة المستقلة والأنشطة العملية والتقييم.",
+    cu3t:"ساعات التواصل", cu3d:"تعلّم منظم تحت الإشراف، ويشمل: المحاضرات المباشرة عبر الإنترنت، والدروس التطبيقية التفاعلية، والندوات، والعروض العملية، وورش العمل المُشرَف عليها، والعروض الشفوية، والاستشارات الأكاديمية، وجلسات المختبرات أو المحاكاة الافتراضية المعتمدة.",
+    cu4t:"ساعات التعلّم المستقل", cu4d:"نشاط ذاتي التوجيه خارج الفصل، ويشمل: قراءة الكتب المقررة، ومراجعة المحاضرات، والبحث في المكتبة أو عبر الإنترنت، وإعداد الواجبات، وحفظ القرآن الكريم (حيثما ينطبق)، والمراجعة، والعمل على المشاريع، ودراسات الحالة، والمناقشات الجماعية، والاستعداد للامتحانات.",
+    cu5t:"توزيع الوحدات الدراسية", cu5d:"تحمل المقررات عادةً من 1 إلى 4 وحدات دراسية؛ وقد تحمل مشاريع البحث والتدريب الصناعي والتدريب العملي والممارسة المهنية قيمًا أعلى بموافقة المجلس الأكاديمي.",
+    cu6t:"عبء العمل الفصلي", cu6d:"الحد الأدنى 20 وحدة دراسية لكل فصل دراسي؛ ويُوصى بـ 22–24 وحدة؛ والحد الأقصى 26 وحدة، بموافقة خاصة.",
+    cu7t:"متطلبات الوحدات الدراسية للبرنامج", cu7d:"يتطلب دبلوم العلوم الإسلامية المتقدمة ودراسات الحضارة الحديثة عادةً ما يقارب 66–72 وحدة دراسية، بالإضافة إلى متطلبات التخرج غير الدراسية الإلزامية حيثما تنطبق.",
+    cu8t:"السياسة المؤسسية", cu8d:"تراجع البلاغ العالمية إطار الوحدات الدراسية الخاص بها دوريًا لضمان توافقه مع ممارسات ضمان الجودة المعترف بها والتطورات التعليمية واحتياجات برامجها الأكاديمية، مع الحفاظ على فلسفتها التعليمية الإسلامية.",
+    cuFwTitle:"إطار الوحدة الدراسية",
+    cuFwH1:"الوحدات الدراسية", cuFwH2:"ساعات التواصل", cuFwH3:"ساعات التعلّم المستقل", cuFwH4:"إجمالي وقت التعلّم الطلابي",
+    cuFwR1a:"وحدة دراسية واحدة", cuFwR1b:"15 ساعة تواصل", cuFwR1c:"نحو 15–30 ساعة", cuFwR1d:"30–45 ساعة",
+    cuFwR2a:"وحدتان دراسيتان", cuFwR2b:"30 ساعة تواصل", cuFwR2c:"نحو 30–60 ساعة", cuFwR2d:"60–90 ساعة",
+    cuFwR3a:"3 وحدات دراسية", cuFwR3b:"45 ساعة تواصل", cuFwR3c:"نحو 45–90 ساعة", cuFwR3d:"90–135 ساعة",
+    cuFwR4a:"4 وحدات دراسية", cuFwR4b:"60 ساعة تواصل", cuFwR4c:"نحو 60–120 ساعة", cuFwR4d:"120–180 ساعة",
+    cuNcTitle:"متطلبات التخرج غير الدراسية", cuNcLead:"إلزامية للتخرج ولكنها لا تحمل وحدات دراسية أكاديمية:",
+    cuNc1:"حفظ القرآن الكريم والمراجعة",
+    cuNc2:"<a href=\"institute-professional-studies.html\">برنامج الكفاءة والممارسة المهنية (AIPS)</a>",
+    cuNc3:"الخدمة المجتمعية", cuNc4:"بناء الشخصية المؤسسية وتطوير القيادة", cuNc5:"تقييم الخروج الشفوي", cuNc6:"متطلبات حفل التخرج",
     faqEyebrow:"الأسئلة الشائعة", faqTitle:"أسئلة شائعة حول برامجنا",
     faq1q:"كم عدد كليات وأقسام البلاغ؟", faq1a:"تضم البلاغ أربع كليات تشمل ثمانية أقسام إجمالًا، قسمان لكل كلية.",
     faq2q:"ما هو نموذج البلاغ لتطوير الخريجين المهنيين (APGDM)؟", faq2a:"هو المسار المنظم الذي يتبعه كل طالب دبلوم مهني، يجمع بين الدراسة الأكاديمية والتدريب الصناعي وبرنامج AIPS للكفاءة والممارسة المهنية والمنح الرسمي للتسمية المؤسسية للخريج.",

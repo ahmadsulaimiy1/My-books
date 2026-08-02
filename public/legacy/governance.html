@@ -154,6 +154,12 @@
   .gov-body-head li{font-size:14.5px; color:var(--ink-muted);}
   .gov-body-head .note{display:inline-block; margin-top:14px; font-size:13.5px; font-style:italic; color:var(--gold); background:rgba(188,154,74,0.08); padding:8px 14px; border-radius:var(--radius-sm);}
 
+  /* OBJECTS OF THE COLLEGE */
+  .objects-list{max-width:820px; margin:0; padding-inline-start:22px; display:grid; gap:14px;}
+  [dir="rtl"] .objects-list{padding-inline-start:0; padding-inline-end:22px;}
+  .objects-list li{font-size:14.5px; color:var(--ink-muted); line-height:1.7;}
+  .objects-list li::marker{color:var(--gold); font-weight:700;}
+
   .leader-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:20px;}
   .leader-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:22px; transition:box-shadow .15s, transform .15s;}
   .leader-card:hover{box-shadow:var(--shadow-1); transform:translateY(-2px);}
@@ -506,6 +512,31 @@
   </div>
 </section>
 
+<section id="objects" style="background:var(--manuscript);">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="objectsEyebrow">Institutional Objects</span>
+      <h2 data-i18n="objectsTitle">The formal Objects of the College</h2>
+      <p data-i18n="objectsLead">The following Objects are formally defined in the constitutional and legal instruments establishing Albalagh Global, and describe the purposes for which the College is established and operated.</p>
+    </div>
+    <ol class="objects-list reveal">
+      <li data-i18n="obj1">To establish, own, manage, and operate educational institutions including colleges, institutes, academies, schools, learning centres, and universities for the promotion of Islamic sciences, modern sciences, technology, vocational education, professional development, and lifelong learning.</li>
+      <li data-i18n="obj2">To provide physical, online, distance, hybrid, and virtual education, training, certification, diploma, professional development programmes, seminars, workshops, conferences, and research activities.</li>
+      <li data-i18n="obj3">To promote the teaching and learning of the Holy Qur'an, Hadith, Fiqh, Aqeedah, Arabic Language, Islamic Civilization, Comparative Religion, Law, Humanities, Social Sciences, Artificial Intelligence, Information Technology, Business, Entrepreneurship, Digital Skills, and other academic and professional disciplines.</li>
+      <li data-i18n="obj4">To establish libraries, research centres, innovation hubs, laboratories, digital learning platforms, publishing houses, and educational technology services.</li>
+      <li data-i18n="obj5">To develop educational software, websites, mobile applications, e-learning platforms, digital libraries, multimedia educational content, and virtual classrooms.</li>
+      <li data-i18n="obj6">To award certificates, diplomas, professional certifications, and other educational qualifications as permitted by applicable laws and regulations.</li>
+      <li data-i18n="obj7">To collaborate with educational institutions, universities, government agencies, international organisations, professional bodies, charitable organisations, and development partners within and outside Nigeria.</li>
+      <li data-i18n="obj8">To organise educational competitions, public lectures, conferences, exhibitions, outreach programmes, scholarship schemes, mentorship programmes, leadership training, and community development initiatives.</li>
+      <li data-i18n="obj9">To publish, print, translate, distribute, and sell books, journals, magazines, research papers, teaching materials, digital publications, and other educational resources.</li>
+      <li data-i18n="obj10">To provide consultancy, educational advisory services, curriculum development, institutional management, teacher training, quality assurance, and capacity-building services.</li>
+      <li data-i18n="obj11">To acquire, lease, build, equip, and maintain land, buildings, campuses, hostels, libraries, laboratories, offices, and other facilities necessary for achieving the objectives of the College.</li>
+      <li data-i18n="obj12">To receive grants, donations, endowments, gifts, subscriptions, and other lawful sources of funding, and to apply such funds solely towards the attainment of the College's objectives.</li>
+      <li data-i18n="obj13">To undertake all lawful activities that are incidental or conducive to the attainment of the foregoing objectives in accordance with the laws of the Federal Republic of Nigeria.</li>
+    </ol>
+  </div>
+</section>
+
 <section id="faq" style="background:var(--surface); border-top:1px solid var(--border);">
   <div class="container">
     <div class="section-head center reveal">
@@ -696,6 +727,21 @@ const i18n = {
     qc6t:"Digital Transformation", qc6d:"Guided by the IT & Digital Learning Committee.",
     qc7t:"International Best Practice", qc7d:"Referenced across all policy review cycles.",
     qc8t:"Continuous Improvement", qc8d:"Governance treated as a living system, reviewed as the College grows.",
+    objectsEyebrow:"Institutional Objects", objectsTitle:"The formal Objects of the College",
+    objectsLead:"The following Objects are formally defined in the constitutional and legal instruments establishing Albalagh Global, and describe the purposes for which the College is established and operated.",
+    obj1:"To establish, own, manage, and operate educational institutions including colleges, institutes, academies, schools, learning centres, and universities for the promotion of Islamic sciences, modern sciences, technology, vocational education, professional development, and lifelong learning.",
+    obj2:"To provide physical, online, distance, hybrid, and virtual education, training, certification, diploma, professional development programmes, seminars, workshops, conferences, and research activities.",
+    obj3:"To promote the teaching and learning of the Holy Qur'an, Hadith, Fiqh, Aqeedah, Arabic Language, Islamic Civilization, Comparative Religion, Law, Humanities, Social Sciences, Artificial Intelligence, Information Technology, Business, Entrepreneurship, Digital Skills, and other academic and professional disciplines.",
+    obj4:"To establish libraries, research centres, innovation hubs, laboratories, digital learning platforms, publishing houses, and educational technology services.",
+    obj5:"To develop educational software, websites, mobile applications, e-learning platforms, digital libraries, multimedia educational content, and virtual classrooms.",
+    obj6:"To award certificates, diplomas, professional certifications, and other educational qualifications as permitted by applicable laws and regulations.",
+    obj7:"To collaborate with educational institutions, universities, government agencies, international organisations, professional bodies, charitable organisations, and development partners within and outside Nigeria.",
+    obj8:"To organise educational competitions, public lectures, conferences, exhibitions, outreach programmes, scholarship schemes, mentorship programmes, leadership training, and community development initiatives.",
+    obj9:"To publish, print, translate, distribute, and sell books, journals, magazines, research papers, teaching materials, digital publications, and other educational resources.",
+    obj10:"To provide consultancy, educational advisory services, curriculum development, institutional management, teacher training, quality assurance, and capacity-building services.",
+    obj11:"To acquire, lease, build, equip, and maintain land, buildings, campuses, hostels, libraries, laboratories, offices, and other facilities necessary for achieving the objectives of the College.",
+    obj12:"To receive grants, donations, endowments, gifts, subscriptions, and other lawful sources of funding, and to apply such funds solely towards the attainment of the College's objectives.",
+    obj13:"To undertake all lawful activities that are incidental or conducive to the attainment of the foregoing objectives in accordance with the laws of the Federal Republic of Nigeria.",
     faqEyebrow:"Frequently Asked Questions", faqTitle:"Common questions about our governance",
     faq1q:"Who governs the College?", faq1a:"Albalagh is governed through a structured hierarchy led by the Board of Trustees, the Governing Council, the Academic Board, and the Management Board, supported by standing committees.",
     faq2q:"What is the role of the Governing Council?", faq2a:"The Governing Council is the highest policy-making body, approving institutional policies, annual budgets, and strategic development, while overseeing governance and institutional performance.",
@@ -755,6 +801,21 @@ const i18n = {
     qc6t:"التحول الرقمي", qc6d:"موجّه عبر لجنة التقنية والتعلّم الرقمي.",
     qc7t:"أفضل الممارسات الدولية", qc7d:"مرجعية عبر كل دورات مراجعة السياسات.",
     qc8t:"التحسين المستمر", qc8d:"تُعامل الحوكمة كنظام حي، يُراجع مع نمو الكلية.",
+    objectsEyebrow:"الأهداف المؤسسية", objectsTitle:"الأهداف الرسمية للكلية",
+    objectsLead:"الأهداف التالية محددة رسميًا في الوثائق التأسيسية والقانونية المُنشئة للبلاغ العالمية، وتصف الأغراض التي أُنشئت الكلية من أجلها وتُدار على أساسها.",
+    obj1:"إنشاء وامتلاك وإدارة وتشغيل مؤسسات تعليمية تشمل الكليات والمعاهد والأكاديميات والمدارس ومراكز التعلّم والجامعات، تعزيزًا للعلوم الإسلامية والعلوم الحديثة والتقنية والتعليم المهني والتطوير المهني والتعلّم مدى الحياة.",
+    obj2:"توفير التعليم والتدريب والاعتماد وبرامج الدبلوم والتطوير المهني والندوات وورش العمل والمؤتمرات والأنشطة البحثية، بصورة حضورية وإلكترونية وعن بُعد ومختلطة وافتراضية.",
+    obj3:"تعزيز تعليم وتعلّم القرآن الكريم والحديث الشريف والفقه والعقيدة واللغة العربية والحضارة الإسلامية ومقارنة الأديان والقانون والعلوم الإنسانية والعلوم الاجتماعية والذكاء الاصطناعي وتقنية المعلومات والأعمال وريادة الأعمال والمهارات الرقمية، وغيرها من التخصصات الأكاديمية والمهنية.",
+    obj4:"إنشاء المكتبات ومراكز البحث ومراكز الابتكار والمختبرات ومنصات التعلّم الرقمي ودور النشر وخدمات التقنية التعليمية.",
+    obj5:"تطوير البرمجيات التعليمية والمواقع الإلكترونية وتطبيقات الهاتف المحمول ومنصات التعلّم الإلكتروني والمكتبات الرقمية والمحتوى التعليمي متعدد الوسائط والفصول الافتراضية.",
+    obj6:"منح الشهادات والدبلومات والاعتمادات المهنية وغيرها من المؤهلات التعليمية وفق ما تسمح به القوانين واللوائح المعمول بها.",
+    obj7:"التعاون مع المؤسسات التعليمية والجامعات والجهات الحكومية والمنظمات الدولية والهيئات المهنية والمنظمات الخيرية وشركاء التنمية داخل نيجيريا وخارجها.",
+    obj8:"تنظيم المسابقات التعليمية والمحاضرات العامة والمؤتمرات والمعارض وبرامج التوعية ومخططات المنح الدراسية وبرامج الإرشاد والتدريب القيادي ومبادرات التنمية المجتمعية.",
+    obj9:"نشر وطباعة وترجمة وتوزيع وبيع الكتب والدوريات والمجلات والأوراق البحثية والمواد التعليمية والمنشورات الرقمية وغيرها من الموارد التعليمية.",
+    obj10:"تقديم خدمات الاستشارات والاستشارات التعليمية وتطوير المناهج والإدارة المؤسسية وتدريب المعلمين وضمان الجودة وبناء القدرات.",
+    obj11:"اقتناء وتأجير وبناء وتجهيز وصيانة الأراضي والمباني والحرم الجامعي والسكن الطلابي والمكتبات والمختبرات والمكاتب وغيرها من المرافق اللازمة لتحقيق أهداف الكلية.",
+    obj12:"تلقّي المنح والتبرعات والأوقاف والهبات والاشتراكات وغيرها من مصادر التمويل المشروعة، وتخصيص هذه الأموال حصريًا لتحقيق أهداف الكلية.",
+    obj13:"الاضطلاع بجميع الأنشطة المشروعة المرتبطة أو المؤدية إلى تحقيق الأهداف السابقة، وفقًا لقوانين جمهورية نيجيريا الاتحادية.",
     faqEyebrow:"الأسئلة الشائعة", faqTitle:"أسئلة شائعة حول حوكمتنا",
     faq1q:"من يحكم الكلية؟", faq1a:"تُحكم البلاغ عبر هيكل منظم يقوده مجلس الأمناء والمجلس الإداري والمجلس الأكاديمي ومجلس الإدارة التنفيذي، مدعومًا بلجان دائمة.",
     faq2q:"ما دور المجلس الإداري؟", faq2a:"المجلس الإداري هو أعلى هيئة لصنع السياسات، يعتمد السياسات المؤسسية والميزانيات السنوية والتطوير الاستراتيجي ويشرف على الحوكمة والأداء المؤسسي.",
