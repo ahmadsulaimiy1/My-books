@@ -23,7 +23,7 @@ const FOOTER_STRINGS = {
   about: { en: 'About', ar: 'عن الكلية' },
   careers: { en: 'Careers', ar: 'الوظائف' },
   contactHeading: { en: 'Contact', ar: 'تواصل' },
-  copy: { en: '© 2026 Al-Balagh International Premium College · Founded 6 January 2024', ar: '© ٢٠٢٦ كلية البلاغ الدولية المتميزة · تأسست في ٦ يناير ٢٠٢٤' },
+  copy: { en: '© 2026 Albalagh Global · Founded 6 January 2024', ar: '© ٢٠٢٦ البلاغ العالمية · تأسست في ٦ يناير ٢٠٢٤' },
   accreditation: { en: 'Accreditation Status', ar: 'حالة الاعتماد' },
   privacy: { en: 'Privacy', ar: 'الخصوصية' },
   terms: { en: 'Terms', ar: 'الشروط' },
@@ -38,7 +38,7 @@ export default function Footer() {
         <div>
           <Link href="/" className="brand">
             <BrandMark />
-            <span>{lang === 'ar' ? 'البلاغ' : 'Al-Balagh'}</span>
+            <span>{lang === 'ar' ? 'البلاغ' : 'Albalagh'}</span>
           </Link>
           <p className="motto">{FOOTER_STRINGS.motto[lang]}</p>
         </div>

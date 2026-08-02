@@ -1,15 +1,15 @@
 import './globals.css';
 
 const SITE_URL = 'https://www.albalagh.edu';
-const TITLE = 'Al-Balagh International Premium College';
+const TITLE = 'Albalagh Global';
 const DESCRIPTION =
-  'Al-Balagh International Premium College for Islamic Sciences and Modern Civilization — official Digital Campus.';
+  'Albalagh Global — Islamic Sciences and Modern Civilization, official Digital Campus.';
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: TITLE, template: `%s | ${TITLE}` },
   description: DESCRIPTION,
-  applicationName: 'Al-Balagh',
+  applicationName: 'Albalagh',
   manifest: '/site.webmanifest',
   icons: {
     icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],

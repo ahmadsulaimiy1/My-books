@@ -5,7 +5,7 @@
 // incrementally without ever breaking the page.
 
 const homepageDict = {
-  heroEyebrow: { en: 'Al-Balagh International Premium College', ar: 'كلية البلاغ الدولية المتميزة' },
+  heroEyebrow: { en: 'Albalagh Global', ar: 'البلاغ العالمية' },
   heroTitle: {
     en: 'Islamic Sciences and Modern Civilization, for a Connected World',
     ar: 'العلوم الإسلامية والحضارة الحديثة، لعالم مترابط',
@@ -17,7 +17,7 @@ const homepageDict = {
   heroCta1: { en: 'Apply Now', ar: 'قدّم الآن' },
   heroCta2: { en: 'Explore Programmes', ar: 'استكشف البرامج' },
 
-  whyEyebrow: { en: 'Why Al-Balagh', ar: 'لماذا البلاغ' },
+  whyEyebrow: { en: 'Why Albalagh', ar: 'لماذا البلاغ' },
   whyTitle: { en: 'Built for serious students, from day one', ar: 'مصممة لطلاب جادين، منذ اليوم الأول' },
   why1Title: { en: 'Bilingual by Design', ar: 'ثنائية اللغة بالتصميم' },
   why1Body: { en: 'Every programme, every page, in English and Arabic.', ar: 'كل برنامج وكل صفحة، بالإنجليزية والعربية.' },
