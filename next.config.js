@@ -34,6 +34,7 @@ const nextConfig = {
         { source: '/governance', destination: '/legacy/governance.html' },
         { source: '/academic-structure', destination: '/legacy/academic-structure.html' },
         { source: '/graduate-designations-apgdm', destination: '/legacy/graduate-designations-apgdm.html' },
+        { source: '/institute-professional-studies', destination: '/legacy/institute-professional-studies.html' },
         { source: '/admissions', destination: '/legacy/admissions.html' },
         { source: '/tuition-scholarships', destination: '/legacy/tuition-scholarships.html' },
         { source: '/digital-campus', destination: '/legacy/digital-campus.html' },
