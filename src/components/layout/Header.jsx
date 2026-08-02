@@ -23,7 +23,7 @@ const NAV_LINKS = [
 ];
 
 const HEADER_STRINGS = {
-  brand: { en: 'Al-Balagh', ar: 'البلاغ' },
+  brand: { en: 'Albalagh', ar: 'البلاغ' },
   navSchools: { en: 'Schools', ar: 'الكليات' },
   navAdmissions: { en: 'Admissions', ar: 'القبول' },
   navResearch: { en: 'Research Centres', ar: 'مراكز البحث' },
