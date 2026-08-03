@@ -145,9 +145,9 @@
   .self-emp-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
   @media (max-width:860px){ .self-emp-grid{grid-template-columns:repeat(2,1fr);} }
   @media (max-width:560px){ .self-emp-grid{grid-template-columns:1fr;} }
-  .self-emp-tile{background:var(--navy-dark); border-radius:var(--radius-md); padding:18px; text-align:center; border-top:3px solid transparent; transition:border-color .2s;}
-  .self-emp-tile:hover{border-top-color:var(--gold);}
-  .self-emp-tile span{color:#EDEEF2; font-size:12.5px; font-weight:600;}
+  .self-emp-tile{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:18px; text-align:center; border-top:3px solid transparent; transition:border-color .2s, box-shadow .2s, transform .2s;}
+  .self-emp-tile:hover{border-top-color:var(--gold); box-shadow:var(--shadow-1); transform:translateY(-2px);}
+  .self-emp-tile span{color:var(--ink); font-size:12.5px; font-weight:600;}
 
   /* CAREER PROGRESSION */
   .progression-flow{display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:8px;}
@@ -196,20 +196,20 @@
 
 <header>
   <div class="container nav-inner">
-    <a href="homepage.html" class="brand">
+    <a href="/" class="brand">
       <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
       <span data-i18n="brand">Albalagh</span>
     </a>
     <nav class="links" aria-label="Primary">
-      <a href="academic-structure.html" class="active" data-i18n="nav1">Schools</a>
-      <a href="admissions.html" data-i18n="nav2">Admissions</a>
-      <a href="#" data-i18n="nav3">Research Centres</a>
-      <a href="about.html" data-i18n="nav4">About</a>
-      <a href="homepage.html#contact" data-i18n="nav5">Contact</a>
+      <a href="/academic-structure" class="active" data-i18n="nav1">Schools</a>
+      <a href="/admissions" data-i18n="nav2">Admissions</a>
+      <a href="/research-innovation" data-i18n="nav3">Research Centres</a>
+      <a href="/about" data-i18n="nav4">About</a>
+      <a href="/#contact" data-i18n="nav5">Contact</a>
     </nav>
     <div class="nav-right">
       <button class="lang-toggle" id="langBtn">عربي</button>
-      <a href="admissions.html#apply" class="btn btn-primary" data-i18n="applyNow">Apply Now</a>
+      <a href="/admissions#apply" class="btn btn-primary" data-i18n="applyNow">Apply Now</a>
       <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
     </div>
   </div>
@@ -217,22 +217,22 @@
 
 <div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
   <div class="mobile-nav-top">
-    <a href="homepage.html" class="brand">
+    <a href="/" class="brand">
       <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
       <span data-i18n="brand">Albalagh</span>
     </a>
     <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">✕</button>
   </div>
   <nav class="mobile-nav-links" aria-label="Mobile Primary">
-    <a href="academic-structure.html" class="active" data-i18n="nav1">Schools</a>
-    <a href="admissions.html" data-i18n="nav2">Admissions</a>
-    <a href="#" data-i18n="nav3">Research Centres</a>
-    <a href="about.html" data-i18n="nav4">About</a>
-    <a href="homepage.html#contact" data-i18n="nav5">Contact</a>
+    <a href="/academic-structure" class="active" data-i18n="nav1">Schools</a>
+    <a href="/admissions" data-i18n="nav2">Admissions</a>
+    <a href="/research-innovation" data-i18n="nav3">Research Centres</a>
+    <a href="/about" data-i18n="nav4">About</a>
+    <a href="/#contact" data-i18n="nav5">Contact</a>
   </nav>
   <div class="mobile-nav-bottom">
     <button class="lang-toggle" id="langBtnMobile" style="width:100%; padding:12px;">عربي</button>
-    <a href="admissions.html#apply" class="btn btn-primary" style="justify-content:center;" data-i18n="applyNow">Apply Now</a>
+    <a href="/admissions#apply" class="btn btn-primary" style="justify-content:center;" data-i18n="applyNow">Apply Now</a>
   </div>
 </div>
 
@@ -242,9 +242,9 @@
   <div class="container">
     <nav aria-label="Breadcrumb">
       <ol class="breadcrumb reveal">
-        <li><a href="homepage.html" data-i18n="bcHome">Home</a></li>
+        <li><a href="/" data-i18n="bcHome">Home</a></li>
         <li aria-hidden="true">／</li>
-        <li><a href="academic-structure.html" data-i18n="bcAcademics">Academic Structure</a></li>
+        <li><a href="/academic-structure" data-i18n="bcAcademics">Academic Structure</a></li>
         <li aria-hidden="true">／</li>
         <li aria-current="page" data-i18n="bcPage">Graduate Designations &amp; APGDM</li>
       </ol>
@@ -298,7 +298,7 @@
       <div class="t-item"><h3 data-i18n="tl13">Employment • Entrepreneurship • Professional Practice • Further Studies • Lifelong Learning</h3></div>
     </div>
     <div class="apgdm-note reveal" data-i18n="apgdmNote">Upon successfully completing the five-week Professional Competency and Practice Programme and meeting all graduation requirements, graduates are formally conferred with their approved Albalagh institutional Graduate Designation during the graduation process.</div>
-    <a href="institute-professional-studies.html" class="btn btn-outline btn-sm reveal" style="border-color:var(--gold-light); color:#fff; margin-top:20px;" data-i18n="aipsLearnMore">Learn more about AIPS →</a>
+    <a href="/institute-professional-studies" class="btn btn-outline btn-sm reveal" style="border-color:var(--gold-light); color:#fff; margin-top:20px;" data-i18n="aipsLearnMore">Learn more about AIPS →</a>
   </div>
 </section>
 
@@ -369,12 +369,12 @@
   </div>
 </section>
 
-<section id="self-employment" style="background:var(--navy-dark);">
+<section id="self-employment" style="background:var(--manuscript); border-top:1px solid var(--border);">
   <div class="container">
     <div class="section-head center reveal">
-      <span class="eyebrow" style="color:var(--gold-light);" data-i18n="selfEyebrow">Self-Employment &amp; Entrepreneurship</span>
-      <h2 style="color:#fff;" data-i18n="selfTitle">Building independent careers</h2>
-      <p style="color:#C7CEDC;" data-i18n="selfLead">Albalagh graduates are equipped to create their own opportunities, not only seek existing ones.</p>
+      <span class="eyebrow" data-i18n="selfEyebrow">Self-Employment &amp; Entrepreneurship</span>
+      <h2 data-i18n="selfTitle">Building independent careers</h2>
+      <p data-i18n="selfLead">Albalagh graduates are equipped to create their own opportunities, not only seek existing ones.</p>
     </div>
     <div class="self-emp-grid">
       <div class="self-emp-tile reveal"><span data-i18n="se1">Islamic Education Consultancy</span></div>
@@ -445,9 +445,9 @@
       <h2 data-i18n="ctaTitle">Ready to begin your graduate journey?</h2>
       <p data-i18n="ctaLead">Explore the full Academic Structure, review admissions requirements, or apply directly.</p>
       <div class="cta-btns">
-        <a href="academic-structure.html" class="btn btn-primary" data-i18n="ctaBtn1">Explore Programmes</a>
-        <a href="admissions.html#apply" class="btn" style="border-color:var(--gold-light); color:#fff;" data-i18n="ctaBtn2">Apply for Admission</a>
-        <a href="homepage.html#contact" class="btn" style="border-color:rgba(255,255,255,0.5); color:#fff;" data-i18n="ctaBtn3">Contact Admissions</a>
+        <a href="/academic-structure" class="btn btn-primary" data-i18n="ctaBtn1">Explore Programmes</a>
+        <a href="/admissions#apply" class="btn" style="border-color:var(--gold-light); color:#fff;" data-i18n="ctaBtn2">Apply for Admission</a>
+        <a href="/#contact" class="btn" style="border-color:rgba(255,255,255,0.5); color:#fff;" data-i18n="ctaBtn3">Contact Admissions</a>
       </div>
     </div>
   </div>
@@ -459,7 +459,7 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <a href="homepage.html" class="brand">
+        <a href="/" class="brand">
           <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
           <span data-i18n="brand">Albalagh</span>
         </a>
@@ -468,18 +468,18 @@
       <div>
         <h4 data-i18n="fSchools">Schools</h4>
         <ul>
-          <li><a href="academic-structure.html#schools" data-i18n="s1t">School of Islamic Sciences</a></li>
-          <li><a href="academic-structure.html#schools" data-i18n="s2t">School of Media, Journalism &amp; Digital Communication</a></li>
-          <li><a href="academic-structure.html#schools" data-i18n="s3t">School of AI, Innovation &amp; Technology</a></li>
-          <li><a href="academic-structure.html#schools" data-i18n="s4t">School of Business, Entrepreneurship &amp; Financial Management</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="s1t">School of Islamic Sciences</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="s2t">School of Media, Journalism &amp; Digital Communication</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="s3t">School of AI, Innovation &amp; Technology</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="s4t">School of Business, Entrepreneurship &amp; Financial Management</a></li>
         </ul>
       </div>
       <div>
         <h4 data-i18n="fQuick">Quick Links</h4>
         <ul>
-          <li><a href="admissions.html" data-i18n="nav2">Admissions</a></li>
-          <li><a href="#" data-i18n="nav3">Research Centres</a></li>
-          <li><a href="about.html" data-i18n="nav4">About</a></li>
+          <li><a href="/admissions" data-i18n="nav2">Admissions</a></li>
+          <li><a href="/research-innovation" data-i18n="nav3">Research Centres</a></li>
+          <li><a href="/about" data-i18n="nav4">About</a></li>
           <li><a href="#" data-i18n="fCareers">Careers</a></li>
         </ul>
       </div>
