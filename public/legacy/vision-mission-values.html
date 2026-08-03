@@ -123,15 +123,13 @@
 
   .obj-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
   @media (max-width:860px){ .obj-grid{grid-template-columns:1fr;} }
-  .obj-card{background:var(--navy-dark); border-radius:var(--radius-md); padding:28px; border-top:3px solid transparent; transition:border-color .2s;}
-  .obj-card:hover{border-top-color:var(--gold);}
+  .obj-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:28px; border-top:3px solid transparent; transition:border-color .2s, box-shadow .2s, transform .2s;}
+  .obj-card:hover{border-top-color:var(--gold); box-shadow:var(--shadow-1); transform:translateY(-2px);}
   .obj-card .step{font-family:'Fraunces',serif; color:var(--gold); font-size:14px; margin-bottom:10px; letter-spacing:0.04em;}
-  .obj-card h3{font-family:'Inter',sans-serif; color:#fff; font-size:17px; font-weight:600; margin-bottom:10px;}
+  .obj-card h3{font-family:'Inter',sans-serif; color:var(--ink); font-size:17px; font-weight:600; margin-bottom:10px;}
   [dir="rtl"] .obj-card h3{font-family:'IBM Plex Sans Arabic',sans-serif;}
-  .obj-card p{color:#AEB7CC; font-size:14.5px;}
-  .objectives{background:var(--navy-dark);}
-  .objectives .section-head h2, .objectives .eyebrow{color:#fff;}
-  .objectives .section-head p{color:#C7CEDC;}
+  .obj-card p{color:var(--ink-muted); font-size:14.5px;}
+  .objectives{background:var(--manuscript); border-top:1px solid var(--border); border-bottom:1px solid var(--border);}
 
   .matters-grid{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;}
   @media (max-width:860px){ .matters-grid{grid-template-columns:1fr;} }
@@ -202,20 +200,20 @@
 
 <header>
   <div class="container nav-inner">
-    <a href="homepage.html" class="brand">
+    <a href="/" class="brand">
       <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
       <span data-i18n="brand">Albalagh</span>
     </a>
     <nav class="links" aria-label="Primary">
-      <a href="homepage.html#programmes" data-i18n="nav1">Schools</a>
-      <a href="#" data-i18n="nav2">Admissions</a>
-      <a href="#" data-i18n="nav3">Research Centres</a>
-      <a href="about.html" class="active" data-i18n="nav4">About</a>
-      <a href="homepage.html#contact" data-i18n="nav5">Contact</a>
+      <a href="/academic-structure#schools" data-i18n="nav1">Schools</a>
+      <a href="/admissions" data-i18n="nav2">Admissions</a>
+      <a href="/research-innovation" data-i18n="nav3">Research Centres</a>
+      <a href="/about" class="active" data-i18n="nav4">About</a>
+      <a href="/#contact" data-i18n="nav5">Contact</a>
     </nav>
     <div class="nav-right">
       <button class="lang-toggle" id="langBtn">عربي</button>
-      <a href="#" class="btn btn-primary" data-i18n="applyNow">Apply Now</a>
+      <a href="/admissions#apply" class="btn btn-primary" data-i18n="applyNow">Apply Now</a>
       <button class="hamburger" aria-label="Open menu">☰</button>
     </div>
   </div>
@@ -227,9 +225,9 @@
   <div class="container">
     <nav aria-label="Breadcrumb">
       <ol class="breadcrumb reveal">
-        <li><a href="homepage.html" data-i18n="bcHome">Home</a></li>
+        <li><a href="/" data-i18n="bcHome">Home</a></li>
         <li aria-hidden="true">／</li>
-        <li><a href="about.html" data-i18n="bcAbout">About</a></li>
+        <li><a href="/about" data-i18n="bcAbout">About</a></li>
         <li aria-hidden="true">／</li>
         <li aria-current="page" data-i18n="bcVMV">Vision, Mission &amp; Core Values</li>
       </ol>
@@ -393,8 +391,8 @@
       <h2 data-i18n="ctaTitle">See these values in the classroom</h2>
       <p data-i18n="ctaLead">Explore the programmes built on this philosophy, or begin your application today.</p>
       <div class="cta-btns">
-        <a href="homepage.html#programmes" class="btn btn-primary" data-i18n="ctaBtn1">Explore Programmes</a>
-        <a href="#" class="btn" style="border-color:rgba(255,255,255,0.5); color:#fff;" data-i18n="ctaBtn2">Apply for Admission</a>
+        <a href="/academic-structure#schools" class="btn btn-primary" data-i18n="ctaBtn1">Explore Programmes</a>
+        <a href="/admissions#apply" class="btn" style="border-color:rgba(255,255,255,0.5); color:#fff;" data-i18n="ctaBtn2">Apply for Admission</a>
       </div>
     </div>
   </div>
@@ -406,7 +404,7 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <a href="homepage.html" class="brand">
+        <a href="/" class="brand">
           <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
           <span data-i18n="brand">Albalagh</span>
         </a>
@@ -415,18 +413,18 @@
       <div>
         <h4 data-i18n="fSchools">Schools</h4>
         <ul>
-          <li><a href="homepage.html#programmes" data-i18n="prog1t">Islamic Sciences</a></li>
-          <li><a href="homepage.html#programmes" data-i18n="prog2t">Digital Technology &amp; AI</a></li>
-          <li><a href="homepage.html#programmes" data-i18n="prog3t">Business &amp; Entrepreneurship</a></li>
-          <li><a href="homepage.html#programmes" data-i18n="prog4t">Freelancing &amp; Digital Careers</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="prog1t">Islamic Sciences</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="prog2t">Digital Technology &amp; AI</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="prog3t">Business &amp; Entrepreneurship</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="prog4t">Freelancing &amp; Digital Careers</a></li>
         </ul>
       </div>
       <div>
         <h4 data-i18n="fQuick">Quick Links</h4>
         <ul>
-          <li><a href="#" data-i18n="nav2">Admissions</a></li>
-          <li><a href="#" data-i18n="nav3">Research Centres</a></li>
-          <li><a href="about.html" data-i18n="nav4">About</a></li>
+          <li><a href="/admissions" data-i18n="nav2">Admissions</a></li>
+          <li><a href="/research-innovation" data-i18n="nav3">Research Centres</a></li>
+          <li><a href="/about" data-i18n="nav4">About</a></li>
           <li><a href="#" data-i18n="fCareers">Careers</a></li>
         </ul>
       </div>
