@@ -1,5 +1,5 @@
 /*
-  Al-Balagh Global Design System — Design Tokens
+  Albalagh Global Design System — Design Tokens
   Single source of truth for colour, spacing, radius, and shadow values.
   Every component should reference these variables rather than hard-coding values,
   so the whole site stays visually consistent and easy to re-theme later.

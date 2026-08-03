@@ -212,10 +212,10 @@
   .faq-a p{padding:0 22px 20px; font-size:14.5px;}
   @media (prefers-reduced-motion:reduce){ .faq-a{transition:none;} }
 
-  .contact-band{background:var(--navy-dark); border-radius:var(--radius-lg); padding:48px; text-align:center; max-width:1000px; margin:0 auto;}
-  .contact-band h2{color:#fff; font-size:26px; margin-bottom:14px;}
-  .contact-band p{color:#C7CEDC; margin-bottom:20px;}
-  .contact-details{display:flex; gap:28px; justify-content:center; flex-wrap:wrap; color:#EDEEF2; font-size:14px;}
+  .contact-band{background:var(--manuscript); border:1px solid var(--border); border-radius:var(--radius-lg); padding:48px; text-align:center; max-width:1000px; margin:0 auto;}
+  .contact-band h2{font-size:26px; margin-bottom:14px;}
+  .contact-band p{margin-bottom:20px;}
+  .contact-details{display:flex; gap:28px; justify-content:center; flex-wrap:wrap; color:var(--ink); font-size:14px; font-weight:600;}
 
   .cta-final{background:linear-gradient(135deg,var(--navy) 0%, var(--navy-dark) 100%); border-radius:var(--radius-lg); margin-inline:auto; max-width:1232px; padding:56px 48px; text-align:center;}
   @media (max-width:600px){ .cta-final{padding:36px 24px; margin-inline:24px;} }
@@ -248,17 +248,17 @@
 
 <header>
   <div class="container nav-inner">
-    <a href="homepage.html" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span>Albalagh</span></a>
+    <a href="/" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span>Albalagh</span></a>
     <nav class="links" aria-label="Primary">
-      <a href="academic-structure.html">Schools</a>
-      <a href="admissions.html" class="active">Admissions</a>
-      <a href="#">Research Centres</a>
-      <a href="about.html">About</a>
-      <a href="homepage.html#contact">Contact</a>
+      <a href="/academic-structure">Schools</a>
+      <a href="/admissions" class="active">Admissions</a>
+      <a href="/research-innovation">Research Centres</a>
+      <a href="/about">About</a>
+      <a href="/#contact">Contact</a>
     </nav>
     <div class="nav-right">
       <button class="lang-toggle" id="langBtn">عربي</button>
-      <a href="admissions.html#apply" class="btn btn-primary">Apply Now</a>
+      <a href="/admissions#apply" class="btn btn-primary">Apply Now</a>
       <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
     </div>
   </div>
@@ -266,19 +266,19 @@
 
 <div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
   <div class="mobile-nav-top">
-    <a href="homepage.html" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span>Albalagh</span></a>
+    <a href="/" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span>Albalagh</span></a>
     <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">✕</button>
   </div>
   <nav class="mobile-nav-links" aria-label="Mobile Primary">
-    <a href="academic-structure.html">Schools</a>
-    <a href="admissions.html" class="active">Admissions</a>
-    <a href="#">Research Centres</a>
-    <a href="about.html">About</a>
-    <a href="homepage.html#contact">Contact</a>
+    <a href="/academic-structure">Schools</a>
+    <a href="/admissions" class="active">Admissions</a>
+    <a href="/research-innovation">Research Centres</a>
+    <a href="/about">About</a>
+    <a href="/#contact">Contact</a>
   </nav>
   <div class="mobile-nav-bottom">
     <button class="lang-toggle" id="langBtnMobile" style="width:100%; padding:12px;">عربي</button>
-    <a href="admissions.html#apply" class="btn btn-primary" style="justify-content:center;">Apply Now</a>
+    <a href="/admissions#apply" class="btn btn-primary" style="justify-content:center;">Apply Now</a>
   </div>
 </div>
 
@@ -288,7 +288,7 @@
   <div class="container">
     <nav aria-label="Breadcrumb">
       <ol class="breadcrumb reveal">
-        <li><a href="homepage.html">Home</a></li><li aria-hidden="true">／</li><li><a href="admissions.html">Admissions</a></li><li aria-hidden="true">／</li><li aria-current="page">Tuition &amp; Scholarships</li>
+        <li><a href="/">Home</a></li><li aria-hidden="true">／</li><li><a href="/admissions">Admissions</a></li><li aria-hidden="true">／</li><li aria-current="page">Tuition &amp; Scholarships</li>
       </ol>
     </nav>
     <span class="eyebrow reveal">Student Finance</span>
@@ -327,8 +327,8 @@
         <div class="cats"><span>Islamic Sciences</span><span>Shari'ah</span></div>
         <div class="price-row"><span class="price-label">Tuition starting from</span><span class="price-value">Rate pending confirmation</span></div>
         <div class="card-actions">
-          <a href="academic-structure.html#schools" class="btn btn-outline btn-sm">Learn More</a>
-          <a href="admissions.html#apply" class="btn btn-primary btn-sm">Apply Now</a>
+          <a href="/academic-structure#schools" class="btn btn-outline btn-sm">Learn More</a>
+          <a href="/admissions#apply" class="btn btn-primary btn-sm">Apply Now</a>
         </div>
       </div>
       <div class="school-tuition-card reveal">
@@ -337,8 +337,8 @@
         <div class="cats"><span>Journalism</span><span>Digital Media</span></div>
         <div class="price-row"><span class="price-label">Tuition starting from</span><span class="price-value">Rate pending confirmation</span></div>
         <div class="card-actions">
-          <a href="academic-structure.html#schools" class="btn btn-outline btn-sm">Learn More</a>
-          <a href="admissions.html#apply" class="btn btn-primary btn-sm">Apply Now</a>
+          <a href="/academic-structure#schools" class="btn btn-outline btn-sm">Learn More</a>
+          <a href="/admissions#apply" class="btn btn-primary btn-sm">Apply Now</a>
         </div>
       </div>
       <div class="school-tuition-card reveal">
@@ -347,8 +347,8 @@
         <div class="cats"><span>AI &amp; Data Science</span><span>Software Development</span></div>
         <div class="price-row"><span class="price-label">Tuition starting from</span><span class="price-value">Rate pending confirmation</span></div>
         <div class="card-actions">
-          <a href="academic-structure.html#schools" class="btn btn-outline btn-sm">Learn More</a>
-          <a href="admissions.html#apply" class="btn btn-primary btn-sm">Apply Now</a>
+          <a href="/academic-structure#schools" class="btn btn-outline btn-sm">Learn More</a>
+          <a href="/admissions#apply" class="btn btn-primary btn-sm">Apply Now</a>
         </div>
       </div>
       <div class="school-tuition-card reveal">
@@ -357,8 +357,8 @@
         <div class="cats"><span>Business &amp; Entrepreneurship</span><span>Accounting &amp; Finance</span></div>
         <div class="price-row"><span class="price-label">Tuition starting from</span><span class="price-value">Rate pending confirmation</span></div>
         <div class="card-actions">
-          <a href="academic-structure.html#schools" class="btn btn-outline btn-sm">Learn More</a>
-          <a href="admissions.html#apply" class="btn btn-primary btn-sm">Apply Now</a>
+          <a href="/academic-structure#schools" class="btn btn-outline btn-sm">Learn More</a>
+          <a href="/admissions#apply" class="btn btn-primary btn-sm">Apply Now</a>
         </div>
       </div>
     </div>
@@ -536,7 +536,7 @@
     </div>
     <div class="reveal" style="text-align:center; margin-top:32px;">
       <button type="button" class="btn btn-outline" disabled aria-describedby="scholApplyNote">Apply for Scholarship</button>
-      <p id="scholApplyNote" style="font-size:12px; margin-top:10px;">This workflow activates once scholarship applications formally open. Interested applicants can register interest via <a href="homepage.html#contact" style="color:var(--navy); text-decoration:underline;">Contact Admissions</a> in the meantime.</p>
+      <p id="scholApplyNote" style="font-size:12px; margin-top:10px;">This workflow activates once scholarship applications formally open. Interested applicants can register interest via <a href="/#contact" style="color:var(--navy); text-decoration:underline;">Contact Admissions</a> in the meantime.</p>
     </div>
   </div>
 </section>
@@ -663,8 +663,8 @@
       <h2>Ready to take the next step?</h2>
       <p>Start your application, or explore the full range of programmes first.</p>
       <div class="cta-btns">
-        <a href="admissions.html#apply" class="btn btn-primary">Apply for Admission</a>
-        <a href="academic-structure.html" class="btn" style="border-color:rgba(255,255,255,0.5); color:#fff;">Explore Programmes</a>
+        <a href="/admissions#apply" class="btn btn-primary">Apply for Admission</a>
+        <a href="/academic-structure" class="btn" style="border-color:rgba(255,255,255,0.5); color:#fff;">Explore Programmes</a>
       </div>
     </div>
   </div>
@@ -676,24 +676,24 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <a href="homepage.html" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span>Albalagh</span></a>
+        <a href="/" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span>Albalagh</span></a>
         <p class="motto">Knowledge • Character • Innovation • Service to Humanity</p>
       </div>
       <div>
         <h4>Schools</h4>
         <ul>
-          <li><a href="academic-structure.html#schools">School of Islamic Sciences</a></li>
-          <li><a href="academic-structure.html#schools">School of Media, Journalism &amp; Digital Communication</a></li>
-          <li><a href="academic-structure.html#schools">School of AI, Innovation &amp; Technology</a></li>
-          <li><a href="academic-structure.html#schools">School of Business, Entrepreneurship &amp; Financial Management</a></li>
+          <li><a href="/academic-structure#schools">School of Islamic Sciences</a></li>
+          <li><a href="/academic-structure#schools">School of Media, Journalism &amp; Digital Communication</a></li>
+          <li><a href="/academic-structure#schools">School of AI, Innovation &amp; Technology</a></li>
+          <li><a href="/academic-structure#schools">School of Business, Entrepreneurship &amp; Financial Management</a></li>
         </ul>
       </div>
       <div>
         <h4>Quick Links</h4>
         <ul>
-          <li><a href="admissions.html">Admissions</a></li>
-          <li><a href="#">Research Centres</a></li>
-          <li><a href="about.html">About</a></li>
+          <li><a href="/admissions">Admissions</a></li>
+          <li><a href="/research-innovation">Research Centres</a></li>
+          <li><a href="/about">About</a></li>
           <li><a href="#">Careers</a></li>
         </ul>
       </div>

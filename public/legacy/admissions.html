@@ -130,14 +130,12 @@
   .route-card p{font-size:13px; margin-top:8px;}
 
   /* JOURNEY TIMELINE */
-  .journey-section{background:var(--navy-dark);}
-  .journey-section .section-head h2, .journey-section .eyebrow{color:#fff;}
-  .journey-section .section-head p{color:#C7CEDC;}
+  .journey-section{background:var(--surface);}
   .journey-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:14px; counter-reset:step;}
-  .journey-step{background:rgba(255,255,255,0.04); border:1px solid var(--border-dark); border-radius:var(--radius-md); padding:18px; position:relative; transition:border-color .2s;}
-  .journey-step:hover{border-color:var(--gold);}
+  .journey-step{background:var(--manuscript); border:1px solid var(--border); border-radius:var(--radius-md); padding:18px; position:relative; transition:border-color .2s, box-shadow .2s;}
+  .journey-step:hover{border-color:var(--gold); box-shadow:var(--shadow-1);}
   .journey-step .step-num{font-family:'Fraunces',serif; font-size:22px; color:var(--gold); margin-bottom:8px;}
-  .journey-step h3{font-family:'Inter',sans-serif; color:#fff; font-size:13.5px; font-weight:600;}
+  .journey-step h3{font-family:'Inter',sans-serif; color:var(--ink); font-size:13.5px; font-weight:600;}
   [dir="rtl"] .journey-step h3{font-family:'IBM Plex Sans Arabic',sans-serif;}
 
   /* WIZARD */
@@ -272,16 +270,16 @@
 
 <header>
   <div class="container nav-inner">
-    <a href="homepage.html" class="brand">
+    <a href="/" class="brand">
       <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
       <span>Albalagh</span>
     </a>
     <nav class="links" aria-label="Primary">
-      <a href="academic-structure.html">Schools</a>
-      <a href="admissions.html" class="active">Admissions</a>
-      <a href="#">Research Centres</a>
-      <a href="about.html">About</a>
-      <a href="homepage.html#contact">Contact</a>
+      <a href="/academic-structure">Schools</a>
+      <a href="/admissions" class="active">Admissions</a>
+      <a href="/research-innovation">Research Centres</a>
+      <a href="/about">About</a>
+      <a href="/#contact">Contact</a>
     </nav>
     <div class="nav-right">
       <button class="lang-toggle" id="langBtn">عربي</button>
@@ -293,15 +291,15 @@
 
 <div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
   <div class="mobile-nav-top">
-    <a href="homepage.html" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span>Albalagh</span></a>
+    <a href="/" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span>Albalagh</span></a>
     <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">✕</button>
   </div>
   <nav class="mobile-nav-links" aria-label="Mobile Primary">
-    <a href="academic-structure.html">Schools</a>
-    <a href="admissions.html" class="active">Admissions</a>
-    <a href="#">Research Centres</a>
-    <a href="about.html">About</a>
-    <a href="homepage.html#contact">Contact</a>
+    <a href="/academic-structure">Schools</a>
+    <a href="/admissions" class="active">Admissions</a>
+    <a href="/research-innovation">Research Centres</a>
+    <a href="/about">About</a>
+    <a href="/#contact">Contact</a>
   </nav>
   <div class="mobile-nav-bottom">
     <button class="lang-toggle" id="langBtnMobile" style="width:100%; padding:12px;">عربي</button>
@@ -315,7 +313,7 @@
   <div class="container">
     <nav aria-label="Breadcrumb">
       <ol class="breadcrumb reveal">
-        <li><a href="homepage.html">Home</a></li><li aria-hidden="true">／</li><li aria-current="page">Admissions</li>
+        <li><a href="/">Home</a></li><li aria-hidden="true">／</li><li aria-current="page">Admissions</li>
       </ol>
     </nav>
     <span class="eyebrow reveal">Admissions</span>
@@ -624,12 +622,12 @@
   </div>
 </section>
 
-<section id="dashboard-preview" style="background:var(--navy-dark);">
+<section id="dashboard-preview" style="background:var(--manuscript); border-top:1px solid var(--border);">
   <div class="container">
     <div class="section-head center reveal">
-      <span class="eyebrow" style="color:var(--gold-light);">After You Apply</span>
-      <h2 style="color:#fff;">Your Applicant Dashboard</h2>
-      <p style="color:#C7CEDC;">Once registered, every applicant tracks their journey in one place.</p>
+      <span class="eyebrow">After You Apply</span>
+      <h2>Your Applicant Dashboard</h2>
+      <p>Once registered, every applicant tracks their journey in one place.</p>
     </div>
     <span class="preview-badge reveal">Preview only — illustrative dashboard, not a live account</span>
     <div class="dash-preview reveal">
@@ -680,7 +678,7 @@
       </div>
       <div class="info-tile reveal">
         <h3>Career Outcomes</h3>
-        <p>Albalagh programmes are built around employment, entrepreneurship, professional practice, and further study. <a href="graduate-designations-apgdm.html" style="color:var(--navy); text-decoration:underline;">See Graduate Pathways →</a></p>
+        <p>Albalagh programmes are built around employment, entrepreneurship, professional practice, and further study. <a href="/graduate-designations-apgdm" style="color:var(--navy); text-decoration:underline;">See Graduate Pathways →</a></p>
       </div>
     </div>
   </div>
@@ -724,7 +722,7 @@
       <p>Our admissions team is ready to help you choose the right route and programme.</p>
       <div class="cta-btns">
         <a href="#apply" class="btn btn-primary">Start Application</a>
-        <a href="homepage.html#contact" class="btn" style="border-color:rgba(255,255,255,0.5); color:#fff;">Contact Admissions</a>
+        <a href="/#contact" class="btn" style="border-color:rgba(255,255,255,0.5); color:#fff;">Contact Admissions</a>
       </div>
     </div>
   </div>
@@ -736,24 +734,24 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <a href="homepage.html" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span>Albalagh</span></a>
+        <a href="/" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span>Albalagh</span></a>
         <p class="motto">Knowledge • Character • Innovation • Service to Humanity</p>
       </div>
       <div>
         <h4>Schools</h4>
         <ul>
-          <li><a href="academic-structure.html#schools">School of Islamic Sciences</a></li>
-          <li><a href="academic-structure.html#schools">School of Media, Journalism &amp; Digital Communication</a></li>
-          <li><a href="academic-structure.html#schools">School of AI, Innovation &amp; Technology</a></li>
-          <li><a href="academic-structure.html#schools">School of Business, Entrepreneurship &amp; Financial Management</a></li>
+          <li><a href="/academic-structure#schools">School of Islamic Sciences</a></li>
+          <li><a href="/academic-structure#schools">School of Media, Journalism &amp; Digital Communication</a></li>
+          <li><a href="/academic-structure#schools">School of AI, Innovation &amp; Technology</a></li>
+          <li><a href="/academic-structure#schools">School of Business, Entrepreneurship &amp; Financial Management</a></li>
         </ul>
       </div>
       <div>
         <h4>Quick Links</h4>
         <ul>
-          <li><a href="admissions.html">Admissions</a></li>
-          <li><a href="#">Research Centres</a></li>
-          <li><a href="about.html">About</a></li>
+          <li><a href="/admissions">Admissions</a></li>
+          <li><a href="/research-innovation">Research Centres</a></li>
+          <li><a href="/about">About</a></li>
           <li><a href="#">Careers</a></li>
         </ul>
       </div>
