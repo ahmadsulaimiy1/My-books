@@ -245,10 +245,351 @@ export const demoStaffRegistrar = {
   office: 'Registrar’s Office',
 };
 
+export const demoAdmin = {
+  name: 'Demo Administrator',
+  staffId: 'ALB-DEMO-A01',
+  office: "Office of the Registrar & Administration",
+};
+
+export const demoParent = {
+  name: 'Demo Parent/Guardian',
+  parentId: 'ALB-DEMO-P01',
+  linkedStudent: demoStudent.name,
+  linkedStudentId: demoStudent.studentId,
+};
+
+// The 13-step "first click to first day of class" admission journey, as
+// published on public/legacy/admissions.html#journey. Reused by the
+// Applicant status page and the Staff admissions queue so both screens
+// describe the same real pipeline.
+export const admissionJourneySteps = [
+  'Explore Programmes',
+  'Create Applicant Account',
+  'Complete Application',
+  'Upload Documents',
+  'Submit Statement of Purpose',
+  'Pay Application Fee',
+  'Application Review',
+  'Entrance Assessment',
+  'Admission Decision',
+  'Accept Admission',
+  'Complete Registration',
+  'Student Account Activation',
+  'Begin Studies',
+];
+
+// The six admission routes published on public/legacy/admissions.html#routes.
+export const admissionRoutes = [
+  'Route 01 — Standard Secondary Qualifications',
+  'Route 02 — Islamic Education Route',
+  'Route 03 — Awaiting Results',
+  'Route 04 — Certificate Progression',
+  'Route 05 — Mature Learner Route',
+  'Route 06 — Recognition of Prior Learning (RPL)',
+];
+
+// The Mandatory Entrance Assessment sections, from
+// public/legacy/admissions.html#entrance-assessment.
+export const entranceAssessmentSections = [
+  {
+    name: 'General Section (All Applicants)',
+    detail: 'English Language and Communication, Basic Mathematics / Numeracy, Logical Reasoning, Digital Literacy, General Knowledge.',
+  },
+  {
+    name: 'Islamic Sciences Applicants',
+    detail: "May include basic Islamic knowledge, Qur'an understanding, Arabic foundation, and Islamic terminology. Applicants with strong Islamic qualifications such as Thanawiyyah or NBAIS may be assessed differently according to their background.",
+  },
+  {
+    name: 'Technology Applicants',
+    detail: 'May include computer awareness, logical thinking, and problem-solving.',
+  },
+  {
+    name: 'Business Applicants',
+    detail: 'May include basic numeracy, business awareness, and communication ability.',
+  },
+];
+
 export const demoApplicant = {
   name: 'Demo Applicant',
   applicationId: 'ALB-APP-DEMO-0001',
   programmeChoice: 'Advanced Islamic Sciences & Modern Civilization Studies',
-  route: 'Route A — Senior Secondary Education Qualification',
-  stage: 'Entrance Assessment Scheduled',
+  route: admissionRoutes[0],
+  stage: 'Entrance Assessment',
+  currentStep: 8, // matches admissionJourneySteps[7], 1-indexed for display
+  submittedDate: '2026-07-18',
+  assessmentDate: '2026-08-12',
 };
+
+// Faculty gradebook / attendance roster. There is no real student directory
+// yet, so this is a small set of obviously-placeholder rows ("Student A",
+// "Student B", ...) — not real names — used for the Faculty gradebook and
+// attendance-marking preview, and reused by the Staff student directory.
+export const demoRoster = [
+  {
+    id: 'r1',
+    name: 'Student A',
+    studentId: 'ALB-DEMO-1001',
+    programme: demoStudent.programme,
+    grades: { 'AISM-201': 'A-', 'AISM-220': 'B+' },
+  },
+  {
+    id: 'r2',
+    name: 'Student B',
+    studentId: 'ALB-DEMO-1002',
+    programme: demoStudent.programme,
+    grades: { 'AISM-201': 'B', 'AISM-220': 'A' },
+  },
+  {
+    id: 'r3',
+    name: 'Student C',
+    studentId: 'ALB-DEMO-1003',
+    programme: demoStudent.programme,
+    grades: { 'AISM-201': 'B+', 'AISM-220': 'B' },
+  },
+  {
+    id: 'r4',
+    name: 'Student D',
+    studentId: 'ALB-DEMO-1004',
+    programme: demoStudent.programme,
+    grades: { 'AISM-201': 'A', 'AISM-220': 'A-' },
+  },
+  {
+    id: 'r5',
+    name: 'Student E',
+    studentId: 'ALB-DEMO-1005',
+    programme: demoStudent.programme,
+    grades: { 'AISM-201': null, 'AISM-220': 'C+' },
+  },
+];
+
+// Sample admissions queue for the Staff Admissions screen. Applicant
+// identities are clearly placeholder ("Applicant A" etc.); the routes,
+// programmes, and stage names are the real ones published on
+// public/legacy/admissions.html.
+export const demoApplications = [
+  {
+    id: 'app1',
+    name: 'Applicant A',
+    applicationId: 'ALB-APP-DEMO-1001',
+    programme: 'Advanced Islamic Sciences and Modern Civilization Studies',
+    route: admissionRoutes[0],
+    stage: 'Application Review',
+    submitted: '2026-07-22',
+  },
+  {
+    id: 'app2',
+    name: 'Applicant B',
+    applicationId: 'ALB-APP-DEMO-1002',
+    programme: "Islamic Law (Shari'ah)",
+    route: admissionRoutes[1],
+    stage: 'Entrance Assessment',
+    submitted: '2026-07-15',
+  },
+  {
+    id: 'app3',
+    name: 'Applicant C',
+    applicationId: 'ALB-APP-DEMO-1003',
+    programme: 'Artificial Intelligence and Data Science',
+    route: admissionRoutes[4],
+    stage: 'Admission Decision',
+    submitted: '2026-06-30',
+  },
+  {
+    id: 'app4',
+    name: 'Applicant D',
+    applicationId: 'ALB-APP-DEMO-1004',
+    programme: 'Business Administration and Entrepreneurship',
+    route: admissionRoutes[2],
+    stage: 'Accept Admission',
+    submitted: '2026-06-18',
+  },
+  {
+    id: 'app5',
+    name: 'Applicant E',
+    applicationId: 'ALB-APP-DEMO-1005',
+    programme: 'Journalism and Mass Communication',
+    route: admissionRoutes[5],
+    stage: 'Complete Registration',
+    submitted: '2026-06-02',
+  },
+];
+
+// Fee types on the Staff Finance ledger. Only the AIPS Professional
+// Competency Programme Fee has a published amount
+// (public/legacy/institute-professional-studies.html#fees — ₦5,000
+// Institute Registration Fee + ₦15,000 Professional Practice and Training
+// Fee = ₦20,000 total). Every other institutional fee type is listed on
+// public/legacy/tuition-scholarships.html#fee-schedule as "TBC" — amount
+// not yet set by the Governing Council's Finance & Audit Committee — so
+// this preview carries that TBC status forward rather than inventing a
+// figure.
+export const demoFeeTypes = [
+  {
+    key: 'aips',
+    label: 'AIPS Professional Competency Programme Fee',
+    amount: 20000,
+    note: 'Institute Registration Fee ₦5,000 + Professional Practice and Training Fee ₦15,000.',
+  },
+  {
+    key: 'application',
+    label: 'Application Fee',
+    amount: null,
+    note: 'Amount to be confirmed — listed as TBC on the official fee schedule.',
+  },
+  {
+    key: 'registration',
+    label: 'Registration Fee',
+    amount: null,
+    note: 'Amount to be confirmed — listed as TBC on the official fee schedule.',
+  },
+  {
+    key: 'attachment',
+    label: 'Industrial Attachment Administration Fee',
+    amount: null,
+    note: 'Where applicable; amount TBC on the official fee schedule.',
+  },
+  {
+    key: 'convocation',
+    label: 'Convocation & Certification Fee',
+    amount: null,
+    note: 'Amount to be confirmed — listed as TBC on the official fee schedule.',
+  },
+];
+
+// Sample fee ledger line items against the placeholder roster — a preview
+// only, no real payment processing. Amounts are pulled from demoFeeTypes
+// above (null = TBC, matching the published fee schedule).
+export const demoLedger = [
+  { id: 'f1', studentId: 'ALB-DEMO-1001', student: 'Student A', feeKey: 'aips', status: 'Paid', date: '2026-06-20' },
+  { id: 'f2', studentId: 'ALB-DEMO-1002', student: 'Student B', feeKey: 'application', status: 'Awaiting institutional rate', date: '2026-07-02' },
+  { id: 'f3', studentId: 'ALB-DEMO-1003', student: 'Student C', feeKey: 'aips', status: 'Outstanding', date: '2026-08-01' },
+  { id: 'f4', studentId: 'ALB-DEMO-1001', student: 'Student A', feeKey: 'registration', status: 'Awaiting institutional rate', date: '2026-06-01' },
+  { id: 'f5', studentId: 'ALB-DEMO-1004', student: 'Student D', feeKey: 'aips', status: 'Paid', date: '2026-07-28' },
+  { id: 'f6', studentId: 'ALB-DEMO-1005', student: 'Student E', feeKey: 'aips', status: 'Outstanding', date: '2026-08-03' },
+];
+
+// Sample accounts across every portal role, for the Admin "Users & Roles"
+// screen. Identifiers reuse the demo records already defined above rather
+// than inventing new identities.
+export const demoUsers = [
+  { id: 'u1', name: demoStudent.name, identifier: demoStudent.studentId, role: 'student', status: 'Active' },
+  { id: 'u2', name: 'Student B (preview)', identifier: 'ALB-DEMO-1002', role: 'student', status: 'Active' },
+  { id: 'u3', name: demoFaculty.name, identifier: demoFaculty.staffId, role: 'faculty', status: 'Active' },
+  { id: 'u4', name: demoStaffRegistrar.name, identifier: demoStaffRegistrar.staffId, role: 'staff', status: 'Active' },
+  { id: 'u5', name: demoAdmin.name, identifier: demoAdmin.staffId, role: 'admin', status: 'Active' },
+  { id: 'u6', name: demoApplicant.name, identifier: demoApplicant.applicationId, role: 'applicant', status: 'Pending' },
+  { id: 'u7', name: demoParent.name, identifier: demoParent.parentId, role: 'parent', status: 'Active' },
+];
+
+export const ROLE_OPTIONS = ['student', 'faculty', 'staff', 'admin', 'applicant', 'parent'];
+
+// Institutional Credit Unit Policy figures, as published on
+// public/legacy/academic-structure.html#academic-structure (Semester
+// Workload: min 20 / recommended 22–24 / max 26 CU per semester). Every
+// Professional Diploma Programme runs 3 semesters over one year, so the
+// recommended-workload total (22–24 × 3) is 66–72 CU — the same range
+// already published specifically for the Advanced Islamic Sciences &
+// Modern Civilization Studies programme — and the min/max-workload total
+// (20–26 × 3) is 60–78 CU. These are used as the typical range for every
+// programme below; only AISM has that exact 66–72 CU figure explicitly
+// published on the public site.
+export const creditUnitPolicy = {
+  semesterMin: 20,
+  semesterRecommendedLow: 22,
+  semesterRecommendedHigh: 24,
+  semesterMax: 26,
+  semesters: 3,
+};
+
+// The 8 published Departments/Programmes, grouped by their 4 Schools, from
+// public/legacy/academic-structure.html#schools. Every Professional Diploma
+// Programme runs 3 semesters over 1 year (Academic Structure page), plus a
+// 6-week industrial attachment and the 5-week AIPS Professional Competency
+// and Practice Programme.
+export const demoProgrammes = [
+  {
+    id: 'p1',
+    school: 'School of Islamic Sciences',
+    programme: 'Advanced Islamic Sciences and Modern Civilization Studies',
+    duration: 'Professional Diploma — 1 Year (3 Semesters)',
+    creditUnits: '66–72 CU (published programme figure)',
+  },
+  {
+    id: 'p2',
+    school: 'School of Islamic Sciences',
+    programme: "Islamic Law (Shari'ah)",
+    duration: 'Professional Diploma — 1 Year (3 Semesters)',
+    creditUnits: '66–72 CU (typical, per Credit Unit Policy)',
+  },
+  {
+    id: 'p3',
+    school: 'School of Media, Journalism and Digital Communication',
+    programme: 'Journalism and Mass Communication',
+    duration: 'Professional Diploma — 1 Year (3 Semesters)',
+    creditUnits: '66–72 CU (typical, per Credit Unit Policy)',
+  },
+  {
+    id: 'p4',
+    school: 'School of Media, Journalism and Digital Communication',
+    programme: 'Multimedia and Digital Media Technology',
+    duration: 'Professional Diploma — 1 Year (3 Semesters)',
+    creditUnits: '66–72 CU (typical, per Credit Unit Policy)',
+  },
+  {
+    id: 'p5',
+    school: 'School of Artificial Intelligence, Innovation and Technology',
+    programme: 'Artificial Intelligence and Data Science',
+    duration: 'Professional Diploma — 1 Year (3 Semesters)',
+    creditUnits: '66–72 CU (typical, per Credit Unit Policy)',
+  },
+  {
+    id: 'p6',
+    school: 'School of Artificial Intelligence, Innovation and Technology',
+    programme: 'Software Development and Digital Innovation',
+    duration: 'Professional Diploma — 1 Year (3 Semesters)',
+    creditUnits: '66–72 CU (typical, per Credit Unit Policy)',
+  },
+  {
+    id: 'p7',
+    school: 'School of Business, Entrepreneurship and Financial Management',
+    programme: 'Business Administration and Entrepreneurship',
+    duration: 'Professional Diploma — 1 Year (3 Semesters)',
+    creditUnits: '66–72 CU (typical, per Credit Unit Policy)',
+  },
+  {
+    id: 'p8',
+    school: 'School of Business, Entrepreneurship and Financial Management',
+    programme: 'Accounting, Finance and Digital Marketing',
+    duration: 'Professional Diploma — 1 Year (3 Semesters)',
+    creditUnits: '66–72 CU (typical, per Credit Unit Policy)',
+  },
+];
+
+// Faculty inbox — same shape as demoMessages, addressed to the Demo
+// Lecturer instead of the Demo Student.
+export const demoFacultyMessages = [
+  {
+    id: 'fm1',
+    from: 'Academic Board Secretariat',
+    subject: 'Semester 2 grade submission window opens Monday',
+    date: '2026-08-02',
+    unread: true,
+    body: 'The grade submission window for Semester 2 continuous assessment opens Monday. Please submit gradebook entries for AISM-201 and AISM-220 through the Faculty Portal before the deadline in the academic calendar.',
+  },
+  {
+    id: 'fm2',
+    from: 'Demo Registrar',
+    subject: 'Updated roster for AISM-220',
+    date: '2026-07-29',
+    unread: false,
+    body: 'A short note to confirm the current roster for AISM-220 Comparative Religion. Let the Registrar’s Office know if any enrolment changes need reflecting before the next attendance cycle.',
+  },
+  {
+    id: 'fm3',
+    from: 'Course Coordinator',
+    subject: 'Reminder: lesson content review for AISM-201',
+    date: '2026-07-24',
+    unread: false,
+    body: 'Please review the published lesson content for AISM-201 Hadith Sciences ahead of the midterm review week, and flag any updates needed to the Course Coordinator.',
+  },
+];
