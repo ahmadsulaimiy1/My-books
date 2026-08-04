@@ -67,7 +67,7 @@ function WhySection() {
   return (
     <section className="why">
       <svg className="why-watermark" viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false">
-        <path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" strokeWidth="0.35" fill="none" />
+        <path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="var(--gold)" strokeWidth="0.35" fill="none" />
       </svg>
       <div className="container">
         <span className="eyebrow">{t('whyEyebrow')}</span>

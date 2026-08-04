@@ -14,9 +14,3 @@ import { demoNotifications } from '@/lib/portalDemoData';
 export async function getNotifications(/* { role, userId } */) {
   return demoNotifications;
 }
-
-// No real persistence yet — mock accepts and echoes the change so the UI
-// can update local state optimistically.
-export async function markAsRead({ notificationId }) {
-  return { success: true, notificationId };
-}

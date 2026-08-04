@@ -162,7 +162,7 @@ function BrandMark() {
     <svg viewBox="0 0 48 48" width="26" height="26" fill="none" aria-hidden="true">
       <path
         d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z"
-        stroke="#BC9A4A"
+        stroke="var(--gold)"
         strokeWidth="1.8"
         fill="none"
       />

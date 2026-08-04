@@ -56,7 +56,7 @@ export function StatTile({ label, value, hint }) {
 
 const BADGE_TONES = {
   neutral: { bg: 'var(--manuscript)', fg: 'var(--ink-muted)', border: 'var(--border)' },
-  gold: { bg: 'rgba(188,154,74,0.12)', fg: '#886828', border: 'rgba(188,154,74,0.35)' },
+  gold: { bg: 'rgba(188,154,74,0.12)', fg: 'var(--gold-ink)', border: 'rgba(188,154,74,0.35)' },
   success: { bg: 'rgba(30,76,67,0.08)', fg: 'var(--emerald)', border: 'rgba(30,76,67,0.25)' },
   alert: { bg: 'rgba(178,58,58,0.08)', fg: '#B23A3A', border: 'rgba(178,58,58,0.25)' },
   info: { bg: 'rgba(23,58,99,0.06)', fg: 'var(--navy)', border: 'rgba(23,58,99,0.2)' },
@@ -119,12 +119,38 @@ export function DataTable({ columns, rows, emptyLabel = 'No records yet.' }) {
   );
 }
 
+// Read-only key/value record grid — used by every role's Profile screen
+// (Student, Faculty, Staff). `fields` is [{ label, value(record) }]; each
+// screen supplies its own field list and record type, but the layout and
+// "read-only preview" framing are identical, so it lives here once rather
+// than being hand-duplicated per role.
+export function RecordGrid({ title, record, fields }) {
+  return (
+    <Card title={title} action={<span className="readonly-tag">Read-only preview</span>}>
+      <dl className="record-grid">
+        {fields.map((f) => (
+          <div className="field" key={f.label}>
+            <dt>{f.label}</dt>
+            <dd>{f.value(record)}</dd>
+          </div>
+        ))}
+      </dl>
+      <style jsx>{`
+        .readonly-tag { font-size: 12px; font-weight: 600; color: var(--ink-muted); background: var(--manuscript); border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px; }
+        .record-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 0; }
+        .field dt { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-muted); margin-bottom: 4px; }
+        .field dd { font-size: 14.5px; color: var(--ink); margin: 0; }
+      `}</style>
+    </Card>
+  );
+}
+
 export function EmptyState({ message, action }) {
   return (
     <div className="empty">
       <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-        <rect x="6" y="10" width="28" height="22" rx="2" stroke="#886828" strokeWidth="1.5" />
-        <path d="M6 16h28" stroke="#886828" strokeWidth="1.5" />
+        <rect x="6" y="10" width="28" height="22" rx="2" stroke="var(--gold-ink)" strokeWidth="1.5" />
+        <path d="M6 16h28" stroke="var(--gold-ink)" strokeWidth="1.5" />
       </svg>
       <p>{message}</p>
       {action}

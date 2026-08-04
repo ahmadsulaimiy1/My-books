@@ -3,11 +3,12 @@
 
   There is no real authentication yet (albalagh-lms-portal-scoping.md
   Phase 0). Portal routes are reached by direct navigation per role, not a
-  login flow, so getCurrentUser(role) is the only function actually called
-  today — it returns the demo persona for whichever role's route was
-  visited. signIn/signOut/onAuthStateChange are written against the shape
-  Firebase Auth will need, but are not called from anywhere yet; they throw
-  clearly rather than silently pretending to work.
+  login flow — each role's page.jsx currently calls that role's own
+  get*Profile() function (e.g. getStudentProfile()) directly rather than
+  going through getCurrentUser(role) here. Nothing in this file is called
+  from anywhere yet; every export — including getCurrentUser — is written
+  against the shape a real login flow will need, and signIn/signOut/
+  onAuthStateChange throw clearly rather than silently pretending to work.
 */
 
 import {

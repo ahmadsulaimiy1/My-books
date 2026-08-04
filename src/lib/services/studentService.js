@@ -82,10 +82,6 @@ export async function getMessages(/* { studentId } */) {
   return demoMessages;
 }
 
-export async function getMessage({ messageId }) {
-  return demoMessages.find((m) => m.id === messageId) ?? null;
-}
-
 export async function getNotifications({ studentId } = {}) {
   return getNotificationsShared({ role: 'student', userId: studentId });
 }
