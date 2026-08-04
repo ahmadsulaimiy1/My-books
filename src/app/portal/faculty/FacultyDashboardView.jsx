@@ -57,16 +57,20 @@ export default function FacultyDashboardView({ faculty, courses, timetable, assi
       </div>
 
       <Card title="Recent messages" className="msg-card">
-        <ul className="msg-list">
-          {messages.map((m) => (
-            <li key={m.id}>
-              {m.unread && <span className="dot" aria-label="Unread" />}
-              <span className="from">{m.from}</span>
-              <span className="subject">{m.subject}</span>
-              <span className="date">{m.date}</span>
-            </li>
-          ))}
-        </ul>
+        {messages.length === 0 ? (
+          <EmptyState message="No messages yet." />
+        ) : (
+          <ul className="msg-list">
+            {messages.map((m) => (
+              <li key={m.id}>
+                {m.unread && <span className="dot" aria-label="Unread" />}
+                <span className="from">{m.from}</span>
+                <span className="subject">{m.subject}</span>
+                <span className="date">{m.date}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </Card>
 
       <style jsx>{`

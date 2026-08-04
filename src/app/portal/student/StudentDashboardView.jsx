@@ -1,7 +1,7 @@
 'use client';
 
 import PortalShell from '@/components/portal/PortalShell';
-import { Card, StatGrid, StatTile, Badge, DataTable } from '@/components/portal/ui';
+import { Card, StatGrid, StatTile, Badge, DataTable, EmptyState } from '@/components/portal/ui';
 
 export default function StudentDashboardView({ student, courses, assignments, notifications }) {
   const inProgress = courses.filter((c) => c.status === 'In Progress');
@@ -58,17 +58,21 @@ export default function StudentDashboardView({ student, courses, assignments, no
       </div>
 
       <Card title="Recent notifications" className="notif-card">
-        <ul className="notif-list">
-          {notifications.map((n) => (
-            <li key={n.id}>
-              <Badge tone={n.type === 'alert' ? 'alert' : n.type === 'success' ? 'success' : 'info'}>
-                {n.type}
-              </Badge>
-              <span>{n.text}</span>
-              <span className="date">{n.date}</span>
-            </li>
-          ))}
-        </ul>
+        {notifications.length === 0 ? (
+          <EmptyState message="No notifications yet." />
+        ) : (
+          <ul className="notif-list">
+            {notifications.map((n) => (
+              <li key={n.id}>
+                <Badge tone={n.type === 'alert' ? 'alert' : n.type === 'success' ? 'success' : 'info'}>
+                  {n.type}
+                </Badge>
+                <span>{n.text}</span>
+                <span className="date">{n.date}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </Card>
 
       <style jsx>{`
