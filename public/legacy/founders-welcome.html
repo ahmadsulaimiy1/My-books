@@ -92,8 +92,27 @@
   .nav-right{display:flex; align-items:center; gap:20px;}
   .lang-toggle{background:transparent; border:1px solid var(--border-dark); color:#fff; font-family:inherit; font-size:13px; font-weight:600; padding:7px 14px; border-radius:var(--radius-sm); cursor:pointer;}
   .lang-toggle:hover{border-color:var(--gold); color:var(--gold);}
-  .hamburger{display:none; background:none; border:none; color:#fff; font-size:24px; cursor:pointer;}
-  @media (max-width:960px){ nav.links{display:none;} .hamburger{display:block;} }
+  .hamburger{display:none; background:none; border:none; color:#fff; font-size:24px; cursor:pointer; line-height:1; padding:4px;}
+  @media (max-width:960px){ nav.links{display:none;} .hamburger{display:block;} .nav-right .btn-primary{display:none;} }
+  @media (max-width:960px){ .nav-right{gap:12px;} }
+
+  /* MOBILE NAV OVERLAY */
+  .mobile-nav{
+    position:fixed; inset:0; background:var(--navy-dark); z-index:200;
+    display:flex; flex-direction:column; padding:24px;
+    transform:translateX(100%); transition:transform .25s ease;
+    visibility:hidden;
+  }
+  [dir="rtl"] .mobile-nav{transform:translateX(-100%);}
+  .mobile-nav.open{transform:translateX(0); visibility:visible;}
+  .mobile-nav-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:48px;}
+  .mobile-nav-close{background:none; border:none; color:#fff; font-size:28px; cursor:pointer; line-height:1;}
+  .mobile-nav-links{display:flex; flex-direction:column; gap:8px;}
+  .mobile-nav-links a{color:#fff; font-size:22px; font-family:'Fraunces',serif; padding:14px 0; border-bottom:1px solid var(--border-dark);}
+  [dir="rtl"] .mobile-nav-links a{font-family:'Amiri',serif;}
+  .mobile-nav-links a.active{color:var(--gold-light);}
+  .mobile-nav-bottom{margin-top:auto; display:flex; flex-direction:column; gap:16px;}
+  @media (prefers-reduced-motion:reduce){ .mobile-nav{transition:none;} }
 
   .page-hero{background:var(--navy-dark); position:relative; overflow:hidden; padding:64px 0 88px;}
   .breadcrumb{display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:13.5px; color:#9AA5BD; margin-bottom:28px; list-style:none; padding:0;}
@@ -226,10 +245,31 @@
     <div class="nav-right">
       <button class="lang-toggle" id="langBtn">عربي</button>
       <a href="/admissions#apply" class="btn btn-primary" data-i18n="applyNow">Apply Now</a>
-      <button class="hamburger" aria-label="Open menu">☰</button>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
     </div>
   </div>
 </header>
+
+<div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+  <div class="mobile-nav-top">
+    <a href="/" class="brand">
+      <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
+      <span data-i18n="brand">Albalagh</span>
+    </a>
+    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">✕</button>
+  </div>
+  <nav class="mobile-nav-links" aria-label="Mobile Primary">
+    <a href="/academic-structure#schools" data-i18n="nav1">Schools</a>
+    <a href="/admissions" data-i18n="nav2">Admissions</a>
+    <a href="/research-innovation" data-i18n="nav3">Research Centres</a>
+    <a href="/about" class="active" data-i18n="nav4">About</a>
+    <a href="/#contact" data-i18n="nav5">Contact</a>
+  </nav>
+  <div class="mobile-nav-bottom">
+    <button class="lang-toggle" id="langBtnMobile" style="width:100%; padding:12px;">عربي</button>
+    <a href="/admissions#apply" class="btn btn-primary" style="justify-content:center;" data-i18n="applyNow">Apply Now</a>
+  </div>
+</div>
 
 <main id="main">
 
@@ -433,6 +473,30 @@ const io = new IntersectionObserver((entries)=>{
 },{threshold:0.15});
 revealEls.forEach(el=>io.observe(el));
 
+// MOBILE NAV — functional open/close
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+const mobileNavClose = document.getElementById('mobileNavClose');
+let lastFocused = null;
+
+function openMobileNav(){
+  lastFocused = document.activeElement;
+  mobileNav.classList.add('open');
+  hamburgerBtn.setAttribute('aria-expanded','true');
+  document.body.style.overflow = 'hidden';
+  mobileNavClose.focus();
+}
+function closeMobileNav(){
+  mobileNav.classList.remove('open');
+  hamburgerBtn.setAttribute('aria-expanded','false');
+  document.body.style.overflow = '';
+  if(lastFocused) lastFocused.focus();
+}
+hamburgerBtn.addEventListener('click', openMobileNav);
+mobileNavClose.addEventListener('click', closeMobileNav);
+mobileNav.querySelectorAll('.mobile-nav-links a').forEach(a=>a.addEventListener('click', closeMobileNav));
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && mobileNav.classList.contains('open')) closeMobileNav(); });
+
 const i18n = {
   en:{
     skipLink:"Skip to main content",
@@ -528,11 +592,14 @@ function applyLang(lang){
     const key = el.getAttribute('data-i18n');
     if(i18n[lang][key]) el.innerHTML = i18n[lang][key];
   });
-  document.getElementById('langBtn').textContent = lang==='ar' ? 'EN' : 'عربي';
-  document.getElementById('langBtn2').textContent = lang==='ar' ? 'EN' : 'عربي';
+  ['langBtn','langBtn2','langBtnMobile'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = lang==='ar' ? 'EN' : 'عربي';
+  });
 }
 document.getElementById('langBtn').addEventListener('click',()=>applyLang(currentLang==='en'?'ar':'en'));
 document.getElementById('langBtn2').addEventListener('click',()=>applyLang(currentLang==='en'?'ar':'en'));
+document.getElementById('langBtnMobile').addEventListener('click',()=>applyLang(currentLang==='en'?'ar':'en'));
 </script>
 
 </body>
