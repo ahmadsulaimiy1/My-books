@@ -1,3 +1,4 @@
+import { getStudentProfile } from '@/lib/services/studentService';
 import ProfileView from './ProfileView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function ProfilePage() {
-  return <ProfileView />;
+export default async function ProfilePage() {
+  const student = await getStudentProfile();
+  return <ProfileView student={student} />;
 }

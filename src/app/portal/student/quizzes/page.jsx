@@ -1,3 +1,4 @@
+import { getQuizzes } from '@/lib/services/studentService';
 import QuizzesView from './QuizzesView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function QuizzesPage() {
-  return <QuizzesView />;
+export default async function QuizzesPage() {
+  const quizzes = await getQuizzes();
+  return <QuizzesView quizzes={quizzes} />;
 }

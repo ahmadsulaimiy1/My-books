@@ -3,14 +3,10 @@
 import Link from 'next/link';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile, Badge, EmptyState } from '@/components/portal/ui';
-import { demoCourses, demoLessons } from '@/lib/portalDemoData';
 
 const STATUS_TONE = { Completed: 'success', 'In Progress': 'info', Upcoming: 'neutral' };
 
-export default function CourseDetailView({ courseId }) {
-  const course = demoCourses.find((c) => c.id === courseId);
-  const lessons = demoLessons[courseId] ?? [];
-
+export default function CourseDetailView({ course, lessons }) {
   if (!course) {
     return (
       <PortalShell role="student" active="courses" title="Course not found">

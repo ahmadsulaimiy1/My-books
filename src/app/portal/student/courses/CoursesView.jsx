@@ -4,15 +4,14 @@ import { useState } from 'react';
 import Link from 'next/link';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, Badge, EmptyState } from '@/components/portal/ui';
-import { demoCourses } from '@/lib/portalDemoData';
 
 const STATUS_FILTERS = ['All', 'In Progress', 'Completed', 'Upcoming'];
 const STATUS_TONE = { Completed: 'success', 'In Progress': 'info', Upcoming: 'neutral' };
 
-export default function CoursesView() {
+export default function CoursesView({ courses }) {
   const [statusFilter, setStatusFilter] = useState('All');
 
-  const filtered = demoCourses.filter((c) => statusFilter === 'All' || c.status === statusFilter);
+  const filtered = courses.filter((c) => statusFilter === 'All' || c.status === statusFilter);
   const semesters = [...new Set(filtered.map((c) => c.semester))].sort((a, b) => a - b);
 
   return (

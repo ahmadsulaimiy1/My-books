@@ -1,3 +1,4 @@
+import { getTimetable } from '@/lib/services/studentService';
 import TimetableView from './TimetableView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function TimetablePage() {
-  return <TimetableView />;
+export default async function TimetablePage() {
+  const timetable = await getTimetable();
+  return <TimetableView timetable={timetable} />;
 }

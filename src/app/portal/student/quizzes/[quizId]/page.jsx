@@ -1,8 +1,8 @@
+import { getQuiz } from '@/lib/services/studentService';
 import QuizTakingView from './QuizTakingView';
-import { demoQuizzes } from '@/lib/portalDemoData';
 
-export function generateMetadata({ params }) {
-  const quiz = demoQuizzes.find((q) => q.id === params.quizId);
+export async function generateMetadata({ params }) {
+  const quiz = await getQuiz({ quizId: params.quizId });
   return {
     title: `${quiz ? quiz.title : 'Quiz'} — Preview | Albalagh Global`,
     description: 'Frontend preview of the Albalagh Global Student Portal quiz-taking flow, populated with sample data.',
@@ -10,6 +10,7 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function QuizTakingPage({ params }) {
-  return <QuizTakingView quizId={params.quizId} />;
+export default async function QuizTakingPage({ params }) {
+  const quiz = await getQuiz({ quizId: params.quizId });
+  return <QuizTakingView quiz={quiz} />;
 }

@@ -1,3 +1,4 @@
+import { getCourses } from '@/lib/services/studentService';
 import CoursesView from './CoursesView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function CoursesPage() {
-  return <CoursesView />;
+export default async function CoursesPage() {
+  const courses = await getCourses();
+  return <CoursesView courses={courses} />;
 }

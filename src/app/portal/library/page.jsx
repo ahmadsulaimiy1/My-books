@@ -1,3 +1,4 @@
+import { getLibraryItems } from '@/lib/services/libraryService';
 import LibraryView from './LibraryView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function LibraryPage() {
-  return <LibraryView />;
+export default async function LibraryPage() {
+  const items = await getLibraryItems();
+  return <LibraryView items={items} />;
 }

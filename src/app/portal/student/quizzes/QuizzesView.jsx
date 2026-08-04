@@ -3,9 +3,8 @@
 import Link from 'next/link';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, Badge, DataTable } from '@/components/portal/ui';
-import { demoQuizzes } from '@/lib/portalDemoData';
 
-export default function QuizzesView() {
+export default function QuizzesView({ quizzes }) {
   return (
     <PortalShell role="student" active="quizzes" title="Quizzes">
       <Card>
@@ -34,7 +33,7 @@ export default function QuizzesView() {
               ),
             },
           ]}
-          rows={demoQuizzes}
+          rows={quizzes}
         />
       </Card>
       <style jsx>{`

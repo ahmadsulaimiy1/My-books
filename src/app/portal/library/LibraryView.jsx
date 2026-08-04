@@ -3,12 +3,11 @@
 import { useState } from 'react';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, Badge, EmptyState } from '@/components/portal/ui';
-import { demoLibrary } from '@/lib/portalDemoData';
 
-export default function LibraryView() {
+export default function LibraryView({ items: allItems }) {
   const [typeFilter, setTypeFilter] = useState('All');
-  const types = ['All', ...new Set(demoLibrary.map((l) => l.type))];
-  const items = demoLibrary.filter((l) => typeFilter === 'All' || l.type === typeFilter);
+  const types = ['All', ...new Set(allItems.map((l) => l.type))];
+  const items = allItems.filter((l) => typeFilter === 'All' || l.type === typeFilter);
 
   return (
     <PortalShell role="student" active="library" title="Library">

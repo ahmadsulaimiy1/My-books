@@ -1,3 +1,4 @@
+import { getAttendance } from '@/lib/services/studentService';
 import AttendanceView from './AttendanceView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function AttendancePage() {
-  return <AttendanceView />;
+export default async function AttendancePage() {
+  const attendance = await getAttendance();
+  return <AttendanceView attendance={attendance} />;
 }

@@ -2,21 +2,20 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile, Badge, DataTable } from '@/components/portal/ui';
-import { demoStudent, demoResults } from '@/lib/portalDemoData';
 
-export default function ResultsView() {
+export default function ResultsView({ student, results }) {
   return (
     <PortalShell role="student" active="results" title="Results">
       <StatGrid>
-        <StatTile label="Programme" value={demoStudent.programme} hint={demoStudent.school} />
+        <StatTile label="Programme" value={student.programme} hint={student.school} />
         <StatTile
           label="Credits completed"
-          value={`${demoStudent.creditsCompleted} / ${demoStudent.creditsRequired}`}
+          value={`${student.creditsCompleted} / ${student.creditsRequired}`}
         />
-        <StatTile label="Standing" value={demoStudent.status} />
+        <StatTile label="Standing" value={student.status} />
       </StatGrid>
 
-      {demoResults.map((sem) => (
+      {results.map((sem) => (
         <Card key={sem.semester} title={sem.semester} className="sem-card">
           <div className="sem-stats">
             <div>

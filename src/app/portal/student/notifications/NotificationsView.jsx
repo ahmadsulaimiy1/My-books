@@ -3,15 +3,14 @@
 import { useState } from 'react';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, Badge, EmptyState } from '@/components/portal/ui';
-import { demoNotifications } from '@/lib/portalDemoData';
 
 const TYPE_FILTERS = ['All', 'alert', 'info', 'success'];
 const TYPE_LABEL = { alert: 'Alerts', info: 'Info', success: 'Success' };
 const TYPE_TONE = { alert: 'alert', info: 'info', success: 'success' };
 
-export default function NotificationsView() {
+export default function NotificationsView({ notifications }) {
   const [filter, setFilter] = useState('All');
-  const rows = demoNotifications.filter((n) => filter === 'All' || n.type === filter);
+  const rows = notifications.filter((n) => filter === 'All' || n.type === filter);
 
   return (
     <PortalShell role="student" active="notifications" title="Notifications">

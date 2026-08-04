@@ -2,7 +2,6 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile, Badge, DataTable } from '@/components/portal/ui';
-import { demoAttendance } from '@/lib/portalDemoData';
 
 function toneForRate(pct) {
   if (pct >= 90) return 'success';
@@ -10,8 +9,8 @@ function toneForRate(pct) {
   return 'alert';
 }
 
-export default function AttendanceView() {
-  const rows = demoAttendance.byCourse.map((c) => ({
+export default function AttendanceView({ attendance }) {
+  const rows = attendance.byCourse.map((c) => ({
     ...c,
     pct: Math.round((c.attended / c.total) * 100),
   }));
@@ -19,8 +18,8 @@ export default function AttendanceView() {
   return (
     <PortalShell role="student" active="attendance" title="Attendance">
       <StatGrid>
-        <StatTile label="Overall attendance" value={demoAttendance.overall} />
-        <StatTile label="Courses tracked" value={demoAttendance.byCourse.length} />
+        <StatTile label="Overall attendance" value={attendance.overall} />
+        <StatTile label="Courses tracked" value={attendance.byCourse.length} />
       </StatGrid>
 
       <Card title="Attendance by course">

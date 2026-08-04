@@ -1,3 +1,4 @@
+import { getNotifications } from '@/lib/services/notificationService';
 import NotificationsView from './NotificationsView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function NotificationsPage() {
-  return <NotificationsView />;
+export default async function NotificationsPage() {
+  const notifications = await getNotifications({ role: 'student' });
+  return <NotificationsView notifications={notifications} />;
 }

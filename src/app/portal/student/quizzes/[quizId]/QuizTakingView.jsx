@@ -4,12 +4,8 @@ import Link from 'next/link';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, Badge, EmptyState } from '@/components/portal/ui';
 import QuizRunner from '@/components/portal/QuizRunner';
-import { demoQuizzes, demoQuizQuestions } from '@/lib/portalDemoData';
 
-export default function QuizTakingView({ quizId }) {
-  const quiz = demoQuizzes.find((q) => q.id === quizId);
-  const questions = demoQuizQuestions[quizId] ?? [];
-
+export default function QuizTakingView({ quiz }) {
   if (!quiz) {
     return (
       <PortalShell role="student" active="quizzes" title="Quiz not found">
@@ -38,16 +34,16 @@ export default function QuizTakingView({ quizId }) {
 
       <div className="meta-row">
         <span>{quiz.course}</span>
-        <span>{quiz.questions} questions in the full quiz</span>
+        <span>{quiz.totalQuestions} questions in the full quiz</span>
         <span>{quiz.durationMins} min</span>
         {quiz.status === 'Completed' && <Badge tone="success">Previously completed — {quiz.score}</Badge>}
       </div>
 
       <Card title="Sample quiz">
-        {questions.length === 0 ? (
+        {quiz.questions.length === 0 ? (
           <EmptyState message="Sample questions for this quiz haven't been added to the preview yet." />
         ) : (
-          <QuizRunner questions={questions} />
+          <QuizRunner quizId={quiz.id} questions={quiz.questions} />
         )}
       </Card>
 

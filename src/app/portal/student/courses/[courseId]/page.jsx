@@ -1,8 +1,8 @@
+import { getCourse, getLessons } from '@/lib/services/studentService';
 import CourseDetailView from './CourseDetailView';
-import { demoCourses } from '@/lib/portalDemoData';
 
-export function generateMetadata({ params }) {
-  const course = demoCourses.find((c) => c.id === params.courseId);
+export async function generateMetadata({ params }) {
+  const course = await getCourse({ courseId: params.courseId });
   return {
     title: `${course ? course.title : 'Course'} — Preview | Albalagh Global`,
     description: 'Frontend preview of an Albalagh Global Student Portal course overview, populated with sample data.',
@@ -10,6 +10,11 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function CourseDetailPage({ params }) {
-  return <CourseDetailView courseId={params.courseId} />;
+export default async function CourseDetailPage({ params }) {
+  const [course, lessons] = await Promise.all([
+    getCourse({ courseId: params.courseId }),
+    getLessons({ courseId: params.courseId }),
+  ]);
+
+  return <CourseDetailView course={course} lessons={lessons} />;
 }
