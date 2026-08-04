@@ -1,3 +1,4 @@
+import { getAssignments } from '@/lib/services/studentService';
 import AssignmentsView from './AssignmentsView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function AssignmentsPage() {
-  return <AssignmentsView />;
+export default async function AssignmentsPage() {
+  const assignments = await getAssignments();
+  return <AssignmentsView assignments={assignments} />;
 }

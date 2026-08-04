@@ -3,23 +3,22 @@
 import { useMemo, useState } from 'react';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, Badge, DataTable } from '@/components/portal/ui';
-import { demoAssignments } from '@/lib/portalDemoData';
 
 const STATUS_TONE = { Submitted: 'success', 'Not started': 'neutral', Overdue: 'alert' };
 
-export default function AssignmentsView() {
+export default function AssignmentsView({ assignments }) {
   const [courseFilter, setCourseFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [sortBy, setSortBy] = useState('due');
 
   const courses = useMemo(
-    () => ['All', ...new Set(demoAssignments.map((a) => a.course))],
-    []
+    () => ['All', ...new Set(assignments.map((a) => a.course))],
+    [assignments]
   );
   const statuses = ['All', 'Not started', 'Submitted', 'Overdue'];
 
   const rows = useMemo(() => {
-    let list = demoAssignments.filter(
+    let list = assignments.filter(
       (a) =>
         (courseFilter === 'All' || a.course === courseFilter) &&
         (statusFilter === 'All' || a.status === statusFilter)
@@ -30,7 +29,7 @@ export default function AssignmentsView() {
       return a.status.localeCompare(b.status);
     });
     return list;
-  }, [courseFilter, statusFilter, sortBy]);
+  }, [assignments, courseFilter, statusFilter, sortBy]);
 
   return (
     <PortalShell role="student" active="assignments" title="Assignments">

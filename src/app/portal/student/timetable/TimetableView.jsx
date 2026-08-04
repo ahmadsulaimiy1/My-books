@@ -3,13 +3,12 @@
 import PortalShell from '@/components/portal/PortalShell';
 import { Card } from '@/components/portal/ui';
 import WeeklyTimetable from '@/components/portal/WeeklyTimetable';
-import { demoTimetable } from '@/lib/portalDemoData';
 
-export default function TimetableView() {
+export default function TimetableView({ timetable }) {
   return (
     <PortalShell role="student" active="timetable" title="Timetable">
       <Card title="This week">
-        <WeeklyTimetable timetable={demoTimetable} />
+        <WeeklyTimetable timetable={timetable} />
       </Card>
     </PortalShell>
   );

@@ -1,3 +1,4 @@
+import { getMessages } from '@/lib/services/studentService';
 import MessagesView from './MessagesView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function MessagesPage() {
-  return <MessagesView />;
+export default async function MessagesPage() {
+  const messages = await getMessages();
+  return <MessagesView messages={messages} />;
 }

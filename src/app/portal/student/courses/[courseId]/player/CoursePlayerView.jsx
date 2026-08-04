@@ -4,12 +4,8 @@ import Link from 'next/link';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, EmptyState } from '@/components/portal/ui';
 import CoursePlayer from '@/components/portal/CoursePlayer';
-import { demoCourses, demoLessons } from '@/lib/portalDemoData';
 
-export default function CoursePlayerView({ courseId }) {
-  const course = demoCourses.find((c) => c.id === courseId);
-  const lessons = demoLessons[courseId] ?? [];
-
+export default function CoursePlayerView({ course, lessons }) {
   if (!course) {
     return (
       <PortalShell role="student" active="courses" title="Course not found">
