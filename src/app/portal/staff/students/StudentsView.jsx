@@ -3,31 +3,31 @@
 import { useState } from 'react';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, Badge, DataTable } from '@/components/portal/ui';
-import { demoRoster, demoApplications } from '@/lib/portalDemoData';
-
-const DIRECTORY = [
-  ...demoRoster.map((s) => ({
-    id: s.id,
-    name: s.name,
-    identifier: s.studentId,
-    programme: s.programme,
-    kind: 'Enrolled',
-  })),
-  ...demoApplications.map((a) => ({
-    id: a.id,
-    name: a.name,
-    identifier: a.applicationId,
-    programme: a.programme,
-    kind: 'Applicant',
-  })),
-];
 
 const FILTERS = ['All', 'Enrolled', 'Applicant'];
 const KIND_TONE = { Enrolled: 'success', Applicant: 'info' };
 
-export default function StudentsView() {
+export default function StudentsView({ students, applications }) {
   const [filter, setFilter] = useState('All');
-  const rows = DIRECTORY.filter((d) => filter === 'All' || d.kind === filter);
+
+  const directory = [
+    ...students.map((s) => ({
+      id: s.id,
+      name: s.name,
+      identifier: s.studentId,
+      programme: s.programme,
+      kind: 'Enrolled',
+    })),
+    ...applications.map((a) => ({
+      id: a.id,
+      name: a.name,
+      identifier: a.applicationId,
+      programme: a.programme,
+      kind: 'Applicant',
+    })),
+  ];
+
+  const rows = directory.filter((d) => filter === 'All' || d.kind === filter);
 
   return (
     <PortalShell role="staff" active="students" title="Students">

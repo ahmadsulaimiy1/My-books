@@ -1,3 +1,4 @@
+import { getApplications, getAdmissionJourneySteps } from '@/lib/services/staffService';
 import AdmissionsView from './AdmissionsView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function AdmissionsPage() {
-  return <AdmissionsView />;
+export default async function AdmissionsPage() {
+  const [applications, journeySteps] = await Promise.all([getApplications(), getAdmissionJourneySteps()]);
+  return <AdmissionsView applications={applications} journeySteps={journeySteps} />;
 }

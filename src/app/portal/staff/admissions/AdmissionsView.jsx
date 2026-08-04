@@ -3,14 +3,13 @@
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile } from '@/components/portal/ui';
 import AdmissionsPipeline from '@/components/portal/AdmissionsPipeline';
-import { demoApplications, admissionJourneySteps } from '@/lib/portalDemoData';
 
-export default function AdmissionsView() {
+export default function AdmissionsView({ applications, journeySteps }) {
   return (
     <PortalShell role="staff" active="admissions" title="Admissions">
       <StatGrid>
-        <StatTile label="Applications in this preview" value={demoApplications.length} />
-        <StatTile label="Admission journey steps" value={admissionJourneySteps.length} hint="Published admission journey" />
+        <StatTile label="Applications in this preview" value={applications.length} />
+        <StatTile label="Admission journey steps" value={journeySteps.length} hint="Published admission journey" />
       </StatGrid>
 
       <Card
@@ -22,7 +21,7 @@ export default function AdmissionsView() {
           real 13-step admission journey published on the public site. There is no real applications database behind
           this yet.
         </p>
-        <AdmissionsPipeline applications={demoApplications} stages={admissionJourneySteps} />
+        <AdmissionsPipeline applications={applications} stages={journeySteps} />
       </Card>
 
       <style jsx>{`

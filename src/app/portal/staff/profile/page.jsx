@@ -1,3 +1,4 @@
+import { getStaffProfile } from '@/lib/services/staffService';
 import StaffProfileView from './StaffProfileView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function StaffProfilePage() {
-  return <StaffProfileView />;
+export default async function StaffProfilePage() {
+  const staff = await getStaffProfile();
+  return <StaffProfileView staff={staff} />;
 }

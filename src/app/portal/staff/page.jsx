@@ -1,3 +1,4 @@
+import { getStaffProfile, getApplications, getLedger, getStudents } from '@/lib/services/staffService';
 import StaffDashboardView from './StaffDashboardView';
 
 export const metadata = {
@@ -6,6 +7,15 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function StaffDashboardPage() {
-  return <StaffDashboardView />;
+export default async function StaffDashboardPage() {
+  const [staff, applications, ledger, students] = await Promise.all([
+    getStaffProfile(),
+    getApplications(),
+    getLedger(),
+    getStudents(),
+  ]);
+
+  return (
+    <StaffDashboardView staff={staff} applications={applications} ledger={ledger} students={students} />
+  );
 }

@@ -2,7 +2,6 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile, Badge, DataTable } from '@/components/portal/ui';
-import { demoStaffRegistrar, demoApplications, demoLedger, demoRoster } from '@/lib/portalDemoData';
 
 const STAGE_TONE = {
   'Application Review': 'info',
@@ -12,16 +11,16 @@ const STAGE_TONE = {
   'Complete Registration': 'success',
 };
 
-export default function StaffDashboardView() {
-  const outstandingFees = demoLedger.filter((f) => f.status === 'Outstanding');
-  const recentApplications = [...demoApplications].sort((a, b) => b.submitted.localeCompare(a.submitted)).slice(0, 4);
+export default function StaffDashboardView({ staff, applications, ledger, students }) {
+  const outstandingFees = ledger.filter((f) => f.status === 'Outstanding');
+  const recentApplications = [...applications].sort((a, b) => b.submitted.localeCompare(a.submitted)).slice(0, 4);
 
   return (
-    <PortalShell role="staff" active="dashboard" title={`Welcome, ${demoStaffRegistrar.name}`}>
+    <PortalShell role="staff" active="dashboard" title={`Welcome, ${staff.name}`}>
       <StatGrid>
-        <StatTile label="Office" value={demoStaffRegistrar.office} />
-        <StatTile label="Applications in queue" value={demoApplications.length} hint="Sample admissions preview" />
-        <StatTile label="Enrolled students (sample)" value={demoRoster.length} />
+        <StatTile label="Office" value={staff.office} />
+        <StatTile label="Applications in queue" value={applications.length} hint="Sample admissions preview" />
+        <StatTile label="Enrolled students (sample)" value={students.length} />
         <StatTile label="Outstanding fee items" value={outstandingFees.length} />
       </StatGrid>
 
