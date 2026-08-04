@@ -13,7 +13,7 @@ export default function StudentDashboardView({ student, courses, assignments, no
         <StatTile label="Programme" value={student.programme} hint={student.school} />
         <StatTile label="Status" value={student.status} />
         <StatTile
-          label="Credits Completed"
+          label="Credits completed"
           value={`${student.creditsCompleted} / ${student.creditsRequired}`}
           hint="Institutional Credit Unit Policy"
         />
