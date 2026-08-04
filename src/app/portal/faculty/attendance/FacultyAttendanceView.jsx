@@ -4,10 +4,9 @@ import { useState } from 'react';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card } from '@/components/portal/ui';
 import AttendanceMarker from '@/components/portal/AttendanceMarker';
-import { demoFaculty, demoRoster } from '@/lib/portalDemoData';
 
-export default function FacultyAttendanceView() {
-  const [course, setCourse] = useState(demoFaculty.coursesTaught[0]);
+export default function FacultyAttendanceView({ faculty, roster }) {
+  const [course, setCourse] = useState(faculty.coursesTaught[0]);
 
   return (
     <PortalShell role="faculty" active="attendance" title="Attendance">
@@ -15,7 +14,7 @@ export default function FacultyAttendanceView() {
         <div className="controls">
           <label htmlFor="course-select">Course session</label>
           <select id="course-select" value={course} onChange={(e) => setCourse(e.target.value)}>
-            {demoFaculty.coursesTaught.map((code) => (
+            {faculty.coursesTaught.map((code) => (
               <option key={code} value={code}>
                 {code}
               </option>
@@ -26,7 +25,7 @@ export default function FacultyAttendanceView() {
           This is a preview — marks you make here only exist in this browser tab for this session and are not saved
           anywhere. A real attendance record will be wired up once the Firebase backend is in place.
         </p>
-        <AttendanceMarker roster={demoRoster} sessionLabel={`${course} — today's session`} />
+        <AttendanceMarker courseId={course} roster={roster} sessionLabel={`${course} — today's session`} />
       </Card>
 
       <style jsx>{`

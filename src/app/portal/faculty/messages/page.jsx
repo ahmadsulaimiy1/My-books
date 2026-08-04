@@ -1,3 +1,4 @@
+import { getFacultyMessages } from '@/lib/services/facultyService';
 import FacultyMessagesView from './FacultyMessagesView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function FacultyMessagesPage() {
-  return <FacultyMessagesView />;
+export default async function FacultyMessagesPage() {
+  const messages = await getFacultyMessages();
+  return <FacultyMessagesView messages={messages} />;
 }

@@ -1,3 +1,4 @@
+import { getFacultyProfile } from '@/lib/services/facultyService';
 import FacultyProfileView from './FacultyProfileView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function FacultyProfilePage() {
-  return <FacultyProfileView />;
+export default async function FacultyProfilePage() {
+  const faculty = await getFacultyProfile();
+  return <FacultyProfileView faculty={faculty} />;
 }

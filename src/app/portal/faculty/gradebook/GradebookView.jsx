@@ -2,13 +2,12 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, Badge, DataTable } from '@/components/portal/ui';
-import { demoFaculty, demoRoster } from '@/lib/portalDemoData';
 
-export default function GradebookView() {
+export default function GradebookView({ faculty, gradebook }) {
   const columns = [
     { key: 'name', label: 'Student' },
     { key: 'studentId', label: 'Student ID' },
-    ...demoFaculty.coursesTaught.map((code) => ({
+    ...faculty.coursesTaught.map((code) => ({
       key: code,
       label: code,
       render: (row) =>
@@ -19,14 +18,14 @@ export default function GradebookView() {
   return (
     <PortalShell role="faculty" active="gradebook" title="Gradebook">
       <Card
-        title={`Sample roster — ${demoFaculty.coursesTaught.join(', ')}`}
+        title={`Sample roster — ${faculty.coursesTaught.join(', ')}`}
         action={<span className="readonly-tag">Read-only preview</span>}
       >
         <p className="intro">
           There is no real class roster yet, so this gradebook shows a small set of clearly placeholder students
           (&ldquo;Student A&rdquo;, &ldquo;Student B&rdquo;, …) with sample grades. Nothing here is connected to a real transcript.
         </p>
-        <DataTable columns={columns} rows={demoRoster} />
+        <DataTable columns={columns} rows={gradebook} />
       </Card>
 
       <style jsx>{`

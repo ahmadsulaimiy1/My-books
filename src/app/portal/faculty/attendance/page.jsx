@@ -1,3 +1,4 @@
+import { getFacultyProfile, getRoster } from '@/lib/services/facultyService';
 import FacultyAttendanceView from './FacultyAttendanceView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function FacultyAttendancePage() {
-  return <FacultyAttendanceView />;
+export default async function FacultyAttendancePage() {
+  const [faculty, roster] = await Promise.all([getFacultyProfile(), getRoster()]);
+  return <FacultyAttendanceView faculty={faculty} roster={roster} />;
 }

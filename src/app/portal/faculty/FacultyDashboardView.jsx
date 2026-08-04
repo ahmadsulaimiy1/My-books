@@ -2,32 +2,25 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile, Badge, DataTable, EmptyState } from '@/components/portal/ui';
-import {
-  demoFaculty,
-  demoCourses,
-  demoTimetable,
-  demoAssignments,
-  demoFacultyMessages,
-} from '@/lib/portalDemoData';
 
-export default function FacultyDashboardView() {
-  const myCourses = demoCourses.filter((c) => demoFaculty.coursesTaught.includes(c.id));
+export default function FacultyDashboardView({ faculty, courses, timetable, assignments, messages }) {
+  const myCourses = courses;
 
-  const todaysClasses = demoTimetable
+  const todaysClasses = timetable
     .flatMap((day) => day.slots.map((slot) => ({ ...slot, day: day.day })))
-    .filter((slot) => demoFaculty.coursesTaught.some((code) => slot.course.startsWith(code)));
+    .filter((slot) => faculty.coursesTaught.some((code) => slot.course.startsWith(code)));
 
-  const pendingGrading = demoAssignments.filter(
-    (a) => demoFaculty.coursesTaught.includes(a.course) && a.status === 'Submitted'
+  const pendingGrading = assignments.filter(
+    (a) => faculty.coursesTaught.includes(a.course) && a.status === 'Submitted'
   );
 
-  const unreadMessages = demoFacultyMessages.filter((m) => m.unread).length;
+  const unreadMessages = messages.filter((m) => m.unread).length;
 
   return (
-    <PortalShell role="faculty" active="dashboard" title={`Welcome, ${demoFaculty.name}`}>
+    <PortalShell role="faculty" active="dashboard" title={`Welcome, ${faculty.name}`}>
       <StatGrid>
-        <StatTile label="Department" value={demoFaculty.department} />
-        <StatTile label="Courses taught" value={myCourses.length} hint={demoFaculty.coursesTaught.join(', ')} />
+        <StatTile label="Department" value={faculty.department} />
+        <StatTile label="Courses taught" value={myCourses.length} hint={faculty.coursesTaught.join(', ')} />
         <StatTile label="Assignments pending grading" value={pendingGrading.length} />
         <StatTile label="Unread messages" value={unreadMessages} />
       </StatGrid>
@@ -65,7 +58,7 @@ export default function FacultyDashboardView() {
 
       <Card title="Recent messages" className="msg-card">
         <ul className="msg-list">
-          {demoFacultyMessages.map((m) => (
+          {messages.map((m) => (
             <li key={m.id}>
               {m.unread && <span className="dot" aria-label="Unread" />}
               <span className="from">{m.from}</span>

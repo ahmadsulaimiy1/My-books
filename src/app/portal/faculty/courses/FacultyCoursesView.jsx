@@ -2,27 +2,26 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile, Badge, EmptyState } from '@/components/portal/ui';
-import { demoFaculty, demoCourses, demoLessons, demoRoster } from '@/lib/portalDemoData';
 
-export default function FacultyCoursesView() {
-  const myCourses = demoCourses.filter((c) => demoFaculty.coursesTaught.includes(c.id));
+export default function FacultyCoursesView({ faculty, courses, roster, lessonsByCourse }) {
+  const myCourses = courses;
 
   return (
     <PortalShell role="faculty" active="courses" title="My Courses">
       <p className="intro">
-        The two courses currently assigned to {demoFaculty.name} in this preview. Enrolment figures use the sample
+        The two courses currently assigned to {faculty.name} in this preview. Enrolment figures use the sample
         roster — there is no real class list behind this yet.
       </p>
 
       {myCourses.map((course) => {
-        const lessons = demoLessons[course.id] ?? [];
+        const lessons = lessonsByCourse[course.id] ?? [];
         return (
           <Card key={course.id} title={`${course.id} — ${course.title}`} className="course-card">
             <StatGrid>
               <StatTile label="Credit units" value={`${course.credits} CU`} />
               <StatTile label="Semester" value={`Semester ${course.semester}`} />
               <StatTile label="Status" value={<Badge tone="info">{course.status}</Badge>} />
-              <StatTile label="Enrolled (sample roster)" value={demoRoster.length} />
+              <StatTile label="Enrolled (sample roster)" value={roster.length} />
             </StatGrid>
 
             <h3 className="lessons-head">Published lesson content</h3>
