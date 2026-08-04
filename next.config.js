@@ -25,6 +25,30 @@ const nextConfig = {
   // required so these rewrites are checked before Next.js's own routing,
   // in case a real page.jsx is later added at the same path during
   // conversion — it will then correctly take over from the rewrite.
+
+  // --- Security headers ------------------------------------------------
+  // Baseline hardening applicable at the platform level regardless of the
+  // static-HTML/Next.js migration bridge above. A strict Content-Security-
+  // Policy is deliberately NOT included here: every legacy page (the static
+  // HTML described above) relies on inline <script>/<style> blocks with no
+  // nonce/hash infrastructure, so a real script-src restriction would
+  // require either converting those pages or wiring per-request nonces —
+  // tracked as a follow-up, not silently skipped (see RELEASE_REPORT.md).
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+        ],
+      },
+    ];
+  },
+
   async rewrites() {
     return {
       beforeFiles: [
