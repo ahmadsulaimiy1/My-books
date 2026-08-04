@@ -268,24 +268,24 @@
 </head>
 <body>
 
-<a href="#main" class="skip-link">Skip to main content</a>
+<a href="#main" class="skip-link" data-i18n="skipLink">Skip to main content</a>
 
 <header>
   <div class="container nav-inner">
     <a href="/" class="brand">
       <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
-      <span>Albalagh</span>
+      <span data-i18n="brand">Albalagh</span>
     </a>
     <nav class="links" aria-label="Primary">
-      <a href="/academic-structure">Schools</a>
-      <a href="/admissions" class="active">Admissions</a>
-      <a href="/research-innovation">Research Centres</a>
-      <a href="/about">About</a>
-      <a href="/#contact">Contact</a>
+      <a href="/academic-structure" data-i18n="nav1">Schools</a>
+      <a href="/admissions" class="active" data-i18n="nav2">Admissions</a>
+      <a href="/research-innovation" data-i18n="nav3">Research Centres</a>
+      <a href="/about" data-i18n="nav4">About</a>
+      <a href="/#contact" data-i18n="nav5">Contact</a>
     </nav>
     <div class="nav-right">
       <button class="lang-toggle" id="langBtn">عربي</button>
-      <a href="#apply" class="btn btn-primary">Apply Now</a>
+      <a href="#apply" class="btn btn-primary" data-i18n="applyNow">Apply Now</a>
       <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
     </div>
   </div>
@@ -293,19 +293,19 @@
 
 <div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
   <div class="mobile-nav-top">
-    <a href="/" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span>Albalagh</span></a>
+    <a href="/" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span data-i18n="brand">Albalagh</span></a>
     <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">✕</button>
   </div>
   <nav class="mobile-nav-links" aria-label="Mobile Primary">
-    <a href="/academic-structure">Schools</a>
-    <a href="/admissions" class="active">Admissions</a>
-    <a href="/research-innovation">Research Centres</a>
-    <a href="/about">About</a>
-    <a href="/#contact">Contact</a>
+    <a href="/academic-structure" data-i18n="nav1">Schools</a>
+    <a href="/admissions" class="active" data-i18n="nav2">Admissions</a>
+    <a href="/research-innovation" data-i18n="nav3">Research Centres</a>
+    <a href="/about" data-i18n="nav4">About</a>
+    <a href="/#contact" data-i18n="nav5">Contact</a>
   </nav>
   <div class="mobile-nav-bottom">
     <button class="lang-toggle" id="langBtnMobile" style="width:100%; padding:12px;">عربي</button>
-    <a href="#apply" class="btn btn-primary" style="justify-content:center;">Apply Now</a>
+    <a href="#apply" class="btn btn-primary" style="justify-content:center;" data-i18n="applyNow">Apply Now</a>
   </div>
 </div>
 
@@ -315,15 +315,15 @@
   <div class="container">
     <nav aria-label="Breadcrumb">
       <ol class="breadcrumb reveal">
-        <li><a href="/">Home</a></li><li aria-hidden="true">／</li><li aria-current="page">Admissions</li>
+        <li><a href="/" data-i18n="bcHome">Home</a></li><li aria-hidden="true">／</li><li aria-current="page" data-i18n="bcPage">Admissions</li>
       </ol>
     </nav>
-    <span class="eyebrow reveal">Admissions</span>
-    <h1 class="reveal">Begin Your Albalagh Admission Journey</h1>
-    <p class="lead reveal">Multiple admission routes, transparent requirements, and a guided application process — for students joining us from secondary school, other institutions, or the workplace.</p>
+    <span class="eyebrow reveal" data-i18n="heroEyebrow">Admissions</span>
+    <h1 class="reveal" data-i18n="heroTitle">Begin Your Albalagh Admission Journey</h1>
+    <p class="lead reveal" data-i18n="heroLead">Multiple admission routes, transparent requirements, and a guided application process — for students joining us from secondary school, other institutions, or the workplace.</p>
     <div class="hero-ctas reveal">
-      <a href="#apply" class="btn btn-primary">Start Application</a>
-      <a href="#routes" class="btn" style="border-color:rgba(255,255,255,0.5); color:#fff;">Check Admission Routes</a>
+      <a href="#apply" class="btn btn-primary" data-i18n="heroCta1">Start Application</a>
+      <a href="#routes" class="btn" style="border-color:rgba(255,255,255,0.5); color:#fff;" data-i18n="heroCta2">Check Admission Routes</a>
     </div>
   </div>
 </section>
@@ -331,33 +331,33 @@
 <section id="routes" style="background:var(--surface);">
   <div class="container">
     <div class="section-head reveal">
-      <span class="eyebrow">Who Can Apply</span>
-      <h2>Six admission routes, one application</h2>
+      <span class="eyebrow" data-i18n="routesEyebrow">Who Can Apply</span>
+      <h2 data-i18n="routesTitle">Six admission routes, one application</h2>
     </div>
     <div class="route-grid">
       <div class="route-card reveal">
-        <div class="num">Route 01</div><h3>Standard Secondary Qualifications</h3>
-        <ul><li>WAEC</li><li>NECO</li><li>GCE</li><li>NABTEB</li><li>NBAIS</li><li>International Secondary Certificates</li><li>Other recognised equivalents</li></ul>
+        <div class="num" data-i18n="route01">Route 01</div><h3 data-i18n="route01t">Standard Secondary Qualifications</h3>
+        <ul><li data-i18n="waec">WAEC</li><li data-i18n="neco">NECO</li><li data-i18n="gce">GCE</li><li data-i18n="nabteb">NABTEB</li><li data-i18n="nbais">NBAIS</li><li data-i18n="intlSecCerts">International Secondary Certificates</li><li data-i18n="otherEquiv">Other recognised equivalents</li></ul>
       </div>
       <div class="route-card reveal">
-        <div class="num">Route 02</div><h3>Islamic Education Route</h3>
-        <ul><li>Thanawiyyah</li><li>Senior Arabic &amp; Islamic Studies Certificates</li><li>Recognised Islamic Institutions</li><li>NBAIS Senior Qualifications</li></ul>
+        <div class="num" data-i18n="route02">Route 02</div><h3 data-i18n="route02t">Islamic Education Route</h3>
+        <ul><li data-i18n="thanawiyyah">Thanawiyyah</li><li data-i18n="seniorArabicIslamic">Senior Arabic &amp; Islamic Studies Certificates</li><li data-i18n="recognisedIslamicInst">Recognised Islamic Institutions</li><li data-i18n="nbaisSenior">NBAIS Senior Qualifications</li></ul>
       </div>
       <div class="route-card reveal">
-        <div class="num">Route 03</div><h3>Awaiting Results</h3>
-        <p>Applicants awaiting results may apply now. Provisional Admission may be granted, subject to the qualifying result being submitted and verified before graduation or by the institutional deadline.</p>
+        <div class="num" data-i18n="route03">Route 03</div><h3 data-i18n="route03t">Awaiting Results</h3>
+        <p data-i18n="route03d">Applicants awaiting results may apply now. Provisional Admission may be granted, subject to the qualifying result being submitted and verified before graduation or by the institutional deadline.</p>
       </div>
       <div class="route-card reveal">
-        <div class="num">Route 04</div><h3>Certificate Progression</h3>
-        <p>Applicants holding relevant certificates from Albalagh, recognised colleges, professional training centres, technical institutions, or Islamic institutions may apply following curriculum evaluation.</p>
+        <div class="num" data-i18n="route04">Route 04</div><h3 data-i18n="route04t">Certificate Progression</h3>
+        <p data-i18n="route04d">Applicants holding relevant certificates from Albalagh, recognised colleges, professional training centres, technical institutions, or Islamic institutions may apply following curriculum evaluation.</p>
       </div>
       <div class="route-card reveal">
-        <div class="num">Route 05</div><h3>Mature Learner Route</h3>
-        <p>Applicants without formal secondary qualifications but with professional experience, vocational competence, Islamic scholarship, workplace experience, community leadership, or demonstrated academic ability may apply through institutional assessment.</p>
+        <div class="num" data-i18n="route05">Route 05</div><h3 data-i18n="route05t">Mature Learner Route</h3>
+        <p data-i18n="route05d">Applicants without formal secondary qualifications but with professional experience, vocational competence, Islamic scholarship, workplace experience, community leadership, or demonstrated academic ability may apply through institutional assessment.</p>
       </div>
       <div class="route-card reveal">
-        <div class="num">Route 06</div><h3>Recognition of Prior Learning (RPL)</h3>
-        <p>Applicants may demonstrate competence through portfolio, interview, challenge examination, professional experience, community learning, workplace learning, or Islamic study, where applicable.</p>
+        <div class="num" data-i18n="route06">Route 06</div><h3 data-i18n="route06t">Recognition of Prior Learning (RPL)</h3>
+        <p data-i18n="route06d">Applicants may demonstrate competence through portfolio, interview, challenge examination, professional experience, community learning, workplace learning, or Islamic study, where applicable.</p>
       </div>
     </div>
   </div>
@@ -366,37 +366,37 @@
 <section id="entrance-assessment" style="background:var(--manuscript); border-top:1px solid var(--border);">
   <div class="container">
     <div class="section-head reveal">
-      <span class="eyebrow">Admission Requirement</span>
-      <h2>Mandatory Entrance Assessment</h2>
-      <p>Regardless of entry route, all applicants must complete the Albalagh Admission Assessment — to confirm academic readiness, programme suitability, basic knowledge level, and ability to succeed in online learning.</p>
+      <span class="eyebrow" data-i18n="eaEyebrow">Admission Requirement</span>
+      <h2 data-i18n="eaTitle">Mandatory Entrance Assessment</h2>
+      <p data-i18n="eaLead">Regardless of entry route, all applicants must complete the Albalagh Admission Assessment — to confirm academic readiness, programme suitability, basic knowledge level, and ability to succeed in online learning.</p>
     </div>
     <div class="route-grid">
       <div class="route-card reveal">
-        <h3>General Section (All Applicants)</h3>
-        <ul><li>English Language and Communication</li><li>Basic Mathematics / Numeracy</li><li>Logical Reasoning</li><li>Digital Literacy</li><li>General Knowledge</li></ul>
+        <h3 data-i18n="ea1t">General Section (All Applicants)</h3>
+        <ul><li data-i18n="ea1a">English Language and Communication</li><li data-i18n="ea1b">Basic Mathematics / Numeracy</li><li data-i18n="ea1c">Logical Reasoning</li><li data-i18n="ea1d">Digital Literacy</li><li data-i18n="ea1e">General Knowledge</li></ul>
       </div>
       <div class="route-card reveal">
-        <h3>Islamic Sciences Applicants</h3>
-        <p>May include basic Islamic knowledge, Qur'an understanding, Arabic foundation, and Islamic terminology. Applicants with strong Islamic qualifications such as Thanawiyyah or NBAIS may be assessed differently according to their background.</p>
+        <h3 data-i18n="ea2t">Islamic Sciences Applicants</h3>
+        <p data-i18n="ea2d">May include basic Islamic knowledge, Qur'an understanding, Arabic foundation, and Islamic terminology. Applicants with strong Islamic qualifications such as Thanawiyyah or NBAIS may be assessed differently according to their background.</p>
       </div>
       <div class="route-card reveal">
-        <h3>Technology Applicants</h3>
-        <p>May include computer awareness, logical thinking, and problem-solving.</p>
+        <h3 data-i18n="ea3t">Technology Applicants</h3>
+        <p data-i18n="ea3d">May include computer awareness, logical thinking, and problem-solving.</p>
       </div>
       <div class="route-card reveal">
-        <h3>Business Applicants</h3>
-        <p>May include basic numeracy, business awareness, and communication ability.</p>
+        <h3 data-i18n="ea4t">Business Applicants</h3>
+        <p data-i18n="ea4d">May include basic numeracy, business awareness, and communication ability.</p>
       </div>
     </div>
-    <p class="reveal" style="max-width:820px; margin-top:32px; font-size:13.5px; font-style:italic;">Admission into Albalagh Global Professional Diploma Programmes is open to candidates who possess SSCE or equivalent qualifications, recognised Islamic education certificates, relevant professional certificates, or approved alternative qualifications. All applicants are required to successfully complete the institutional entrance assessment as part of the admission process.</p>
+    <p class="reveal" style="max-width:820px; margin-top:32px; font-size:13.5px; font-style:italic;" data-i18n="eaNote">Admission into Albalagh Global Professional Diploma Programmes is open to candidates who possess SSCE or equivalent qualifications, recognised Islamic education certificates, relevant professional certificates, or approved alternative qualifications. All applicants are required to successfully complete the institutional entrance assessment as part of the admission process.</p>
   </div>
 </section>
 
 <section class="journey-section" id="journey">
   <div class="container">
     <div class="section-head center reveal">
-      <span class="eyebrow">Your Admission Journey</span>
-      <h2>From first click to first day of class</h2>
+      <span class="eyebrow" data-i18n="jEyebrow">Your Admission Journey</span>
+      <h2 data-i18n="jTitle">From first click to first day of class</h2>
     </div>
     <svg class="journey-path reveal" viewBox="0 0 1200 60" fill="none" aria-hidden="true" preserveAspectRatio="none">
       <path d="M40,30 L133,14 L227,30 L320,46 L413,30 L507,14 L600,30 L693,46 L787,30 L880,14 L973,30 L1067,46 L1130,32" stroke="#E1DACB" stroke-width="1.5" fill="none"/>
@@ -408,19 +408,19 @@
       <g transform="translate(1160 32) scale(0.62)"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" fill="none" stroke="#173A63" stroke-width="2.2" transform="translate(-24 -24)"/></g>
     </svg>
     <div class="journey-grid">
-      <div class="journey-step reveal"><div class="step-num">01</div><h3>Explore Programmes</h3></div>
-      <div class="journey-step reveal"><div class="step-num">02</div><h3>Create Applicant Account</h3></div>
-      <div class="journey-step reveal"><div class="step-num">03</div><h3>Complete Application</h3></div>
-      <div class="journey-step reveal"><div class="step-num">04</div><h3>Upload Documents</h3></div>
-      <div class="journey-step reveal"><div class="step-num">05</div><h3>Submit Statement of Purpose</h3></div>
-      <div class="journey-step reveal"><div class="step-num">06</div><h3>Pay Application Fee</h3></div>
-      <div class="journey-step reveal"><div class="step-num">07</div><h3>Application Review</h3></div>
-      <div class="journey-step reveal"><div class="step-num">08</div><h3>Entrance Assessment</h3></div>
-      <div class="journey-step reveal"><div class="step-num">09</div><h3>Admission Decision</h3></div>
-      <div class="journey-step reveal"><div class="step-num">10</div><h3>Accept Admission</h3></div>
-      <div class="journey-step reveal"><div class="step-num">11</div><h3>Complete Registration</h3></div>
-      <div class="journey-step reveal"><div class="step-num">12</div><h3>Student Account Activation</h3></div>
-      <div class="journey-step reveal"><div class="step-num">13</div><h3>Begin Studies</h3></div>
+      <div class="journey-step reveal"><div class="step-num">01</div><h3 data-i18n="jStep1">Explore Programmes</h3></div>
+      <div class="journey-step reveal"><div class="step-num">02</div><h3 data-i18n="jStep2">Create Applicant Account</h3></div>
+      <div class="journey-step reveal"><div class="step-num">03</div><h3 data-i18n="jStep3">Complete Application</h3></div>
+      <div class="journey-step reveal"><div class="step-num">04</div><h3 data-i18n="jStep4">Upload Documents</h3></div>
+      <div class="journey-step reveal"><div class="step-num">05</div><h3 data-i18n="jStep5">Submit Statement of Purpose</h3></div>
+      <div class="journey-step reveal"><div class="step-num">06</div><h3 data-i18n="jStep6">Pay Application Fee</h3></div>
+      <div class="journey-step reveal"><div class="step-num">07</div><h3 data-i18n="jStep7">Application Review</h3></div>
+      <div class="journey-step reveal"><div class="step-num">08</div><h3 data-i18n="jStep8">Entrance Assessment</h3></div>
+      <div class="journey-step reveal"><div class="step-num">09</div><h3 data-i18n="jStep9">Admission Decision</h3></div>
+      <div class="journey-step reveal"><div class="step-num">10</div><h3 data-i18n="jStep10">Accept Admission</h3></div>
+      <div class="journey-step reveal"><div class="step-num">11</div><h3 data-i18n="jStep11">Complete Registration</h3></div>
+      <div class="journey-step reveal"><div class="step-num">12</div><h3 data-i18n="jStep12">Student Account Activation</h3></div>
+      <div class="journey-step reveal"><div class="step-num">13</div><h3 data-i18n="jStep13">Begin Studies</h3></div>
     </div>
   </div>
 </section>
@@ -428,19 +428,19 @@
 <section id="apply" style="background:var(--surface); border-top:1px solid var(--border);">
   <div class="container">
     <div class="section-head center reveal">
-      <span class="eyebrow">Start Your Application</span>
-      <h2>Complete your application in six steps</h2>
+      <span class="eyebrow" data-i18n="applyEyebrow">Start Your Application</span>
+      <h2 data-i18n="applyTitle">Complete your application in six steps</h2>
     </div>
 
     <form class="wizard-shell reveal" id="appForm" novalidate>
       <div class="wizard-progress">
         <div class="wizard-steps" id="stepPills">
-          <span class="wizard-step-pill active" data-step="1">1. Personal Info</span>
-          <span class="wizard-step-pill" data-step="2">2. Programme</span>
-          <span class="wizard-step-pill" data-step="3">3. Education</span>
-          <span class="wizard-step-pill" data-step="4">4. Documents</span>
-          <span class="wizard-step-pill" data-step="5">5. Statement</span>
-          <span class="wizard-step-pill" data-step="6">6. Review &amp; Submit</span>
+          <span class="wizard-step-pill active" data-step="1" data-i18n="pill1">1. Personal Info</span>
+          <span class="wizard-step-pill" data-step="2" data-i18n="pill2">2. Programme</span>
+          <span class="wizard-step-pill" data-step="3" data-i18n="pill3">3. Education</span>
+          <span class="wizard-step-pill" data-step="4" data-i18n="pill4">4. Documents</span>
+          <span class="wizard-step-pill" data-step="5" data-i18n="pill5">5. Statement</span>
+          <span class="wizard-step-pill" data-step="6" data-i18n="pill6">6. Review &amp; Submit</span>
         </div>
         <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
       </div>
@@ -449,139 +449,139 @@
 
         <!-- STEP 1 -->
         <div class="form-step active" data-step="1">
-          <h3>Personal Information</h3>
-          <p class="step-desc">Let's start with the basics.</p>
+          <h3 data-i18n="step1h">Personal Information</h3>
+          <p class="step-desc" data-i18n="step1desc">Let's start with the basics.</p>
           <div class="field full">
-            <label>Passport Photograph <span class="req">*</span></label>
+            <label data-i18n="lblPhoto">Passport Photograph <span class="req">*</span></label>
             <div class="upload-zone" data-upload="photo" tabindex="0" role="button" aria-label="Upload passport photograph">
               <input type="file" accept="image/*" hidden data-input="photo">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="10" r="4" stroke="#BC9A4A" stroke-width="1.6"/><path d="M5 24c1.5-6 5-8.5 9-8.5s7.5 2.5 9 8.5" stroke="#BC9A4A" stroke-width="1.6"/></svg>
-              <div class="u-title">Click or drag your photo here</div>
-              <div class="u-hint">JPG or PNG, max 2MB</div>
+              <div class="u-title" data-i18n="uPhotoTitle">Click or drag your photo here</div>
+              <div class="u-hint" data-i18n="uPhotoHint">JPG or PNG, max 2MB</div>
               <div class="u-filename"></div>
             </div>
           </div>
           <div class="form-grid">
-            <div class="field"><label>Surname <span class="req">*</span></label><input type="text" required></div>
-            <div class="field"><label>First Name <span class="req">*</span></label><input type="text" required></div>
-            <div class="field"><label>Middle / Other Name</label><input type="text"></div>
-            <div class="field"><label>Preferred Name</label><input type="text"></div>
-            <div class="field"><label>Gender <span class="req">*</span></label>
-              <select required><option value="">Select</option><option>Female</option><option>Male</option></select>
+            <div class="field"><label data-i18n="lblSurname">Surname <span class="req">*</span></label><input type="text" required></div>
+            <div class="field"><label data-i18n="lblFirstName">First Name <span class="req">*</span></label><input type="text" required></div>
+            <div class="field"><label data-i18n="lblMiddleName">Middle / Other Name</label><input type="text"></div>
+            <div class="field"><label data-i18n="lblPreferredName">Preferred Name</label><input type="text"></div>
+            <div class="field"><label data-i18n="lblGender">Gender <span class="req">*</span></label>
+              <select required><option value="" data-i18n="optSelect">Select</option><option data-i18n="optFemale">Female</option><option data-i18n="optMale">Male</option></select>
             </div>
-            <div class="field"><label>Date of Birth <span class="req">*</span></label><input type="date" required></div>
-            <div class="field"><label>Nationality <span class="req">*</span></label><input type="text" required></div>
-            <div class="field"><label>Country of Residence <span class="req">*</span></label><input type="text" required></div>
-            <div class="field"><label>State / Province</label><input type="text"></div>
-            <div class="field"><label>City</label><input type="text"></div>
-            <div class="field full"><label>Residential Address</label><input type="text"></div>
-            <div class="field"><label>Email Address <span class="req">*</span></label><input type="email" required></div>
-            <div class="field"><label>Phone Number <span class="req">*</span></label><input type="tel" required></div>
-            <div class="field"><label>WhatsApp Number</label><input type="tel"></div>
-            <div class="field"><label>Parent / Guardian Name</label><input type="text"></div>
-            <div class="field"><label>Emergency Contact</label><input type="tel"></div>
+            <div class="field"><label data-i18n="lblDob">Date of Birth <span class="req">*</span></label><input type="date" required></div>
+            <div class="field"><label data-i18n="lblNationality">Nationality <span class="req">*</span></label><input type="text" required></div>
+            <div class="field"><label data-i18n="lblCountryRes">Country of Residence <span class="req">*</span></label><input type="text" required></div>
+            <div class="field"><label data-i18n="lblState">State / Province</label><input type="text"></div>
+            <div class="field"><label data-i18n="lblCity">City</label><input type="text"></div>
+            <div class="field full"><label data-i18n="lblAddress">Residential Address</label><input type="text"></div>
+            <div class="field"><label data-i18n="lblEmail">Email Address <span class="req">*</span></label><input type="email" required></div>
+            <div class="field"><label data-i18n="lblPhone">Phone Number <span class="req">*</span></label><input type="tel" required></div>
+            <div class="field"><label data-i18n="lblWhatsapp">WhatsApp Number</label><input type="tel"></div>
+            <div class="field"><label data-i18n="lblParent">Parent / Guardian Name</label><input type="text"></div>
+            <div class="field"><label data-i18n="lblEmergency">Emergency Contact</label><input type="tel"></div>
           </div>
         </div>
 
         <!-- STEP 2 -->
         <div class="form-step" data-step="2">
-          <h3>Programme Information</h3>
-          <p class="step-desc">Tell us which programme you're applying for.</p>
+          <h3 data-i18n="step2h">Programme Information</h3>
+          <p class="step-desc" data-i18n="step2desc">Tell us which programme you're applying for.</p>
           <div class="form-grid">
-            <div class="field"><label>School <span class="req">*</span></label>
+            <div class="field"><label data-i18n="lblSchool">School <span class="req">*</span></label>
               <select id="schoolSelect" required>
-                <option value="">Select School</option>
-                <option>School of Islamic Sciences</option>
-                <option>School of Media, Journalism and Digital Communication</option>
-                <option>School of Artificial Intelligence, Innovation and Technology</option>
-                <option>School of Business, Entrepreneurship and Financial Management</option>
+                <option value="" data-i18n="optSelectSchool">Select School</option>
+                <option value="School of Islamic Sciences" data-i18n="s1t">School of Islamic Sciences</option>
+                <option value="School of Media, Journalism and Digital Communication" data-i18n="s2t">School of Media, Journalism and Digital Communication</option>
+                <option value="School of Artificial Intelligence, Innovation and Technology" data-i18n="s3t">School of Artificial Intelligence, Innovation and Technology</option>
+                <option value="School of Business, Entrepreneurship and Financial Management" data-i18n="s4t">School of Business, Entrepreneurship and Financial Management</option>
               </select>
             </div>
-            <div class="field"><label>Department <span class="req">*</span></label>
-              <select id="deptSelect" required><option value="">Select School First</option></select>
+            <div class="field"><label data-i18n="lblDept">Department <span class="req">*</span></label>
+              <select id="deptSelect" required><option value="" data-i18n="optSelectSchoolFirst">Select School First</option></select>
             </div>
-            <div class="field"><label>Admission Route <span class="req">*</span></label>
+            <div class="field"><label data-i18n="lblRoute">Admission Route <span class="req">*</span></label>
               <select id="routeSelect" required>
-                <option value="">Select Route</option>
-                <option>Standard Secondary Qualifications</option>
-                <option>Islamic Education Route</option>
-                <option>Awaiting Results</option>
-                <option>Certificate Progression</option>
-                <option>Mature Learner Route</option>
-                <option>Recognition of Prior Learning (RPL)</option>
+                <option value="" data-i18n="optSelectRoute">Select Route</option>
+                <option value="Standard Secondary Qualifications" data-i18n="route01t">Standard Secondary Qualifications</option>
+                <option value="Islamic Education Route" data-i18n="route02t">Islamic Education Route</option>
+                <option value="Awaiting Results" data-i18n="route03t">Awaiting Results</option>
+                <option value="Certificate Progression" data-i18n="route04t">Certificate Progression</option>
+                <option value="Mature Learner Route" data-i18n="route05t">Mature Learner Route</option>
+                <option value="Recognition of Prior Learning (RPL)" data-i18n="route06t">Recognition of Prior Learning (RPL)</option>
               </select>
             </div>
-            <div class="field"><label>Study Mode <span class="req">*</span></label>
-              <select required><option value="">Select</option><option>Full-Time Online</option><option>Part-Time Online</option></select>
+            <div class="field"><label data-i18n="lblStudyMode">Study Mode <span class="req">*</span></label>
+              <select required><option value="" data-i18n="optSelect">Select</option><option data-i18n="optFullTime">Full-Time Online</option><option data-i18n="optPartTime">Part-Time Online</option></select>
             </div>
-            <div class="field full"><label>Preferred Admission Session <span class="req">*</span></label>
-              <select required><option value="">Select</option><option>Next Available Session</option><option>Following Session</option></select>
+            <div class="field full"><label data-i18n="lblSession">Preferred Admission Session <span class="req">*</span></label>
+              <select required><option value="" data-i18n="optSelect">Select</option><option data-i18n="optNextSession">Next Available Session</option><option data-i18n="optFollowingSession">Following Session</option></select>
             </div>
           </div>
         </div>
 
         <!-- STEP 3 -->
         <div class="form-step" data-step="3">
-          <h3>Educational Background</h3>
-          <p class="step-desc">Your most recent qualification, and any prior institutions attended.</p>
+          <h3 data-i18n="step3h">Educational Background</h3>
+          <p class="step-desc" data-i18n="step3desc">Your most recent qualification, and any prior institutions attended.</p>
           <div class="form-grid">
-            <div class="field"><label>Highest Qualification <span class="req">*</span></label><input type="text" required placeholder="e.g. WAEC, Thanawiyyah, Diploma"></div>
-            <div class="field"><label>Institution Attended <span class="req">*</span></label><input type="text" required></div>
-            <div class="field"><label>Year Completed / Expected</label><input type="text"></div>
-            <div class="field"><label>Grade / Result (if available)</label><input type="text"></div>
-            <div class="field full"><label>Other Qualifications or Institutions (optional)</label><textarea style="height:100px;" placeholder="List any additional certificates, colleges, or training relevant to your application."></textarea></div>
+            <div class="field"><label data-i18n="lblHighestQual">Highest Qualification <span class="req">*</span></label><input type="text" required placeholder="e.g. WAEC, Thanawiyyah, Diploma" data-i18n-ph="phHighestQual"></div>
+            <div class="field"><label data-i18n="lblInstitution">Institution Attended <span class="req">*</span></label><input type="text" required></div>
+            <div class="field"><label data-i18n="lblYearCompleted">Year Completed / Expected</label><input type="text"></div>
+            <div class="field"><label data-i18n="lblGrade">Grade / Result (if available)</label><input type="text"></div>
+            <div class="field full"><label data-i18n="lblOtherQual">Other Qualifications or Institutions (optional)</label><textarea style="height:100px;" placeholder="List any additional certificates, colleges, or training relevant to your application." data-i18n-ph="phOtherQual"></textarea></div>
           </div>
         </div>
 
         <!-- STEP 4 -->
         <div class="form-step" data-step="4">
-          <h3>Document Uploads</h3>
-          <p class="step-desc">Accepted formats: PDF, JPG, PNG. Maximum 5MB per file.</p>
+          <h3 data-i18n="step4h">Document Uploads</h3>
+          <p class="step-desc" data-i18n="step4desc">Accepted formats: PDF, JPG, PNG. Maximum 5MB per file.</p>
 
           <div class="upload-group">
-            <h4>Academic Documents</h4>
+            <h4 data-i18n="grpAcademic">Academic Documents</h4>
             <div class="upload-grid">
               <div class="upload-zone" data-upload="results" tabindex="0" role="button">
                 <input type="file" hidden data-input="results">
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="4" y="2" width="18" height="22" rx="1.5" stroke="#BC9A4A" stroke-width="1.5"/><path d="M8 8h10M8 13h10M8 18h6" stroke="#BC9A4A" stroke-width="1.5"/></svg>
-                <div class="u-title">WAEC / NECO / NABTEB / NBAIS Results</div><div class="u-hint">or Thanawiyyah / GCE / International Certificate</div><div class="u-filename"></div>
+                <div class="u-title" data-i18n="u1t">WAEC / NECO / NABTEB / NBAIS Results</div><div class="u-hint" data-i18n="u1h">or Thanawiyyah / GCE / International Certificate</div><div class="u-filename"></div>
               </div>
               <div class="upload-zone" data-upload="transcript" tabindex="0" role="button">
                 <input type="file" hidden data-input="transcript">
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="4" y="2" width="18" height="22" rx="1.5" stroke="#BC9A4A" stroke-width="1.5"/></svg>
-                <div class="u-title">Academic Transcript</div><div class="u-hint">Or Awaiting Result Slip</div><div class="u-filename"></div>
+                <div class="u-title" data-i18n="u2t">Academic Transcript</div><div class="u-hint" data-i18n="u2h">Or Awaiting Result Slip</div><div class="u-filename"></div>
               </div>
             </div>
           </div>
 
           <div class="upload-group">
-            <h4>Personal Documents</h4>
+            <h4 data-i18n="grpPersonal">Personal Documents</h4>
             <div class="upload-grid">
               <div class="upload-zone" data-upload="id" tabindex="0" role="button">
                 <input type="file" hidden data-input="id">
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="3" y="6" width="20" height="14" rx="2" stroke="#BC9A4A" stroke-width="1.5"/><circle cx="9" cy="13" r="2.2" stroke="#BC9A4A" stroke-width="1.3"/></svg>
-                <div class="u-title">National ID / Passport / Driver's Licence</div><div class="u-filename"></div>
+                <div class="u-title" data-i18n="u3t">National ID / Passport / Driver's Licence</div><div class="u-filename"></div>
               </div>
               <div class="upload-zone" data-upload="birth" tabindex="0" role="button">
                 <input type="file" hidden data-input="birth">
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="4" y="2" width="18" height="22" rx="1.5" stroke="#BC9A4A" stroke-width="1.5"/></svg>
-                <div class="u-title">Birth Certificate / Declaration of Age</div><div class="u-hint">Where required</div><div class="u-filename"></div>
+                <div class="u-title" data-i18n="u4t">Birth Certificate / Declaration of Age</div><div class="u-hint" data-i18n="u4h">Where required</div><div class="u-filename"></div>
               </div>
             </div>
           </div>
 
           <div class="upload-group" id="rplGroup" style="display:none;">
-            <h4>Recognition of Prior Learning (RPL) Documents</h4>
+            <h4 data-i18n="grpRpl">Recognition of Prior Learning (RPL) Documents</h4>
             <div class="upload-grid">
               <div class="upload-zone" data-upload="cv" tabindex="0" role="button">
                 <input type="file" hidden data-input="cv">
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="4" y="2" width="18" height="22" rx="1.5" stroke="#1E4C43" stroke-width="1.5"/></svg>
-                <div class="u-title">Curriculum Vitae (CV)</div><div class="u-filename"></div>
+                <div class="u-title" data-i18n="u5t">Curriculum Vitae (CV)</div><div class="u-filename"></div>
               </div>
               <div class="upload-zone" data-upload="portfolio" tabindex="0" role="button">
                 <input type="file" hidden data-input="portfolio">
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="3" y="4" width="20" height="16" rx="2" stroke="#1E4C43" stroke-width="1.5"/></svg>
-                <div class="u-title">Portfolio / Supporting Evidence</div><div class="u-hint">Employment letters, recommendations, certificates</div><div class="u-filename"></div>
+                <div class="u-title" data-i18n="u6t">Portfolio / Supporting Evidence</div><div class="u-hint" data-i18n="u6h">Employment letters, recommendations, certificates</div><div class="u-filename"></div>
               </div>
             </div>
           </div>
@@ -589,42 +589,42 @@
 
         <!-- STEP 5 -->
         <div class="form-step" data-step="5">
-          <h3>Statement of Purpose</h3>
-          <p class="step-desc">In your own words — why this programme, why Albalagh, and what you hope to achieve.</p>
+          <h3 data-i18n="step5h">Statement of Purpose</h3>
+          <p class="step-desc" data-i18n="step5desc">In your own words — why this programme, why Albalagh, and what you hope to achieve.</p>
           <div class="field full">
-            <label>Your Statement <span class="req">*</span></label>
-            <textarea id="sopText" required placeholder="Explain why you selected this programme, your educational background, your career aspirations, why you chose Albalagh, and how you intend to contribute to society after graduation." maxlength="3000"></textarea>
-            <div class="word-count"><span id="sopCount">0</span> / 3000 characters</div>
+            <label data-i18n="lblStatement">Your Statement <span class="req">*</span></label>
+            <textarea id="sopText" required placeholder="Explain why you selected this programme, your educational background, your career aspirations, why you chose Albalagh, and how you intend to contribute to society after graduation." maxlength="3000" data-i18n-ph="phSop"></textarea>
+            <div class="word-count"><span id="sopCount">0</span> <span data-i18n="charCount">/ 3000 characters</span></div>
           </div>
         </div>
 
         <!-- STEP 6 -->
         <div class="form-step" data-step="6">
-          <h3>Review &amp; Declaration</h3>
-          <p class="step-desc">Please review your details before submitting.</p>
+          <h3 data-i18n="step6h">Review &amp; Declaration</h3>
+          <p class="step-desc" data-i18n="step6desc">Please review your details before submitting.</p>
           <div class="review-list" id="reviewList"></div>
           <div class="declaration-box">
-            <div class="checkbox-row"><input type="checkbox" id="declare1" required><label for="declare1">I declare that the information provided in this application is true and accurate to the best of my knowledge.</label></div>
-            <div class="checkbox-row"><input type="checkbox" id="declare2" required><label for="declare2">I have read and agree to the College's Privacy Policy.</label></div>
+            <div class="checkbox-row"><input type="checkbox" id="declare1" required><label for="declare1" data-i18n="declare1">I declare that the information provided in this application is true and accurate to the best of my knowledge.</label></div>
+            <div class="checkbox-row"><input type="checkbox" id="declare2" required><label for="declare2" data-i18n="declare2">I have read and agree to the College's Privacy Policy.</label></div>
             <div class="form-grid" style="margin-top:14px;">
-              <div class="field"><label>Electronic Signature (Full Name) <span class="req">*</span></label><input type="text" id="signature" required></div>
-              <div class="field"><label>Date</label><input type="date" id="sigDate"></div>
+              <div class="field"><label data-i18n="lblSignature">Electronic Signature (Full Name) <span class="req">*</span></label><input type="text" id="signature" required></div>
+              <div class="field"><label data-i18n="lblDate">Date</label><input type="date" id="sigDate"></div>
             </div>
           </div>
         </div>
 
         <div class="wizard-actions" id="wizardActions">
-          <button type="button" class="btn btn-outline btn-sm" id="backBtn" disabled>← Back</button>
-          <button type="button" class="btn btn-primary" id="nextBtn">Continue →</button>
+          <button type="button" class="btn btn-outline btn-sm" id="backBtn" disabled data-i18n="backBtn">← Back</button>
+          <button type="button" class="btn btn-primary" id="nextBtn" data-i18n="continueBtn">Continue →</button>
         </div>
       </div>
 
       <div class="confirmation-panel" id="confirmationPanel">
         <div class="check-circle"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true"><path d="M6 16l6 6 12-14" stroke="#fff" stroke-width="2.5"/></svg></div>
-        <h3>Application Submitted</h3>
-        <p>Thank you for applying to Albalagh Global. Your reference number is below.</p>
+        <h3 data-i18n="confH">Application Submitted</h3>
+        <p data-i18n="confP">Thank you for applying to Albalagh Global. Your reference number is below.</p>
         <div class="app-number" id="appNumber">AB-2026-000000</div>
-        <div class="confirmation-note">
+        <div class="confirmation-note" data-i18n="confNote">
           <strong>Note:</strong> This is a demonstration of the application flow on our current website prototype. Full backend processing — secure applicant accounts, document verification, application fee payment, and status tracking — will be connected once the Admissions system is live. For a real application today, please contact our admissions team directly.
         </div>
       </div>
@@ -636,39 +636,39 @@
 <section id="dashboard-preview" style="background:var(--manuscript); border-top:1px solid var(--border);">
   <div class="container">
     <div class="section-head center reveal">
-      <span class="eyebrow">After You Apply</span>
-      <h2>Your Applicant Dashboard</h2>
-      <p>Once registered, every applicant tracks their journey in one place.</p>
+      <span class="eyebrow" data-i18n="dashEyebrow">After You Apply</span>
+      <h2 data-i18n="dashTitle">Your Applicant Dashboard</h2>
+      <p data-i18n="dashLead">Once registered, every applicant tracks their journey in one place.</p>
     </div>
-    <span class="preview-badge reveal">Preview only — illustrative dashboard, not a live account</span>
+    <span class="preview-badge reveal" data-i18n="previewBadge">Preview only — illustrative dashboard, not a live account</span>
     <div class="dash-preview reveal">
       <div class="dash-topbar">
-        <span>Albalagh Applicant Portal</span>
-        <span>Applicant #AB-2026-000000</span>
+        <span data-i18n="dashPortal">Albalagh Applicant Portal</span>
+        <span data-i18n="dashApplicantNo">Applicant #AB-2026-000000</span>
       </div>
       <div class="dash-body">
         <div class="dash-sidebar">
-          <div class="item active">Overview</div>
-          <div class="item">Application</div>
-          <div class="item">Documents</div>
-          <div class="item">Payments</div>
-          <div class="item">Assessment</div>
-          <div class="item">Messages</div>
-          <div class="item">Profile Settings</div>
+          <div class="item active" data-i18n="sbOverview">Overview</div>
+          <div class="item" data-i18n="sbApplication">Application</div>
+          <div class="item" data-i18n="sbDocuments">Documents</div>
+          <div class="item" data-i18n="sbPayments">Payments</div>
+          <div class="item" data-i18n="sbAssessment">Assessment</div>
+          <div class="item" data-i18n="sbMessages">Messages</div>
+          <div class="item" data-i18n="sbProfile">Profile Settings</div>
         </div>
         <div class="dash-main">
           <div class="dash-stat-row">
-            <div class="dash-card"><div class="label">Admission Status</div><div class="value"><span class="status-pill progress">Under Review</span></div></div>
-            <div class="dash-card"><div class="label">Application Progress</div><div class="value">75%</div></div>
-            <div class="dash-card"><div class="label">Payment Status</div><div class="value"><span class="status-pill pending">Pending</span></div></div>
+            <div class="dash-card"><div class="label" data-i18n="dc1l">Admission Status</div><div class="value"><span class="status-pill progress" data-i18n="underReview">Under Review</span></div></div>
+            <div class="dash-card"><div class="label" data-i18n="dc2l">Application Progress</div><div class="value">75%</div></div>
+            <div class="dash-card"><div class="label" data-i18n="dc3l">Payment Status</div><div class="value"><span class="status-pill pending" data-i18n="pending">Pending</span></div></div>
           </div>
           <div class="dash-card">
-            <div class="label">Programme Applied For</div>
-            <div class="value">Department of Software Development and Digital Innovation</div>
+            <div class="label" data-i18n="dc4l">Programme Applied For</div>
+            <div class="value" data-i18n="dc4v">Department of Software Development and Digital Innovation</div>
           </div>
           <div class="dash-card">
-            <div class="label">Outstanding Requirements</div>
-            <div class="value" style="font-size:13px; font-weight:500; color:var(--ink-muted);">Academic Transcript · Application Fee Payment</div>
+            <div class="label" data-i18n="dc5l">Outstanding Requirements</div>
+            <div class="value" style="font-size:13px; font-weight:500; color:var(--ink-muted);" data-i18n="dc5v">Academic Transcript · Application Fee Payment</div>
           </div>
         </div>
       </div>
@@ -680,16 +680,16 @@
   <div class="container">
     <div class="grid-3">
       <div class="info-tile reveal">
-        <h3>Tuition &amp; Fees</h3>
-        <p>Tuition varies by programme and is confirmed during the application process. A dedicated Tuition &amp; Scholarships page with full fee schedules is coming soon.</p>
+        <h3 data-i18n="info1t">Tuition &amp; Fees</h3>
+        <p data-i18n="info1d">Tuition varies by programme and is confirmed during the application process. A dedicated Tuition &amp; Scholarships page with full fee schedules is coming soon.</p>
       </div>
       <div class="info-tile reveal">
-        <h3>Student Support</h3>
-        <p>Our admissions and student support team is available to guide you through every step — from choosing a programme to your first day of class.</p>
+        <h3 data-i18n="info2t">Student Support</h3>
+        <p data-i18n="info2d">Our admissions and student support team is available to guide you through every step — from choosing a programme to your first day of class.</p>
       </div>
       <div class="info-tile reveal">
-        <h3>Career Outcomes</h3>
-        <p>Albalagh programmes are built around employment, entrepreneurship, professional practice, and further study. <a href="/graduate-designations-apgdm" style="color:var(--navy); text-decoration:underline;">See Graduate Pathways →</a></p>
+        <h3 data-i18n="info3t">Career Outcomes</h3>
+        <p data-i18n="info3d">Albalagh programmes are built around employment, entrepreneurship, professional practice, and further study. <a href="/graduate-designations-apgdm" style="color:var(--navy); text-decoration:underline;">See Graduate Pathways →</a></p>
       </div>
     </div>
   </div>
@@ -698,29 +698,29 @@
 <section id="faq">
   <div class="container">
     <div class="section-head center reveal">
-      <span class="eyebrow">Frequently Asked Questions</span>
-      <h2>Common admissions questions</h2>
+      <span class="eyebrow" data-i18n="faqEyebrow">Frequently Asked Questions</span>
+      <h2 data-i18n="faqTitle">Common admissions questions</h2>
     </div>
     <div class="faq-list reveal">
       <div class="faq-item">
-        <button class="faq-q" aria-expanded="false"><span>Who can apply to Albalagh?</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="#173A63" stroke-width="1.8"/></svg></button>
-        <div class="faq-a"><p>Applicants with standard secondary qualifications, Islamic education qualifications, mature learners without formal qualifications, and those seeking Recognition of Prior Learning may all apply through the relevant admission route.</p></div>
+        <button class="faq-q" aria-expanded="false"><span data-i18n="faq1q">Who can apply to Albalagh?</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="#173A63" stroke-width="1.8"/></svg></button>
+        <div class="faq-a"><p data-i18n="faq1a">Applicants with standard secondary qualifications, Islamic education qualifications, mature learners without formal qualifications, and those seeking Recognition of Prior Learning may all apply through the relevant admission route.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" aria-expanded="false"><span>Can I apply while awaiting my results?</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="#173A63" stroke-width="1.8"/></svg></button>
-        <div class="faq-a"><p>Yes. Applicants awaiting results may apply and may receive Provisional Admission, subject to the qualifying result being submitted and verified before graduation or by the institutional deadline.</p></div>
+        <button class="faq-q" aria-expanded="false"><span data-i18n="faq2q">Can I apply while awaiting my results?</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="#173A63" stroke-width="1.8"/></svg></button>
+        <div class="faq-a"><p data-i18n="faq2a">Yes. Applicants awaiting results may apply and may receive Provisional Admission, subject to the qualifying result being submitted and verified before graduation or by the institutional deadline.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" aria-expanded="false"><span>What documents do I need to apply?</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="#173A63" stroke-width="1.8"/></svg></button>
-        <div class="faq-a"><p>Required documents include academic certificates or results, a passport photograph, valid identification, and — for Recognition of Prior Learning applicants — a CV, portfolio, or supporting professional evidence.</p></div>
+        <button class="faq-q" aria-expanded="false"><span data-i18n="faq3q">What documents do I need to apply?</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="#173A63" stroke-width="1.8"/></svg></button>
+        <div class="faq-a"><p data-i18n="faq3a">Required documents include academic certificates or results, a passport photograph, valid identification, and — for Recognition of Prior Learning applicants — a CV, portfolio, or supporting professional evidence.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" aria-expanded="false"><span>Is there an application fee?</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="#173A63" stroke-width="1.8"/></svg></button>
-        <div class="faq-a"><p>An application fee is payable as part of the application process; details are confirmed during the application itself.</p></div>
+        <button class="faq-q" aria-expanded="false"><span data-i18n="faq4q">Is there an application fee?</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="#173A63" stroke-width="1.8"/></svg></button>
+        <div class="faq-a"><p data-i18n="faq4a">An application fee is payable as part of the application process; details are confirmed during the application itself.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" aria-expanded="false"><span>How do I track my application?</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="#173A63" stroke-width="1.8"/></svg></button>
-        <div class="faq-a"><p>Once registered, applicants can track status, outstanding requirements, and communications through the Applicant Dashboard.</p></div>
+        <button class="faq-q" aria-expanded="false"><span data-i18n="faq5q">How do I track my application?</span><svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="#173A63" stroke-width="1.8"/></svg></button>
+        <div class="faq-a"><p data-i18n="faq5a">Once registered, applicants can track status, outstanding requirements, and communications through the Applicant Dashboard.</p></div>
       </div>
     </div>
   </div>
@@ -729,11 +729,11 @@
 <section>
   <div class="container">
     <div class="cta-final reveal">
-      <h2>Questions before you apply?</h2>
-      <p>Our admissions team is ready to help you choose the right route and programme.</p>
+      <h2 data-i18n="ctaTitle">Questions before you apply?</h2>
+      <p data-i18n="ctaLead">Our admissions team is ready to help you choose the right route and programme.</p>
       <div class="cta-btns">
-        <a href="#apply" class="btn btn-primary">Start Application</a>
-        <a href="/#contact" class="btn" style="border-color:rgba(255,255,255,0.5); color:#fff;">Contact Admissions</a>
+        <a href="#apply" class="btn btn-primary" data-i18n="heroCta1">Start Application</a>
+        <a href="/#contact" class="btn" style="border-color:rgba(255,255,255,0.5); color:#fff;" data-i18n="ctaBtn2">Contact Admissions</a>
       </div>
     </div>
   </div>
@@ -745,29 +745,29 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <a href="/" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span>Albalagh</span></a>
-        <p class="motto">Knowledge • Character • Innovation • Service to Humanity</p>
+        <a href="/" class="brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg><span data-i18n="brand">Albalagh</span></a>
+        <p class="motto" data-i18n="motto">Knowledge • Character • Innovation • Service to Humanity</p>
       </div>
       <div>
-        <h4>Schools</h4>
+        <h4 data-i18n="fSchools">Schools</h4>
         <ul>
-          <li><a href="/academic-structure#schools">School of Islamic Sciences</a></li>
-          <li><a href="/academic-structure#schools">School of Media, Journalism &amp; Digital Communication</a></li>
-          <li><a href="/academic-structure#schools">School of AI, Innovation &amp; Technology</a></li>
-          <li><a href="/academic-structure#schools">School of Business, Entrepreneurship &amp; Financial Management</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="s1t">School of Islamic Sciences</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="s2tFooter">School of Media, Journalism &amp; Digital Communication</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="s3tFooter">School of AI, Innovation &amp; Technology</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="s4tFooter">School of Business, Entrepreneurship &amp; Financial Management</a></li>
         </ul>
       </div>
       <div>
-        <h4>Quick Links</h4>
+        <h4 data-i18n="fQuick">Quick Links</h4>
         <ul>
-          <li><a href="/admissions">Admissions</a></li>
-          <li><a href="/research-innovation">Research Centres</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="#">Careers</a></li>
+          <li><a href="/admissions" data-i18n="nav2">Admissions</a></li>
+          <li><a href="/research-innovation" data-i18n="nav3">Research Centres</a></li>
+          <li><a href="/about" data-i18n="nav4">About</a></li>
+          <li><a href="#" data-i18n="fCareers">Careers</a></li>
         </ul>
       </div>
       <div>
-        <h4>Contact</h4>
+        <h4 data-i18n="fContact">Contact</h4>
         <ul>
           <li>admissions@albalagh.edu</li>
           <li><button class="lang-toggle" id="langBtn2">عربي</button></li>
@@ -775,8 +775,8 @@
       </div>
     </div>
     <div class="footer-bottom container" style="padding-inline:0;">
-      <span>© 2026 Albalagh Global · Founded 6 January 2024</span>
-      <span><a href="#">Accreditation Status</a> · <a href="#">Privacy</a> · <a href="#">Terms</a></span>
+      <span data-i18n="fCopy">© 2026 Albalagh Global · Founded 6 January 2024</span>
+      <span><a href="#" data-i18n="fAccred">Accreditation Status</a> · <a href="#" data-i18n="fPriv">Privacy</a> · <a href="#" data-i18n="fTerms">Terms</a></span>
     </div>
   </div>
 </footer>
@@ -812,34 +812,220 @@ mobileNavClose.addEventListener('click', closeMobileNav);
 mobileNav.querySelectorAll('.mobile-nav-links a').forEach(a=>a.addEventListener('click', closeMobileNav));
 document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && mobileNav.classList.contains('open')) closeMobileNav(); });
 
-/* Language toggle (labels kept in English for the wizard for reliability; nav/header still toggles) */
-let currentLang='en';
-function applyLangSimple(lang){
-  currentLang = lang;
-  document.documentElement.lang = lang;
-  document.documentElement.dir = lang==='ar' ? 'rtl' : 'ltr';
-  ['langBtn','langBtn2','langBtnMobile'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.textContent = lang==='ar' ? 'EN' : 'عربي';
-  });
-}
-document.getElementById('langBtn').addEventListener('click',()=>applyLangSimple(currentLang==='en'?'ar':'en'));
-document.getElementById('langBtn2').addEventListener('click',()=>applyLangSimple(currentLang==='en'?'ar':'en'));
-document.getElementById('langBtnMobile').addEventListener('click',()=>applyLangSimple(currentLang==='en'?'ar':'en'));
+/* Bilingual dictionary and language toggle */
+const i18n = {
+  en:{
+    skipLink:"Skip to main content",
+    brand:"Albalagh", nav1:"Schools", nav2:"Admissions", nav3:"Research Centres", nav4:"About", nav5:"Contact", applyNow:"Apply Now",
+    bcHome:"Home", bcPage:"Admissions",
+    heroEyebrow:"Admissions", heroTitle:"Begin Your Albalagh Admission Journey",
+    heroLead:"Multiple admission routes, transparent requirements, and a guided application process — for students joining us from secondary school, other institutions, or the workplace.",
+    heroCta1:"Start Application", heroCta2:"Check Admission Routes",
+    routesEyebrow:"Who Can Apply", routesTitle:"Six admission routes, one application",
+    route01:"Route 01", route01t:"Standard Secondary Qualifications",
+    waec:"WAEC", neco:"NECO", gce:"GCE", nabteb:"NABTEB", nbais:"NBAIS", intlSecCerts:"International Secondary Certificates", otherEquiv:"Other recognised equivalents",
+    route02:"Route 02", route02t:"Islamic Education Route",
+    thanawiyyah:"Thanawiyyah", seniorArabicIslamic:"Senior Arabic &amp; Islamic Studies Certificates", recognisedIslamicInst:"Recognised Islamic Institutions", nbaisSenior:"NBAIS Senior Qualifications",
+    route03:"Route 03", route03t:"Awaiting Results", route03d:"Applicants awaiting results may apply now. Provisional Admission may be granted, subject to the qualifying result being submitted and verified before graduation or by the institutional deadline.",
+    route04:"Route 04", route04t:"Certificate Progression", route04d:"Applicants holding relevant certificates from Albalagh, recognised colleges, professional training centres, technical institutions, or Islamic institutions may apply following curriculum evaluation.",
+    route05:"Route 05", route05t:"Mature Learner Route", route05d:"Applicants without formal secondary qualifications but with professional experience, vocational competence, Islamic scholarship, workplace experience, community leadership, or demonstrated academic ability may apply through institutional assessment.",
+    route06:"Route 06", route06t:"Recognition of Prior Learning (RPL)", route06d:"Applicants may demonstrate competence through portfolio, interview, challenge examination, professional experience, community learning, workplace learning, or Islamic study, where applicable.",
+    eaEyebrow:"Admission Requirement", eaTitle:"Mandatory Entrance Assessment",
+    eaLead:"Regardless of entry route, all applicants must complete the Albalagh Admission Assessment — to confirm academic readiness, programme suitability, basic knowledge level, and ability to succeed in online learning.",
+    ea1t:"General Section (All Applicants)", ea1a:"English Language and Communication", ea1b:"Basic Mathematics / Numeracy", ea1c:"Logical Reasoning", ea1d:"Digital Literacy", ea1e:"General Knowledge",
+    ea2t:"Islamic Sciences Applicants", ea2d:"May include basic Islamic knowledge, Qur'an understanding, Arabic foundation, and Islamic terminology. Applicants with strong Islamic qualifications such as Thanawiyyah or NBAIS may be assessed differently according to their background.",
+    ea3t:"Technology Applicants", ea3d:"May include computer awareness, logical thinking, and problem-solving.",
+    ea4t:"Business Applicants", ea4d:"May include basic numeracy, business awareness, and communication ability.",
+    eaNote:"Admission into Albalagh Global Professional Diploma Programmes is open to candidates who possess SSCE or equivalent qualifications, recognised Islamic education certificates, relevant professional certificates, or approved alternative qualifications. All applicants are required to successfully complete the institutional entrance assessment as part of the admission process.",
+    jEyebrow:"Your Admission Journey", jTitle:"From first click to first day of class",
+    jStep1:"Explore Programmes", jStep2:"Create Applicant Account", jStep3:"Complete Application", jStep4:"Upload Documents", jStep5:"Submit Statement of Purpose",
+    jStep6:"Pay Application Fee", jStep7:"Application Review", jStep8:"Entrance Assessment", jStep9:"Admission Decision", jStep10:"Accept Admission",
+    jStep11:"Complete Registration", jStep12:"Student Account Activation", jStep13:"Begin Studies",
+    applyEyebrow:"Start Your Application", applyTitle:"Complete your application in six steps",
+    pill1:"1. Personal Info", pill2:"2. Programme", pill3:"3. Education", pill4:"4. Documents", pill5:"5. Statement", pill6:"6. Review &amp; Submit",
+    step1h:"Personal Information", step1desc:"Let's start with the basics.",
+    lblPhoto:'Passport Photograph <span class="req">*</span>', uPhotoTitle:"Click or drag your photo here", uPhotoHint:"JPG or PNG, max 2MB",
+    lblSurname:'Surname <span class="req">*</span>', lblFirstName:'First Name <span class="req">*</span>', lblMiddleName:"Middle / Other Name", lblPreferredName:"Preferred Name",
+    lblGender:'Gender <span class="req">*</span>', optSelect:"Select", optFemale:"Female", optMale:"Male",
+    lblDob:'Date of Birth <span class="req">*</span>', lblNationality:'Nationality <span class="req">*</span>', lblCountryRes:'Country of Residence <span class="req">*</span>',
+    lblState:"State / Province", lblCity:"City", lblAddress:"Residential Address",
+    lblEmail:'Email Address <span class="req">*</span>', lblPhone:'Phone Number <span class="req">*</span>', lblWhatsapp:"WhatsApp Number", lblParent:"Parent / Guardian Name", lblEmergency:"Emergency Contact",
+    step2h:"Programme Information", step2desc:"Tell us which programme you're applying for.",
+    lblSchool:'School <span class="req">*</span>', optSelectSchool:"Select School",
+    s1t:"School of Islamic Sciences", s2t:"School of Media, Journalism and Digital Communication", s3t:"School of Artificial Intelligence, Innovation and Technology", s4t:"School of Business, Entrepreneurship and Financial Management",
+    lblDept:'Department <span class="req">*</span>', optSelectSchoolFirst:"Select School First",
+    lblRoute:'Admission Route <span class="req">*</span>', optSelectRoute:"Select Route",
+    lblStudyMode:'Study Mode <span class="req">*</span>', optFullTime:"Full-Time Online", optPartTime:"Part-Time Online",
+    lblSession:'Preferred Admission Session <span class="req">*</span>', optNextSession:"Next Available Session", optFollowingSession:"Following Session",
+    step3h:"Educational Background", step3desc:"Your most recent qualification, and any prior institutions attended.",
+    lblHighestQual:'Highest Qualification <span class="req">*</span>', phHighestQual:"e.g. WAEC, Thanawiyyah, Diploma",
+    lblInstitution:'Institution Attended <span class="req">*</span>', lblYearCompleted:"Year Completed / Expected", lblGrade:"Grade / Result (if available)",
+    lblOtherQual:"Other Qualifications or Institutions (optional)", phOtherQual:"List any additional certificates, colleges, or training relevant to your application.",
+    step4h:"Document Uploads", step4desc:"Accepted formats: PDF, JPG, PNG. Maximum 5MB per file.",
+    grpAcademic:"Academic Documents", u1t:"WAEC / NECO / NABTEB / NBAIS Results", u1h:"or Thanawiyyah / GCE / International Certificate", u2t:"Academic Transcript", u2h:"Or Awaiting Result Slip",
+    grpPersonal:"Personal Documents", u3t:"National ID / Passport / Driver's Licence", u4t:"Birth Certificate / Declaration of Age", u4h:"Where required",
+    grpRpl:"Recognition of Prior Learning (RPL) Documents", u5t:"Curriculum Vitae (CV)", u6t:"Portfolio / Supporting Evidence", u6h:"Employment letters, recommendations, certificates",
+    step5h:"Statement of Purpose", step5desc:"In your own words — why this programme, why Albalagh, and what you hope to achieve.",
+    lblStatement:'Your Statement <span class="req">*</span>', phSop:"Explain why you selected this programme, your educational background, your career aspirations, why you chose Albalagh, and how you intend to contribute to society after graduation.", charCount:"/ 3000 characters",
+    step6h:"Review &amp; Declaration", step6desc:"Please review your details before submitting.",
+    declare1:"I declare that the information provided in this application is true and accurate to the best of my knowledge.", declare2:"I have read and agree to the College's Privacy Policy.",
+    lblSignature:'Electronic Signature (Full Name) <span class="req">*</span>', lblDate:"Date",
+    backBtn:"← Back", continueBtn:"Continue →", submitBtn:"Submit Application →",
+    confH:"Application Submitted", confP:"Thank you for applying to Albalagh Global. Your reference number is below.",
+    confNote:'<strong>Note:</strong> This is a demonstration of the application flow on our current website prototype. Full backend processing — secure applicant accounts, document verification, application fee payment, and status tracking — will be connected once the Admissions system is live. For a real application today, please contact our admissions team directly.',
+    dashEyebrow:"After You Apply", dashTitle:"Your Applicant Dashboard", dashLead:"Once registered, every applicant tracks their journey in one place.",
+    previewBadge:"Preview only — illustrative dashboard, not a live account", dashPortal:"Albalagh Applicant Portal", dashApplicantNo:"Applicant #AB-2026-000000",
+    sbOverview:"Overview", sbApplication:"Application", sbDocuments:"Documents", sbPayments:"Payments", sbAssessment:"Assessment", sbMessages:"Messages", sbProfile:"Profile Settings",
+    dc1l:"Admission Status", underReview:"Under Review", dc2l:"Application Progress", dc3l:"Payment Status", pending:"Pending",
+    dc4l:"Programme Applied For", dc4v:"Department of Software Development and Digital Innovation",
+    dc5l:"Outstanding Requirements", dc5v:"Academic Transcript · Application Fee Payment",
+    info1t:"Tuition &amp; Fees", info1d:"Tuition varies by programme and is confirmed during the application process. A dedicated Tuition &amp; Scholarships page with full fee schedules is coming soon.",
+    info2t:"Student Support", info2d:"Our admissions and student support team is available to guide you through every step — from choosing a programme to your first day of class.",
+    info3t:"Career Outcomes", info3d:'Albalagh programmes are built around employment, entrepreneurship, professional practice, and further study. <a href="/graduate-designations-apgdm" style="color:var(--navy); text-decoration:underline;">See Graduate Pathways →</a>',
+    faqEyebrow:"Frequently Asked Questions", faqTitle:"Common admissions questions",
+    faq1q:"Who can apply to Albalagh?", faq1a:"Applicants with standard secondary qualifications, Islamic education qualifications, mature learners without formal qualifications, and those seeking Recognition of Prior Learning may all apply through the relevant admission route.",
+    faq2q:"Can I apply while awaiting my results?", faq2a:"Yes. Applicants awaiting results may apply and may receive Provisional Admission, subject to the qualifying result being submitted and verified before graduation or by the institutional deadline.",
+    faq3q:"What documents do I need to apply?", faq3a:"Required documents include academic certificates or results, a passport photograph, valid identification, and — for Recognition of Prior Learning applicants — a CV, portfolio, or supporting professional evidence.",
+    faq4q:"Is there an application fee?", faq4a:"An application fee is payable as part of the application process; details are confirmed during the application itself.",
+    faq5q:"How do I track my application?", faq5a:"Once registered, applicants can track status, outstanding requirements, and communications through the Applicant Dashboard.",
+    ctaTitle:"Questions before you apply?", ctaLead:"Our admissions team is ready to help you choose the right route and programme.", ctaBtn2:"Contact Admissions",
+    motto:"Knowledge • Character • Innovation • Service to Humanity",
+    fSchools:"Schools", s2tFooter:"School of Media, Journalism &amp; Digital Communication", s3tFooter:"School of AI, Innovation &amp; Technology", s4tFooter:"School of Business, Entrepreneurship &amp; Financial Management",
+    fQuick:"Quick Links", fContact:"Contact", fCareers:"Careers",
+    fCopy:"© 2026 Albalagh Global · Founded 6 January 2024", fAccred:"Accreditation Status", fPriv:"Privacy", fTerms:"Terms",
+    alertPhoto:"Please upload your passport photograph before continuing.", alertDeclare:"Please complete the declaration and electronic signature before submitting.",
+    rowFullName:"Full Name", rowEmail:"Email", rowProgramme:"Programme", rowRoute:"Admission Route", rowHighestQual:"Highest Qualification"
+  },
+  ar:{
+    skipLink:"تخطَّ إلى المحتوى الرئيسي",
+    brand:"البلاغ", nav1:"الكليات", nav2:"القبول", nav3:"مراكز البحث", nav4:"عن الكلية", nav5:"تواصل", applyNow:"قدّم الآن",
+    bcHome:"الرئيسية", bcPage:"القبول",
+    heroEyebrow:"القبول", heroTitle:"ابدأ رحلة قبولك في البلاغ",
+    heroLead:"مسارات قبول متعددة، ومتطلبات شفافة، وعملية تقديم موجَّهة — للطلاب المنضمين إلينا من المدرسة الثانوية، أو مؤسسات أخرى، أو سوق العمل.",
+    heroCta1:"ابدأ الطلب", heroCta2:"تحقق من مسارات القبول",
+    routesEyebrow:"من يمكنه التقديم", routesTitle:"ستة مسارات للقبول، طلب واحد",
+    route01:"المسار 01", route01t:"المؤهلات الثانوية القياسية",
+    waec:"WAEC", neco:"NECO", gce:"GCE", nabteb:"NABTEB", nbais:"NBAIS", intlSecCerts:"الشهادات الثانوية الدولية", otherEquiv:"معادلات معترف بها أخرى",
+    route02:"المسار 02", route02t:"مسار التعليم الإسلامي",
+    thanawiyyah:"الثانوية", seniorArabicIslamic:"شهادات اللغة العربية والدراسات الإسلامية العليا", recognisedIslamicInst:"مؤسسات إسلامية معترف بها", nbaisSenior:"مؤهلات NBAIS العليا",
+    route03:"المسار 03", route03t:"بانتظار النتائج", route03d:"يمكن للمتقدمين الذين ينتظرون نتائجهم التقديم الآن. يجوز منح قبول مبدئي، رهنًا بتقديم النتيجة المؤهلة والتحقق منها قبل التخرج أو بحلول الموعد النهائي المؤسسي.",
+    route04:"المسار 04", route04t:"الترقي بالشهادات", route04d:"يجوز للمتقدمين الحاصلين على شهادات ذات صلة من البلاغ، أو كليات معترف بها، أو مراكز تدريب مهني، أو مؤسسات تقنية، أو مؤسسات إسلامية التقديم بعد تقييم المنهج الدراسي.",
+    route05:"المسار 05", route05t:"مسار المتعلم الناضج", route05d:"يجوز للمتقدمين الذين لا يحملون مؤهلات ثانوية رسمية، لكن لديهم خبرة مهنية أو كفاءة حرفية أو علمًا شرعيًا أو خبرة عملية أو قيادة مجتمعية أو قدرة أكاديمية مثبتة، التقديم عبر التقييم المؤسسي.",
+    route06:"المسار 06", route06t:"الاعتراف بالتعلّم السابق (RPL)", route06d:"يجوز للمتقدمين إثبات كفاءتهم من خلال ملف الأعمال، أو المقابلة، أو امتحان تحدٍّ، أو الخبرة المهنية، أو التعلّم المجتمعي، أو التعلّم في مكان العمل، أو الدراسة الإسلامية، حيثما ينطبق ذلك.",
+    eaEyebrow:"متطلب القبول", eaTitle:"تقييم القبول الإلزامي",
+    eaLead:"بصرف النظر عن مسار الالتحاق، يجب على جميع المتقدمين إتمام تقييم القبول في البلاغ — للتأكد من الجاهزية الأكاديمية، وملاءمة البرنامج، ومستوى المعرفة الأساسية، والقدرة على النجاح في التعلّم عبر الإنترنت.",
+    ea1t:"القسم العام (لجميع المتقدمين)", ea1a:"اللغة الإنجليزية والتواصل", ea1b:"الرياضيات الأساسية / الحساب", ea1c:"التفكير المنطقي", ea1d:"الإلمام الرقمي", ea1e:"المعرفة العامة",
+    ea2t:"المتقدمون للعلوم الإسلامية", ea2d:"قد يشمل معرفة إسلامية أساسية، وفهمًا للقرآن الكريم، وأساسًا في اللغة العربية، ومصطلحات إسلامية. قد يُقيَّم المتقدمون ذوو المؤهلات الإسلامية القوية مثل الثانوية أو NBAIS بشكل مختلف وفقًا لخلفيتهم.",
+    ea3t:"المتقدمون للتقنية", ea3d:"قد يشمل الوعي الحاسوبي، والتفكير المنطقي، وحل المشكلات.",
+    ea4t:"المتقدمون للأعمال", ea4d:"قد يشمل الحساب الأساسي، والوعي بالأعمال، والقدرة على التواصل.",
+    eaNote:"القبول في برامج الدبلوم المهني بالبلاغ العالمية متاح للمرشحين الحاصلين على شهادة الثانوية العامة (SSCE) أو ما يعادلها، أو شهادات تعليم إسلامي معترف بها، أو شهادات مهنية ذات صلة، أو مؤهلات بديلة معتمدة. يُطلب من جميع المتقدمين إتمام تقييم القبول المؤسسي بنجاح كجزء من عملية القبول.",
+    jEyebrow:"رحلة قبولك", jTitle:"من أول نقرة إلى أول يوم دراسي",
+    jStep1:"استكشف البرامج", jStep2:"أنشئ حساب المتقدم", jStep3:"أكمل الطلب", jStep4:"ارفع المستندات", jStep5:"قدّم بيان الغرض",
+    jStep6:"ادفع رسم الطلب", jStep7:"مراجعة الطلب", jStep8:"تقييم القبول", jStep9:"قرار القبول", jStep10:"اقبل العرض",
+    jStep11:"أكمل التسجيل", jStep12:"تفعيل حساب الطالب", jStep13:"ابدأ الدراسة",
+    applyEyebrow:"ابدأ طلبك", applyTitle:"أكمل طلبك في ست خطوات",
+    pill1:"١. المعلومات الشخصية", pill2:"٢. البرنامج", pill3:"٣. التعليم", pill4:"٤. المستندات", pill5:"٥. البيان", pill6:"٦. المراجعة والتقديم",
+    step1h:"المعلومات الشخصية", step1desc:"لنبدأ بالأساسيات.",
+    lblPhoto:'الصورة الشخصية <span class="req">*</span>', uPhotoTitle:"انقر أو اسحب صورتك هنا", uPhotoHint:"JPG أو PNG، بحد أقصى 2 ميجابايت",
+    lblSurname:'اسم العائلة <span class="req">*</span>', lblFirstName:'الاسم الأول <span class="req">*</span>', lblMiddleName:"الاسم الأوسط / اسم آخر", lblPreferredName:"الاسم المفضل",
+    lblGender:'الجنس <span class="req">*</span>', optSelect:"اختر", optFemale:"أنثى", optMale:"ذكر",
+    lblDob:'تاريخ الميلاد <span class="req">*</span>', lblNationality:'الجنسية <span class="req">*</span>', lblCountryRes:'بلد الإقامة <span class="req">*</span>',
+    lblState:"الولاية / المحافظة", lblCity:"المدينة", lblAddress:"عنوان الإقامة",
+    lblEmail:'البريد الإلكتروني <span class="req">*</span>', lblPhone:'رقم الهاتف <span class="req">*</span>', lblWhatsapp:"رقم واتساب", lblParent:"اسم ولي الأمر", lblEmergency:"جهة اتصال الطوارئ",
+    step2h:"معلومات البرنامج", step2desc:"أخبرنا بالبرنامج الذي تتقدم إليه.",
+    lblSchool:'الكلية <span class="req">*</span>', optSelectSchool:"اختر الكلية",
+    s1t:"كلية العلوم الإسلامية", s2t:"كلية الإعلام والصحافة والاتصال الرقمي", s3t:"كلية الذكاء الاصطناعي والابتكار والتقنية", s4t:"كلية الأعمال وريادة الأعمال والإدارة المالية",
+    lblDept:'القسم <span class="req">*</span>', optSelectSchoolFirst:"اختر الكلية أولاً",
+    lblRoute:'مسار القبول <span class="req">*</span>', optSelectRoute:"اختر المسار",
+    lblStudyMode:'نمط الدراسة <span class="req">*</span>', optFullTime:"عبر الإنترنت بدوام كامل", optPartTime:"عبر الإنترنت بدوام جزئي",
+    lblSession:'فترة القبول المفضلة <span class="req">*</span>', optNextSession:"أقرب فترة متاحة", optFollowingSession:"الفترة التالية",
+    step3h:"الخلفية التعليمية", step3desc:"أحدث مؤهلاتك، وأي مؤسسات التحقت بها سابقًا.",
+    lblHighestQual:'أعلى مؤهل <span class="req">*</span>', phHighestQual:"مثال: WAEC، الثانوية، دبلوم",
+    lblInstitution:'المؤسسة التي التحقت بها <span class="req">*</span>', lblYearCompleted:"سنة الإتمام / المتوقعة", lblGrade:"الدرجة / النتيجة (إن وُجدت)",
+    lblOtherQual:"مؤهلات أو مؤسسات أخرى (اختياري)", phOtherQual:"اذكر أي شهادات أو كليات أو تدريبات إضافية ذات صلة بطلبك.",
+    step4h:"رفع المستندات", step4desc:"الصيغ المقبولة: PDF وJPG وPNG. الحد الأقصى 5 ميجابايت لكل ملف.",
+    grpAcademic:"المستندات الأكاديمية", u1t:"نتائج WAEC / NECO / NABTEB / NBAIS", u1h:"أو الثانوية / GCE / شهادة دولية", u2t:"كشف الدرجات الأكاديمي", u2h:"أو إشعار انتظار النتيجة",
+    grpPersonal:"المستندات الشخصية", u3t:"الهوية الوطنية / جواز السفر / رخصة القيادة", u4t:"شهادة الميلاد / إقرار السن", u4h:"حيثما يُطلب",
+    grpRpl:"مستندات الاعتراف بالتعلّم السابق (RPL)", u5t:"السيرة الذاتية (CV)", u6t:"ملف الأعمال / أدلة داعمة", u6h:"خطابات العمل، والتوصيات، والشهادات",
+    step5h:"بيان الغرض", step5desc:"بأسلوبك الخاص — لماذا هذا البرنامج، ولماذا البلاغ، وما الذي تأمل تحقيقه.",
+    lblStatement:'بيانك <span class="req">*</span>', phSop:"اشرح سبب اختيارك لهذا البرنامج، وخلفيتك التعليمية، وتطلعاتك المهنية، ولماذا اخترت البلاغ، وكيف تنوي الإسهام في المجتمع بعد التخرج.", charCount:"/ 3000 حرف",
+    step6h:"المراجعة والإقرار", step6desc:"يرجى مراجعة بياناتك قبل التقديم.",
+    declare1:"أُقر بأن المعلومات المقدمة في هذا الطلب صحيحة ودقيقة على حد علمي.", declare2:"لقد قرأت سياسة الخصوصية الخاصة بالكلية وأوافق عليها.",
+    lblSignature:'التوقيع الإلكتروني (الاسم الكامل) <span class="req">*</span>', lblDate:"التاريخ",
+    backBtn:"→ رجوع", continueBtn:"متابعة ←", submitBtn:"إرسال الطلب ←",
+    confH:"تم تقديم الطلب", confP:"شكرًا لتقديمك إلى البلاغ العالمية. رقمك المرجعي أدناه.",
+    confNote:'<strong>ملاحظة:</strong> هذا عرض توضيحي لمسار التقديم على النموذج الأولي الحالي لموقعنا الإلكتروني. سيتم ربط المعالجة الكاملة في الخلفية — حسابات المتقدمين الآمنة، والتحقق من المستندات، ودفع رسم الطلب، وتتبع الحالة — بمجرد تفعيل نظام القبول. لتقديم طلب حقيقي اليوم، يرجى التواصل مباشرة مع فريق القبول لدينا.',
+    dashEyebrow:"بعد التقديم", dashTitle:"لوحة تحكم المتقدم الخاصة بك", dashLead:"بمجرد التسجيل، يتتبع كل متقدم رحلته في مكان واحد.",
+    previewBadge:"معاينة فقط — لوحة توضيحية، وليست حسابًا فعليًا", dashPortal:"بوابة المتقدمين في البلاغ", dashApplicantNo:"رقم المتقدم AB-2026-000000#",
+    sbOverview:"نظرة عامة", sbApplication:"الطلب", sbDocuments:"المستندات", sbPayments:"المدفوعات", sbAssessment:"التقييم", sbMessages:"الرسائل", sbProfile:"إعدادات الملف الشخصي",
+    dc1l:"حالة القبول", underReview:"قيد المراجعة", dc2l:"تقدم الطلب", dc3l:"حالة الدفع", pending:"قيد الانتظار",
+    dc4l:"البرنامج المتقدم إليه", dc4v:"قسم تطوير البرمجيات والابتكار الرقمي",
+    dc5l:"المتطلبات المتبقية", dc5v:"كشف الدرجات الأكاديمي · دفع رسم الطلب",
+    info1t:"الرسوم الدراسية والرسوم", info1d:"تختلف الرسوم الدراسية حسب البرنامج وتُؤكَّد أثناء عملية التقديم. صفحة مخصصة للرسوم الدراسية والمنح بجداول رسوم كاملة ستتوفر قريبًا.",
+    info2t:"دعم الطلاب", info2d:"فريق القبول ودعم الطلاب لدينا متاح لإرشادك خلال كل خطوة — من اختيار البرنامج إلى أول يوم دراسي لك.",
+    info3t:"المخرجات المهنية", info3d:'بُنيت برامج البلاغ حول التوظيف وريادة الأعمال والممارسة المهنية ومواصلة الدراسة. <a href="/graduate-designations-apgdm" style="color:var(--navy); text-decoration:underline;">شاهد مسارات الخريجين ←</a>',
+    faqEyebrow:"الأسئلة الشائعة", faqTitle:"أسئلة شائعة حول القبول",
+    faq1q:"من يمكنه التقديم إلى البلاغ؟", faq1a:"يمكن للمتقدمين الحاصلين على مؤهلات ثانوية قياسية، أو مؤهلات تعليم إسلامي، والمتعلمين الناضجين بلا مؤهلات رسمية، والراغبين في الاعتراف بالتعلّم السابق، جميعًا التقديم عبر مسار القبول المناسب.",
+    faq2q:"هل يمكنني التقديم أثناء انتظار نتائجي؟", faq2a:"نعم. يمكن للمتقدمين الذين ينتظرون نتائجهم التقديم، وقد يحصلون على قبول مبدئي، رهنًا بتقديم النتيجة المؤهلة والتحقق منها قبل التخرج أو بحلول الموعد النهائي المؤسسي.",
+    faq3q:"ما المستندات التي أحتاجها للتقديم؟", faq3a:"تشمل المستندات المطلوبة الشهادات أو النتائج الأكاديمية، وصورة شخصية، وإثبات هوية صالح، و — بالنسبة لمتقدمي الاعتراف بالتعلّم السابق — سيرة ذاتية أو ملف أعمال أو أدلة مهنية داعمة.",
+    faq4q:"هل يوجد رسم للطلب؟", faq4a:"يُستحق رسم طلب كجزء من عملية التقديم؛ تُؤكَّد التفاصيل أثناء الطلب نفسه.",
+    faq5q:"كيف أتابع طلبي؟", faq5a:"بمجرد التسجيل، يمكن للمتقدمين متابعة الحالة والمتطلبات المتبقية والمراسلات عبر لوحة تحكم المتقدم.",
+    ctaTitle:"أسئلة قبل التقديم؟", ctaLead:"فريق القبول لدينا جاهز لمساعدتك على اختيار المسار والبرنامج المناسبين.", ctaBtn2:"تواصل مع القبول",
+    motto:"العلم • الأخلاق • الابتكار • خدمة الإنسانية",
+    fSchools:"الكليات", s2tFooter:"كلية الإعلام والصحافة والاتصال الرقمي", s3tFooter:"كلية الذكاء الاصطناعي والابتكار والتقنية", s4tFooter:"كلية الأعمال وريادة الأعمال والإدارة المالية",
+    fQuick:"روابط سريعة", fContact:"تواصل", fCareers:"الوظائف",
+    fCopy:"© ٢٠٢٦ البلاغ العالمية · تأسست في ٦ يناير ٢٠٢٤", fAccred:"حالة الاعتماد", fPriv:"الخصوصية", fTerms:"الشروط",
+    alertPhoto:"يرجى رفع صورتك الشخصية قبل المتابعة.", alertDeclare:"يرجى إكمال الإقرار والتوقيع الإلكتروني قبل التقديم.",
+    rowFullName:"الاسم الكامل", rowEmail:"البريد الإلكتروني", rowProgramme:"البرنامج", rowRoute:"مسار القبول", rowHighestQual:"أعلى مؤهل"
+  }
+};
 
-/* School -> Department dependent dropdown */
-const deptMap = {
+/* School -> Department dependent dropdown (bilingual; option value stays the stable English department name) */
+const deptMapEn = {
   "School of Islamic Sciences": ["Department of Advanced Islamic Sciences and Modern Civilization Studies", "Department of Islamic Law (Shari'ah)"],
   "School of Media, Journalism and Digital Communication": ["Department of Journalism and Mass Communication", "Department of Multimedia and Digital Media Technology"],
   "School of Artificial Intelligence, Innovation and Technology": ["Department of Artificial Intelligence and Data Science", "Department of Software Development and Digital Innovation"],
   "School of Business, Entrepreneurship and Financial Management": ["Department of Business Administration and Entrepreneurship", "Department of Accounting, Finance and Digital Marketing"]
 };
+const deptMapAr = {
+  "School of Islamic Sciences": ["قسم العلوم الإسلامية المتقدمة ودراسات الحضارة الحديثة", "قسم الفقه الإسلامي (الشريعة)"],
+  "School of Media, Journalism and Digital Communication": ["قسم الصحافة والإعلام الجماهيري", "قسم الوسائط المتعددة وتقنية الإعلام الرقمي"],
+  "School of Artificial Intelligence, Innovation and Technology": ["قسم الذكاء الاصطناعي وعلم البيانات", "قسم تطوير البرمجيات والابتكار الرقمي"],
+  "School of Business, Entrepreneurship and Financial Management": ["قسم إدارة الأعمال وريادة الأعمال", "قسم المحاسبة والتمويل والتسويق الرقمي"]
+};
 const schoolSelect = document.getElementById('schoolSelect');
 const deptSelect = document.getElementById('deptSelect');
-schoolSelect.addEventListener('change', ()=>{
-  const depts = deptMap[schoolSelect.value] || [];
-  deptSelect.innerHTML = '<option value="">Select Department</option>' + depts.map(d=>`<option>${d}</option>`).join('');
-});
+function renderDeptOptions(){
+  const depts = (currentLang==='ar' ? deptMapAr : deptMapEn)[schoolSelect.value] || [];
+  const enDepts = deptMapEn[schoolSelect.value] || [];
+  const placeholder = i18n[currentLang].optSelectSchoolFirst;
+  deptSelect.innerHTML = `<option value="">${placeholder}</option>` + depts.map((d,i)=>`<option value="${enDepts[i]}">${d}</option>`).join('');
+}
+schoolSelect.addEventListener('change', renderDeptOptions);
+
+let currentLang='en';
+function applyLang(lang){
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang==='ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(i18n[lang][key]) el.innerHTML = i18n[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-ph');
+    if(i18n[lang][key]) el.setAttribute('placeholder', i18n[lang][key]);
+  });
+  ['langBtn','langBtn2','langBtnMobile'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = lang==='ar' ? 'EN' : 'عربي';
+  });
+  if(schoolSelect.value) renderDeptOptions();
+  if(typeof updateWizard === 'function') updateWizard();
+}
+document.getElementById('langBtn').addEventListener('click',()=>applyLang(currentLang==='en'?'ar':'en'));
+document.getElementById('langBtn2').addEventListener('click',()=>applyLang(currentLang==='en'?'ar':'en'));
+document.getElementById('langBtnMobile').addEventListener('click',()=>applyLang(currentLang==='en'?'ar':'en'));
 
 /* Show/hide RPL upload group based on admission route */
 const routeSelect = document.getElementById('routeSelect');
@@ -899,7 +1085,7 @@ function updateWizard(){
   });
   progressFill.style.width = (current/totalSteps*100) + '%';
   backBtn.disabled = current === 1;
-  nextBtn.textContent = current === totalSteps ? 'Submit Application →' : 'Continue →';
+  nextBtn.textContent = current === totalSteps ? i18n[currentLang].submitBtn : i18n[currentLang].continueBtn;
   if(current === totalSteps){ buildReview(); }
 }
 
@@ -912,7 +1098,7 @@ function validateCurrentStep(){
   }
   if(current === 1){
     const photoInput = document.querySelector('[data-input="photo"]');
-    if(!photoInput.files.length){ alert('Please upload your passport photograph before continuing.'); return false; }
+    if(!photoInput.files.length){ alert(i18n[currentLang].alertPhoto); return false; }
   }
   return true;
 }
@@ -921,12 +1107,15 @@ function buildReview(){
   const get = sel => { const el = document.querySelector(sel); return el ? el.value : ''; };
   const fields = document.querySelectorAll('.form-step[data-step="1"] input, .form-step[data-step="1"] select');
   const surname = fields[0] ? fields[0].value : '';
+  const t = i18n[currentLang];
+  const deptLabel = deptSelect.selectedOptions[0]?.textContent || '';
+  const routeLabel = routeSelect.selectedOptions[0]?.textContent || '';
   const rows = [
-    ['Full Name', `${surname} ${document.querySelectorAll('.form-step[data-step="1"] input')[1]?.value || ''}`.trim()],
-    ['Email', document.querySelector('.form-step[data-step="1"] input[type="email"]')?.value || ''],
-    ['Programme', deptSelect.value || '—'],
-    ['Admission Route', routeSelect.value || '—'],
-    ['Highest Qualification', document.querySelector('.form-step[data-step="3"] input')?.value || '—'],
+    [t.rowFullName, `${surname} ${document.querySelectorAll('.form-step[data-step="1"] input')[1]?.value || ''}`.trim()],
+    [t.rowEmail, document.querySelector('.form-step[data-step="1"] input[type="email"]')?.value || ''],
+    [t.rowProgramme, deptLabel || '—'],
+    [t.rowRoute, routeLabel || '—'],
+    [t.rowHighestQual, document.querySelector('.form-step[data-step="3"] input')?.value || '—'],
   ];
   document.getElementById('reviewList').innerHTML = rows.map(([k,v])=>`<div class="review-row"><span>${k}</span><span>${v || '—'}</span></div>`).join('');
 }
@@ -943,7 +1132,7 @@ nextBtn.addEventListener('click', ()=>{
     const declare2 = document.getElementById('declare2');
     const signature = document.getElementById('signature');
     if(!declare1.checked || !declare2.checked || !signature.value){
-      alert('Please complete the declaration and electronic signature before submitting.');
+      alert(i18n[currentLang].alertDeclare);
       return;
     }
     const randomNum = Math.floor(100000 + Math.random()*900000);
