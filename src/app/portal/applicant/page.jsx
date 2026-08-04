@@ -1,3 +1,8 @@
+import {
+  getApplicantStatus,
+  getAdmissionJourneySteps,
+  getEntranceAssessmentSections,
+} from '@/lib/services/applicantService';
 import ApplicantStatusView from './ApplicantStatusView';
 
 export const metadata = {
@@ -6,6 +11,14 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function ApplicantStatusPage() {
-  return <ApplicantStatusView />;
+export default async function ApplicantStatusPage() {
+  const [applicant, journeySteps, assessmentSections] = await Promise.all([
+    getApplicantStatus(),
+    getAdmissionJourneySteps(),
+    getEntranceAssessmentSections(),
+  ]);
+
+  return (
+    <ApplicantStatusView applicant={applicant} journeySteps={journeySteps} assessmentSections={assessmentSections} />
+  );
 }

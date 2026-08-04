@@ -2,7 +2,6 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile, Badge, DataTable } from '@/components/portal/ui';
-import { demoParent, demoStudent, demoResults, demoAttendance } from '@/lib/portalDemoData';
 
 function toneForRate(pct) {
   if (pct >= 90) return 'success';
@@ -10,25 +9,27 @@ function toneForRate(pct) {
   return 'alert';
 }
 
-export default function ParentOverviewView() {
-  const attendanceRows = demoAttendance.byCourse.map((c) => ({
+export default function ParentOverviewView({ parent, overview }) {
+  const { student, results, attendance } = overview;
+
+  const attendanceRows = attendance.byCourse.map((c) => ({
     ...c,
     pct: Math.round((c.attended / c.total) * 100),
   }));
 
   return (
-    <PortalShell role="parent" active="dashboard" title={`Welcome, ${demoParent.name}`}>
+    <PortalShell role="parent" active="dashboard" title={`Welcome, ${parent.name}`}>
       <p className="intro">
-        A read-only overview of {demoParent.linkedStudent}&apos;s progress, linked to your account. This preview shows
+        A read-only overview of {parent.linkedStudent}&apos;s progress, linked to your account. This preview shows
         one sample student — a real Parent Portal would let you switch between multiple linked children where
         applicable.
       </p>
 
       <StatGrid>
-        <StatTile label="Linked student" value={demoStudent.name} hint={demoStudent.studentId} />
-        <StatTile label="Programme" value={demoStudent.programme} hint={demoStudent.school} />
-        <StatTile label="Status" value={demoStudent.status} />
-        <StatTile label="Overall attendance" value={demoAttendance.overall} />
+        <StatTile label="Linked student" value={student.name} hint={student.studentId} />
+        <StatTile label="Programme" value={student.programme} hint={student.school} />
+        <StatTile label="Status" value={student.status} />
+        <StatTile label="Overall attendance" value={attendance.overall} />
       </StatGrid>
 
       <div className="grid">
@@ -44,7 +45,7 @@ export default function ParentOverviewView() {
         </Card>
 
         <Card title="Results by semester">
-          {demoResults.map((sem) => (
+          {results.map((sem) => (
             <div className="sem-row" key={sem.semester}>
               <span className="sem-name">{sem.semester}</span>
               <span className="sem-gpa">{sem.gpa ? `GPA ${sem.gpa}` : 'Pending'}</span>
