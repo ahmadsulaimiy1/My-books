@@ -2,11 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    // Add real image domains here once a CMS/asset host is chosen.
-    // Using picsum.photos only as a placeholder source during design phase.
-    remotePatterns: [
-      { protocol: 'https', hostname: 'picsum.photos' }
-    ]
+    // Add real image domains here once a CMS/asset host is chosen. Every
+    // page currently uses hand-authored inline SVG in place of photography
+    // (see RELEASE_REPORT.md), so no remote image host is needed yet.
+    remotePatterns: []
   },
   // i18n handled via a custom LanguageProvider (React Context) rather than
   // Next.js built-in i18n routing, since the design uses a client-side
