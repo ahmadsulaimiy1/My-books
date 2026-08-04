@@ -18,7 +18,7 @@ export default function AdmissionsView() {
         action={<span className="readonly-tag">Read-only preview</span>}
       >
         <p className="intro">
-          A small, clearly placeholder queue of sample applicants ("Applicant A" etc.), grouped by their stage in the
+          A small, clearly placeholder queue of sample applicants (&ldquo;Applicant A&rdquo; etc.), grouped by their stage in the
           real 13-step admission journey published on the public site. There is no real applications database behind
           this yet.
         </p>

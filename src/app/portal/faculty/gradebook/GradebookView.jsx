@@ -24,7 +24,7 @@ export default function GradebookView() {
       >
         <p className="intro">
           There is no real class roster yet, so this gradebook shows a small set of clearly placeholder students
-          ("Student A", "Student B", …) with sample grades. Nothing here is connected to a real transcript.
+          (&ldquo;Student A&rdquo;, &ldquo;Student B&rdquo;, …) with sample grades. Nothing here is connected to a real transcript.
         </p>
         <DataTable columns={columns} rows={demoRoster} />
       </Card>

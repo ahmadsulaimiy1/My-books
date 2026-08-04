@@ -42,7 +42,7 @@ export default function SettingsView() {
             </select>
           </div>
           <p className="hint">
-            The portal preview is English-first for now. Arabic support will follow the public site's bilingual
+            The portal preview is English-first for now. Arabic support will follow the public site&apos;s bilingual
             experience once the portal is connected to a real backend.
           </p>
         </Card>
