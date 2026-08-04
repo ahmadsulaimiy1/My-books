@@ -96,7 +96,11 @@ export default function AttendanceMarker({ courseId, roster, sessionLabel }) {
         <button type="button" className="save-btn" onClick={handleSave} disabled={saving}>
           {saving ? 'Saving…' : 'Save attendance'}
         </button>
-        {savedNote && <p className="saved-note">{savedNote}</p>}
+        {savedNote && (
+          <p className="saved-note" role="status">
+            {savedNote}
+          </p>
+        )}
       </div>
 
       <style jsx>{`

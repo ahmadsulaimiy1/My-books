@@ -71,11 +71,13 @@ export default function CoursePlayer({ lessons }) {
         <div className="lesson-panel">
           <div className="lesson-panel-head">
             <h2>{active?.title}</h2>
-            {completed.has(active?.id) ? (
-              <Badge tone="success">Completed</Badge>
-            ) : (
-              <Badge tone="neutral">Not yet completed</Badge>
-            )}
+            <span role="status">
+              {completed.has(active?.id) ? (
+                <Badge tone="success">Completed</Badge>
+              ) : (
+                <Badge tone="neutral">Not yet completed</Badge>
+              )}
+            </span>
           </div>
           <p className="lesson-desc">
             Sample lesson content for this preview — {active?.durationMins} minutes. In the live portal this

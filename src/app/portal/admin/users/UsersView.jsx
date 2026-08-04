@@ -17,10 +17,14 @@ const ROLE_TONE = {
 export default function UsersView({ users, roleOptions }) {
   const [roles, setRoles] = useState(() => Object.fromEntries(users.map((u) => [u.id, u.role])));
   const [note, setNote] = useState('');
+  const [pendingId, setPendingId] = useState(null);
 
   async function handleRoleChange(id, newRole) {
+    setPendingId(id);
+    setNote('');
     await updateUserRole({ userId: id, role: newRole });
     setRoles((prev) => ({ ...prev, [id]: newRole }));
+    setPendingId(null);
     setNote('Role updated for this preview session only — nothing is saved to a server yet.');
   }
 
@@ -46,6 +50,7 @@ export default function UsersView({ users, roleOptions }) {
                   value={row.role}
                   onChange={(e) => handleRoleChange(row.id, e.target.value)}
                   className="role-select"
+                  disabled={pendingId === row.id}
                 >
                   {roleOptions.map((r) => (
                     <option key={r} value={r}>
@@ -64,7 +69,11 @@ export default function UsersView({ users, roleOptions }) {
           ]}
           rows={rows}
         />
-        {note && <p className="note">{note}</p>}
+        {note && (
+          <p className="note" role="status">
+            {note}
+          </p>
+        )}
       </Card>
 
       <style jsx>{`
@@ -72,6 +81,7 @@ export default function UsersView({ users, roleOptions }) {
         .intro { font-size: 13px; color: var(--ink-muted); line-height: 1.6; margin: 0 0 16px; }
         .note { font-size: 12.5px; color: var(--emerald); margin: 14px 0 0; }
         .role-select { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; font-size: 13px; color: var(--ink); background: var(--surface); }
+        .role-select:disabled { opacity: 0.5; cursor: not-allowed; }
       `}</style>
     </PortalShell>
   );

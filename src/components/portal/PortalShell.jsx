@@ -152,6 +152,9 @@ export default function PortalShell({ role, active, title, children }) {
           .sidebar.open { transform: translateX(0); }
           .content { padding: 24px 16px 48px; }
         }
+        @media (prefers-reduced-motion: reduce) {
+          .sidebar { transition: none; }
+        }
       `}</style>
     </div>
   );

@@ -11,7 +11,7 @@
   /portal/CONVENTIONS.md.
 */
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Badge } from './ui';
 import { submitQuiz } from '@/lib/services/studentService';
 
@@ -21,6 +21,22 @@ export default function QuizRunner({ quizId, questions }) {
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Each of the three screens below (intro / questions / results) is a
+  // structurally distinct subtree, so React unmounts and remounts on every
+  // transition — the element a keyboard/screen-reader user was just on
+  // disappears. Move focus to the new screen's container on every
+  // transition (but not on first mount — nothing should steal focus from
+  // the page's own heading before the visitor has done anything).
+  const sectionRef = useRef(null);
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    sectionRef.current?.focus();
+  }, [started, submitted]);
 
   const allAnswered = questions.every((q) => answers[q.id] !== undefined);
 
@@ -48,7 +64,7 @@ export default function QuizRunner({ quizId, questions }) {
 
   if (!started) {
     return (
-      <div className="intro">
+      <div className="intro" ref={sectionRef} tabIndex={-1}>
         <p>
           This is a short sample of {questions.length} question{questions.length === 1 ? '' : 's'} for preview
           purposes — the full quiz will be available once the portal is connected to real course content.
@@ -58,6 +74,7 @@ export default function QuizRunner({ quizId, questions }) {
         </button>
         <style jsx>{`
           .intro { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+          .intro:focus { outline: 2px solid var(--navy); outline-offset: 2px; }
           .intro p { color: var(--ink-muted); font-size: 13.5px; line-height: 1.6; margin: 0; }
           .primary-btn { background: var(--navy); color: #fff; border: none; border-radius: var(--radius-sm); padding: 10px 20px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
           .primary-btn:hover { background: var(--navy-dark); }
@@ -69,8 +86,8 @@ export default function QuizRunner({ quizId, questions }) {
   if (submitted && result) {
     const pct = Math.round((result.score / result.total) * 100);
     return (
-      <div className="results">
-        <div className="score-banner">
+      <div className="results" ref={sectionRef} tabIndex={-1}>
+        <div className="score-banner" role="status">
           <span className="score-value">{result.score} / {result.total}</span>
           <span className="score-pct">{pct}% correct</span>
         </div>
@@ -106,6 +123,7 @@ export default function QuizRunner({ quizId, questions }) {
 
         <style jsx>{`
           .results { display: flex; flex-direction: column; gap: 20px; }
+          .results:focus { outline: 2px solid var(--navy); outline-offset: 2px; }
           .score-banner { display: flex; align-items: baseline; gap: 12px; background: var(--manuscript); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 22px; }
           .score-value { font-family: 'Fraunces', serif; font-size: 26px; color: var(--navy); }
           .score-pct { font-size: 13.5px; color: var(--ink-muted); }
@@ -124,7 +142,7 @@ export default function QuizRunner({ quizId, questions }) {
   }
 
   return (
-    <form className="quiz-form" onSubmit={handleSubmit}>
+    <form className="quiz-form" onSubmit={handleSubmit} ref={sectionRef} tabIndex={-1}>
       <ol className="questions">
         {questions.map((q, i) => (
           <li key={q.id}>
@@ -152,13 +170,23 @@ export default function QuizRunner({ quizId, questions }) {
         ))}
       </ol>
 
-      <button type="submit" className="primary-btn" disabled={!allAnswered || submitting}>
-        Submit answers
+      <button
+        type="submit"
+        className="primary-btn"
+        disabled={!allAnswered || submitting}
+        aria-describedby={!allAnswered ? 'quiz-answer-hint' : undefined}
+      >
+        {submitting ? 'Submitting…' : 'Submit answers'}
       </button>
-      {!allAnswered && <p className="hint">Answer every question to submit.</p>}
+      {!allAnswered && (
+        <p className="hint" id="quiz-answer-hint">
+          Answer every question to submit.
+        </p>
+      )}
 
       <style jsx>{`
         .quiz-form { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
+        .quiz-form:focus { outline: 2px solid var(--navy); outline-offset: 2px; }
         .questions { list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-direction: column; gap: 16px; }
         fieldset { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px 18px; margin: 0; }
         legend { display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: var(--ink); padding: 0 4px; }
