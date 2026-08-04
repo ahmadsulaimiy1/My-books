@@ -38,7 +38,7 @@ export default function PreviewBanner({ lang = 'en' }) {
           width: 7px;
           height: 7px;
           border-radius: 50%;
-          background: var(--gold);
+          background: var(--gold-ink);
           flex-shrink: 0;
         }
       `}</style>

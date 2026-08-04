@@ -98,8 +98,9 @@ export default function CoursePlayer({ lessons }) {
         .lesson:hover { background: var(--manuscript); }
         .lesson.active { background: var(--navy); color: #fff; }
         .lesson.active .lesson-meta { color: var(--gold-light); }
-        .check { width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%; border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--gold); }
-        .check.done { background: var(--gold); color: #fff; }
+        .check { width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%; border: 1.5px solid var(--gold-ink); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--gold-ink); }
+        .lesson.active .check { border-color: var(--gold); color: var(--gold); }
+        .check.done { background: var(--gold); color: var(--navy-dark); }
         .lesson-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
         .lesson-title { font-size: 13.5px; font-weight: 500; }
         .lesson-meta { font-size: 11.5px; color: var(--ink-muted); }
