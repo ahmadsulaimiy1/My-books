@@ -49,7 +49,7 @@ export default function FacultyCoursesView({ faculty, courses, roster, lessonsBy
         .lesson-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
         .lesson-list li { display: flex; align-items: center; gap: 14px; padding: 10px 4px; border-bottom: 1px solid var(--border); }
         .lesson-list li:last-child { border-bottom: none; }
-        .num { width: 22px; height: 22px; border-radius: 50%; background: var(--manuscript); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 600; color: var(--navy); flex-shrink: 0; }
+        .num { width: 24px; height: 24px; border-radius: 50%; background: var(--manuscript); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--navy); flex-shrink: 0; }
         .lesson-list .title { flex: 1; font-size: 13.5px; color: var(--ink); }
         .duration { font-size: 12px; color: var(--ink-muted); flex-shrink: 0; }
       `}</style>

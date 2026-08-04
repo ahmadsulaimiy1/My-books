@@ -63,7 +63,7 @@ export default function ApplicantStatusView({ applicant, journeySteps, assessmen
         .journey { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
         .step { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid var(--border); }
         .step:last-child { border-bottom: none; }
-        .num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 600; flex-shrink: 0; border: 1px solid var(--border); background: var(--manuscript); color: var(--navy); }
+        .num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; border: 1px solid var(--border); background: var(--manuscript); color: var(--navy); }
         .step.done .num { background: var(--navy); border-color: var(--navy); color: #fff; }
         .step.current .num { background: rgba(188,154,74,0.18); border-color: var(--gold-ink); color: var(--gold-ink); }
         .label { flex: 1; font-size: 13.5px; color: var(--ink); }
