@@ -45,7 +45,10 @@ export async function getQuizzes(/* { studentId } */) {
 export async function getQuiz({ quizId }) {
   const quiz = demoQuizzes.find((q) => q.id === quizId) ?? null;
   if (!quiz) return null;
-  return { ...quiz, questions: demoQuizQuestions[quizId] ?? [] };
+  // `quiz.questions` is the full-quiz question count (a number, from
+  // demoQuizzes) — preserve it as `totalQuestions` rather than clobbering
+  // it with the attached sample-question bank.
+  return { ...quiz, totalQuestions: quiz.questions, questions: demoQuizQuestions[quizId] ?? [] };
 }
 
 // Mirrors what a real submit-quiz endpoint returns: a score against the

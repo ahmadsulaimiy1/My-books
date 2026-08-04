@@ -4,30 +4,45 @@
   QuizRunner
   ----------
   Preview quiz-taking flow: sample multiple-choice questions, answer
-  selection kept in local React state, and a results screen computed
-  client-side on submit. No backend, no persistence — see
+  selection kept in local React state. Grading happens server-side via
+  studentService.submitQuiz (a write action, so this client component
+  calls it directly rather than going through page.jsx) — the client
+  never computes its own score. No persistence beyond that call — see
   /portal/CONVENTIONS.md.
 */
 
 import { useState } from 'react';
 import { Badge } from './ui';
+import { submitQuiz } from '@/lib/services/studentService';
 
-export default function QuizRunner({ questions }) {
+export default function QuizRunner({ quizId, questions }) {
   const [started, setStarted] = useState(false);
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [result, setResult] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const allAnswered = questions.every((q) => answers[q.id] !== undefined);
-  const score = questions.reduce((sum, q) => (answers[q.id] === q.correctIndex ? sum + 1 : sum), 0);
 
   function selectAnswer(questionId, optionIndex) {
     if (submitted) return;
     setAnswers((prev) => ({ ...prev, [questionId]: optionIndex }));
   }
 
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setSubmitting(true);
+    const answersByIndex = questions.map((q) => answers[q.id]);
+    const response = await submitQuiz({ quizId, answers: answersByIndex });
+    setResult(response);
+    setSubmitted(true);
+    setSubmitting(false);
+  }
+
   function reset() {
     setAnswers({});
     setSubmitted(false);
+    setResult(null);
     setStarted(false);
   }
 
@@ -51,19 +66,20 @@ export default function QuizRunner({ questions }) {
     );
   }
 
-  if (submitted) {
-    const pct = Math.round((score / questions.length) * 100);
+  if (submitted && result) {
+    const pct = Math.round((result.score / result.total) * 100);
     return (
       <div className="results">
         <div className="score-banner">
-          <span className="score-value">{score} / {questions.length}</span>
+          <span className="score-value">{result.score} / {result.total}</span>
           <span className="score-pct">{pct}% correct</span>
         </div>
 
         <ol className="review">
           {questions.map((q, i) => {
-            const chosen = answers[q.id];
-            const correct = chosen === q.correctIndex;
+            const item = result.review[i];
+            const chosen = item.selected;
+            const correct = item.isCorrect;
             return (
               <li key={q.id}>
                 <div className="review-head">
@@ -76,7 +92,7 @@ export default function QuizRunner({ questions }) {
                 </p>
                 {!correct && (
                   <p className="answer-line correct-line">
-                    Correct answer: <strong>{q.options[q.correctIndex]}</strong>
+                    Correct answer: <strong>{q.options[item.correctIndex]}</strong>
                   </p>
                 )}
               </li>
@@ -108,13 +124,7 @@ export default function QuizRunner({ questions }) {
   }
 
   return (
-    <form
-      className="quiz-form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        setSubmitted(true);
-      }}
-    >
+    <form className="quiz-form" onSubmit={handleSubmit}>
       <ol className="questions">
         {questions.map((q, i) => (
           <li key={q.id}>
@@ -142,7 +152,7 @@ export default function QuizRunner({ questions }) {
         ))}
       </ol>
 
-      <button type="submit" className="primary-btn" disabled={!allAnswered}>
+      <button type="submit" className="primary-btn" disabled={!allAnswered || submitting}>
         Submit answers
       </button>
       {!allAnswered && <p className="hint">Answer every question to submit.</p>}

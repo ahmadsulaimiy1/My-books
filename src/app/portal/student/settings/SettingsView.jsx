@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card } from '@/components/portal/ui';
+import { updateSettings } from '@/lib/services/studentService';
 
 const NOTIFICATION_TOGGLES = [
   { key: 'assignmentReminders', label: 'Assignment due-date reminders' },
@@ -21,8 +22,9 @@ export default function SettingsView() {
   });
   const [savedNote, setSavedNote] = useState('');
 
-  function handleSave(e) {
+  async function handleSave(e) {
     e.preventDefault();
+    await updateSettings({ language, notifications: toggles });
     setSavedNote('Preferences updated for this session. This is a preview — nothing is saved to a server yet.');
   }
 
