@@ -39,7 +39,7 @@
 </script>
 <style>
   :root{
-    --navy:#173A63; --navy-dark:#0F2847; --gold:#BC9A4A; --gold-light:#D8C58C;
+    --navy:#173A63; --navy-dark:#0F2847; --gold:#BC9A4A; --gold-light:#D8C58C; --gold-ink:#8A6A2E;
     --manuscript:#F6F2E7; --surface:#FFFFFF; --ink:#1C2430; --ink-muted:#4B5568;
     --border:#E1DACB; --border-dark:#2A3E5C; --emerald:#1E4C43;
     --radius-sm:6px; --radius-md:8px; --radius-lg:16px;
@@ -61,7 +61,7 @@
   .container{max-width:1280px; margin:0 auto; padding-inline:24px;}
   section{padding:88px 0;}
   @media (max-width:768px){ section{padding:52px 0;} }
-  .eyebrow{font-size:12px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; display:block;}
+  .eyebrow{font-size:12px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-ink); margin-bottom:16px; display:block;}
   .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 28px; border-radius:var(--radius-md); font-size:15px; font-weight:600; letter-spacing:0.02em; cursor:pointer; border:1.5px solid transparent; transition:all .15s ease;}
   .btn-primary{background:var(--gold); color:var(--navy-dark);}
   .btn-primary:hover{background:var(--gold-light); border-color:var(--gold);}
@@ -122,7 +122,7 @@
   @media (max-width:640px){ .route-grid{grid-template-columns:1fr;} }
   .route-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:26px; transition:box-shadow .15s, transform .15s;}
   .route-card:hover{box-shadow:var(--shadow-1); transform:translateY(-2px);}
-  .route-card .num{font-family:'Fraunces',serif; font-size:13px; color:var(--gold); font-weight:600; margin-bottom:10px;}
+  .route-card .num{font-family:'Fraunces',serif; font-size:13px; color:var(--gold-ink); font-weight:600; margin-bottom:10px;}
   .route-card h3{font-size:17px; margin-bottom:10px;}
   .route-card ul{margin:0; padding-inline-start:18px; display:grid; gap:4px;}
   [dir="rtl"] .route-card ul{padding-inline-start:0; padding-inline-end:18px;}
@@ -133,8 +133,8 @@
   .journey-section{background:var(--surface);}
   .journey-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:14px; counter-reset:step;}
   .journey-step{background:var(--manuscript); border:1px solid var(--border); border-radius:var(--radius-md); padding:18px; position:relative; transition:border-color .2s, box-shadow .2s;}
-  .journey-step:hover{border-color:var(--gold); box-shadow:var(--shadow-1);}
-  .journey-step .step-num{font-family:'Fraunces',serif; font-size:22px; color:var(--gold); margin-bottom:8px;}
+  .journey-step:hover{border-color:var(--gold-ink); box-shadow:var(--shadow-1);}
+  .journey-step .step-num{font-family:'Fraunces',serif; font-size:22px; color:var(--gold-ink); margin-bottom:8px;}
   .journey-step h3{font-family:'Inter',sans-serif; color:var(--ink); font-size:13.5px; font-weight:600;}
   [dir="rtl"] .journey-step h3{font-family:'IBM Plex Sans Arabic',sans-serif;}
   .journey-path{display:block; width:100%; height:auto; margin-bottom:28px;}
@@ -148,7 +148,7 @@
   .wizard-step-pill.active{background:var(--navy); color:#fff; border-color:var(--navy);}
   .wizard-step-pill.done{background:var(--emerald); color:#fff; border-color:var(--emerald);}
   .progress-bar-track{height:6px; background:var(--border); border-radius:999px; overflow:hidden;}
-  .progress-bar-fill{height:100%; background:var(--gold); border-radius:999px; transition:width .3s ease; width:16.6%;}
+  .progress-bar-fill{height:100%; background:var(--gold-ink); border-radius:999px; transition:width .3s ease; width:16.6%;}
   .wizard-body{padding:36px;}
   @media (max-width:600px){ .wizard-body{padding:24px;} }
   .form-step{display:none;}
@@ -174,7 +174,7 @@
     border:1.5px dashed var(--border); border-radius:var(--radius-md); padding:22px; text-align:center;
     background:var(--manuscript); transition:border-color .2s, background .2s; cursor:pointer;
   }
-  .upload-zone.dragover{border-color:var(--gold); background:#fff;}
+  .upload-zone.dragover{border-color:var(--gold-ink); background:#fff;}
   .upload-zone.filled{border-style:solid; border-color:var(--emerald); background:rgba(30,76,67,0.05);}
   .upload-zone svg{margin-bottom:8px;}
   .upload-zone .u-title{font-size:13px; font-weight:600; color:var(--ink); margin-bottom:4px;}
@@ -202,7 +202,7 @@
   .confirmation-panel.show{display:block;}
   .confirmation-panel .check-circle{width:64px; height:64px; border-radius:50%; background:var(--emerald); display:flex; align-items:center; justify-content:center; margin:0 auto 20px;}
   .confirmation-panel h3{font-size:24px; margin-bottom:10px;}
-  .confirmation-panel .app-number{font-family:'Fraunces',serif; font-size:20px; color:var(--gold); margin:16px 0;}
+  .confirmation-panel .app-number{font-family:'Fraunces',serif; font-size:20px; color:var(--gold-ink); margin:16px 0;}
   .confirmation-note{background:rgba(188,154,74,0.08); border:1px dashed var(--gold); border-radius:var(--radius-sm); padding:16px; font-size:12.5px; color:var(--ink); max-width:560px; margin:20px auto 0; text-align:start;}
 
   /* DASHBOARD PREVIEW */
@@ -400,7 +400,7 @@
     </div>
     <svg class="journey-path reveal" viewBox="0 0 1200 60" fill="none" aria-hidden="true" preserveAspectRatio="none">
       <path d="M40,30 L133,14 L227,30 L320,46 L413,30 L507,14 L600,30 L693,46 L787,30 L880,14 L973,30 L1067,46 L1130,32" stroke="#E1DACB" stroke-width="1.5" fill="none"/>
-      <g fill="#BC9A4A">
+      <g fill="#8A6A2E">
         <circle cx="40" cy="30" r="3.5"/><circle cx="133" cy="14" r="3.5"/><circle cx="227" cy="30" r="3.5"/><circle cx="320" cy="46" r="3.5"/>
         <circle cx="413" cy="30" r="3.5"/><circle cx="507" cy="14" r="3.5"/><circle cx="600" cy="30" r="3.5"/><circle cx="693" cy="46" r="3.5"/>
         <circle cx="787" cy="30" r="3.5"/><circle cx="880" cy="14" r="3.5"/><circle cx="973" cy="30" r="3.5"/><circle cx="1067" cy="46" r="3.5"/>
@@ -455,7 +455,7 @@
             <label data-i18n="lblPhoto">Passport Photograph <span class="req">*</span></label>
             <div class="upload-zone" data-upload="photo" tabindex="0" role="button" aria-label="Upload passport photograph">
               <input type="file" accept="image/*" hidden data-input="photo">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="10" r="4" stroke="#BC9A4A" stroke-width="1.6"/><path d="M5 24c1.5-6 5-8.5 9-8.5s7.5 2.5 9 8.5" stroke="#BC9A4A" stroke-width="1.6"/></svg>
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="10" r="4" stroke="#8A6A2E" stroke-width="1.6"/><path d="M5 24c1.5-6 5-8.5 9-8.5s7.5 2.5 9 8.5" stroke="#8A6A2E" stroke-width="1.6"/></svg>
               <div class="u-title" data-i18n="uPhotoTitle">Click or drag your photo here</div>
               <div class="u-hint" data-i18n="uPhotoHint">JPG or PNG, max 2MB</div>
               <div class="u-filename"></div>
@@ -543,12 +543,12 @@
             <div class="upload-grid">
               <div class="upload-zone" data-upload="results" tabindex="0" role="button">
                 <input type="file" hidden data-input="results">
-                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="4" y="2" width="18" height="22" rx="1.5" stroke="#BC9A4A" stroke-width="1.5"/><path d="M8 8h10M8 13h10M8 18h6" stroke="#BC9A4A" stroke-width="1.5"/></svg>
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="4" y="2" width="18" height="22" rx="1.5" stroke="#8A6A2E" stroke-width="1.5"/><path d="M8 8h10M8 13h10M8 18h6" stroke="#8A6A2E" stroke-width="1.5"/></svg>
                 <div class="u-title" data-i18n="u1t">WAEC / NECO / NABTEB / NBAIS Results</div><div class="u-hint" data-i18n="u1h">or Thanawiyyah / GCE / International Certificate</div><div class="u-filename"></div>
               </div>
               <div class="upload-zone" data-upload="transcript" tabindex="0" role="button">
                 <input type="file" hidden data-input="transcript">
-                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="4" y="2" width="18" height="22" rx="1.5" stroke="#BC9A4A" stroke-width="1.5"/></svg>
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="4" y="2" width="18" height="22" rx="1.5" stroke="#8A6A2E" stroke-width="1.5"/></svg>
                 <div class="u-title" data-i18n="u2t">Academic Transcript</div><div class="u-hint" data-i18n="u2h">Or Awaiting Result Slip</div><div class="u-filename"></div>
               </div>
             </div>
@@ -559,12 +559,12 @@
             <div class="upload-grid">
               <div class="upload-zone" data-upload="id" tabindex="0" role="button">
                 <input type="file" hidden data-input="id">
-                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="3" y="6" width="20" height="14" rx="2" stroke="#BC9A4A" stroke-width="1.5"/><circle cx="9" cy="13" r="2.2" stroke="#BC9A4A" stroke-width="1.3"/></svg>
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="3" y="6" width="20" height="14" rx="2" stroke="#8A6A2E" stroke-width="1.5"/><circle cx="9" cy="13" r="2.2" stroke="#8A6A2E" stroke-width="1.3"/></svg>
                 <div class="u-title" data-i18n="u3t">National ID / Passport / Driver's Licence</div><div class="u-filename"></div>
               </div>
               <div class="upload-zone" data-upload="birth" tabindex="0" role="button">
                 <input type="file" hidden data-input="birth">
-                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="4" y="2" width="18" height="22" rx="1.5" stroke="#BC9A4A" stroke-width="1.5"/></svg>
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="4" y="2" width="18" height="22" rx="1.5" stroke="#8A6A2E" stroke-width="1.5"/></svg>
                 <div class="u-title" data-i18n="u4t">Birth Certificate / Declaration of Age</div><div class="u-hint" data-i18n="u4h">Where required</div><div class="u-filename"></div>
               </div>
             </div>
