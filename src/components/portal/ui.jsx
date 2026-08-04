@@ -56,7 +56,7 @@ export function StatTile({ label, value, hint }) {
 
 const BADGE_TONES = {
   neutral: { bg: 'var(--manuscript)', fg: 'var(--ink-muted)', border: 'var(--border)' },
-  gold: { bg: 'rgba(188,154,74,0.12)', fg: '#8A6A2E', border: 'rgba(188,154,74,0.35)' },
+  gold: { bg: 'rgba(188,154,74,0.12)', fg: '#886828', border: 'rgba(188,154,74,0.35)' },
   success: { bg: 'rgba(30,76,67,0.08)', fg: 'var(--emerald)', border: 'rgba(30,76,67,0.25)' },
   alert: { bg: 'rgba(178,58,58,0.08)', fg: '#B23A3A', border: 'rgba(178,58,58,0.25)' },
   info: { bg: 'rgba(23,58,99,0.06)', fg: 'var(--navy)', border: 'rgba(23,58,99,0.2)' },
@@ -123,8 +123,8 @@ export function EmptyState({ message, action }) {
   return (
     <div className="empty">
       <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-        <rect x="6" y="10" width="28" height="22" rx="2" stroke="#8A6A2E" strokeWidth="1.5" />
-        <path d="M6 16h28" stroke="#8A6A2E" strokeWidth="1.5" />
+        <rect x="6" y="10" width="28" height="22" rx="2" stroke="#886828" strokeWidth="1.5" />
+        <path d="M6 16h28" stroke="#886828" strokeWidth="1.5" />
       </svg>
       <p>{message}</p>
       {action}
