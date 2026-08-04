@@ -21,10 +21,14 @@ export default function SettingsView() {
     messageAlerts: false,
   });
   const [savedNote, setSavedNote] = useState('');
+  const [saving, setSaving] = useState(false);
 
   async function handleSave(e) {
     e.preventDefault();
+    setSaving(true);
+    setSavedNote('');
     await updateSettings({ language, notifications: toggles });
+    setSaving(false);
     setSavedNote('Preferences updated for this session. This is a preview — nothing is saved to a server yet.');
   }
 
@@ -70,10 +74,14 @@ export default function SettingsView() {
         </Card>
 
         <div className="save-row">
-          <button type="submit" className="save-btn">
-            Save preferences
+          <button type="submit" className="save-btn" disabled={saving}>
+            {saving ? 'Saving…' : 'Save preferences'}
           </button>
-          {savedNote && <p className="saved-note">{savedNote}</p>}
+          {savedNote && (
+            <p className="saved-note" role="status">
+              {savedNote}
+            </p>
+          )}
         </div>
       </form>
 
@@ -90,7 +98,8 @@ export default function SettingsView() {
 
         .save-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
         .save-btn { background: var(--navy); color: #fff; border: none; border-radius: var(--radius-sm); padding: 10px 22px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
-        .save-btn:hover { background: var(--navy-dark); }
+        .save-btn:hover:not(:disabled) { background: var(--navy-dark); }
+        .save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .saved-note { font-size: 12.5px; color: var(--emerald); margin: 0; }
       `}</style>
     </PortalShell>
