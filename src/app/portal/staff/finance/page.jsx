@@ -1,3 +1,4 @@
+import { getLedger, getFeeTypes } from '@/lib/services/staffService';
 import FinanceView from './FinanceView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function FinancePage() {
-  return <FinanceView />;
+export default async function FinancePage() {
+  const [ledger, feeTypes] = await Promise.all([getLedger(), getFeeTypes()]);
+  return <FinanceView ledger={ledger} feeTypes={feeTypes} />;
 }

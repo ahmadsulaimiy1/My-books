@@ -1,3 +1,4 @@
+import { getUsers, getRoleOptions } from '@/lib/services/adminService';
 import UsersView from './UsersView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function UsersPage() {
-  return <UsersView />;
+export default async function UsersPage() {
+  const [users, roleOptions] = await Promise.all([getUsers(), getRoleOptions()]);
+  return <UsersView users={users} roleOptions={roleOptions} />;
 }

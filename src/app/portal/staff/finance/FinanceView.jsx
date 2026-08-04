@@ -2,7 +2,6 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile, Badge, DataTable } from '@/components/portal/ui';
-import { demoLedger, demoFeeTypes } from '@/lib/portalDemoData';
 
 const STATUS_TONE = {
   Paid: 'success',
@@ -10,19 +9,15 @@ const STATUS_TONE = {
   'Awaiting institutional rate': 'neutral',
 };
 
-function feeType(key) {
-  return demoFeeTypes.find((f) => f.key === key);
-}
-
 function formatNaira(n) {
   return `₦${n.toLocaleString('en-NG')}`;
 }
 
-export default function FinanceView() {
-  const paidAips = demoLedger.filter((f) => f.feeKey === 'aips' && f.status === 'Paid').length;
-  const outstanding = demoLedger.filter((f) => f.status === 'Outstanding').length;
+export default function FinanceView({ ledger, feeTypes }) {
+  const paidAips = ledger.filter((f) => f.feeKey === 'aips' && f.status === 'Paid').length;
+  const outstanding = ledger.filter((f) => f.status === 'Outstanding').length;
 
-  const rows = demoLedger.map((entry) => ({ ...entry, type: feeType(entry.feeKey) }));
+  const rows = ledger.map((entry) => ({ ...entry, type: entry.feeType }));
 
   return (
     <PortalShell role="staff" active="finance" title="Finance">
@@ -34,12 +29,12 @@ export default function FinanceView() {
       <StatGrid>
         <StatTile label="AIPS fee — paid (sample)" value={paidAips} />
         <StatTile label="Outstanding items (sample)" value={outstanding} />
-        <StatTile label="Fee types tracked" value={demoFeeTypes.length} />
+        <StatTile label="Fee types tracked" value={feeTypes.length} />
       </StatGrid>
 
       <Card title="Official fee schedule (published rates)" className="fee-card">
         <ul className="fee-type-list">
-          {demoFeeTypes.map((f) => (
+          {feeTypes.map((f) => (
             <li key={f.key}>
               <span className="label">{f.label}</span>
               <span className="amount">{f.amount != null ? formatNaira(f.amount) : 'TBC'}</span>

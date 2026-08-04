@@ -2,34 +2,29 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile, Badge } from '@/components/portal/ui';
-import {
-  demoApplicant,
-  admissionJourneySteps,
-  entranceAssessmentSections,
-} from '@/lib/portalDemoData';
 
-export default function ApplicantStatusView() {
+export default function ApplicantStatusView({ applicant, journeySteps, assessmentSections }) {
   return (
-    <PortalShell role="applicant" active="dashboard" title={`Welcome, ${demoApplicant.name}`}>
+    <PortalShell role="applicant" active="dashboard" title={`Welcome, ${applicant.name}`}>
       <StatGrid>
-        <StatTile label="Application ID" value={demoApplicant.applicationId} />
-        <StatTile label="Programme choice" value={demoApplicant.programmeChoice} />
-        <StatTile label="Admission route" value={demoApplicant.route} />
-        <StatTile label="Current stage" value={demoApplicant.stage} hint={`Submitted ${demoApplicant.submittedDate}`} />
+        <StatTile label="Application ID" value={applicant.applicationId} />
+        <StatTile label="Programme choice" value={applicant.programmeChoice} />
+        <StatTile label="Admission route" value={applicant.route} />
+        <StatTile label="Current stage" value={applicant.stage} hint={`Submitted ${applicant.submittedDate}`} />
       </StatGrid>
 
       <Card title="Your admission journey so far">
         <p className="intro">
           Every applicant follows the same journey, from first exploring programmes to their first day of class.
-          Your application is currently at step {demoApplicant.currentStep} of {admissionJourneySteps.length}.
+          Your application is currently at step {applicant.currentStep} of {journeySteps.length}.
         </p>
         <ol className="journey">
-          {admissionJourneySteps.map((step, i) => {
+          {journeySteps.map((step, i) => {
             const stepNum = i + 1;
             const state =
-              stepNum < demoApplicant.currentStep
+              stepNum < applicant.currentStep
                 ? 'done'
-                : stepNum === demoApplicant.currentStep
+                : stepNum === applicant.currentStep
                 ? 'current'
                 : 'upcoming';
             return (
@@ -49,12 +44,12 @@ export default function ApplicantStatusView() {
           Regardless of entry route, every applicant must complete the Albalagh Admission Assessment — to confirm
           academic readiness, programme suitability, basic knowledge level, and ability to succeed in online
           learning.
-          {demoApplicant.assessmentDate && (
-            <> Your assessment is scheduled for <strong>{demoApplicant.assessmentDate}</strong>.</>
+          {applicant.assessmentDate && (
+            <> Your assessment is scheduled for <strong>{applicant.assessmentDate}</strong>.</>
           )}
         </p>
         <div className="sections">
-          {entranceAssessmentSections.map((s) => (
+          {assessmentSections.map((s) => (
             <div className="section" key={s.name}>
               <h3>{s.name}</h3>
               <p>{s.detail}</p>

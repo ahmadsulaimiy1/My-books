@@ -1,3 +1,4 @@
+import { getProgrammes, getCreditUnitPolicy } from '@/lib/services/adminService';
 import AcademicView from './AcademicView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function AcademicPage() {
-  return <AcademicView />;
+export default async function AcademicPage() {
+  const [programmes, creditUnitPolicy] = await Promise.all([getProgrammes(), getCreditUnitPolicy()]);
+  return <AcademicView programmes={programmes} creditUnitPolicy={creditUnitPolicy} />;
 }

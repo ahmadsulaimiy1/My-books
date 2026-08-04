@@ -1,3 +1,4 @@
+import { getParentProfile, getLinkedStudentOverview } from '@/lib/services/parentService';
 import ParentOverviewView from './ParentOverviewView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function ParentOverviewPage() {
-  return <ParentOverviewView />;
+export default async function ParentOverviewPage() {
+  const [parent, overview] = await Promise.all([getParentProfile(), getLinkedStudentOverview()]);
+  return <ParentOverviewView parent={parent} overview={overview} />;
 }

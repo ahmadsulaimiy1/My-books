@@ -2,30 +2,22 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile, Badge } from '@/components/portal/ui';
-import {
-  demoAdmin,
-  demoRoster,
-  demoCourses,
-  demoUsers,
-  demoProgrammes,
-  demoApplications,
-} from '@/lib/portalDemoData';
 
-export default function AdminDashboardView() {
-  const staffCount = demoUsers.filter((u) => u.role === 'faculty' || u.role === 'staff').length;
+export default function AdminDashboardView({ admin, users, applications, overview }) {
+  const staffCount = users.filter((u) => u.role === 'faculty' || u.role === 'staff').length;
 
   return (
-    <PortalShell role="admin" active="dashboard" title={`Welcome, ${demoAdmin.name}`}>
+    <PortalShell role="admin" active="dashboard" title={`Welcome, ${admin.name}`}>
       <p className="intro">
         Preview counts only — every figure below comes from the sample data in this frontend preview, not a real
         enrolment or staffing database.
       </p>
 
       <StatGrid>
-        <StatTile label="Sample students" value={demoRoster.length} hint="Preview count, not real enrolment" />
-        <StatTile label="Sample courses" value={demoCourses.length} hint="Across the AISM programme sample" />
+        <StatTile label="Sample students" value={overview.sampleStudents} hint="Preview count, not real enrolment" />
+        <StatTile label="Sample courses" value={overview.sampleCourses} hint="Across the AISM programme sample" />
         <StatTile label="Sample staff accounts" value={staffCount} hint="Faculty + Staff roles" />
-        <StatTile label="Published programmes" value={demoProgrammes.length} hint="Real programme list" />
+        <StatTile label="Published programmes" value={overview.programmes} hint="Real programme list" />
       </StatGrid>
 
       <div className="grid">
@@ -34,7 +26,7 @@ export default function AdminDashboardView() {
             {['student', 'faculty', 'staff', 'admin', 'applicant', 'parent'].map((role) => (
               <li key={role}>
                 <Badge tone="info">{role}</Badge>
-                <span>{demoUsers.filter((u) => u.role === role).length} account(s)</span>
+                <span>{users.filter((u) => u.role === role).length} account(s)</span>
               </li>
             ))}
           </ul>
@@ -42,7 +34,7 @@ export default function AdminDashboardView() {
 
         <Card title="Admissions queue snapshot">
           <ul className="role-list">
-            {demoApplications.map((a) => (
+            {applications.map((a) => (
               <li key={a.id}>
                 <Badge tone="gold">{a.stage}</Badge>
                 <span>{a.name}</span>

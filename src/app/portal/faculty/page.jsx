@@ -1,3 +1,10 @@
+import {
+  getFacultyProfile,
+  getCoursesTaught,
+  getTimetable,
+  getAssignments,
+  getFacultyMessages,
+} from '@/lib/services/facultyService';
 import FacultyDashboardView from './FacultyDashboardView';
 
 export const metadata = {
@@ -6,6 +13,22 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function FacultyDashboardPage() {
-  return <FacultyDashboardView />;
+export default async function FacultyDashboardPage() {
+  const [faculty, courses, timetable, assignments, messages] = await Promise.all([
+    getFacultyProfile(),
+    getCoursesTaught(),
+    getTimetable(),
+    getAssignments(),
+    getFacultyMessages(),
+  ]);
+
+  return (
+    <FacultyDashboardView
+      faculty={faculty}
+      courses={courses}
+      timetable={timetable}
+      assignments={assignments}
+      messages={messages}
+    />
+  );
 }

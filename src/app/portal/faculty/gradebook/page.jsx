@@ -1,3 +1,4 @@
+import { getFacultyProfile, getGradebook } from '@/lib/services/facultyService';
 import GradebookView from './GradebookView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function GradebookPage() {
-  return <GradebookView />;
+export default async function GradebookPage() {
+  const [faculty, gradebook] = await Promise.all([getFacultyProfile(), getGradebook()]);
+  return <GradebookView faculty={faculty} gradebook={gradebook} />;
 }

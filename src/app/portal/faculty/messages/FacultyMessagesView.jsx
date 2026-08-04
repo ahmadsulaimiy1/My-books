@@ -3,18 +3,17 @@
 import { useState } from 'react';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card } from '@/components/portal/ui';
-import { demoFacultyMessages } from '@/lib/portalDemoData';
 
-export default function FacultyMessagesView() {
-  const [selectedId, setSelectedId] = useState(demoFacultyMessages[0]?.id);
-  const selected = demoFacultyMessages.find((m) => m.id === selectedId);
+export default function FacultyMessagesView({ messages }) {
+  const [selectedId, setSelectedId] = useState(messages[0]?.id);
+  const selected = messages.find((m) => m.id === selectedId);
 
   return (
     <PortalShell role="faculty" active="messages" title="Messages">
       <div className="inbox">
         <Card title="Inbox" className="list-card">
           <ul className="msg-list">
-            {demoFacultyMessages.map((m) => (
+            {messages.map((m) => (
               <li key={m.id}>
                 <button
                   type="button"

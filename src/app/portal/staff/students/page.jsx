@@ -1,3 +1,4 @@
+import { getStudents, getApplications } from '@/lib/services/staffService';
 import StudentsView from './StudentsView';
 
 export const metadata = {
@@ -6,6 +7,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function StudentsPage() {
-  return <StudentsView />;
+export default async function StudentsPage() {
+  const [students, applications] = await Promise.all([getStudents(), getApplications()]);
+  return <StudentsView students={students} applications={applications} />;
 }

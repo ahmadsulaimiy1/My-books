@@ -5,27 +5,43 @@
   -----------------
   Mark-attendance grid for a single course session: one row per roster
   student, a Present/Absent toggle per row, local component state only.
-  Used by the Faculty Attendance screen. Nothing here persists anywhere —
-  the parent screen is responsible for making that clear in its copy too.
+  Used by the Faculty Attendance screen. Marks are held in local state
+  until "Save attendance" is pressed, which calls
+  facultyService.markAttendance directly (a write, so this client
+  component owns the call rather than page.jsx) — the mock still doesn't
+  persist anywhere, see the parent screen's on-screen notice.
 */
 
 import { useState } from 'react';
 import { Badge } from './ui';
+import { markAttendance } from '@/lib/services/facultyService';
 
-export default function AttendanceMarker({ roster, sessionLabel }) {
+export default function AttendanceMarker({ courseId, roster, sessionLabel }) {
   const [marks, setMarks] = useState(() =>
     Object.fromEntries(roster.map((s) => [s.id, 'unmarked']))
   );
+  const [saving, setSaving] = useState(false);
+  const [savedNote, setSavedNote] = useState('');
 
   const presentCount = Object.values(marks).filter((m) => m === 'present').length;
   const absentCount = Object.values(marks).filter((m) => m === 'absent').length;
 
   function setMark(id, value) {
     setMarks((prev) => ({ ...prev, [id]: value }));
+    setSavedNote('');
   }
 
   function markAll(value) {
     setMarks(Object.fromEntries(roster.map((s) => [s.id, value])));
+    setSavedNote('');
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    const records = roster.map((s) => ({ studentId: s.studentId, status: marks[s.id] }));
+    await markAttendance({ courseId, records });
+    setSaving(false);
+    setSavedNote('Attendance recorded for this preview session only — nothing is saved to a server yet.');
   }
 
   return (
@@ -76,6 +92,13 @@ export default function AttendanceMarker({ roster, sessionLabel }) {
         ))}
       </ul>
 
+      <div className="save-row">
+        <button type="button" className="save-btn" onClick={handleSave} disabled={saving}>
+          {saving ? 'Saving…' : 'Save attendance'}
+        </button>
+        {savedNote && <p className="saved-note">{savedNote}</p>}
+      </div>
+
       <style jsx>{`
         .marker-head { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-bottom: 16px; }
         .session { font-size: 13.5px; font-weight: 600; color: var(--navy); }
@@ -96,6 +119,12 @@ export default function AttendanceMarker({ roster, sessionLabel }) {
         .toggle:hover { background: var(--manuscript); }
         .toggle.present.active { background: rgba(30,76,67,0.12); border-color: var(--emerald); color: var(--emerald); }
         .toggle.absent.active { background: rgba(178,58,58,0.1); border-color: #B23A3A; color: #B23A3A; }
+
+        .save-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 18px; }
+        .save-btn { background: var(--navy); color: #fff; border: none; border-radius: var(--radius-sm); padding: 10px 22px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+        .save-btn:hover:not(:disabled) { background: var(--navy-dark); }
+        .save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .saved-note { font-size: 12.5px; color: var(--emerald); margin: 0; }
       `}</style>
     </div>
   );

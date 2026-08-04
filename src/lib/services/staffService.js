@@ -4,7 +4,14 @@
   file, never portalDemoData.js directly.
 */
 
-import { demoStaffRegistrar, demoApplications, demoFeeTypes, demoLedger, demoRoster } from '@/lib/portalDemoData';
+import {
+  demoStaffRegistrar,
+  demoApplications,
+  demoFeeTypes,
+  demoLedger,
+  demoRoster,
+  admissionJourneySteps,
+} from '@/lib/portalDemoData';
 
 export async function getStaffProfile(/* { staffId } */) {
   return demoStaffRegistrar;
@@ -12,6 +19,13 @@ export async function getStaffProfile(/* { staffId } */) {
 
 export async function getApplications() {
   return demoApplications;
+}
+
+// Same published 13-step admission journey applicantService exposes to
+// applicants — the registrar's Admissions screen groups the sample queue
+// against it too.
+export async function getAdmissionJourneySteps() {
+  return admissionJourneySteps;
 }
 
 export async function getFeeTypes() {

@@ -2,7 +2,6 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card } from '@/components/portal/ui';
-import { demoStaffRegistrar } from '@/lib/portalDemoData';
 
 const FIELDS = [
   { label: 'Full name', value: (s) => s.name },
@@ -10,7 +9,7 @@ const FIELDS = [
   { label: 'Office', value: (s) => s.office },
 ];
 
-export default function StaffProfileView() {
+export default function StaffProfileView({ staff }) {
   return (
     <PortalShell role="staff" active="profile" title="Profile">
       <Card title="Staff record" action={<span className="readonly-tag">Read-only preview</span>}>
@@ -18,7 +17,7 @@ export default function StaffProfileView() {
           {FIELDS.map((f) => (
             <div className="field" key={f.label}>
               <dt>{f.label}</dt>
-              <dd>{f.value(demoStaffRegistrar)}</dd>
+              <dd>{f.value(staff)}</dd>
             </div>
           ))}
         </dl>
