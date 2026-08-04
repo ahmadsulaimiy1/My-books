@@ -70,9 +70,11 @@
   .panel{display:none;}
   .panel.active{display:block;}
 
-  .welcome-banner{background:linear-gradient(135deg,var(--navy) 0%, var(--navy-dark) 100%); border-radius:var(--radius-lg); padding:32px; color:#fff; margin-bottom:28px;}
-  .welcome-banner h2{color:#fff; font-size:24px; margin-bottom:6px;}
-  .welcome-banner p{color:#C7CEDC; font-size:13.5px;}
+  .welcome-banner{background:linear-gradient(135deg,var(--navy) 0%, var(--navy-dark) 100%); border-radius:var(--radius-lg); padding:32px; color:#fff; margin-bottom:28px; position:relative; overflow:hidden;}
+  .welcome-banner h2{color:#fff; font-size:24px; margin-bottom:6px; position:relative;}
+  .welcome-banner p{color:#C7CEDC; font-size:13.5px; position:relative; max-width:70%;}
+  .welcome-banner .banner-motif{position:absolute; inset-inline-end:-30px; top:50%; transform:translateY(-50%); width:260px; height:180px; opacity:0.9; pointer-events:none;}
+  @media (max-width:760px){ .welcome-banner .banner-motif{display:none;} .welcome-banner p{max-width:100%;} }
 
   .widget-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-bottom:28px;}
   @media (max-width:1100px){ .widget-grid{grid-template-columns:repeat(3,1fr);} }
@@ -189,6 +191,24 @@
 
       <section class="panel active" data-panel-content="dashboard">
         <div class="welcome-banner">
+          <svg class="banner-motif" viewBox="0 0 260 180" fill="none" aria-hidden="true">
+            <g stroke="#D8C58C" stroke-width="1" opacity="0.55">
+              <line x1="130" y1="90" x2="46" y2="40"/>
+              <line x1="130" y1="90" x2="206" y2="34"/>
+              <line x1="130" y1="90" x2="40" y2="128"/>
+              <line x1="130" y1="90" x2="214" y2="140"/>
+              <line x1="130" y1="90" x2="130" y2="18"/>
+              <line x1="46" y1="40" x2="130" y2="18"/>
+              <line x1="206" y1="34" x2="130" y2="18"/>
+              <line x1="40" y1="128" x2="214" y2="140"/>
+            </g>
+            <g transform="translate(130 90) scale(0.75)"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" fill="none" stroke="#D8C58C" stroke-width="1.8" transform="translate(-24 -24)"/></g>
+            <circle cx="46" cy="40" r="4" fill="#D8C58C" opacity="0.7"/>
+            <circle cx="206" cy="34" r="4" fill="#D8C58C" opacity="0.7"/>
+            <circle cx="40" cy="128" r="4" fill="#D8C58C" opacity="0.7"/>
+            <circle cx="214" cy="140" r="4" fill="#D8C58C" opacity="0.7"/>
+            <circle cx="130" cy="18" r="4" fill="#D8C58C" opacity="0.7"/>
+          </svg>
           <h2 data-i18n="welcomeTitle">Research &amp; Innovation</h2>
           <p data-i18n="welcomeBody">Research Centre • Publications • Innovation Hub — the institution's platform for research administration, scholarly publishing, and innovation.</p>
         </div>

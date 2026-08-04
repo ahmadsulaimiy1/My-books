@@ -65,6 +65,9 @@ function WhySection() {
   ];
   return (
     <section className="why">
+      <svg className="why-watermark" viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false">
+        <path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" strokeWidth="0.35" fill="none" />
+      </svg>
       <div className="container">
         <span className="eyebrow">{t('whyEyebrow')}</span>
         <h2>{t('whyTitle')}</h2>
@@ -78,10 +81,12 @@ function WhySection() {
         </div>
       </div>
       <style jsx>{`
-        .why { padding: 88px 0; background: var(--surface); }
-        h2 { font-size: 32px; margin-bottom: 44px; max-width: 600px; }
+        .why { padding: 88px 0; background: var(--surface); position: relative; overflow: hidden; }
+        .why-watermark { position: absolute; top: -110px; inset-inline-end: -90px; width: 480px; height: 480px; opacity: 0.16; pointer-events: none; }
+        [dir='rtl'] .why-watermark { transform: scaleX(-1); }
+        h2 { font-size: 32px; margin-bottom: 44px; max-width: 600px; position: relative; }
         [dir='rtl'] h2 { font-size: 28px; }
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; position: relative; }
         @media (max-width: 960px) { .grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
         .tile { background: var(--manuscript); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 26px; }
