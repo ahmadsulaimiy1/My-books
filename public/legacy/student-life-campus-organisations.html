@@ -70,9 +70,11 @@
   .panel{display:none;}
   .panel.active{display:block;}
 
-  .welcome-banner{background:linear-gradient(135deg,var(--navy) 0%, var(--navy-dark) 100%); border-radius:var(--radius-lg); padding:32px; color:#fff; margin-bottom:28px;}
-  .welcome-banner h2{color:#fff; font-size:24px; margin-bottom:6px;}
-  .welcome-banner p{color:#C7CEDC; font-size:13.5px;}
+  .welcome-banner{background:linear-gradient(135deg,var(--navy) 0%, var(--navy-dark) 100%); border-radius:var(--radius-lg); padding:32px; color:#fff; margin-bottom:28px; position:relative; overflow:hidden;}
+  .welcome-banner h2{color:#fff; font-size:24px; margin-bottom:6px; position:relative;}
+  .welcome-banner p{color:#C7CEDC; font-size:13.5px; position:relative; max-width:70%;}
+  .welcome-banner .banner-motif{position:absolute; inset-inline-end:-20px; top:50%; transform:translateY(-50%); width:240px; height:180px; opacity:0.9; pointer-events:none;}
+  @media (max-width:760px){ .welcome-banner .banner-motif{display:none;} .welcome-banner p{max-width:100%;} }
 
   .widget-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-bottom:28px;}
   @media (max-width:1100px){ .widget-grid{grid-template-columns:repeat(3,1fr);} }
@@ -195,6 +197,14 @@
 
       <section class="panel active" data-panel-content="dashboard">
         <div class="welcome-banner">
+          <svg class="banner-motif" viewBox="0 0 240 180" fill="none" aria-hidden="true">
+            <g stroke="#D8C58C" stroke-width="1" opacity="0.6">
+              <circle cx="86" cy="70" r="46"/>
+              <circle cx="146" cy="70" r="46"/>
+              <circle cx="116" cy="118" r="46"/>
+            </g>
+            <g transform="translate(196 30) scale(0.55)" opacity="0.75"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" fill="none" stroke="#D8C58C" stroke-width="1.8" transform="translate(-24 -24)"/></g>
+          </svg>
           <h2 data-i18n="welcomeTitle">Student Life, Leadership &amp; Campus Organisations</h2>
           <p data-i18n="welcomeBody">The digital heart of campus life — student governance, Islamic development, entrepreneurship, and community, in one moderated space.</p>
         </div>

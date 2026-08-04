@@ -137,6 +137,8 @@
   .journey-step .step-num{font-family:'Fraunces',serif; font-size:22px; color:var(--gold); margin-bottom:8px;}
   .journey-step h3{font-family:'Inter',sans-serif; color:var(--ink); font-size:13.5px; font-weight:600;}
   [dir="rtl"] .journey-step h3{font-family:'IBM Plex Sans Arabic',sans-serif;}
+  .journey-path{display:block; width:100%; height:auto; margin-bottom:28px;}
+  @media (max-width:700px){ .journey-path{display:none;} }
 
   /* WIZARD */
   .wizard-shell{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); box-shadow:var(--shadow-2); overflow:hidden;}
@@ -396,6 +398,15 @@
       <span class="eyebrow">Your Admission Journey</span>
       <h2>From first click to first day of class</h2>
     </div>
+    <svg class="journey-path reveal" viewBox="0 0 1200 60" fill="none" aria-hidden="true" preserveAspectRatio="none">
+      <path d="M40,30 L133,14 L227,30 L320,46 L413,30 L507,14 L600,30 L693,46 L787,30 L880,14 L973,30 L1067,46 L1130,32" stroke="#E1DACB" stroke-width="1.5" fill="none"/>
+      <g fill="#BC9A4A">
+        <circle cx="40" cy="30" r="3.5"/><circle cx="133" cy="14" r="3.5"/><circle cx="227" cy="30" r="3.5"/><circle cx="320" cy="46" r="3.5"/>
+        <circle cx="413" cy="30" r="3.5"/><circle cx="507" cy="14" r="3.5"/><circle cx="600" cy="30" r="3.5"/><circle cx="693" cy="46" r="3.5"/>
+        <circle cx="787" cy="30" r="3.5"/><circle cx="880" cy="14" r="3.5"/><circle cx="973" cy="30" r="3.5"/><circle cx="1067" cy="46" r="3.5"/>
+      </g>
+      <g transform="translate(1160 32) scale(0.62)"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" fill="none" stroke="#173A63" stroke-width="2.2" transform="translate(-24 -24)"/></g>
+    </svg>
     <div class="journey-grid">
       <div class="journey-step reveal"><div class="step-num">01</div><h3>Explore Programmes</h3></div>
       <div class="journey-step reveal"><div class="step-num">02</div><h3>Create Applicant Account</h3></div>

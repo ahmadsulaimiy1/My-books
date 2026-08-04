@@ -172,8 +172,9 @@
   .commit-card p{font-size:15px;}
 
   /* QUOTE */
-  .quote-section{background:linear-gradient(135deg,var(--emerald) 0%, #143530 100%); text-align:center;}
-  .quote-section .container{max-width:800px;}
+  .quote-section{background:linear-gradient(135deg,var(--emerald) 0%, #143530 100%); text-align:center; position:relative; overflow:hidden;}
+  .quote-section .quote-motif{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:640px; height:640px; opacity:0.14; pointer-events:none;}
+  .quote-section .container{max-width:800px; position:relative;}
   .quote-section blockquote{margin:0; font-family:'Fraunces',serif; font-size:28px; line-height:1.55; color:#fff; font-weight:500;}
   [dir="rtl"] .quote-section blockquote{font-family:'Amiri',serif;}
   @media (max-width:600px){ .quote-section blockquote{font-size:21px;} }
@@ -354,6 +355,11 @@
 </section>
 
 <section class="quote-section">
+  <svg class="quote-motif" viewBox="0 0 640 640" fill="none" aria-hidden="true">
+    <circle cx="320" cy="320" r="300" stroke="#D8C58C" stroke-width="1"/>
+    <circle cx="320" cy="320" r="220" stroke="#D8C58C" stroke-width="1"/>
+    <path d="M320 100 L358 220 L484 220 L382 292 L420 412 L320 336 L220 412 L258 292 L156 220 L282 220 Z" fill="none" stroke="#D8C58C" stroke-width="1.4"/>
+  </svg>
   <div class="container">
     <span class="eyebrow" style="color:var(--gold-light);" data-i18n="quoteEyebrow">In My Own Words</span>
     <blockquote class="reveal" data-i18n="quoteText">"An institution is not judged by what it says about itself, but by what it is still doing when no one is watching. That is the standard I have set for Albalagh."</blockquote>
