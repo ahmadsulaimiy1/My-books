@@ -42,8 +42,11 @@ functions, not touching a single page/component.
   `adminService.js`, `applicantService.js`, `parentService.js` — one per
   portal role, covering every screen that role has.
 - `libraryService.js` — shared across roles.
-- `notificationService.js` — shared notification read/mark-read, used by
-  more than one role's screens.
+- `notificationService.js` — notification reads. Only the Student Portal
+  has a notifications screen today, but it lives as its own service (not
+  folded into `studentService.js`) because notifications are a cross-role
+  concern other roles will need the same shape for once they grow
+  notification screens.
 
 ## When Firebase actually lands
 
