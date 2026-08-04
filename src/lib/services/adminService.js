@@ -4,7 +4,16 @@
   file, never portalDemoData.js directly.
 */
 
-import { demoAdmin, demoUsers, ROLE_OPTIONS, demoProgrammes, creditUnitPolicy, demoRoster, demoCourses } from '@/lib/portalDemoData';
+import {
+  demoAdmin,
+  demoUsers,
+  ROLE_OPTIONS,
+  demoProgrammes,
+  creditUnitPolicy,
+  demoRoster,
+  demoCourses,
+  demoApplications,
+} from '@/lib/portalDemoData';
 
 export async function getAdminProfile() {
   return demoAdmin;
@@ -12,6 +21,12 @@ export async function getAdminProfile() {
 
 export async function getUsers() {
   return demoUsers;
+}
+
+// The dashboard's admissions-queue snapshot reuses the same sample queue
+// staffService exposes to the registrar's own Admissions screen.
+export async function getApplications() {
+  return demoApplications;
 }
 
 export async function getRoleOptions() {

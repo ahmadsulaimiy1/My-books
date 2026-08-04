@@ -2,16 +2,15 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile, DataTable } from '@/components/portal/ui';
-import { demoProgrammes, creditUnitPolicy } from '@/lib/portalDemoData';
 
-export default function AcademicView() {
-  const schools = new Set(demoProgrammes.map((p) => p.school));
+export default function AcademicView({ programmes, creditUnitPolicy }) {
+  const schools = new Set(programmes.map((p) => p.school));
 
   return (
     <PortalShell role="admin" active="academic" title="Academic">
       <StatGrid>
         <StatTile label="Schools" value={schools.size} />
-        <StatTile label="Departments / Programmes" value={demoProgrammes.length} />
+        <StatTile label="Departments / Programmes" value={programmes.length} />
         <StatTile
           label="Semester workload policy"
           value={`${creditUnitPolicy.semesterMin}–${creditUnitPolicy.semesterMax} CU`}
@@ -36,7 +35,7 @@ export default function AcademicView() {
             { key: 'duration', label: 'Duration' },
             { key: 'creditUnits', label: 'Credit units' },
           ]}
-          rows={demoProgrammes}
+          rows={programmes}
         />
       </Card>
     </PortalShell>

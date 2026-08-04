@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, Badge, DataTable } from '@/components/portal/ui';
-import { demoUsers, ROLE_OPTIONS } from '@/lib/portalDemoData';
+import { updateUserRole } from '@/lib/services/adminService';
 
 const ROLE_TONE = {
   student: 'info',
@@ -14,16 +14,17 @@ const ROLE_TONE = {
   parent: 'neutral',
 };
 
-export default function UsersView() {
-  const [roles, setRoles] = useState(() => Object.fromEntries(demoUsers.map((u) => [u.id, u.role])));
+export default function UsersView({ users, roleOptions }) {
+  const [roles, setRoles] = useState(() => Object.fromEntries(users.map((u) => [u.id, u.role])));
   const [note, setNote] = useState('');
 
-  function handleRoleChange(id, newRole) {
+  async function handleRoleChange(id, newRole) {
+    await updateUserRole({ userId: id, role: newRole });
     setRoles((prev) => ({ ...prev, [id]: newRole }));
     setNote('Role updated for this preview session only — nothing is saved to a server yet.');
   }
 
-  const rows = demoUsers.map((u) => ({ ...u, role: roles[u.id] }));
+  const rows = users.map((u) => ({ ...u, role: roles[u.id] }));
 
   return (
     <PortalShell role="admin" active="users" title="Users & Roles">
@@ -46,7 +47,7 @@ export default function UsersView() {
                   onChange={(e) => handleRoleChange(row.id, e.target.value)}
                   className="role-select"
                 >
-                  {ROLE_OPTIONS.map((r) => (
+                  {roleOptions.map((r) => (
                     <option key={r} value={r}>
                       {r}
                     </option>
