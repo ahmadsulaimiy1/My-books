@@ -19,7 +19,7 @@ export default function ParentOverviewView() {
   return (
     <PortalShell role="parent" active="dashboard" title={`Welcome, ${demoParent.name}`}>
       <p className="intro">
-        A read-only overview of {demoParent.linkedStudent}'s progress, linked to your account. This preview shows
+        A read-only overview of {demoParent.linkedStudent}&apos;s progress, linked to your account. This preview shows
         one sample student — a real Parent Portal would let you switch between multiple linked children where
         applicable.
       </p>

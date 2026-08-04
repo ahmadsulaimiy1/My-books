@@ -1,7 +1,7 @@
 'use client';
 
 import PortalShell from '@/components/portal/PortalShell';
-import { Card, StatGrid, StatTile, Badge } from '@/components/portal/ui';
+import { Card, StatGrid, StatTile, Badge, EmptyState } from '@/components/portal/ui';
 import { demoFaculty, demoCourses, demoLessons, demoRoster } from '@/lib/portalDemoData';
 
 export default function FacultyCoursesView() {
@@ -27,7 +27,7 @@ export default function FacultyCoursesView() {
 
             <h3 className="lessons-head">Published lesson content</h3>
             {lessons.length === 0 ? (
-              <p className="hint">No lesson content published for this course in the preview yet.</p>
+              <EmptyState message="No lesson content published for this course in the preview yet." />
             ) : (
               <ol className="lesson-list">
                 {lessons.map((lesson, i) => (
@@ -47,7 +47,6 @@ export default function FacultyCoursesView() {
         .intro { font-size: 13.5px; color: var(--ink-muted); line-height: 1.6; margin: -8px 0 20px; }
         .course-card { margin-bottom: 20px; }
         .lessons-head { font-family: 'Fraunces', serif; font-size: 15px; color: var(--navy); margin: 4px 0 10px; }
-        .hint { font-size: 13px; color: var(--ink-muted); margin: 0; }
         .lesson-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
         .lesson-list li { display: flex; align-items: center; gap: 14px; padding: 10px 4px; border-bottom: 1px solid var(--border); }
         .lesson-list li:last-child { border-bottom: none; }

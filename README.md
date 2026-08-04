@@ -1,4 +1,4 @@
-# Al-Balagh International Premium College — Digital Campus
+# Albalagh Global — Digital Campus
 
 Official website and Digital Campus platform, built with Next.js 14 (App Router).
 

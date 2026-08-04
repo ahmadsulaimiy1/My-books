@@ -22,7 +22,7 @@
 export const demoStudent = {
   name: 'Demo Student',
   studentId: 'ALB-DEMO-0001',
-  programme: 'Advanced Islamic Sciences & Modern Civilization Studies',
+  programme: 'Advanced Islamic Sciences and Modern Civilization Studies',
   school: 'School of Islamic Sciences',
   intake: 'September 2026 Intake',
   status: 'Active — Semester 2 of 3',
@@ -279,7 +279,9 @@ export const admissionJourneySteps = [
 ];
 
 // The six admission routes published on public/legacy/admissions.html#routes.
-export const admissionRoutes = [
+// Not exported — used only internally in this file to build demoApplicant /
+// demoApplications route fields; no screen imports it directly.
+const admissionRoutes = [
   'Route 01 — Standard Secondary Qualifications',
   'Route 02 — Islamic Education Route',
   'Route 03 — Awaiting Results',
@@ -312,7 +314,7 @@ export const entranceAssessmentSections = [
 export const demoApplicant = {
   name: 'Demo Applicant',
   applicationId: 'ALB-APP-DEMO-0001',
-  programmeChoice: 'Advanced Islamic Sciences & Modern Civilization Studies',
+  programmeChoice: 'Advanced Islamic Sciences and Modern Civilization Studies',
   route: admissionRoutes[0],
   stage: 'Entrance Assessment',
   currentStep: 8, // matches admissionJourneySteps[7], 1-indexed for display

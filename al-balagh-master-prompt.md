@@ -1,4 +1,4 @@
-# Al-Balagh Content Integration — Master Prompt
+# Albalagh Global Content Integration — Master Prompt
 
 Use this once at the start of a session, then paste raw content in follow-up messages. Claude should integrate it without re-asking for permission on routine edits, but must still ask before anything irreversible, brand-defining, or fact-inventing (see "Stop and ask" below).
 

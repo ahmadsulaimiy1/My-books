@@ -1,7 +1,7 @@
 'use client';
 
 import PortalShell from '@/components/portal/PortalShell';
-import { Card, StatGrid, StatTile, Badge, DataTable } from '@/components/portal/ui';
+import { Card, StatGrid, StatTile, Badge, DataTable, EmptyState } from '@/components/portal/ui';
 import {
   demoFaculty,
   demoCourses,
@@ -35,7 +35,7 @@ export default function FacultyDashboardView() {
       <div className="grid">
         <Card title="Upcoming class sessions this week">
           {todaysClasses.length === 0 ? (
-            <p className="hint">No scheduled sessions for your courses this week in this preview.</p>
+            <EmptyState message="No scheduled sessions for your courses this week in this preview." />
           ) : (
             <ul className="class-list">
               {todaysClasses.map((slot, i) => (
@@ -80,7 +80,6 @@ export default function FacultyDashboardView() {
         .grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 20px; margin-bottom: 20px; }
         @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
 
-        .hint { font-size: 13.5px; color: var(--ink-muted); margin: 0; }
         .class-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
         .class-list li { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid var(--border); font-size: 13px; flex-wrap: wrap; }
         .class-list li:last-child { border-bottom: none; }
