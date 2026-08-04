@@ -31,7 +31,7 @@ This is why every service function is `async`, even though the mock resolves ins
 
 ## File pattern (required — avoids a real Next.js App Router gotcha)
 
-A route's `page.jsx` must stay a **Server Component** so it can export `metadata`. But `PortalShell`/`ui.jsx` use `styled-jsx`, which only works in Client Components. So every screen is two files:
+A route's `page.jsx` must stay a **Server Component** so it can export `metadata`. The `<Screen>View.jsx` stays `'use client'` too — not just because `PortalShell`/`ui.jsx` use `styled-jsx` (which does need a Client Component), but because most views hand callback props to Client Components (`DataTable`'s `render(row)` per column, `RecordGrid`'s `fields[].value(record)`), and a Server Component cannot pass a function as a prop to a Client Component — it fails at build/render time, not just as a style problem. So every screen is two files:
 
 ```
 src/app/portal/<role>/<screen>/page.jsx        — server component, just metadata + renders the view

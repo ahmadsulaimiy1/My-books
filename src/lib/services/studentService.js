@@ -48,13 +48,22 @@ export async function getQuiz({ quizId }) {
   // `quiz.questions` is the full-quiz question count (a number, from
   // demoQuizzes) — preserve it as `totalQuestions` rather than clobbering
   // it with the attached sample-question bank.
-  return { ...quiz, totalQuestions: quiz.questions, questions: demoQuizQuestions[quizId] ?? [] };
+  //
+  // Deliberately strip `correctIndex` from each question before this
+  // reaches the client: this is the pre-submission taking view, and a real
+  // Firestore-backed quiz-questions read would never return the answer key
+  // to a student who hasn't submitted yet — it's a graded assessment, not
+  // a study guide. `submitQuiz` below grades against its own independent
+  // lookup of the answer key, so nothing downstream needs it here.
+  const questions = (demoQuizQuestions[quizId] ?? []).map(({ correctIndex, ...question }) => question);
+  return { ...quiz, totalQuestions: quiz.questions, questions };
 }
 
 // Mirrors what a real submit-quiz endpoint returns: a score against the
 // question bank, not just an acknowledgement. Grading happens against the
-// server-held answer key (demoQuizQuestions), never trusting a client-sent
-// score — the same trust boundary a real backend would need.
+// server-held answer key (demoQuizQuestions) — looked up independently of
+// whatever getQuiz returned to the client — never trusting a client-sent
+// score, the same trust boundary a real backend would need.
 export async function submitQuiz({ quizId, answers }) {
   const questions = demoQuizQuestions[quizId] ?? [];
   let correct = 0;
