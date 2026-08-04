@@ -2,28 +2,22 @@
 
 import PortalShell from '@/components/portal/PortalShell';
 import { Card, StatGrid, StatTile, Badge, DataTable } from '@/components/portal/ui';
-import {
-  demoStudent,
-  demoCourses,
-  demoAssignments,
-  demoNotifications,
-} from '@/lib/portalDemoData';
 
-export default function StudentDashboardView() {
-  const inProgress = demoCourses.filter((c) => c.status === 'In Progress');
-  const openAssignments = demoAssignments.filter((a) => a.status !== 'Submitted');
+export default function StudentDashboardView({ student, courses, assignments, notifications }) {
+  const inProgress = courses.filter((c) => c.status === 'In Progress');
+  const openAssignments = assignments.filter((a) => a.status !== 'Submitted');
 
   return (
-    <PortalShell role="student" active="dashboard" title={`Welcome, ${demoStudent.name}`}>
+    <PortalShell role="student" active="dashboard" title={`Welcome, ${student.name}`}>
       <StatGrid>
-        <StatTile label="Programme" value={demoStudent.programme} hint={demoStudent.school} />
-        <StatTile label="Status" value={demoStudent.status} />
+        <StatTile label="Programme" value={student.programme} hint={student.school} />
+        <StatTile label="Status" value={student.status} />
         <StatTile
           label="Credits Completed"
-          value={`${demoStudent.creditsCompleted} / ${demoStudent.creditsRequired}`}
+          value={`${student.creditsCompleted} / ${student.creditsRequired}`}
           hint="Institutional Credit Unit Policy"
         />
-        <StatTile label="Intake" value={demoStudent.intake} />
+        <StatTile label="Intake" value={student.intake} />
       </StatGrid>
 
       <div className="grid">
@@ -65,7 +59,7 @@ export default function StudentDashboardView() {
 
       <Card title="Recent notifications" className="notif-card">
         <ul className="notif-list">
-          {demoNotifications.map((n) => (
+          {notifications.map((n) => (
             <li key={n.id}>
               <Badge tone={n.type === 'alert' ? 'alert' : n.type === 'success' ? 'success' : 'info'}>
                 {n.type}

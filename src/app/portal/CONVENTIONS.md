@@ -2,6 +2,33 @@
 
 Read this before adding any screen under `src/app/portal/**`. It exists so five different build passes (Student, Faculty, Staff, Admin, Applicant/Parent) end up looking like one product, not five.
 
+## Data fetching (required — this is the Firebase-readiness contract)
+
+**No component ever imports `portalDemoData.js` directly.** All data comes from `src/lib/services/*Service.js` (see `src/lib/services/README.md`). The pattern:
+
+```jsx
+// page.jsx — server component, fetches
+import { getX } from '@/lib/services/xService';
+import XView from './XView';
+
+export const metadata = { /* ... */ robots: { index: false, follow: false } };
+
+export default async function XPage() {
+  const data = await getX();
+  return <XView data={data} />;
+}
+```
+
+```jsx
+// XView.jsx — client component, renders + owns interactivity
+'use client';
+export default function XView({ data }) {
+  // ...
+}
+```
+
+This is why every service function is `async`, even though the mock resolves instantly: when Firebase replaces the mock inside a service function, `page.jsx` doesn't change at all — it's already `await`ing.
+
 ## File pattern (required — avoids a real Next.js App Router gotcha)
 
 A route's `page.jsx` must stay a **Server Component** so it can export `metadata`. But `PortalShell`/`ui.jsx` use `styled-jsx`, which only works in Client Components. So every screen is two files:
