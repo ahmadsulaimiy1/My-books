@@ -65,7 +65,7 @@ export default function ApplicantStatusView({ applicant, journeySteps, assessmen
         .step:last-child { border-bottom: none; }
         .num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 600; flex-shrink: 0; border: 1px solid var(--border); background: var(--manuscript); color: var(--navy); }
         .step.done .num { background: var(--navy); border-color: var(--navy); color: #fff; }
-        .step.current .num { background: rgba(188,154,74,0.18); border-color: var(--gold-ink); color: #886828; }
+        .step.current .num { background: rgba(188,154,74,0.18); border-color: var(--gold-ink); color: var(--gold-ink); }
         .label { flex: 1; font-size: 13.5px; color: var(--ink); }
         .step.upcoming .label { color: var(--ink-muted); }
 
