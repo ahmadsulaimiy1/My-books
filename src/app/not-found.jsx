@@ -80,7 +80,7 @@ function NotFoundContent() {
         }
         .links nav { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
         .links nav a { font-size: 14.5px; font-weight: 600; color: var(--navy); }
-        .links nav a:hover { color: var(--gold); }
+        .links nav a:hover { color: var(--gold-ink); }
       `}</style>
     </section>
   );

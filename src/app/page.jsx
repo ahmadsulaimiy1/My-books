@@ -44,6 +44,7 @@ function Hero() {
       </div>
       <style jsx>{`
         .hero { background: var(--navy-dark); padding: 96px 0 88px; }
+        .eyebrow { color: var(--gold); }
         h1 { color: #fff; font-size: 44px; max-width: 760px; margin-bottom: 18px; }
         [dir='rtl'] h1 { font-size: 38px; line-height: 1.4; }
         @media (max-width: 600px) { h1 { font-size: 28px; } }
@@ -128,7 +129,7 @@ function SchoolsSection() {
         .card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; transition: box-shadow 0.15s, transform 0.15s; }
         .card:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); }
         .card h3 { font-size: 18px; margin-bottom: 10px; }
-        .card span { font-size: 13px; font-weight: 600; color: var(--gold); }
+        .card span { font-size: 13px; font-weight: 600; color: var(--gold-ink); }
       `}</style>
     </section>
   );

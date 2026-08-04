@@ -123,8 +123,8 @@ export function EmptyState({ message, action }) {
   return (
     <div className="empty">
       <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-        <rect x="6" y="10" width="28" height="22" rx="2" stroke="#BC9A4A" strokeWidth="1.5" />
-        <path d="M6 16h28" stroke="#BC9A4A" strokeWidth="1.5" />
+        <rect x="6" y="10" width="28" height="22" rx="2" stroke="#8A6A2E" strokeWidth="1.5" />
+        <path d="M6 16h28" stroke="#8A6A2E" strokeWidth="1.5" />
       </svg>
       <p>{message}</p>
       {action}

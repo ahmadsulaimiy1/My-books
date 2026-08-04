@@ -91,7 +91,7 @@ export default function FacultyDashboardView() {
         .msg-list { list-style: none; margin: 0; padding: 0; }
         .msg-list li { display: flex; align-items: center; gap: 12px; padding: 14px 22px; border-bottom: 1px solid var(--border); font-size: 13.5px; color: var(--ink); }
         .msg-list li:last-child { border-bottom: none; }
-        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold-ink); flex-shrink: 0; }
         .from { font-weight: 600; color: var(--navy); flex-shrink: 0; }
         .subject { flex: 1; min-width: 140px; }
         .date { color: var(--ink-muted); font-size: 12px; flex-shrink: 0; }

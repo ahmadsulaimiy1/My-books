@@ -62,7 +62,7 @@ export default function MessagesView() {
         .msg-row { width: 100%; display: flex; align-items: center; gap: 10px; text-align: start; background: none; border: none; padding: 14px 18px; cursor: pointer; color: var(--ink); }
         .msg-row:hover { background: var(--manuscript); }
         .msg-row.active { background: var(--manuscript); box-shadow: inset 3px 0 0 var(--navy); }
-        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+        .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold-ink); flex-shrink: 0; }
         .msg-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
         .from { font-size: 13px; font-weight: 600; color: var(--navy); }
         .subject { font-size: 12.5px; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
