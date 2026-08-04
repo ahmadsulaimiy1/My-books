@@ -3,9 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About Albalagh Global</title>
+<title>About | Albalagh Global</title>
+<meta name="description" content="Albalagh Global is an online institution built at the intersection of Islamic scholarship and modern civilisation studies — our story, vision, mission, and core values.">
+<link rel="canonical" href="https://www.albalagh.edu/about">
+
+<!-- Open Graph placeholders -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="About | Albalagh Global">
+<meta property="og:description" content="Albalagh Global is an online institution built at the intersection of Islamic scholarship and modern civilisation studies.">
+<meta property="og:image" content="https://www.albalagh.edu/assets/og/about.jpg">
+<meta property="og:url" content="https://www.albalagh.edu/about">
+
+<!-- Twitter Card placeholders -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="About | Albalagh Global">
+<meta name="twitter:description" content="Albalagh Global is an online institution built at the intersection of Islamic scholarship and modern civilisation studies.">
+<meta name="twitter:image" content="https://www.albalagh.edu/assets/og/about.jpg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Structured data placeholders — to be populated with real organization/person details before launch -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "Albalagh Global — Islamic Sciences and Modern Civilization",
+  "alternateName": "البلاغ العالمية",
+  "url": "https://www.albalagh.edu",
+  "foundingDate": "2024-01-06",
+  "description": "PLACEHOLDER — official institutional description pending final approval."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://www.albalagh.edu/"},
+    {"@type":"ListItem","position":2,"name":"About","item":"https://www.albalagh.edu/about"}
+  ]
+}
+</script>
+
 <style>
   :root{
     --navy:#173A63; --navy-dark:#0F2847; --gold:#BC9A4A; --gold-light:#D8C58C;
@@ -23,6 +63,9 @@
   p{margin:0; color:var(--ink-muted); line-height:1.6;}
   a{color:inherit; text-decoration:none;}
   img{max-width:100%; display:block;}
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{outline:2px solid var(--navy); outline-offset:2px;}
+  .skip-link{position:absolute; left:-999px; top:0; background:#fff; color:var(--navy); padding:12px 20px; z-index:1000; border-radius:0 0 8px 0;}
+  .skip-link:focus{left:0;}
   .container{max-width:1280px; margin:0 auto; padding-inline:24px;}
   section{padding:96px 0;}
   @media (max-width:768px){ section{padding:56px 0;} }
@@ -50,11 +93,30 @@
   .nav-right{display:flex; align-items:center; gap:20px;}
   .lang-toggle{background:transparent; border:1px solid var(--border-dark); color:#fff; font-family:inherit; font-size:13px; font-weight:600; padding:7px 14px; border-radius:var(--radius-sm); cursor:pointer;}
   .lang-toggle:hover{border-color:var(--gold); color:var(--gold);}
-  .hamburger{display:none; background:none; border:none; color:#fff; font-size:24px; cursor:pointer;}
-  @media (max-width:960px){ nav.links{display:none;} .hamburger{display:block;} }
+  .hamburger{display:none; background:none; border:none; color:#fff; font-size:24px; cursor:pointer; line-height:1; padding:4px;}
+  @media (max-width:960px){ nav.links{display:none;} .hamburger{display:block;} .nav-right .btn-primary{display:none;} }
+  @media (max-width:960px){ .nav-right{gap:12px;} }
+
+  /* MOBILE NAV OVERLAY */
+  .mobile-nav{
+    position:fixed; inset:0; background:var(--navy-dark); z-index:200;
+    display:flex; flex-direction:column; padding:24px;
+    transform:translateX(100%); transition:transform .25s ease;
+    visibility:hidden;
+  }
+  [dir="rtl"] .mobile-nav{transform:translateX(-100%);}
+  .mobile-nav.open{transform:translateX(0); visibility:visible;}
+  .mobile-nav-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:48px;}
+  .mobile-nav-close{background:none; border:none; color:#fff; font-size:28px; cursor:pointer; line-height:1;}
+  .mobile-nav-links{display:flex; flex-direction:column; gap:8px;}
+  .mobile-nav-links a{color:#fff; font-size:22px; font-family:'Fraunces',serif; padding:14px 0; border-bottom:1px solid var(--border-dark);}
+  [dir="rtl"] .mobile-nav-links a{font-family:'Amiri',serif;}
+  .mobile-nav-links a.active{color:var(--gold-light);}
+  .mobile-nav-bottom{margin-top:auto; display:flex; flex-direction:column; gap:16px;}
+  @media (prefers-reduced-motion:reduce){ .mobile-nav{transition:none;} }
 
   .page-hero{background:var(--navy-dark); position:relative; overflow:hidden; padding:64px 0 88px;}
-  .breadcrumb{display:flex; gap:8px; align-items:center; font-size:13.5px; color:#9AA5BD; margin-bottom:28px;}
+  .breadcrumb{display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:13.5px; color:#9AA5BD; margin-bottom:28px; list-style:none; padding:0;}
   .breadcrumb a{color:#C7CEDC;}
   .breadcrumb a:hover{color:var(--gold-light);}
   .breadcrumb span{color:#5C6A87;}
@@ -150,13 +212,15 @@
 </head>
 <body>
 
+<a href="#main" class="skip-link" data-i18n="skipLink">Skip to main content</a>
+
 <header>
   <div class="container nav-inner">
     <a href="/" class="brand">
-      <svg viewBox="0 0 48 48" fill="none"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
+      <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
       <span data-i18n="brand">Albalagh</span>
     </a>
-    <nav class="links">
+    <nav class="links" aria-label="Primary">
       <a href="/academic-structure#schools" data-i18n="nav1">Schools</a>
       <a href="/admissions" data-i18n="nav2">Admissions</a>
       <a href="/research-innovation" data-i18n="nav3">Research Centres</a>
@@ -166,16 +230,43 @@
     <div class="nav-right">
       <button class="lang-toggle" id="langBtn">عربي</button>
       <a href="/admissions#apply" class="btn btn-primary" data-i18n="applyNow">Apply Now</a>
-      <button class="hamburger">☰</button>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">☰</button>
     </div>
   </div>
 </header>
 
+<div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+  <div class="mobile-nav-top">
+    <a href="/" class="brand">
+      <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4 L30 14 L42 14 L33 22 L37 34 L24 27 L11 34 L15 22 L6 14 L18 14 Z" stroke="#BC9A4A" stroke-width="1.6" fill="none"/></svg>
+      <span data-i18n="brand">Albalagh</span>
+    </a>
+    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">✕</button>
+  </div>
+  <nav class="mobile-nav-links" aria-label="Mobile Primary">
+    <a href="/academic-structure#schools" data-i18n="nav1">Schools</a>
+    <a href="/admissions" data-i18n="nav2">Admissions</a>
+    <a href="/research-innovation" data-i18n="nav3">Research Centres</a>
+    <a href="/about" class="active" data-i18n="nav4">About</a>
+    <a href="/#contact" data-i18n="nav5">Contact</a>
+  </nav>
+  <div class="mobile-nav-bottom">
+    <button class="lang-toggle" id="langBtnMobile" style="width:100%; padding:12px;">عربي</button>
+    <a href="/admissions#apply" class="btn btn-primary" style="justify-content:center;" data-i18n="applyNow">Apply Now</a>
+  </div>
+</div>
+
+<main id="main">
+
 <section class="page-hero">
   <div class="container">
-    <div class="breadcrumb reveal">
-      <a href="/" data-i18n="bcHome">Home</a><span>／</span><span data-i18n="bcAbout">About</span>
-    </div>
+    <nav aria-label="Breadcrumb">
+      <ol class="breadcrumb reveal">
+        <li><a href="/" data-i18n="bcHome">Home</a></li>
+        <li aria-hidden="true">／</li>
+        <li aria-current="page" data-i18n="bcAbout">About</li>
+      </ol>
+    </nav>
     <span class="eyebrow reveal" data-i18n="pageEyebrow">About The College</span>
     <h1 class="reveal" data-i18n="pageTitle">Knowledge and character, built for the modern world</h1>
     <p class="lead reveal" data-i18n="pageLead">Albalagh Global — Islamic Sciences and Modern Civilization is an online institution dedicated to producing graduates who are scholarly, capable, and principled.</p>
@@ -355,6 +446,8 @@
   </div>
 </section>
 
+</main>
+
 <footer>
   <div class="container">
     <div class="footer-grid">
@@ -368,10 +461,10 @@
       <div>
         <h4 data-i18n="fSchools">Schools</h4>
         <ul>
-          <li><a href="/academic-structure#schools" data-i18n="prog1t">Islamic Sciences</a></li>
-          <li><a href="/academic-structure#schools" data-i18n="prog2t">Digital Technology &amp; AI</a></li>
-          <li><a href="/academic-structure#schools" data-i18n="prog3t">Business &amp; Entrepreneurship</a></li>
-          <li><a href="/academic-structure#schools" data-i18n="prog4t">Freelancing &amp; Digital Careers</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="s1t">School of Islamic Sciences</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="s2t">School of Media, Journalism &amp; Digital Communication</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="s3t">School of AI, Innovation &amp; Technology</a></li>
+          <li><a href="/academic-structure#schools" data-i18n="s4t">School of Business, Entrepreneurship &amp; Financial Management</a></li>
         </ul>
       </div>
       <div>
@@ -405,8 +498,33 @@ const io = new IntersectionObserver((entries)=>{
 },{threshold:0.15});
 revealEls.forEach(el=>io.observe(el));
 
+// MOBILE NAV — functional open/close
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+const mobileNavClose = document.getElementById('mobileNavClose');
+let lastFocused = null;
+
+function openMobileNav(){
+  lastFocused = document.activeElement;
+  mobileNav.classList.add('open');
+  hamburgerBtn.setAttribute('aria-expanded','true');
+  document.body.style.overflow = 'hidden';
+  mobileNavClose.focus();
+}
+function closeMobileNav(){
+  mobileNav.classList.remove('open');
+  hamburgerBtn.setAttribute('aria-expanded','false');
+  document.body.style.overflow = '';
+  if(lastFocused) lastFocused.focus();
+}
+hamburgerBtn.addEventListener('click', openMobileNav);
+mobileNavClose.addEventListener('click', closeMobileNav);
+mobileNav.querySelectorAll('.mobile-nav-links a').forEach(a=>a.addEventListener('click', closeMobileNav));
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && mobileNav.classList.contains('open')) closeMobileNav(); });
+
 const i18n = {
   en:{
+    skipLink:"Skip to main content",
     brand:"Albalagh", nav1:"Schools", nav2:"Admissions", nav3:"Research Centres", nav4:"About", nav5:"Contact", applyNow:"Apply Now",
     bcHome:"Home", bcAbout:"About",
     pageEyebrow:"About The College", pageTitle:"Knowledge and character, built for the modern world",
@@ -452,12 +570,13 @@ const i18n = {
     t4phase:"Phase Four — Technology", t4t:"Expanding the digital learning platform", t4d:"A dedicated student portal, mobile application, and expanded course delivery infrastructure.",
     ctaTitle:"Ready to begin your journey with Albalagh?", ctaLead:"Explore our programmes, start an application, or reach out with questions — our team is ready to help.",
     ctaBtn1:"Explore Programmes", ctaBtn2:"Apply for Admission", ctaBtn3:"Contact Us",
-    prog1t:"Islamic Sciences", prog2t:"Digital Technology &amp; AI", prog3t:"Business &amp; Entrepreneurship", prog4t:"Freelancing &amp; Digital Careers",
+    s1t:"School of Islamic Sciences", s2t:"School of Media, Journalism &amp; Digital Communication", s3t:"School of AI, Innovation &amp; Technology", s4t:"School of Business, Entrepreneurship &amp; Financial Management",
     motto:"Knowledge • Character • Innovation • Service to Humanity",
     fSchools:"Schools", fQuick:"Quick Links", fContact:"Contact", fCareers:"Careers",
     fCopy:"© 2026 Albalagh Global · Founded 6 January 2024", fAccred:"Accreditation Status", fPriv:"Privacy", fTerms:"Terms"
   },
   ar:{
+    skipLink:"تخطَّ إلى المحتوى الرئيسي",
     brand:"البلاغ", nav1:"الكليات", nav2:"القبول", nav3:"مراكز البحث", nav4:"عن الكلية", nav5:"تواصل", applyNow:"قدّم الآن",
     bcHome:"الرئيسية", bcAbout:"عن الكلية",
     pageEyebrow:"عن الكلية", pageTitle:"العلم والأخلاق، مبنيان لعالم اليوم",
@@ -503,7 +622,7 @@ const i18n = {
     t4phase:"المرحلة الرابعة — التقنية", t4t:"توسيع منصة التعلّم الرقمي", t4d:"بوابة طلابية مخصصة، وتطبيق جوال، وبنية موسّعة لتقديم المقررات.",
     ctaTitle:"مستعد لبدء رحلتك مع البلاغ؟", ctaLead:"استكشف برامجنا، ابدأ طلب القبول، أو تواصل معنا لأي استفسار — فريقنا جاهز لمساعدتك.",
     ctaBtn1:"استكشف البرامج", ctaBtn2:"قدّم طلب القبول", ctaBtn3:"تواصل معنا",
-    prog1t:"العلوم الإسلامية", prog2t:"التقنية الرقمية والذكاء الاصطناعي", prog3t:"الأعمال وريادة الأعمال", prog4t:"العمل الحر والمهن الرقمية",
+    s1t:"كلية العلوم الإسلامية", s2t:"كلية الإعلام والصحافة والاتصال الرقمي", s3t:"كلية الذكاء الاصطناعي والابتكار والتقنية", s4t:"كلية الأعمال وريادة الأعمال والإدارة المالية",
     motto:"العلم • الأخلاق • الابتكار • خدمة الإنسانية",
     fSchools:"الكليات", fQuick:"روابط سريعة", fContact:"تواصل", fCareers:"الوظائف",
     fCopy:"© ٢٠٢٦ البلاغ العالمية · تأسست في ٦ يناير ٢٠٢٤", fAccred:"حالة الاعتماد", fPriv:"الخصوصية", fTerms:"الشروط"
@@ -518,11 +637,14 @@ function applyLang(lang){
     const key = el.getAttribute('data-i18n');
     if(i18n[lang][key]) el.innerHTML = i18n[lang][key];
   });
-  document.getElementById('langBtn').textContent = lang==='ar' ? 'EN' : 'عربي';
-  document.getElementById('langBtn2').textContent = lang==='ar' ? 'EN' : 'عربي';
+  ['langBtn','langBtn2','langBtnMobile'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = lang==='ar' ? 'EN' : 'عربي';
+  });
 }
 document.getElementById('langBtn').addEventListener('click',()=>applyLang(currentLang==='en'?'ar':'en'));
 document.getElementById('langBtn2').addEventListener('click',()=>applyLang(currentLang==='en'?'ar':'en'));
+document.getElementById('langBtnMobile').addEventListener('click',()=>applyLang(currentLang==='en'?'ar':'en'));
 </script>
 
 </body>
