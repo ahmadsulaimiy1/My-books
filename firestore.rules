@@ -1,0 +1,258 @@
+rules_version = '2';
+
+// Security Rules for the Albalagh Global platform.
+// Written against DATA_MODEL.md — read that document first; this file is
+// the enforcement of what it specifies, not an independent design.
+//
+// This file cannot be deployed or tested until a real Firebase project
+// exists (see RELEASE_REPORT.md / FIREBASE_INTEGRATION_GUIDE.md — Phase 0
+// is blocked on that). It is written now, ahead of the project, so the
+// data model and its access control are designed together rather than
+// rules being bolted on after collections already exist.
+//
+// Core principle used throughout: a role is only ever trusted from
+// request.auth.token.role (the Auth custom claim, set exclusively by a
+// Cloud Function using the Admin SDK — see DATA_MODEL.md's "Identity"
+// section). Never trust a role read from a client-writable document field.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---- Helpers ------------------------------------------------------
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function role() {
+      return request.auth.token.role;
+    }
+
+    function isRole(r) {
+      return isSignedIn() && role() == r;
+    }
+
+    function isSelf(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isStaffOrAdmin() {
+      return isRole('staff') || isRole('admin');
+    }
+
+    // ---- Identity -------------------------------------------------------
+
+    match /users/{uid} {
+      allow read: if isSelf(uid) || isStaffOrAdmin();
+      // role is deliberately absent from allowed update fields below —
+      // it can never be set by a client write, at any role, including
+      // the user's own admin-looking request. Only a Cloud Function
+      // (Admin SDK, bypasses these rules) may set it.
+      allow update: if isSelf(uid)
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['displayName', 'phone', 'updatedAt']);
+      allow create, delete: if false; // Cloud Function only (account lifecycle)
+    }
+
+    match /studentProfiles/{uid} {
+      allow read: if isSelf(uid) || isStaffOrAdmin()
+        || (isRole('parent') && resource.data.guardianUid == request.auth.uid);
+      allow write: if isStaffOrAdmin(); // never student-writable
+    }
+
+    match /applicantProfiles/{uid} {
+      allow read: if isSelf(uid) || isStaffOrAdmin();
+      // An applicant may update their own in-progress application fields,
+      // but never `stage` or `decision` — those are staff/admin-only,
+      // enforced the same way as users.role above.
+      allow update: if isSelf(uid)
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['programmeChoiceId', 'route', 'documentRefs', 'updatedAt'])
+        || isStaffOrAdmin();
+      allow create: if isSelf(uid);
+      allow delete: if false;
+    }
+
+    match /staffProfiles/{uid} {
+      allow read: if isSelf(uid) || isRole('admin');
+      allow write: if isRole('admin');
+    }
+
+    // ---- Academic structure (published facts — public read) -----------
+
+    match /schools/{id} {
+      allow read: if true;
+      allow write: if isRole('admin');
+    }
+
+    match /programmes/{id} {
+      allow read: if true;
+      allow write: if isRole('admin');
+    }
+
+    match /courses/{id} {
+      allow read: if true;
+      allow write: if isRole('admin');
+    }
+
+    match /academicSessions/{id} {
+      allow read: if true;
+      allow write: if isRole('admin');
+    }
+
+    match /classes/{id} {
+      allow read: if true; // timetable/class metadata is not sensitive
+      allow update: if isRole('admin')
+        || (isRole('faculty') && resource.data.facultyUid == request.auth.uid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['schedule']));
+      allow create, delete: if isRole('admin');
+    }
+
+    // ---- Enrolment, attendance, assessment -----------------------------
+
+    match /enrolments/{id} {
+      allow read: if isStaffOrAdmin()
+        || (isSignedIn() && resource.data.studentUid == request.auth.uid);
+      // Enrolment is a consequence of a registration workflow (a Cloud
+      // Function following the applicant->student lifecycle in
+      // DATA_MODEL.md), never a direct client write — a student cannot
+      // self-enrol by writing this collection.
+      allow write: if isStaffOrAdmin();
+    }
+
+    match /attendance/{id} {
+      allow read: if isStaffOrAdmin()
+        || (isSignedIn() && resource.data.studentUid == request.auth.uid)
+        || (isRole('faculty') && resource.data.classId != null); // scoped further at query time by classId
+      allow create, update: if isRole('faculty')
+        && request.resource.data.markedByUid == request.auth.uid
+        // 72-hour correction window from DATA_MODEL.md — a later change
+        // must go through the audited correction path, not a silent rewrite.
+        && request.time < timestamp.value(request.resource.data.sessionDate) + duration.value(72, 'h');
+      allow delete: if false;
+    }
+
+    match /assignments/{id} {
+      allow read: if isSignedIn(); // further scoped by class enrolment at query time
+      allow write: if isRole('faculty') || isRole('admin');
+    }
+
+    match /submissions/{id} {
+      allow read: if isStaffOrAdmin()
+        || (isSignedIn() && resource.data.studentUid == request.auth.uid)
+        || isRole('faculty');
+      // A student may create their own submission but can never set
+      // score/feedback/gradedByUid on it.
+      allow create: if isRole('student')
+        && request.resource.data.studentUid == request.auth.uid
+        && !('score' in request.resource.data)
+        && !('feedback' in request.resource.data);
+      allow update: if isRole('faculty') || isRole('admin'); // grading only
+      allow delete: if false;
+    }
+
+    // Quiz questions: the answer key. This match block is the literal
+    // enforcement of the "never send answer keys to the client" lesson
+    // from the V1.0 review — a student-role token cannot read this
+    // subcollection at all. Grading happens in a Cloud Function using
+    // Admin SDK privileges, which bypass these rules entirely.
+    match /quizzes/{quizId} {
+      allow read: if isSignedIn();
+      allow write: if isRole('admin') || isRole('faculty');
+
+      match /questions/{questionId} {
+        allow read: if isStaffOrAdmin() || isRole('faculty');
+        allow write: if isRole('admin') || isRole('faculty');
+      }
+    }
+
+    match /quizAttempts/{id} {
+      allow read: if isStaffOrAdmin()
+        || (isSignedIn() && resource.data.studentUid == request.auth.uid);
+      // A student may create an attempt with their answers, but `score`
+      // is never client-writable — only the grading Cloud Function sets it.
+      allow create: if isRole('student')
+        && request.resource.data.studentUid == request.auth.uid
+        && !('score' in request.resource.data);
+      allow update, delete: if false; // attempts are immutable once submitted
+    }
+
+    match /results/{id} {
+      allow read: if isStaffOrAdmin()
+        || (isSignedIn() && resource.data.studentUid == request.auth.uid
+            && resource.data.confirmedAt != null) // unconfirmed grades are not student-visible
+        || (isRole('faculty')); // scoped further by courseId at query time
+      allow create, update: if isRole('faculty') || isRole('admin');
+      // Once confirmedAt is set, the document should only change via the
+      // audited correction path (DATA_MODEL.md) — enforced at the
+      // application layer (Cloud Function), since Security Rules alone
+      // can express "no further change" but not "except via this one
+      // audited path" cleanly; the Cloud Function is the only writer
+      // trusted to bypass rules for that specific correction flow.
+      allow delete: if false;
+    }
+
+    // ---- Finance --------------------------------------------------------
+
+    match /feeSchedule/{id} {
+      allow read: if true; // published fee information
+      allow write: if isRole('admin');
+    }
+
+    match /invoices/{id} {
+      allow read: if isStaffOrAdmin()
+        || (isSignedIn() && resource.data.studentUid == request.auth.uid)
+        || (isRole('parent')); // scoped further by guardianUid lookup at query time
+      allow write: if isStaffOrAdmin(); // never student-writable
+    }
+
+    match /payments/{id} {
+      allow read: if isStaffOrAdmin()
+        || (isSignedIn() && resource.data.studentUid == request.auth.uid);
+      // Payments are written exclusively by the payment-gateway webhook
+      // handler (a Cloud Function using Admin SDK), never by any client
+      // role — a client-writable "I paid" field is not a real payment
+      // system. See FIREBASE_INTEGRATION_GUIDE.md Phase 5.
+      allow write: if false;
+    }
+
+    // ---- Communication ----------------------------------------------------
+
+    match /announcements/{id} {
+      allow read: if isSignedIn(); // audience filtering happens at query time
+      allow create, update: if isRole('faculty') || isStaffOrAdmin();
+      allow delete: if isStaffOrAdmin();
+    }
+
+    match /messageThreads/{threadId} {
+      allow read, update: if isSignedIn() && request.auth.uid in resource.data.participantUids;
+      allow create: if isSignedIn() && request.auth.uid in request.resource.data.participantUids;
+
+      match /messages/{messageId} {
+        allow read: if isSignedIn()
+          && request.auth.uid in get(/databases/$(database)/documents/messageThreads/$(threadId)).data.participantUids;
+        allow create: if isSignedIn()
+          && request.resource.data.senderUid == request.auth.uid
+          && request.auth.uid in get(/databases/$(database)/documents/messageThreads/$(threadId)).data.participantUids;
+        allow update, delete: if false; // messages are immutable once sent
+      }
+    }
+
+    // ---- Library ----------------------------------------------------------
+
+    match /libraryItems/{id} {
+      allow read: if isSignedIn(); // enrolled-only by default; a public flag can loosen this per DATA_MODEL.md
+      allow write: if isStaffOrAdmin();
+    }
+
+    // ---- Audit log ----------------------------------------------------------
+
+    match /auditLog/{id} {
+      allow read: if isRole('admin');
+      // Never writable by any client role, at any privilege level — every
+      // write comes from the same Cloud Function performing the
+      // consequential operation it logs, as one atomic transaction.
+      allow write: if false;
+    }
+  }
+}

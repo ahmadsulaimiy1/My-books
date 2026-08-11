@@ -2,11 +2,23 @@
 
 How to turn the portal preview into a real, working backend. This is the guide `src/lib/services/*.js` was built for — every function in that directory is already shaped for this.
 
+## What's already prepared, ahead of a real project
+
+The following exist in the repo **now**, written and reviewed before any Firebase project was available, so the data model and its access control were designed together rather than bolted on after collections already existed. None of these are wired into the running app yet — nothing imports `src/lib/firebase.js`, nothing has been deployed:
+
+- **`DATA_MODEL.md`** — the canonical collection-by-collection data model (read this before `firestore.rules`, it explains the *why* behind every rule).
+- **`firestore.rules`** / **`storage.rules`** — the Security Rules enforcing that model. Not yet deployed to anything (there's no project to deploy them to) — review and adjust before the first `firebase deploy --only firestore:rules,storage`.
+- **`firebase.json`** / **`firestore.indexes.json`** — project config and the composite indexes the data model's common queries will need.
+- **`.firebaserc.example`** — copy to `.firebaserc` and fill in your real project ID once one exists (`.firebaserc` is gitignored, since project association is developer/environment-specific).
+- **`src/lib/firebase.js`** — the client SDK init, reading config from `NEXT_PUBLIC_FIREBASE_*` env vars (see `.env.example`). Throws a clear, actionable error if called before those env vars exist, rather than silently failing — this is intentional, not a bug to fix.
+
 ## Before you start
 
-You need a real Firebase project (free Spark tier is enough to start). Create one at [console.firebase.google.com](https://console.firebase.google.com), register a web app, and you'll get a config object (`apiKey`, `authDomain`, `projectId`, etc.). That config is safe to be public/client-side — it identifies your project, it doesn't authorise anything by itself. **Security Rules are what actually protect data**, not the config object. Get the rules right before writing a line of the actual integration; see "Security Rules" below before "Phase 0."
+You need a real Firebase project (free Spark tier is enough to start). Create one at [console.firebase.google.com](https://console.firebase.google.com), register a web app, and you'll get a config object (`apiKey`, `authDomain`, `projectId`, etc.). That config is safe to be public/client-side — it identifies your project, it doesn't authorise anything by itself. **Security Rules are what actually protect data**, not the config object — which is why `firestore.rules`/`storage.rules` above were written before any project existed, not as an afterthought.
 
-`firebase` (10.12.4) is already a `package.json` dependency, unused — added in anticipation of exactly this work.
+`firebase` (10.12.4) is already a `package.json` dependency, unused until `src/lib/firebase.js` is actually imported somewhere.
+
+Once you have a project: fill in `.env.local` (copy from `.env.example`) with the real config, copy `.firebaserc.example` to `.firebaserc` with the real project ID, then `firebase deploy --only firestore:rules,firestore:indexes,storage` to push the prepared rules and indexes before writing any application code against them.
 
 ## The contract you're implementing against
 
@@ -24,22 +36,11 @@ Read `src/lib/services/README.md` first — the rules it states are the ones eve
 - **Firebase Security Rules** — role-based read/write access enforced server-side. This is the part that actually matters; a portal with only client-side role checks is worse than no portal.
 - **Vercel stays the host.** Firebase is called from the existing Next.js app for auth/data/storage; nothing about deployment changes (see `DEPLOYMENT_GUIDE.md`).
 
-## Data model (Firestore, sketch — same one drafted in `albalagh-lms-portal-scoping.md`)
+## Data model
 
-```
-users/{uid}          — profile, role, programme (student) / department (staff/faculty)
-programmes/{id}       — the 8 published Professional Diploma programmes
-courses/{id}          — courses within a programme; credit units per the Credit Unit Policy
-enrolments/{id}        — student ↔ programme ↔ intake, status
-assignments/{id}       — set by a faculty member for a course
-submissions/{id}       — student ↔ assignment, file ref, grade, feedback
-grades/{id}            — per-course result
-announcements/{id}      — role- or programme-scoped notices
-payments/{id}           — tuition/fee ledger entries (Phase 5, see below)
-library_items/{id}       — a real digital catalogue
-```
+Superseded by the full, standalone **`DATA_MODEL.md`** — read that document for the real collection-by-collection shape, ownership, and lifecycle (it supersedes the earlier sketch that used to live in this section; keeping one canonical copy rather than two that could drift, per the documentation-freshness rule in `CONTRIBUTING.md`).
 
-Map this onto the existing service function signatures, not the other way around — e.g. `studentService.getCourses({ studentId })` becomes a Firestore query filtering `enrolments` by `studentId` and joining to `courses`, but its return shape should still match what `demoCourses` currently returns (an array of `{ id, title, credits, semester, status, grade }`), so nothing downstream in `CoursesView.jsx` needs to change.
+Map the real model onto the existing service function signatures, not the other way around — e.g. `studentService.getCourses({ studentId })` becomes a Firestore query filtering `enrolments` by `studentId` and joining to `courses`, but its return shape should still match what `demoCourses` currently returns (an array of `{ id, title, credits, semester, status, grade }`), so nothing downstream in `CoursesView.jsx` needs to change.
 
 ## Phased rollout — each phase is a real, shippable slice
 
@@ -59,14 +60,9 @@ Map this onto the existing service function signatures, not the other way around
 
 ## Security Rules — the part that actually matters
 
-Every collection needs rules matching the role model already established in the service layer:
+Already written: `firestore.rules` and `storage.rules`, in full, matching the role model established in `DATA_MODEL.md` (a student can read their own `enrolments`/`submissions`/`results`, never another student's; only a Cloud Function via the Admin SDK ever sets `users/{uid}.role`; `payments` are never client-writable, only a gateway webhook handler; quiz answer keys are unreadable to a `student`-role token at the rules level, not just omitted from a mock's response). Review them against your actual project before deploying — they're a starting point written carefully, not a substitute for your own review.
 
-- A student can read their own `enrolments`/`submissions`/`grades`, never another student's.
-- A faculty member can read/write `assignments`/`grades` only for courses in their own `coursesTaught`.
-- Only `admin`-role users can write `users/{uid}.role`.
-- `payments` writes should go through a Cloud Function (server-side), never a direct client write, once Phase 5 exists.
-
-Write the rules before wiring the corresponding service function, and test them (the Firebase emulator suite is the right tool) before deploying — a portal with plausible-looking but unenforced access control is a worse security posture than the current honest, backend-less preview.
+Test with the Firebase emulator suite (`firebase emulators:start`, config already in `firebase.json`) before deploying to a real project — a portal with plausible-looking but unenforced access control is a worse security posture than the current honest, backend-less preview.
 
 ## What does not change
 
