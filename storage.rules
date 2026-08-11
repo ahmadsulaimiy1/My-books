@@ -1,0 +1,65 @@
+rules_version = '2';
+
+// Storage Security Rules — companion to firestore.rules. Same caveat: not
+// deployable until a real Firebase project exists (see DATA_MODEL.md).
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function role() {
+      return request.auth.token.role;
+    }
+
+    function isRole(r) {
+      return isSignedIn() && role() == r;
+    }
+
+    function isSelf(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isStaffOrAdmin() {
+      return isRole('staff') || isRole('admin');
+    }
+
+    // Applicant-uploaded documents, per DATA_MODEL.md's admissions
+    // lifecycle: applicants/{uid}/<document>. An applicant can upload
+    // their own documents and read them back; staff/admin can read any
+    // applicant's documents for review. Nobody can overwrite a document
+    // that's already part of a submitted application without going
+    // through a new-version path (enforced by the calling Cloud Function
+    // setting a fresh filename, not by these rules alone).
+    match /applicants/{uid}/{fileName} {
+      allow read: if isSelf(uid) || isStaffOrAdmin();
+      allow write: if isSelf(uid)
+        && request.resource.size < 10 * 1024 * 1024 // 10MB cap
+        && request.resource.contentType.matches('application/pdf|image/.*');
+    }
+
+    // Assignment submissions: submissions/{studentUid}/{assignmentId}/<file>.
+    match /submissions/{uid}/{assignmentId}/{fileName} {
+      allow read: if isSelf(uid) || isStaffOrAdmin() || isRole('faculty');
+      allow write: if isSelf(uid)
+        && request.resource.size < 25 * 1024 * 1024; // 25MB cap
+    }
+
+    // Library items: staff/admin-managed, world-readable to signed-in users
+    // (enrolled-only enforcement happens at the Firestore libraryItems
+    // level, not here — Storage just serves the bytes once Firestore has
+    // already authorised access).
+    match /library/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isStaffOrAdmin();
+    }
+
+    // Everything else: closed by default. Add a new match block deliberately
+    // rather than loosening this.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

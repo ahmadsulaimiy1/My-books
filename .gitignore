@@ -26,6 +26,13 @@ yarn-error.log*
 .env
 .env*.local
 
+# firebase (project association is machine/developer-specific; see .firebaserc.example)
+.firebaserc
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
 # vercel
 .vercel
 

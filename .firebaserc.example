@@ -1,0 +1,7 @@
+{
+  "//": "Copy this file to .firebaserc (no .example suffix) once a real Firebase project exists, and replace the placeholder IDs below. .firebaserc is already in .gitignore — never commit a real project ID's association file if you'd rather keep it private, though project IDs themselves aren't secret.",
+  "projects": {
+    "default": "REPLACE-WITH-REAL-PROJECT-ID",
+    "staging": "REPLACE-WITH-A-SEPARATE-STAGING-PROJECT-ID"
+  }
+}
