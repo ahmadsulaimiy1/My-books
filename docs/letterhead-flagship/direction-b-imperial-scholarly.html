@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Direction B — Imperial Scholarly</title>
+<link rel="stylesheet" href="assets/letterhead-typography.css">
+<link rel="stylesheet" href="assets/materials.css">
+<style>
+  /* ═══════════════════════════════════════════════════════════════════════
+     DIRECTION B · IMPERIAL SCHOLARLY
+     A crown of flood sapphire across the head, closed by a band of champagne
+     guilloché — the engine-turned line-work of security printing and of the
+     engraved certificate, which is the oldest visual grammar of authority in
+     print. The name is not printed ON the crown; it is struck OUT of it in
+     foil. A crimson ribbon descends from the crown onto the sheet, the way a
+     seal's ribbon hangs from a document. The foot answers the head.
+     ═══════════════════════════════════════════════════════════════════════ */
+  .crown{ position:absolute; top:0; left:0; right:0; height:84mm; }
+  /* The guilloché works at two densities: an engine-turned GROUND across the
+     whole crown, faint enough to be a texture rather than a pattern, and a
+     dense BAND that closes the crown along its edge. Together they read as one
+     engraved plate rather than as a decorated rectangle. */
+  .guil-ground{ position:absolute; inset:0; opacity:.26; }
+  .guil-band{ position:absolute; left:0; right:0; bottom:0; height:7.4mm;
+    overflow:hidden; opacity:.92; }
+  .crown-edge{ position:absolute; left:0; right:0; bottom:7mm; height:.6px; opacity:.85; }
+
+  .mark{ position:absolute; top:9mm; left:50%; transform:translateX(-50%);
+    width:20.6mm; height:25mm; }
+  .office{ position:absolute; top:37.5mm; left:0; right:0; text-align:center;
+    font-family:"Aref Ruqaa",serif; font-weight:400; font-size:12.6pt; }
+  .name{ position:absolute; top:46mm; left:0; right:0; text-align:center;
+    font-family:var(--name-face),"Amiri",serif; font-weight:700; font-size:28pt; line-height:1.6;
+    margin:0; white-space:nowrap; }
+  .name .house{ font-size:.64em; }
+
+  /* the ribbon: it leaves the crown and hangs on the sheet, notched at its foot */
+  .ribbon{ position:absolute; top:84mm; left:50%; transform:translateX(-50%);
+    width:6.4mm; height:15mm; z-index:3;
+    clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%); }
+  /* the ribbon carries a foil edge on each side, as a bound ribbon does */
+  .ribbon{ border-left:.35mm solid #C9AC79; border-right:.35mm solid #A5884F; }
+
+  .en{ position:absolute; top:104mm; left:0; right:0; text-align:center; direction:ltr; }
+  .en-office{ font:400 6.2pt/1 "Jost",sans-serif; letter-spacing:.46em; text-indent:.46em;
+    color:var(--gold-700); margin-bottom:3.4mm; }
+  .en-name{ font-family:"Bodoni Moda",serif; font-weight:600; font-size:15pt;
+    letter-spacing:.11em; text-indent:.11em; color:var(--sapphire-800); line-height:1; }
+  .en-house{ font:400 7pt/1 "Jost",sans-serif; letter-spacing:.52em; text-indent:.52em;
+    color:var(--gold-700); margin-top:3mm; }
+
+  .scope-ar{ position:absolute; top:127mm; left:26mm; right:26mm; text-align:center; margin:0;
+    font-family:"Amiri",serif; font-size:10.6pt; line-height:1.75; color:var(--ink-60); }
+  .scope-en{ position:absolute; top:136mm; left:22mm; right:22mm; text-align:center; direction:ltr;
+    font:300 5.4pt/1 "Jost",sans-serif; letter-spacing:.23em; text-indent:.23em;
+    text-transform:uppercase; color:var(--ink-40); }
+  .scope-en i{ display:inline-block; width:2.3px; height:2.3px; background:var(--gold-500);
+    transform:rotate(45deg); margin:0 .85em; vertical-align:.16em; font-style:normal; }
+
+  /* ── the foot answers the head ───────────────────────────────────────── */
+  .plinth{ position:absolute; left:0; right:0; bottom:0; height:17mm; }
+  .plinth-crimson{ position:absolute; left:0; right:0; bottom:17mm; height:1.6mm; }
+  .plinth-edge{ position:absolute; left:0; right:0; bottom:18.6mm; height:.6px; opacity:.85; }
+  .contact{ position:absolute; left:0; right:0; bottom:0; height:17mm; direction:ltr;
+    display:flex; align-items:center; justify-content:center;
+    font:400 6.6pt/1 "Jost",sans-serif; letter-spacing:.17em; }
+  .contact i{ display:inline-block; width:2.7px; height:2.7px; background:var(--gold-400);
+    transform:rotate(45deg); margin:0 1.5em; vertical-align:.18em; font-style:normal; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="crown field-sapphire">
+    <img class="mark" src="assets/insignia-foil.png" alt="Insignia of the Personal Office">
+    <div class="office"><span class="foil-type foil-type--dark">المكتب الخاص</span></div>
+    <h1 class="name"><span class="foil-type foil-type--dark">الإمام أحمد بن إبراهيم السليمي <span class="house">(آل سلام)</span></span></h1>
+
+    <div class="crown-edge foil-block foil-block--dark"></div>
+    <!-- engine-turned guilloché: interlaced rosette curves, as struck on an
+         engraved certificate or a banknote — line-work, never ornament -->
+    <div class="guil-ground">
+      <svg class="fill" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <pattern id="guilloche" width="64" height="26" patternUnits="userSpaceOnUse">
+            <g fill="none" stroke="#DCC68F" stroke-width=".55">
+              <path d="M0 13 C 8 2, 24 2, 32 13 S 56 24, 64 13"/>
+              <path d="M0 13 C 8 24, 24 24, 32 13 S 56 2, 64 13"/>
+              <path d="M0 8  C 8 -3, 24 -3, 32 8  S 56 19, 64 8"/>
+              <path d="M0 18 C 8 29, 24 29, 32 18 S 56 7,  64 18"/>
+              <path d="M0 13 C 11 5, 21 21, 32 13 S 53 5, 64 13" opacity=".55"/>
+            </g>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#guilloche)"/>
+      </svg>
+    </div>
+    <div class="guil-band">
+      <svg class="fill" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <pattern id="guilloche-dense" width="34" height="28" patternUnits="userSpaceOnUse">
+            <g fill="none" stroke="#E4D2A2" stroke-width=".6">
+              <path d="M0 14 C 4.25 3, 12.75 3, 17 14 S 29.75 25, 34 14"/>
+              <path d="M0 14 C 4.25 25, 12.75 25, 17 14 S 29.75 3, 34 14"/>
+              <path d="M0 9  C 4.25 -2, 12.75 -2, 17 9  S 29.75 20, 34 9"/>
+              <path d="M0 19 C 4.25 30, 12.75 30, 17 19 S 29.75 8, 34 19"/>
+            </g>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#guilloche-dense)"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="ribbon field-crimson"></div>
+  
+
+  <div class="en">
+    <div class="en-office">PERSONAL OFFICE</div>
+    <div class="en-name letterpress">IMAM AHMAD IBROHIM SULAIMIY</div>
+    <div class="en-house">ĀL-ES-SALAM</div>
+  </div>
+
+  <p class="scope-ar">للتطوير الأكاديمي والدعوة الإسلامية والعلاقات الدولية والشؤون الأهلية الخاصة</p>
+  <div class="scope-en">Academic Development<i></i>Islamic Da&lsquo;wah<i></i>International Relations<i></i>Private &amp; Civic Affairs</div>
+
+  <div class="plinth-edge foil-block"></div>
+  <div class="plinth-crimson field-crimson"></div>
+  <div class="plinth field-sapphire"></div>
+  <div class="contact">
+    <span class="foil-type foil-type--dark">+234&nbsp;810&nbsp;430&nbsp;2087<i></i>+44&nbsp;7961&nbsp;869638<i></i>abisulaimiycollege@gmail.com</span>
+  </div>
+
+</div>
+</body>
+</html>

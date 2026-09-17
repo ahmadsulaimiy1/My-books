@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Direction C — Contemporary Heritage</title>
+<link rel="stylesheet" href="assets/letterhead-typography.css">
+<link rel="stylesheet" href="assets/materials.css">
+<style>
+  /* ═══════════════════════════════════════════════════════════════════════
+     DIRECTION C · CONTEMPORARY HERITAGE
+     A gallery wall rather than a document. The sapphire appears once, as a
+     small solid plaque holding the mark — the way a museum mounts a bronze —
+     and everything else is drawn with hairlines on open paper. The heritage is
+     carried not by ornament but by a girih lattice pressed blind into the
+     lower field, present only to the hand and to raking light. One crimson
+     square sits on the grid intersection: the whole page's only saturated
+     accent, and the signature of the identity.
+     ═══════════════════════════════════════════════════════════════════════ */
+  .plaque{ position:absolute; left:18mm; top:20mm; width:34mm; height:41mm; }
+  .plaque img{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:22mm; height:26.5mm; }
+
+  .office{ position:absolute; right:18mm; top:22mm; font-family:"Amiri",serif;
+    font-size:11.4pt; color:var(--sapphire-600); }
+  .name{ position:absolute; right:18mm; top:30mm; left:60mm; text-align:right; margin:0;
+    font-family:var(--name-face),"Amiri",serif; font-weight:700; font-size:27pt;
+    line-height:1.55; color:var(--sapphire-800); white-space:nowrap; }
+  .name .house{ font-size:.64em; }
+
+  /* the drawn grid: two horizontals and one vertical, all foil hairline */
+  .h1{ position:absolute; left:18mm; right:18mm; top:66mm;   height:.7px; }
+  .h2{ position:absolute; left:18mm; right:18mm; top:68.6mm; height:.4px; opacity:.55; }
+  .v1{ position:absolute; left:56mm; top:20mm; width:.5px; height:46.4mm; opacity:.7; }
+  /* the signature: one crimson square, on the intersection */
+  .sig{ position:absolute; left:53mm; top:63mm; width:6mm; height:6mm; z-index:3; }
+
+  .scope-ar{ position:absolute; right:18mm; left:60mm; top:74mm; margin:0; text-align:right;
+    font-family:"Amiri",serif; font-size:10.4pt; line-height:1.8; color:var(--ink-60); }
+  .en{ position:absolute; left:18mm; top:74mm; width:80mm; direction:ltr; }
+  .en-office{ font:400 5.8pt/1 "Jost",sans-serif; letter-spacing:.4em; color:var(--gold-700);
+    margin-bottom:2.6mm; }
+  .en-name{ font-family:"Bodoni Moda",serif; font-weight:600; font-size:11.4pt;
+    letter-spacing:.06em; color:var(--sapphire-800); line-height:1.3; }
+  .en-house{ font:400 6.2pt/1 "Jost",sans-serif; letter-spacing:.44em; color:var(--gold-700);
+    margin-top:2.4mm; }
+
+  /* the lattice, pressed blind into the sheet */
+  .lattice{ position:absolute; right:0; bottom:26mm; width:132mm; height:132mm;
+    opacity:.5; overflow:hidden; }
+
+  .foot{ position:absolute; left:18mm; right:18mm; bottom:15mm; direction:ltr; }
+  .foot-rule{ height:.6px; margin-bottom:3.4mm; }
+  .foot-row{ display:flex; justify-content:space-between; align-items:baseline;
+    font:400 6.4pt/1 "Jost",sans-serif; letter-spacing:.14em; color:var(--ink-60); }
+  .foot-row .mut{ color:var(--ink-40); letter-spacing:.3em; font-size:5.6pt; }
+  .foot-row i{ display:inline-block; width:2.5px; height:2.5px; background:var(--gold-500);
+    transform:rotate(45deg); margin:0 1.2em; vertical-align:.16em; font-style:normal; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="plaque field-sapphire">
+    <img src="assets/insignia-foil.png" alt="Insignia of the Personal Office">
+  </div>
+
+  <div class="office letterpress">المكتب الخاص</div>
+  <h1 class="name letterpress">الإمام أحمد بن إبراهيم السليمي <span class="house">(آل سلام)</span></h1>
+
+  <div class="v1 foil-block"></div>
+  <div class="h1 foil-block"></div>
+  <div class="h2 foil-block"></div>
+  <div class="sig field-crimson"></div>
+
+  <p class="scope-ar">للتطوير الأكاديمي والدعوة الإسلامية والعلاقات الدولية والشؤون الأهلية الخاصة</p>
+
+  <div class="en">
+    <div class="en-office">PERSONAL OFFICE</div>
+    <div class="en-name letterpress">IMAM AHMAD<br>IBROHIM SULAIMIY</div>
+    <div class="en-house">ĀL-ES-SALAM</div>
+  </div>
+
+  <!-- girih: two squares per cell, tessellating into eight-point stars.
+       Blind — it carries no ink, and is only found in raking light. -->
+  <div class="lattice">
+    <svg class="fill" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <pattern id="girih" width="66" height="66" patternUnits="userSpaceOnUse">
+          <g fill="none" stroke="#7A6A48" stroke-width="1.1" opacity=".30">
+            <rect x="9.7" y="9.7" width="46.6" height="46.6"/>
+            <polygon points="33,0 66,33 33,66 0,33"/>
+          </g>
+          <g fill="none" stroke="#FFFFFF" stroke-width="1.1" opacity=".55"
+             transform="translate(-0.8,-0.9)">
+            <rect x="9.7" y="9.7" width="46.6" height="46.6"/>
+            <polygon points="33,0 66,33 33,66 0,33"/>
+          </g>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#girih)"/>
+    </svg>
+  </div>
+
+  <div class="foot">
+    <div class="foot-rule foil-block"></div>
+    <div class="foot-row">
+      <span>+234&nbsp;810&nbsp;430&nbsp;2087<i></i>+44&nbsp;7961&nbsp;869638<i></i>abisulaimiycollege@gmail.com</span>
+      <span class="mut">ĀL-ES-SALAM</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
