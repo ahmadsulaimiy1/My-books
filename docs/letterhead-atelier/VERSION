@@ -3,7 +3,7 @@ letterhead v1.0
 PERSONAL OFFICE · IMAM AHMAD IBROHIM SULAIMIY · ĀL-ES-SALAM
 
 Released    2026-09-17
-Tag         letterhead-v1
+Tag         letterhead-v1   (annotated; see README for the release commit)
 Spec        SPEC-v1.md
 Seal        MANIFEST-v1.sha256
 Verify      python3 tools/verify-v1.py

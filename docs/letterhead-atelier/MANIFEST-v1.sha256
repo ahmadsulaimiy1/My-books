@@ -1,9 +1,9 @@
 # letterhead v1.0 — sealed manifest
 # verify: python3 tools/verify-v1.py
 
-f87779cc4bbc1f1bdf8301c65c86bd131d88a132945df3fb9b4b2170f3ecf6e8  README.md
+f9cdad5ad233dda38d4d370b3a02ba93fdc6f17a52a6b4c3b8b815f2dfcefa55  README.md
 ebe066305e1b4c0d5caf3db1011b7fa22cf58795bee0aaf10d1265e8a1fd69e1  SPEC-v1.md
-69d9c096b68866ecdee5b9394e5988ab757647b702d834f95ea9a3cbef3e6a43  VERSION
+bf6f1019e87f0d7ece481c5753326273ed4011ba414bfa591acf69520eda13ab  VERSION
 bbbe429dc497231ea4a13b85f7643729a65a44e198d71112c180754dc78a0262  letter-tahniah-dr-adewuyi.html
 92dc16fab00a5ed4abf06e43888b3763cf5a9b3a2b117c809a1e1fe29116d737  letterhead-continuation.html
 5781190b836ac76b8b8dbe0e744e9aa75f183d45b0c0ea8dee442862f1899b46  letterhead.html

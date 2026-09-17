@@ -16,7 +16,11 @@ PERSONAL OFFICE · IMAM AHMAD IBROHIM SULAIMIY · ĀL-ES-SALAM
 >
 > The verifier checks two things: that every dimension, colour and type size
 > the design depends on is still in the stylesheets **by name**, and that no
-> released file has changed. Git tag **`letterhead-v1`**.
+> released file has changed.
+>
+> Release point: the commit titled **`letterhead: lock the atelier sheet as
+> v1.0`** on `claude/luxury-executive-letterhead-5vyoye`, tagged
+> **`letterhead-v1`**.
 >
 > **Changing anything in `SPEC-v1.md` is a change to the design, not a fix.**
 > It belongs in v2: bump `VERSION` in `tools/verify-v1.py`, update the
