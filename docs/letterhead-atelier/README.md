@@ -5,10 +5,28 @@ PERSONAL OFFICE · IMAM AHMAD IBROHIM SULAIMIY · ĀL-ES-SALAM
 
 **SAPPHIRE · RED · PEARL · GOLD · PLATINUM · STAINLESS**
 
+> ### 🔒 LOCKED AS `letterhead v1.0`
+>
+> This design is **released**. The frozen specification is [`SPEC-v1.md`](SPEC-v1.md);
+> every released file is sealed in `MANIFEST-v1.sha256`.
+>
+> ```bash
+> python3 tools/verify-v1.py      # → ✓ locked, and this tree matches it
+> ```
+>
+> The verifier checks two things: that every dimension, colour and type size
+> the design depends on is still in the stylesheets **by name**, and that no
+> released file has changed. Git tag **`letterhead-v1`**.
+>
+> **Changing anything in `SPEC-v1.md` is a change to the design, not a fix.**
+> It belongs in v2: bump `VERSION` in `tools/verify-v1.py`, update the
+> constant, re-seal with `--seal`, tag. The *content* of a letter — addressee,
+> reference, date, subject, body, signatures — is free and is not part of v1.
+
 ![the stationery, photographed](presentation.jpg)
 
 > Earlier letterheads in `docs/letterhead/`, `docs/letterhead-flagship/` and
-> `docs/letterhead-instrument/` are untouched.
+> `docs/letterhead-instrument/` are untouched. This folder is the released one.
 
 ---
 
@@ -401,6 +419,25 @@ python3 tools/cutout-logo.py <src>     python3 tools/build-mark-variants.py
 python3 tools/cutout-signature.py <src> <out.png>
 python3 tools/build-qr.py              python3 tools/build-pages.py
 python3 tools/build-presentation.py
+```
+
+Then, always:
+
+```bash
+python3 tools/verify-v1.py        # must print ✓ before anything ships
+```
+
+### Cutting a v2
+
+A rebuild that changes a released file — even a re-run of
+`build-presentation.py`, which re-encodes the JPEG — will fail the manifest.
+That is the point: it means *this tree no longer is v1*. Either restore it
+(`git checkout docs/letterhead-atelier`) or cut the next version deliberately:
+
+```bash
+# 1 · bump VERSION and the changed CONSTANTS in tools/verify-v1.py
+python3 tools/verify-v1.py --spec --seal
+git commit -am "letterhead v2.0: …"   &&   git tag -a letterhead-v2
 ```
 
 All three documents are generated from one source — the only way the masthead on
