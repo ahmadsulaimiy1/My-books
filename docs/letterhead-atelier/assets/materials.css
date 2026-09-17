@@ -67,6 +67,14 @@
 
   /* Diamond stainless: the glint at 72% is pure white. That single stop is the
      difference between "grey metal" and a polished, faceted surface. */
+  /* A RICHER gold for the members that must read as heavy metal rather than as
+     a hairline — deeper chroma, less champagne. The pale ramp above is right
+     for a 0.45mm rule; a 2.4mm engraved member needs the weight. */
+  --foil-gold-rich:linear-gradient(104deg,
+     #8A6418 0%,  #C99B2E 9%,  #F7DF97 19%, #DDB14A 27%,
+     #A07820 38%, #FCEDB4 50%, #CDA43C 60%, #FFF8D8 72%,
+     #E0B855 82%, #8E6A1C 92%, #EFD9A0 100%);
+
   --foil-steel:linear-gradient(104deg,
      #6F7B88 0%,  #B7C2CE 10%, #F7FAFD 20%, #A6B2BF 28%,
      #79858F 38%, #E8EEF4 50%, #9FAAB7 60%, #FFFFFF 72%,
@@ -107,6 +115,7 @@ html,body{ margin:0; padding:0; }
 .gold-block     { background-image:url(foil-grain.png), var(--foil-gold);
                   background-size:24mm auto, 100% 100%; background-blend-mode:soft-light, normal; }
 .gold-block--dark{ background-image:url(foil-grain.png), var(--foil-gold-dark); }
+.gold-block--rich{ background-image:url(foil-grain.png), var(--foil-gold-rich); }
 
 /* ── STAINLESS ─────────────────────────────────────────────────────────────
    THREE METALS, ONE JOB EACH. This is the rule the page is built on, and it is
@@ -137,8 +146,14 @@ html,body{ margin:0; padding:0; }
   content:""; position:absolute; inset:0; pointer-events:none;
   background-image:url(paper-cotton.png); background-size:33mm 33mm;
   mix-blend-mode:overlay; opacity:.19; }
-.field-red{ background:linear-gradient(170deg,
-   var(--red-600) 0%, var(--red-700) 46%, var(--red-800) 100%); }
+/* Red gets the same treatment as sapphire: a flood, not a fill. Flat red is the
+   single fastest way to make a page look printed on a desktop machine. */
+.field-red{ background:radial-gradient(120% 320% at 16% -40%,
+   var(--red-600) 0%, var(--red-700) 44%, var(--red-800) 100%); }
+.field-red::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:url(paper-cotton.png); background-size:33mm 33mm;
+  mix-blend-mode:overlay; opacity:.17; }
 
 /* ── RELIEF — light fixed top-left across the whole sheet ──────────────────── */
 .emboss{ color:#F6F3EB; text-shadow:-0.35px -0.45px 0.4px rgba(255,255,255,.95),

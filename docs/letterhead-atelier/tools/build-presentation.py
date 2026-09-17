@@ -5,9 +5,9 @@ Compose the production presentation.
     python3 tools/build-presentation.py
 
 Renders the actual print PDFs at 300dpi and photographs them: a studio surface,
-raking light from the top left, the sheets laid at a slight angle with真 contact
-shadows, and a magnified detail of the crown edge so the three plates — foil,
-crimson, sapphire — can be counted.
+raking light from the top left, the sheets laid at a slight angle with true contact
+shadows, and a magnified detail of the binding edge so the metals — engraved
+gold, milled stainless, gold hairline — can be counted against the sapphire.
 
 Nothing here is decoration on top of the design. Every pixel comes from the same
 PDF a printer would receive; only the lighting and the table are added.

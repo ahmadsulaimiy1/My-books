@@ -65,7 +65,7 @@ def plate(spec=False):
 {GUIL}
     </div>
   </div>
-  <div class="band-thread gold-block gold-block--dark"{r}></div>
+  <div class="band-thread gold-block gold-block--rich"{r}></div>
   <div class="band-steel steel-block steel-block--dark"></div>
   <div class="band-gold gold-block gold-block--dark"></div>
 
@@ -97,10 +97,16 @@ def head(spec=False):
   <p class="scope-ar">{SCOPE_AR}</p>
   <div class="scope-en">Academic Development<i></i>Islamic Da&lsquo;wah<i></i>International Relations<i></i>Private &amp; Civic Affairs</div>
 
-  <div class="classification">
+  <!-- ══ CLASSIFICATION BAND — the head of the register, full bleed ══ -->
+  <div class="classband-steel steel-block"></div>
+  <div class="classband field-red"></div>
+  <div class="classband-in">
     <span class="en">OFFICIAL CORRESPONDENCE</span>
     <span class="ar">مراسلة رسمية</span>
   </div>
+  <div class="classband-gold gold-block"></div>
+
+
 '''
 
 def register(ref="", date_ar="", to_name="", to_role="", subject="", spec=False):
@@ -108,7 +114,6 @@ def register(ref="", date_ar="", to_name="", to_role="", subject="", spec=False)
     def lab(ar, en): return f'<div class="reg-lab"><span class="ar">{ar}</span><span class="en">{en}</span></div>'
     return f'''
   <div class="register"{s}>
-    <div class="reg-open field-red"></div>
     <div class="reg-row split">
       {lab("رقم","REF.")}
       <div class="reg-val lat"><span class="ref">{ref}</span></div>
@@ -188,7 +193,7 @@ def cont_head(spec=False):
   <div class="cont-plate field-sapphire"><div class="plate-guil">
 {GUIL}
   </div></div>
-  <div class="band-thread gold-block gold-block--dark"></div>
+  <div class="band-thread gold-block gold-block--rich"></div>
   <div class="band-steel steel-block steel-block--dark"></div>
   <div class="band-gold gold-block gold-block--dark"></div>
 

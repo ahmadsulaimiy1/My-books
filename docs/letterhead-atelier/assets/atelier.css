@@ -51,11 +51,24 @@
    it was the reason it read as jewellery — but the thread is gold now, and the
    red has gone entirely to where it does more work: the register rule, the
    reference, the classification and the folio. */
-.band-thread{ position:absolute; top:0; bottom:0; left:171.5mm; width:1.5mm; z-index:3;
-  box-shadow: inset .28mm 0 0 rgba(255,250,224,.62),
-              inset -.28mm 0 0 rgba(84,60,14,.72),
-              .18mm 0 .35mm rgba(40,28,4,.34); }
-.band-steel { position:absolute; top:0; bottom:0; left:174.5mm; width:3mm;   z-index:3;
+/* ENGRAVED, not embossed. The two are opposite lightings and the difference is
+   the whole effect: a raised member is lit on the side facing the light and
+   shadowed on the far side; a member cut INTO the plate is the reverse — its
+   near wall falls into shadow and its far wall catches the light, with a thin
+   glint on the lip of the channel. Light is fixed top-left across this sheet,
+   so for a vertical member that means: left wall dark, right wall lit.
+   It is 3.1mm — wider than the stainless beside it, and four times any
+   sapphire reveal in the band, so gold is plainly the principal metal here.
+   The three sapphire reveals are held at exactly .7mm so the blue reads as
+   the ground between the metals, never as an outline competing with them. */
+.band-thread{ position:absolute; top:0; bottom:0; left:170.7mm; width:3.1mm; z-index:4;
+  box-shadow: inset  .42mm 0 .34mm rgba(46,30,2,.88),    /* left wall, in shade   */
+              inset  .10mm 0 0     rgba(24,14,2,.58),    /* the cut line, left    */
+              inset -.30mm 0 .30mm rgba(255,250,222,.74),/* right wall, in light  */
+              inset -.07mm 0 0     rgba(255,255,238,.58),/* glint on the lip      */
+              -.14mm 0 .26mm rgba(3,10,28,.62),          /* plate shadow, left    */
+               .14mm 0 .22mm rgba(196,214,244,.22); }    /* plate lip lit, right  */
+.band-steel { position:absolute; top:0; bottom:0; left:174.5mm; width:3mm;   z-index:4;
   box-shadow: inset .3mm 0 0 rgba(255,255,255,.80),
               inset -.3mm 0 0 rgba(38,48,60,.68),
               .18mm 0 .4mm rgba(18,26,38,.36); }
@@ -66,7 +79,7 @@
                            rgba(40,52,66,.5) 50.7%, transparent 50.7%),
     repeating-linear-gradient(0deg, rgba(255,255,255,.16) 0 .12mm,
                                     transparent .12mm .34mm); }
-.band-gold  { position:absolute; top:0; bottom:0; left:178.4mm; width:.45mm; z-index:3; }
+.band-gold  { position:absolute; top:0; bottom:0; left:178.2mm; width:.5mm; z-index:4; }
 
 /* ── THE MEDALLION ─────────────────────────────────────────────────────────
    Centre (150mm, 44mm): on the plate's lower edge, clear of the binding edge
@@ -121,19 +134,33 @@
 .scope-en i{ display:inline-block; width:2.2px; height:2.2px; background:var(--gold-600);
   transform:rotate(45deg); margin:0 .9em; vertical-align:.16em; font-style:normal; }
 
-/* the classification: discreet, and paired with the register rather than
-   banded across the page */
-.classification{ position:absolute; top:95mm; left:24mm; right:48mm; z-index:1;
-  display:flex; justify-content:space-between; align-items:baseline; direction:ltr; }
-.classification .en{ font:600 5.2pt/1 "Inter",sans-serif; letter-spacing:.32em;
-  color:var(--red-700); }
-.classification .ar{ font-family:"Reem Kufi",sans-serif; font-weight:400; font-size:7.4pt;
-  color:var(--red-700); }
+/* ── THE CLASSIFICATION BAND ───────────────────────────────────────────────
+   The red returns as a band, but it is not a stripe laid across the page — it
+   is the HEAD OF THE REGISTER. The classification announces the instrument and
+   rules it in the same gesture, so the two read as one object instead of a
+   coloured bar with a table under it. That is the only reason a band this
+   strong earns its place.
+
+   It is framed in the two metals, one on each edge: STAINLESS above, GOLD
+   below, echoing the binding band. It full-bleeds both ways, and where it
+   crosses the binding edge the engraved gold thread and the milled steel rail
+   ride OVER it — the inlays are in the plate, the band is printed on it, and
+   the layering says so. */
+/* The band bleeds off the LEFT trim and dies UNDER the sapphire pier (z-index 1,
+   beneath the plate at 2) so the pier reads as the later, heavier element. */
+.classband      { position:absolute; left:0; right:38mm; top:93mm;    height:8.6mm;  z-index:1; }
+.classband-steel{ position:absolute; left:0; right:38mm; top:92.5mm;  height:.5mm;   z-index:1; }
+.classband-gold { position:absolute; left:0; right:38mm; top:101.6mm; height:.55mm;  z-index:1; }
+.classband-in{ position:absolute; left:24mm; right:48mm; top:93mm; height:8.6mm; z-index:1;
+  display:flex; align-items:center; justify-content:space-between; direction:ltr; }
+.classband-in .en{ font:600 6pt/1 "Inter",sans-serif; letter-spacing:.34em;
+  color:#FBEEDC; }
+.classband-in .ar{ font-family:"Reem Kufi",sans-serif; font-weight:400; font-size:9pt;
+  color:#F8E3A8; text-shadow:0 -.2px 0 rgba(90,10,22,.5), 0 .3px .3px rgba(255,248,224,.35); }
 
 /* ── THE REGISTER ──────────────────────────────────────────────────────────
    Bilingual labels, gold hairlines, no boxes. Opened by the red rule. */
-.register{ position:absolute; top:101mm; left:24mm; right:48mm; z-index:1; }
-.reg-open{ height:.8mm; }
+.register{ position:absolute; top:102.15mm; left:24mm; right:48mm; z-index:1; }
 .reg-rule{ height:.35px; background:var(--sapphire-600); opacity:.5; }
 .reg-close{ height:.5px; background:var(--sapphire-700); opacity:.75; }
 .reg-row{ display:grid; grid-template-columns:20mm 1fr; padding:1.8mm 0 2mm; }
@@ -162,7 +189,7 @@
    Amiri at 11.2pt on a 138mm measure, leaded 1.95 — a book page, not a form.
    Measured: the register closes at 130mm, the signature opens at 240mm.
    About 100mm of set type on sheet one, about 200mm on each continuation. */
-.field{ position:absolute; top:146mm; left:24mm; right:48mm; bottom:57mm; z-index:1; }
+.field{ position:absolute; top:143mm; left:24mm; right:48mm; bottom:57mm; z-index:1; }
 .field--continued{ top:44mm; bottom:57mm; }
 
 .bismillah{ text-align:center; font-family:"Amiri",serif; font-size:10pt;
@@ -228,7 +255,7 @@
   letter-spacing:.12em; color:rgba(230,212,158,.82); }
 
 /* ── SECURITY AND RELIEF ───────────────────────────────────────────────────── */
-.latent{ position:absolute; left:20mm; top:140mm; width:120mm; height:120mm; z-index:0;
+.latent{ position:absolute; left:20mm; top:138mm; width:120mm; height:120mm; z-index:0;
   opacity:.2; pointer-events:none; }
 .watermark{ position:absolute; left:58mm; top:190mm; width:48mm; z-index:0; pointer-events:none; }
 .watermark img{ width:100%; display:block; opacity:.14; }
