@@ -109,10 +109,12 @@ def main():
     canvas.alpha_composite(front_sh, (238, 168))
     canvas.alpha_composite(front,    (222, 150))
 
-    # the medallion, magnified: a complete insignia inside a struck gold ring,
-    # with its own clear space, sitting on the plate's stepped edge
+    # THE ONE DETAIL WORTH MAGNIFYING: the seal on the plate's lower edge with
+    # its clear zone, and the milled edge section beside it — sill, gold rail,
+    # return, platinum floor, cut line — in the same frame, so the clearance
+    # between the two can be measured by eye.
     px_mm = DPI / 25.4
-    box = (int(112*px_mm), int(4*px_mm), int(182*px_mm), int(58*px_mm))
+    box = (int(121*px_mm), int(26*px_mm), int(192*px_mm), int(80*px_mm))
     det = detail(letter, box, 470)
     dsh = Image.new("RGBA", det.size, (0, 0, 0, 0))
     dsh.putalpha(Image.new("L", det.size, 200).filter(ImageFilter.GaussianBlur(24)))

@@ -54,22 +54,27 @@ def medallion(cls="medallion", spec=False):
   </div>
 '''
 
-def plate(spec=False):
-    g = ' data-spec="GOLD FOIL keyline"' if spec else ''
-    s = ' data-spec="SAPPHIRE FLOOD · offset"' if spec else ''
-    r = ' data-spec="GOLD ENGRAVED · STAINLESS MILLED · GOLD"' if spec else ''
-    return f'''  <!-- ══ ONE CUT PLATE: head and binding edge, with a stepped lower edge ══ -->
-  <div class="plate-gold gold-block"{g}></div>
-  <div class="plate field-sapphire"{s}>
-    <div class="plate-guil">
-{GUIL}
-    </div>
+# ── THE EDGE SECTION ────────────────────────────────────────────────────────
+# Nine members, one order, no gaps. Emitted from ONE function so page one and
+# the continuation sheet cannot drift apart: they are not two pages that look
+# alike, they are the same construction called twice.
+def edge(spec=False, full=False):
+    e = ' data-spec="MILLED CHANNEL: sill · GOLD RAIL 3.4 · return · PLATINUM 2.2 · cut line"' if spec else ''
+    a = " edge-arris--full" if full else ""
+    return f'''  <div class="edge-arris{a}"></div>
+  <div class="edge"{e}>
+    <i class="edge-sill"></i>
+    <i class="edge-cut"></i>
+    <i class="edge-rail gold-block gold-block--rich"></i>
+    <i class="edge-ret"></i>
+    <i class="edge-plat plat-block"></i>
+    <i class="edge-wall"></i>
+    <i class="edge-rule"></i>
   </div>
-  <div class="band-thread gold-block gold-block--rich"{r}></div>
-  <div class="band-steel steel-block steel-block--dark"></div>
-  <div class="band-gold gold-block gold-block--dark"></div>
+'''
 
-  <span class="vert pier-en gold-type gold-type--dark">IMAM AHMAD IBROHIM SULAIMIY</span>
+def pier():
+    return f'''  <span class="vert pier-en gold-type gold-type--dark">IMAM AHMAD IBROHIM SULAIMIY</span>
   <span class="vert pier-sub">PERSONAL OFFICE &nbsp;·&nbsp; ĀL-ES-SALAM</span>
 
   <div class="verify">
@@ -79,6 +84,18 @@ def plate(spec=False):
   </div>
 '''
 
+def plate(spec=False):
+    g = ' data-spec="GOLD FOIL keyline · lower silhouette only"' if spec else ''
+    s = ' data-spec="SAPPHIRE FLOOD · offset"' if spec else ''
+    return f'''  <!-- ══ ONE MILLED PLATE: head across the sheet, pier down the binding edge ══ -->
+  <div class="plate-gold gold-block"{g}></div>
+  <div class="plate field-sapphire"{s}>
+    <div class="plate-guil">
+{GUIL}
+    </div>
+  </div>
+{edge(spec)}{pier()}'''
+
 def head(spec=False):
     n = ' data-spec="PEARL, reversed out of sapphire"' if spec else ''
     return f'''
@@ -86,51 +103,48 @@ def head(spec=False):
   <h1 class="name"{n}>{NAME_AR}</h1>
   <div class="house gold-type gold-type--dark">{HOUSE_AR}</div>
   <div class="name-rule gold-block gold-block--dark"></div>
+  <p class="scope-ar">{SCOPE_AR}</p>
 
   <div class="ident">
     <div class="ident-rule"></div>
     <div class="ident-office">PERSONAL OFFICE</div>
     <div class="ident-name letterpress">IMAM AHMAD IBROHIM SULAIMIY</div>
     <div class="ident-house">ĀL · ES · SALAM</div>
+    <div class="scope-en">Academic Development<i></i>Islamic Da&lsquo;wah<i></i>International Relations<i></i>Private &amp; Civic Affairs</div>
   </div>
 
-  <p class="scope-ar">{SCOPE_AR}</p>
-  <div class="scope-en">Academic Development<i></i>Islamic Da&lsquo;wah<i></i>International Relations<i></i>Private &amp; Civic Affairs</div>
-
-  <!-- ══ CLASSIFICATION BAND — the head of the register, full bleed ══ -->
-  <div class="classband-steel steel-block"></div>
-  <div class="classband field-red"></div>
-  <div class="classband-in">
+  <!-- ══ THE RED CHANNEL — the binding section turned through 90° ══ -->
+  <div class="redch-steel steel-block steel-block--dark"></div>
+  <div class="redch field-red"></div>
+  <div class="redch-in">
     <span class="en">OFFICIAL CORRESPONDENCE</span>
     <span class="ar">مراسلة رسمية</span>
   </div>
-  <div class="classband-gold gold-block"></div>
+  <div class="redch-gold gold-block gold-block--rich"></div>
 
 
 '''
 
-def register(ref="", date_ar="", to_name="", to_role="", subject="", spec=False):
-    s = ' data-spec="RED rule · GOLD hairlines · no boxes"' if spec else ''
-    def lab(ar, en): return f'<div class="reg-lab"><span class="ar">{ar}</span><span class="en">{en}</span></div>'
+def register(ref="", date_ar="", date_sub="", to_name="", to_role="", subject="", spec=False):
+    s = ' data-spec="THE FILE at the left · THE ADDRESSEE at the right · no boxes"' if spec else ''
+    blank = '&nbsp;'
+    tpl = " register--blank" if not (ref or to_name) else ""
     return f'''
-  <div class="register"{s}>
-    <div class="reg-row split">
-      {lab("رقم","REF.")}
-      <div class="reg-val lat"><span class="ref">{ref}</span></div>
-      {lab("التاريخ","DATE")}
-      <div class="reg-val">{date_ar}</div>
+  <div class="register{tpl}"{s}>
+    <div class="reg-pair">
+      <div class="reg-to">
+        <span class="k">إلى</span>
+        <div class="to-name">{to_name or blank}</div>
+        <div class="to-role">{to_role or blank}</div>
+      </div>
+      <div class="reg-file">
+        <div class="rf"><span class="k">رقم</span><span class="v lat"><span class="ref">{ref or blank}</span></span></div>
+        <div class="rf"><span class="k">التاريخ</span><span class="v">{date_ar or blank}</span></div>
+        <div class="rf"><span class="k"></span><span class="v sub">{date_sub or blank}</span></div>
+      </div>
     </div>
-    <div class="reg-rule"></div>
-    <div class="reg-row">
-      {lab("إلى","TO")}
-      <div class="reg-val"><span class="strong">{to_name}</span>{"<br>" if to_role else ""}<span class="sub">{to_role}</span></div>
-    </div>
-    <div class="reg-rule"></div>
-    <div class="reg-row">
-      {lab("الموضوع","SUBJECT")}
-      <div class="reg-val reg-val--kufi">{subject}</div>
-    </div>
-    <div class="reg-close"></div>
+    <div class="reg-hair gold-block"></div>
+    <div class="reg-subject"><span class="k">الموضوع</span><span class="s">{subject or blank}</span></div>
   </div>
 '''
 
@@ -189,21 +203,10 @@ SIGNATURES = '''
 
 def cont_head(spec=False):
     return f'''
-  <div class="cont-plate-gold gold-block"></div>
   <div class="cont-plate field-sapphire"><div class="plate-guil">
 {GUIL}
   </div></div>
-  <div class="band-thread gold-block gold-block--rich"></div>
-  <div class="band-steel steel-block steel-block--dark"></div>
-  <div class="band-gold gold-block gold-block--dark"></div>
-
-  <span class="vert pier-en gold-type gold-type--dark">IMAM AHMAD IBROHIM SULAIMIY</span>
-  <span class="vert pier-sub">PERSONAL OFFICE &nbsp;·&nbsp; ĀL-ES-SALAM</span>
-  <div class="verify">
-    <div class="frame gold-block"><img src="assets/qr-office.png" alt=""></div>
-    <div class="serial">{REF}</div>
-  </div>
-
+{edge(full=True)}{pier()}
 {medallion("cont-med medallion")}
   <div class="cont-ref">REF. <span class="ref">{REF}</span><br><span class="k">CONTINUATION</span></div>
   <div class="cont-head">
@@ -268,12 +271,14 @@ def main():
     fa1, fe1 = folio(1, 2); fa2, fe2 = folio(2, 2)
     p1 = sheet(plate() + medallion() + head()
         + register(ref=REF,
-                   date_ar='٣ ربيع الآخر ١٤٤٨هـ<br><span class="sub">الموافق ١٧ سبتمبر ٢٠٢٦م</span>',
+                   date_ar='٣ ربيع الآخر ١٤٤٨هـ',
+                   date_sub='الموافق ١٧ سبتمبر ٢٠٢٦م',
                    to_name="سعادة الدكتور حبيب الله يوسف أديوي المحترم",
                    to_role="مدير كلية منار الهدى العالمية",
                    subject="تهنئة بمناسبة نيل درجة الدكتوراه")
         + SECURITY
         + '  <div class="field">\n    <p class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
+          '    <div class="open-rule gold-block"></div>\n'
           '    <div class="letter">\n      ' + "\n      ".join(LETTER_1) + '\n    </div>\n  </div>\n'
         + foot(fa1, fe1))
     p2 = sheet(cont_head() + SECURITY

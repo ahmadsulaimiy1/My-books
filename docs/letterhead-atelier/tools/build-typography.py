@@ -40,16 +40,22 @@ UR_EXT = ("U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,
 # family, google query, subset label, weight, pinned axes (None = already static)
 FACES = [
     # ── Arabic ──────────────────────────────────────────────────────────────
-    # AMIRI for the body. This is the decision the whole page rests on: a
-    # letterhead with an extraordinary masthead and ordinary text is not
-    # expensive. Amiri is a revival of the Naskh cut by the Bulaq Press in
-    # Cairo — it has genuine stroke modulation, properly resolved connected
-    # forms, and it was drawn for BOOK setting, which is what a formal letter
-    # actually is. Nothing else available approaches it for text at 11pt.
-    ("Amiri",           "family=Amiri:wght@400",        "arabic",    400, None),
-    ("Amiri",           "family=Amiri:wght@400",        "latin",     400, None),
-    ("Amiri",           "family=Amiri:wght@700",        "arabic",    700, None),
-    ("Amiri",           "family=Amiri:wght@700",        "latin",     700, None),
+    # SCHEHERAZADE NEW for the document voice. Amiri was here and has been
+    # replaced outright. Set against it at matched optical size, Amiri reads
+    # as a competent screen Naskh: even colour, shallow modulation, shallow
+    # descenders — the look of a document produced in an office. Scheherazade
+    # is a classical Naskh in the tradition of the great Cairo and Beirut
+    # book founts: pronounced thick/thin modulation, deep generous bowls,
+    # long confident descenders, and a rhythm that wants air around it. It is
+    # the fount of Qur'anic and scholarly Arabic publishing, and it is what a
+    # letter from a scholar's office should be set in.
+    #
+    # It carries a large body for its point size, so it is set at 13.4pt where
+    # Amiri was at 11.2pt — the same apparent size, more presence.
+    ("Scheherazade New","family=Scheherazade+New:wght@400","arabic", 400, {"wght":400}),
+    ("Scheherazade New","family=Scheherazade+New:wght@400","latin",  400, {"wght":400}),
+    ("Scheherazade New","family=Scheherazade+New:wght@700","arabic", 700, {"wght":700}),
+    ("Scheherazade New","family=Scheherazade+New:wght@700","latin",  700, {"wght":700}),
     # REEM KUFI for display. A contemporary Kufi drawn from the Jazm tradition
     # by the same hand that drew Amiri, so the pairing is a designed one rather
     # than an assembled one. Monumental without being a calligraphic pastiche,
@@ -157,11 +163,19 @@ def main():
    identically offline, at a print shop, and inside an exported PDF, with no
    font to install and no network request.
 
-     Amiri         Arabic text — the Bulaq Naskh revival; the body face
-     Reem Kufi     Arabic display — contemporary Kufi, by Amiri's designer
-     Playfair Display  Latin wordmark — wide, bold, high-contrast
-     EB Garamond   Latin body and subordinate lines — the European book face
-     Inter         Latin instrument — references, serials, microtext
+   FOUR VOICES, AND A RULE FOR EACH. Every line on the sheet belongs to one
+   of three layers, and each layer has exactly one fount per script:
+
+                   ARABIC                LATIN
+     IDENTITY      Reem Kufi             Playfair Display 700
+     DOCUMENT      Scheherazade New      EB Garamond
+     INSTRUMENT    Reem Kufi (small)     Inter
+
+   Nothing crosses. The office name, the personal name, the house and the
+   scope are IDENTITY and are set only in the first row. The letter, the
+   Bismillah, the addressee and the subject are DOCUMENT. References,
+   serials, glosses, microtext and the folio are INSTRUMENT — deliberately
+   impersonal, because that part of the page is machinery, not voice.
 
    Two decisions worth keeping:
    · Faces are pinned to STATIC instances. Chrome's print-to-PDF will not embed

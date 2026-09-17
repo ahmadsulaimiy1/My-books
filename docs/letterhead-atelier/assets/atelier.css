@@ -2,92 +2,117 @@
    THE ATELIER SHEET
    المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام)
 
-   ONE sapphire shape, not a band plus a sidebar. A single cut plate wraps the
-   head and the binding edge, and its lower edge STEPS — deep on the right,
-   shallow on the left, chamfered between. A plate with a silhouette reads as
-   architecture; a rectangle reads as a banner.
+   ONE PLATE, ONE CHANNEL, ONE SEAL. The sapphire is a single milled plate: a
+   head across the top of the sheet and a pier down the binding edge, cut from
+   the same material in the same operation. A CHANNEL is machined down the
+   pier's inner edge and runs the full height of the plate, through the head
+   as well — which is what makes the head and the pier read as one object
+   rather than a banner with a sidebar beside it.
 
-   THE MEDALLION RESOLVES ITS INNER CORNER. A gold-ringed sapphire roundel sits
-   on the plate's lower edge, half in the sapphire and half on the sheet. This
-   is the answer to the insignia being trimmed: the mark is not placed inside a
-   column that then crops it — the architecture is built around the mark, which
-   sits complete, centred, with 7mm of clear space inside its own ring. If the
-   two ever conflict again, the architecture moves.
+   THE EDGE IS A SECTION, NOT A SET OF LINES. Nine members in a stated order,
+   no two the same width, with the sapphire never reappearing between them:
 
-   THE GOLD IS STRUCTURAL. A keyline follows the whole plate silhouette, struck
-   from a plate one notch larger than the sapphire. The medallion's double ring,
-   the rule under the name, the two hairlines flanking the red inlay, the
-   register rules, the signature rule and the foot rule are all the same gold.
-   Limited, positioned, unmistakable.
+     PEARL │ crevice · arris │ SILL │ cut │ GOLD RAIL │ return │ PLATINUM
+           │       .55       │  .86 │ .19 │   3.40    │   .35  │   2.20
+           │ …  │ far wall │ cut line │ SAPPHIRE FIELD
+           │    │    .30   │    .22   │
 
-   THE RED IS AN INLAY, NOT A BANNER. A 3mm spine runs the full height inside
-   the sapphire, one millimetre from its inner edge, flanked by gold hairlines.
-   It strikes twice more — the rule that opens the register, and the reference.
+   Gold is the proud metal and measures like it: 3.4mm, wider than anything
+   beside it. Platinum is the recessed metal — narrower, cooler, darker,
+   lying on the floor of the channel that the gold rail overhangs. The return
+   between them is a LIT CHAMFER, not a gap: the two metals are joined by a
+   step, which is the whole reason they read as one assembly. The ultra-fine
+   dark rule at the far side is the cut line where the channel's far wall
+   meets the plate's surface again.
+
+   LIGHT IS FIXED TOP-LEFT over the whole sheet, and every member obeys it.
+   For a vertical channel that means the near (left) wall falls into shade and
+   the far (right) wall takes the light; for a horizontal one — the red — the
+   upper wall is shaded and the lower wall is lit. The red channel is the same
+   detail rotated 90°, which is why the sheet has one edge vocabulary and not
+   two.
+
+   THE SEAL IS NEVER CROSSED. The medallion sits astride the plate's lower
+   edge with 10mm of clear ground on every side: 10mm to the channel, 10mm to
+   the Arabic name, 7mm to the Latin scope beneath it. The architecture was
+   laid out around it. If the two ever conflict again, the architecture moves.
    ══════════════════════════════════════════════════════════════════════════ */
 
 /* ── THE PLATE ─────────────────────────────────────────────────────────────
-   Two shapes, the same silhouette, the gold one a notch larger. What shows
-   along every edge is a gold keyline that turns the chamfer with the plate. */
+   Head 56mm deep across the full sheet, pier 38mm wide down the binding edge.
+   The gold keyline is struck from a plate a notch larger, but ONLY along the
+   lower silhouette — the binding edge has no keyline, because the gold there
+   is the rail itself. One gold per edge; two would be the parallel-strokes
+   problem the whole section exists to solve. */
 .plate, .plate-gold{ position:absolute; top:0; left:0; right:0; height:297mm; z-index:2; }
-.plate-gold{ clip-path:polygon(0 0,210mm 0,210mm 297mm,169.4mm 297mm,169.4mm 30.6mm,
-                               140.6mm 30.6mm,126.4mm 46.6mm,0 46.6mm); }
-.plate     { clip-path:polygon(0 0,210mm 0,210mm 297mm,170mm 297mm,170mm 30mm,
-                               140mm 30mm,126mm 46mm,0 46mm); overflow:hidden; }
+.plate-gold{ clip-path:polygon(0 0,210mm 0,210mm 297mm,172mm 297mm,172mm 56.55mm,0 56.55mm); }
+.plate     { clip-path:polygon(0 0,210mm 0,210mm 297mm,172mm 297mm,172mm 56mm,0 56mm);
+             overflow:hidden; }
 .plate-guil{ position:absolute; inset:0; opacity:.17; }
 
-/* THE BINDING BAND — now all metal, and machined rather than printed.
-   Reading from the writing field outward:
+/* ── THE EDGE SECTION ──────────────────────────────────────────────────────
+   One element, nine members, no gaps. Positions are stated as offsets inside
+   the assembly so the section can be moved or re-cut in one place, and the
+   continuation sheet uses the identical element — the two sheets are the same
+   stationery because they are literally the same construction. */
+.edge{ position:absolute; top:0; bottom:0; left:172mm; width:7.87mm; z-index:4; }
+.edge > i{ position:absolute; top:0; bottom:0; display:block; }
 
-     a GOLD THREAD, 1.5mm, ENGRAVED — a raised bevel catching the light on its
-       left edge and dropping a shadow on its right, so it reads as a member cut
-       into the plate rather than a line drawn on it
-     a STAINLESS RAIL, 3mm, exactly twice its width, MILLED — a bright chamfer
-       on each edge, a fine longitudinal brush across the face, and a darker
-       score down its centre, which is what turns a grey block into a machined
-       inlay
-     a GOLD HAIRLINE closing the band toward the page edge
+/* The plate stands proud of the paper, so where it meets the sheet there is a
+   tight occlusion line and then a LIT ARRIS — the plate's own top-left edge
+   catching the key light. This is the whole transition from pearl into metal,
+   and it exists only below the head, where there is paper to meet. */
+.edge-arris{ position:absolute; top:56mm; bottom:0; left:-.20mm; width:.55mm; z-index:4;
+  background:linear-gradient(90deg,
+    rgba(122,110,86,0)  0%,  rgba(122,110,86,.30) 32%,
+    #08183A 36%,
+    #3468B4 44%, #255AA6 62%, #1B4A92 100%); }
 
-   The 1:2 proportion between thread and rail is kept from the earlier band —
-   it was the reason it read as jewellery — but the thread is gold now, and the
-   red has gone entirely to where it does more work: the register rule, the
-   reference, the classification and the folio. */
-/* ENGRAVED, not embossed. The two are opposite lightings and the difference is
-   the whole effect: a raised member is lit on the side facing the light and
-   shadowed on the far side; a member cut INTO the plate is the reverse — its
-   near wall falls into shadow and its far wall catches the light, with a thin
-   glint on the lip of the channel. Light is fixed top-left across this sheet,
-   so for a vertical member that means: left wall dark, right wall lit.
-   It is 3.1mm — wider than the stainless beside it, and four times any
-   sapphire reveal in the band, so gold is plainly the principal metal here.
-   The three sapphire reveals are held at exactly .7mm so the blue reads as
-   the ground between the metals, never as an outline competing with them. */
-.band-thread{ position:absolute; top:0; bottom:0; left:170.7mm; width:3.1mm; z-index:4;
-  box-shadow: inset  .42mm 0 .34mm rgba(46,30,2,.88),    /* left wall, in shade   */
-              inset  .10mm 0 0     rgba(24,14,2,.58),    /* the cut line, left    */
-              inset -.30mm 0 .30mm rgba(255,250,222,.74),/* right wall, in light  */
-              inset -.07mm 0 0     rgba(255,255,238,.58),/* glint on the lip      */
-              -.14mm 0 .26mm rgba(3,10,28,.62),          /* plate shadow, left    */
-               .14mm 0 .22mm rgba(196,214,244,.22); }    /* plate lip lit, right  */
-.band-steel { position:absolute; top:0; bottom:0; left:174.5mm; width:3mm;   z-index:4;
-  box-shadow: inset .3mm 0 0 rgba(255,255,255,.80),
-              inset -.3mm 0 0 rgba(38,48,60,.68),
-              .18mm 0 .4mm rgba(18,26,38,.36); }
-/* the brush and the centre score ride on top of the steel ramp */
-.band-steel::after{ content:""; position:absolute; inset:0;
-  background-image:
-    linear-gradient(90deg, transparent 49.3%, rgba(40,52,66,.5) 49.3%,
-                           rgba(40,52,66,.5) 50.7%, transparent 50.7%),
-    repeating-linear-gradient(0deg, rgba(255,255,255,.16) 0 .12mm,
-                                    transparent .12mm .34mm); }
-.band-gold  { position:absolute; top:0; bottom:0; left:178.2mm; width:.5mm; z-index:4; }
+/* THE SILL — the plate's own top surface, and it is LIT. Getting this wrong is
+   what makes an edge look like stripes: a dark sapphire band between the paper
+   and the gold reads as an outline drawn around the rail, where a lit one
+   reads as the material the channel was cut into. */
+.edge-arris--full{ top:0; }
+.edge-sill { left:.35mm;  width:.86mm;
+  background:linear-gradient(90deg,#1B4A92 0%,#153E80 60%,#0E2F66 100%); }
+/* the near wall of the channel: cut, and facing away from the light */
+.edge-cut  { left:1.21mm; width:.19mm;
+  background:linear-gradient(90deg,#071A3C 0%,#030D22 100%); }
+
+/* THE GOLD RAIL — the principal member. Seated at the top of the channel, so
+   it carries a shade along its own left flank and turns up into the light at
+   the return. 3.4mm: wider than the platinum, wider than the sill, four times
+   any other member in the section. */
+.edge-rail { left:1.40mm; width:3.40mm;
+  box-shadow: inset .34mm 0 .40mm rgba(40,26,2,.62),
+              inset -.05mm 0 0    rgba(255,252,236,.55); }
+/* THE RETURN — the step from the gold down onto the platinum floor. It faces
+   the light square-on, so it is the brightest thing in the section, and it is
+   what welds the two metals into one assembly instead of two lines. */
+.edge-ret  { left:4.80mm; width:.35mm;
+  background:linear-gradient(90deg,#FFF7D6 0%,#F6EFD2 45%,#E8EEF5 100%); }
+/* THE PLATINUM FLOOR — recessed, and shaded at its near side by the rail that
+   overhangs it. One specular line runs down it off-centre; that is the only
+   bright thing platinum is allowed on this sheet. */
+.edge-plat { left:5.15mm; width:2.20mm;
+  box-shadow: inset .55mm 0 .70mm rgba(4,12,28,.55),
+              inset -.28mm 0 .34mm rgba(6,16,34,.30); }
+.edge-plat::after{ content:""; position:absolute; top:0; bottom:0; left:.74mm; width:.14mm;
+  background:linear-gradient(90deg,rgba(238,244,250,.14),rgba(242,247,252,.60),rgba(238,244,250,.12)); }
+/* the far wall, rising back to the plate's surface — square to the light */
+.edge-wall { left:7.35mm; width:.30mm;
+  background:linear-gradient(90deg,#D3DDE9 0%,#96A2B0 55%,#4E5866 100%); }
+/* and the cut line where it lands. 0.22mm: the finest member in the section,
+   and the only one whose job is to separate rather than to be seen. */
+.edge-rule { left:7.65mm; width:.22mm; background:#020814; }
 
 /* ── THE MEDALLION ─────────────────────────────────────────────────────────
-   Centre (150mm, 44mm): on the plate's lower edge, clear of the binding edge
-   by 3mm, and everything else on the page is laid out around it. */
-.medallion{ position:absolute; left:124mm; top:8mm; width:46mm; height:46mm; z-index:5;
+   Centre (139mm, 56mm) — astride the plate's lower edge, 10mm clear of the
+   edge section on one side and 10mm clear of the Arabic name on the other.
+   The mark is never cropped and never crossed; it is drawn last, over
+   everything. */
+.medallion{ position:absolute; left:116mm; top:33mm; width:46mm; height:46mm; z-index:5;
   border-radius:50%; filter:drop-shadow(0 .5mm .7mm rgba(60,44,10,.3)); }
-/* gold outer ring · stainless bezel · sapphire field · gold hairline ring.
-   A watch bezel, not a circle with a border. */
 .med-steel{ position:absolute; inset:1.5mm; border-radius:50%; }
 .med-field{ position:absolute; inset:2.6mm; border-radius:50%; overflow:hidden; }
 .med-hair { position:absolute; inset:4.4mm; border-radius:50%;
@@ -95,115 +120,149 @@
 .med-mark { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
   width:19mm; height:22.9mm; }
 
-/* ── THE HEAD ──────────────────────────────────────────────────────────────
-   Arabic is right-aligned to 122mm — clear of the medallion by 5mm — so the
-   name is never crowded and the medallion is never crossed. */
-.office{ position:absolute; top:11mm; left:24mm; right:95mm; text-align:right; z-index:4;
-  font-family:"Reem Kufi",sans-serif; font-weight:400; font-size:12pt; letter-spacing:0; }
-.name{ position:absolute; top:16.5mm; left:24mm; right:95mm; margin:0; text-align:right; z-index:4;
-  font-family:var(--name-face),sans-serif; font-weight:600; font-size:21pt;
-  line-height:1.4; color:#FBF7EC; white-space:nowrap; }
-.house{ position:absolute; top:28.5mm; left:24mm; right:95mm; text-align:right; z-index:4;
-  font-family:var(--name-face),sans-serif; font-weight:600; font-size:15pt; }
-.name-rule{ position:absolute; top:39.5mm; right:95mm; width:64mm; height:.5mm; z-index:4; }
+/* ── THE HEAD — the ARABIC identity, reversed out of the plate ─────────────
+   SAPPHIRE CARRIES THE ARABIC, PEARL CARRIES THE LATIN. That is the whole
+   masthead hierarchy, and it is why there is no longer a stack of competing
+   lines: the office name, the personal name, the house and the Arabic scope
+   are ONE statement in ONE voice on ONE ground, and the Latin is its mirror
+   below, in its own voice on its own ground.
 
-/* ── THE SHEET ─────────────────────────────────────────────────────────────── */
-/* Set on ONE line, larger, and on x=24mm — the same left axis as the register,
-   the field, the signatures and the foot. The previous sheet put it on 20mm
-   while everything under it sat on 24mm, which is most of why it read as
-   floating rather than as the Latin half of the identity. The rule above it is
-   SAPPHIRE, not gold: ruling is sapphire's job on this page. */
-.ident{ position:absolute; top:55mm; left:24mm; right:48mm; direction:ltr; z-index:1; }
+   Right-aligned to 106mm — 10mm clear of the medallion. */
+.office{ position:absolute; top:10mm; left:24mm; right:104mm; text-align:right; z-index:4;
+  font-family:"Reem Kufi",sans-serif; font-weight:400; font-size:11pt; letter-spacing:0; }
+.name{ position:absolute; top:14.6mm; left:24mm; right:104mm; margin:0; text-align:right; z-index:4;
+  font-family:var(--name-face),sans-serif; font-weight:600; font-size:19pt;
+  line-height:1.4; color:#FBF7EC; white-space:nowrap; }
+.house{ position:absolute; top:25.4mm; left:24mm; right:104mm; text-align:right; z-index:4;
+  font-family:var(--name-face),sans-serif; font-weight:600; font-size:13.4pt; }
+.name-rule{ position:absolute; top:36.6mm; right:104mm; width:54mm; height:.5mm; z-index:4; }
+/* The Arabic scope belongs to the Arabic identity, so it lives on the plate
+   with it rather than floating on the pearl between two identities. */
+.scope-ar{ position:absolute; top:41mm; left:24mm; right:104mm; margin:0; text-align:right; z-index:4;
+  font-family:"Reem Kufi",sans-serif; font-weight:400; font-size:8.6pt; line-height:1.75;
+  color:rgba(214,228,248,.94); }
+
+/* ── THE LATIN IDENTITY — the mirror, on the pearl ─────────────────────────
+   One voice: Playfair Display 700 throughout, the label and the house set at
+   the same size and tracking so they bracket the name symmetrically. The rule
+   above is SAPPHIRE, because ruling is sapphire's job on this page. */
+.ident{ position:absolute; top:64mm; left:24mm; right:48mm; direction:ltr; z-index:1; }
 .ident-rule{ width:42mm; height:.5px; background:var(--sapphire-700); opacity:.9;
   margin-bottom:3.2mm; }
-.ident-office{ font:400 5.8pt/1 "Inter",sans-serif; letter-spacing:.44em;
-  color:var(--steel-700); margin-bottom:3mm; }
-/* Playfair Display 700, not EB Garamond. A book face's capitals are narrow and
-   old-style by design and they read as reticent at identity size; this is wide,
-   high-contrast and genuinely bold — a name on a door rather than in a book. */
-.ident-name{ font-family:"Playfair Display",serif; font-weight:700; font-size:14.2pt;
-  letter-spacing:.085em; line-height:1.2; color:var(--sapphire-800); white-space:nowrap; }
-.ident-house{ font-family:"EB Garamond",serif; font-size:8.8pt; letter-spacing:.46em;
-  color:var(--gold-700); margin-top:3mm; }
-
-.scope-ar{ position:absolute; top:80mm; left:24mm; right:48mm; margin:0; text-align:right; z-index:1;
-  font-family:"Amiri",serif; font-size:9.8pt; line-height:1.7; color:var(--ink-60); }
-.scope-en{ position:absolute; top:88mm; left:24mm; right:48mm; direction:ltr; z-index:1;
-  font:400 5.1pt/1 "Inter",sans-serif; letter-spacing:.235em; text-transform:uppercase;
-  color:var(--ink-40); white-space:nowrap; }
+.ident-office{ font-family:"Playfair Display",serif; font-weight:700; font-size:5.8pt;
+  letter-spacing:.46em; color:var(--gold-700); margin-bottom:2.8mm; }
+/* 13.6pt at .06em, not 14.2 at .085em, and the block one millimetre lower.
+   At the larger setting the wordmark ran to 118mm and closed to 6mm of the
+   seal's arc. THE CLEAR ZONE IS THE FIXED QUANTITY ON THIS PAGE — 10mm to the
+   seal on every side — and the typography moves to keep it, never the mark. */
+.ident-name{ font-family:"Playfair Display",serif; font-weight:700; font-size:13.6pt;
+  letter-spacing:.06em; line-height:1.2; color:var(--sapphire-800); white-space:nowrap; }
+.ident-house{ font-family:"Playfair Display",serif; font-weight:700; font-size:5.8pt;
+  letter-spacing:.46em; color:var(--gold-700); margin-top:3mm; }
+/* the Latin scope closes the identity block and hands off to the register */
+.scope-en{ margin-top:4.8mm; font-family:"Playfair Display",serif; font-weight:700;
+  font-size:5pt; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-40);
+  white-space:nowrap; }
 .scope-en i{ display:inline-block; width:2.2px; height:2.2px; background:var(--gold-600);
-  transform:rotate(45deg); margin:0 .9em; vertical-align:.16em; font-style:normal; }
+  transform:rotate(45deg); margin:0 .8em; vertical-align:.16em; font-style:normal; }
 
-/* ── THE CLASSIFICATION BAND ───────────────────────────────────────────────
-   The red returns as a band, but it is not a stripe laid across the page — it
-   is the HEAD OF THE REGISTER. The classification announces the instrument and
-   rules it in the same gesture, so the two read as one object instead of a
-   coloured bar with a table under it. That is the only reason a band this
-   strong earns its place.
+/* ── THE RED CHANNEL ───────────────────────────────────────────────────────
+   The same detail as the binding edge, turned through 90°. The red is not a
+   banner laid on the page — it is a channel let into it, 5.6mm deep, with a
+   STAINLESS wall above (turned away from the light, so it is the darker of
+   the two) and a GOLD wall below (square to it, so it is the brighter). It
+   runs from the left trim and dies against the plate, where the vertical
+   section takes over: a cross-member meeting a post.
 
-   It is framed in the two metals, one on each edge: STAINLESS above, GOLD
-   below, echoing the binding band. It full-bleeds both ways, and where it
-   crosses the binding edge the engraved gold thread and the milled steel rail
-   ride OVER it — the inlays are in the plate, the band is printed on it, and
-   the layering says so. */
-/* The band bleeds off the LEFT trim and dies UNDER the sapphire pier (z-index 1,
-   beneath the plate at 2) so the pier reads as the later, heavier element. */
-.classband      { position:absolute; left:0; right:38mm; top:93mm;    height:8.6mm;  z-index:1; }
-.classband-steel{ position:absolute; left:0; right:38mm; top:92.5mm;  height:.5mm;   z-index:1; }
-.classband-gold { position:absolute; left:0; right:38mm; top:101.6mm; height:.55mm;  z-index:1; }
-.classband-in{ position:absolute; left:24mm; right:48mm; top:93mm; height:8.6mm; z-index:1;
+   Under it hangs the register. Announcing the instrument and opening the
+   correspondence are one gesture, which is the only thing that earns a mark
+   this strong. */
+.redch      { position:absolute; left:0; right:38mm; top:95mm; height:5.6mm; z-index:1; }
+.redch::before{ content:""; position:absolute; left:0; right:0; top:0; height:1.1mm;
+  background:linear-gradient(180deg,rgba(2,6,18,.42),rgba(2,6,18,0)); pointer-events:none; }
+.redch-steel{ position:absolute; left:0; right:38mm; top:94.5mm; height:.5mm; z-index:1; }
+.redch-steel::after{ content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(6,14,28,.5),rgba(6,14,28,.06)); }
+.redch-gold { position:absolute; left:0; right:38mm; top:100.6mm; height:.62mm; z-index:1; }
+.redch-gold::after{ content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(255,252,232,0),rgba(255,252,232,.42)); }
+.redch-in{ position:absolute; left:24mm; right:48mm; top:95mm; height:5.6mm; z-index:1;
   display:flex; align-items:center; justify-content:space-between; direction:ltr; }
-.classband-in .en{ font:600 6pt/1 "Inter",sans-serif; letter-spacing:.34em;
-  color:#FBEEDC; }
-.classband-in .ar{ font-family:"Reem Kufi",sans-serif; font-weight:400; font-size:9pt;
+.redch-in .en{ font:600 5.6pt/1 "Inter",sans-serif; letter-spacing:.34em; color:#FBEEDC; }
+.redch-in .ar{ font-family:"Reem Kufi",sans-serif; font-weight:400; font-size:8.4pt;
   color:#F8E3A8; text-shadow:0 -.2px 0 rgba(90,10,22,.5), 0 .3px .3px rgba(255,248,224,.35); }
 
-/* ── THE REGISTER ──────────────────────────────────────────────────────────
-   Bilingual labels, gold hairlines, no boxes. Opened by the red rule. */
-.register{ position:absolute; top:102.15mm; left:24mm; right:48mm; z-index:1; }
-.reg-rule{ height:.35px; background:var(--sapphire-600); opacity:.5; }
-.reg-close{ height:.5px; background:var(--sapphire-700); opacity:.75; }
-.reg-row{ display:grid; grid-template-columns:20mm 1fr; padding:1.8mm 0 2mm; }
-.reg-row.split{ grid-template-columns:20mm 1fr 20mm 1fr; }
-.reg-lab{ text-align:right; padding-left:3.6mm; border-left:.35px solid var(--sapphire-600);
-  min-height:4.4mm; }
-.reg-lab .ar{ display:block; font-family:"Reem Kufi",sans-serif; font-weight:400;
-  font-size:7.2pt; color:var(--sapphire-700); line-height:1.25; }
-.reg-lab .en{ display:block; direction:ltr; font:400 4.4pt/1.5 "Inter",sans-serif;
-  letter-spacing:.2em; color:var(--ink-40); }
-.reg-val{ font-family:"Amiri",serif; font-size:9.6pt; line-height:1.6; color:var(--ink);
-  padding-right:3.6mm; padding-left:6mm; min-height:4.4mm; }
-.reg-val.lat{ direction:ltr; font:400 8.6pt/1.6 "Inter",sans-serif; letter-spacing:.07em; }
-.reg-val .ref{ color:var(--red-700); font-weight:600; }
-/* The recipient and the subject are the two things a reader looks for first,
-   so they are set in KUFI — the display hand — against the Naskh of everything
-   else in the register. The recipient's POSITION stays in Naskh beneath it, so
-   the name and the office do not compete. */
-.reg-val .strong{ font-family:"Reem Kufi",sans-serif; font-weight:600;
-  font-size:9.8pt; line-height:1.5; color:var(--sapphire-800); }
-.reg-val--kufi{ font-family:"Reem Kufi",sans-serif; font-weight:400;
-  font-size:9.2pt; line-height:1.55; color:var(--sapphire-800); }
-.reg-val .sub{ color:var(--ink-60); font-size:9pt; }
+/* ── THE REGISTER — a private diplomatic file head, not a form ─────────────
+   A form is a column of field names with ruled boxes against them. This is
+   two islands on one baseline: the FILE at the left (reference, date) and the
+   ADDRESSEE at the right, the way a chancery letter is actually laid out.
+   Labels are small gold Kufi prefixes inside the line, not a label column.
+   One gold hairline closes the head; the subject is centred beneath it.
+   `من · FROM` drops in as one more .rf row and nothing else moves. */
+.register{ position:absolute; top:107.4mm; left:24mm; right:48mm; z-index:1; }
+.reg-pair{ display:flex; justify-content:space-between; align-items:flex-start; }
+/* dropped by one label line so the reference sits level with the addressee's
+   name rather than one step above it — the two islands share a baseline */
+.reg-file{ width:48mm; padding-top:3.9mm; }
+.reg-to  { width:76mm; }
+/* label column at the right, value column beside it — the file block ALIGNS,
+   which is what stops two ragged stacks reading as an accident. It is still
+   not a form: no rules, no boxes, and the labels are inside the lines. */
+.rf{ display:grid; grid-template-columns:11mm 1fr; column-gap:2.4mm;
+  align-items:baseline; margin-bottom:1.5mm; }
+.rf .k, .rf .v{ text-align:right; }
+.k{ font-family:"Reem Kufi",sans-serif; font-weight:400; font-size:6.8pt;
+  letter-spacing:.05em; color:var(--gold-700); white-space:nowrap; }
+.rf .v{ font-family:"Scheherazade New",serif; font-size:10.4pt; line-height:1.3;
+  color:var(--ink); }
+.rf .v.lat{ direction:ltr; font:400 8.4pt/1.3 "Inter",sans-serif; letter-spacing:.07em; }
+.rf .v .ref{ color:var(--red-700); font-weight:600; }
+.rf .v.sub{ font-size:9.4pt; color:var(--ink-60); }
+.reg-to .k{ display:block; text-align:right; margin-bottom:1.4mm; }
+.to-name{ text-align:right; font-family:"Reem Kufi",sans-serif; font-weight:600;
+  font-size:10.2pt; line-height:1.5; color:var(--sapphire-800); }
+.to-role{ text-align:right; font-family:"Scheherazade New",serif; font-size:10.6pt;
+  line-height:1.4; color:var(--ink-60); margin-top:1mm; }
+/* THE TEMPLATE, NOT THE LETTER. A blank sheet has to be writable, so on the
+   blank — and only there — each value sits on a sapphire writing hairline.
+   A letter set on the same register shows no rules at all. */
+.register--blank .rf .v,
+.register--blank .to-name,
+.register--blank .to-role,
+.register--blank .reg-subject .s{
+  border-bottom:.3px solid var(--sapphire-600); opacity:.42; min-width:34mm; }
+.register--blank .reg-subject .s{ min-width:96mm; }
+.register--blank .rf .k,
+.register--blank .reg-to .k,
+.register--blank .reg-subject .k{ opacity:1; }
+.reg-hair{ height:.32mm; margin-top:5.2mm; opacity:.92; }
+.reg-subject{ display:flex; justify-content:center; align-items:baseline; gap:3.2mm;
+  margin-top:3.4mm; }
+.reg-subject .s{ font-family:"Reem Kufi",sans-serif; font-weight:600; font-size:10.4pt;
+  color:var(--sapphire-800); }
 
-/* ── THE WRITING FIELD ─────────────────────────────────────────────────────
-   Amiri at 11.2pt on a 138mm measure, leaded 1.95 — a book page, not a form.
-   Measured: the register closes at 130mm, the signature opens at 240mm.
-   About 100mm of set type on sheet one, about 200mm on each continuation. */
-.field{ position:absolute; top:143mm; left:24mm; right:48mm; bottom:57mm; z-index:1; }
+/* ── THE OPENING AND THE WRITING FIELD ─────────────────────────────────────
+   Scheherazade New at 13.4pt on a 138mm measure, leaded 1.78. A classical
+   Naskh cut for book setting, which is what a formal letter is; Amiri was
+   here and read as an office document beside it.
+
+   The opening is a sequence, not a pile: the register closes on a gold
+   hairline, the Bismillah stands alone under a short gold rule of its own,
+   and only then does the letter speak. The intervals are 9mm · 8mm · 5mm,
+   each smaller than the last, so the page visibly settles into the text. */
+.field{ position:absolute; top:147mm; left:24mm; right:48mm; bottom:52mm; z-index:1; }
 .field--continued{ top:44mm; bottom:57mm; }
 
-.bismillah{ text-align:center; font-family:"Amiri",serif; font-size:10pt;
-  color:var(--gold-700); margin:0 0 6.4mm; }
-.letter{ font-family:"Amiri",serif; font-size:11.2pt; line-height:1.95; color:var(--ink);
-  text-align:justify; hyphens:none; }
-.letter p{ margin:0 0 3.6mm; }
-.letter p.salutation{ margin-bottom:4.6mm; }
+.bismillah{ text-align:center; font-family:"Scheherazade New",serif; font-size:12.6pt;
+  color:var(--gold-700); margin:0 0 2.6mm; }
+.open-rule{ width:15mm; height:.3mm; margin:0 auto 8mm; opacity:.85; }
+.letter{ font-family:"Scheherazade New",serif; font-size:13.4pt; line-height:1.78;
+  color:var(--ink); text-align:justify; hyphens:none; }
+.letter p{ margin:0 0 4.2mm; }
+.letter p.salutation{ margin-bottom:5.4mm; }
 .letter .lat{ font-family:"EB Garamond",serif; font-size:10.5pt; line-height:1.72; }
 
-/* ── SIGNATURE ─────────────────────────────────────────────────────────────
-   The principal signs; the office that prepared the letter is identified
-   beneath, deliberately smaller. Space is left for a wet OR a digital
-   signature — the block does not assume either. */
+/* ── SIGNATURE ─────────────────────────────────────────────────────────────── */
 .signatures{ position:absolute; left:24mm; right:48mm; bottom:28mm; z-index:1;
   display:flex; justify-content:space-between; align-items:flex-end; gap:12mm; }
 .sig--principal{ width:80mm; text-align:right; order:2; }
@@ -218,22 +277,23 @@
   line-height:1.5; color:var(--sapphire-800); }
 .sig-lat{ direction:ltr; font-family:"Playfair Display",serif; font-weight:700;
   font-size:8.4pt; letter-spacing:.06em; color:var(--ink-60); margin-top:1.6mm; }
-.sig-role{ font:400 5.2pt/1.7 "Inter","Reem Kufi",sans-serif; letter-spacing:.26em; color:var(--gold-700);
-  margin-top:2mm; text-transform:uppercase; direction:ltr; }
-.sig--issuing .sig-ar{ font-family:"Amiri",serif; font-weight:700; font-size:8.6pt;
+.sig-role{ font:400 5.2pt/1.7 "Inter","Reem Kufi",sans-serif; letter-spacing:.26em;
+  color:var(--gold-700); margin-top:2mm; text-transform:uppercase; direction:ltr; }
+.sig--issuing .sig-ar{ font-family:"Scheherazade New",serif; font-weight:700; font-size:9.6pt;
   color:var(--ink); }
 .sig--issuing .sig-ar .cred{ font-family:"Inter",sans-serif; font-weight:400; font-size:6pt;
   letter-spacing:.08em; color:var(--ink-60); }
-.sig--issuing .sig-fn{ font-family:"Amiri",serif; font-size:8.2pt; color:var(--ink-60);
-  margin-top:.8mm; }
+.sig--issuing .sig-fn{ font-family:"Scheherazade New",serif; font-size:9.4pt;
+  color:var(--ink-60); margin-top:.8mm; }
 .sig--issuing .sig-role{ font-size:4.8pt; letter-spacing:.22em; color:var(--ink-40); }
 
-/* ── THE FOOT ──────────────────────────────────────────────────────────────── */
-.microtext{ position:absolute; left:24mm; right:0; bottom:21mm; height:1.6mm; z-index:1;
+/* ── THE FOOT ──────────────────────────────────────────────────────────────
+   Everything in the foot stops at the plate, like the red channel above it. */
+.microtext{ position:absolute; left:24mm; right:38mm; bottom:21mm; height:1.6mm; z-index:1;
   overflow:hidden; white-space:nowrap; user-select:none;
-  font:400 2.4pt/1.6 "Inter","Amiri",sans-serif; letter-spacing:.06em;
+  font:400 2.4pt/1.6 "Inter","Scheherazade New",sans-serif; letter-spacing:.06em;
   color:var(--steel-700); opacity:.9; }
-.foot-rule{ position:absolute; left:24mm; right:0; bottom:18.6mm; height:.4mm; z-index:1; }
+.foot-rule{ position:absolute; left:24mm; right:38mm; bottom:18.6mm; height:.4mm; z-index:1; }
 .foot{ position:absolute; left:24mm; right:48mm; bottom:11mm; z-index:1; direction:ltr;
   display:flex; justify-content:space-between; align-items:baseline; }
 .foot .contact{ font:400 6.2pt/1 "Inter",sans-serif; letter-spacing:.1em; color:var(--ink-60); }
@@ -243,43 +303,49 @@
 .folio .ar{ font-family:"Reem Kufi",sans-serif; font-size:6.2pt; color:var(--sapphire-700); }
 .folio .sep{ color:var(--red-700); margin:0 .7em; }
 
-/* ── THE PIER'S OWN FURNITURE ──────────────────────────────────────────────── */
-.pier-en { left:183mm; top:214mm; z-index:4; direction:ltr;
-  font-family:"EB Garamond",serif; font-size:10pt; letter-spacing:.22em; }
-.pier-sub{ left:191.4mm; top:214mm; z-index:4; direction:ltr;
-  font:400 4.8pt/1 "Inter",sans-serif; letter-spacing:.36em; color:rgba(226,208,150,.6); }
-.verify{ position:absolute; left:181mm; bottom:13mm; width:22mm; z-index:4; text-align:center; }
-.verify img{ width:22mm; height:22mm; display:block; }
+/* ── THE PIER'S OWN FURNITURE — centred in the 29.7mm field beyond the section ── */
+.pier-en { left:190.2mm; top:214mm; z-index:4; direction:ltr;
+  font-family:"Playfair Display",serif; font-weight:700; font-size:9.2pt; letter-spacing:.2em; }
+.pier-sub{ left:197.7mm; top:214mm; z-index:4; direction:ltr;
+  font:400 4.8pt/1 "Inter",sans-serif; letter-spacing:.34em; color:rgba(226,208,150,.6); }
+.verify{ position:absolute; left:184.3mm; bottom:13mm; width:21mm; z-index:4; text-align:center; }
+.verify img{ width:21mm; height:21mm; display:block; }
 .verify .frame{ padding:.9mm; }
-.verify .serial{ margin-top:1.8mm; direction:ltr; font:400 4.4pt/1.5 "Inter",sans-serif;
-  letter-spacing:.12em; color:rgba(230,212,158,.82); }
+.verify .serial{ margin-top:1.8mm; direction:ltr; font:400 4.2pt/1.5 "Inter",sans-serif;
+  letter-spacing:.1em; color:rgba(230,212,158,.82); }
 
-/* ── SECURITY AND RELIEF ───────────────────────────────────────────────────── */
-.latent{ position:absolute; left:20mm; top:138mm; width:120mm; height:120mm; z-index:0;
-  opacity:.2; pointer-events:none; }
-.watermark{ position:absolute; left:58mm; top:190mm; width:48mm; z-index:0; pointer-events:none; }
-.watermark img{ width:100%; display:block; opacity:.14; }
+/* ── SECURITY AND RELIEF ───────────────────────────────────────────────────
+   The empty lower half of a short letter is not a gap to be closed — on
+   stationery of this class it is the most expensive thing on the page. It is
+   made deliberate rather than accidental by OCCUPYING it: the latent geometry
+   is centred on the writing field, and the watermarked insignia is struck
+   large at its optical centre. The reader sees a watermarked panel, not a
+   blank one. */
+.latent{ position:absolute; left:18mm; top:126mm; width:150mm; height:150mm; z-index:0;
+  opacity:.17; pointer-events:none; }
+.watermark{ position:absolute; left:50mm; top:168mm; width:86mm; z-index:0; pointer-events:none; }
+.watermark img{ width:100%; display:block; opacity:.15; }
 
 /* ── THE CONTINUATION SHEET ────────────────────────────────────────────────
-   The plate becomes a pier only: the binding edge continues, the head does
-   not. A 17mm medallion keeps the mark present and complete. Maximum field. */
-.cont-plate{ position:absolute; top:0; right:0; bottom:0; width:40mm; z-index:2; }
-.cont-plate-gold{ position:absolute; top:0; right:0; bottom:0; width:40.6mm; z-index:2; }
+   NOT a copy of page one with the same strip pasted on. The pier and the edge
+   section are the identical construction at the identical coordinates — the
+   channel, the rail, the platinum floor, the cut line, all of it — so the two
+   sheets are the same stationery. What page two drops is the head, not the
+   architecture. */
+.cont-plate{ position:absolute; top:0; right:0; bottom:0; width:38mm; z-index:2; }
 .cont-med{ position:absolute; left:138mm; top:13mm; width:26mm; height:26mm; z-index:5;
   border-radius:50%; filter:drop-shadow(0 .4mm .5mm rgba(60,44,10,.28)); }
 .cont-med .med-steel{ inset:.9mm; }
 .cont-med .med-field{ inset:1.7mm; }
 .cont-med .med-mark{ width:11.6mm; height:14mm; }
-/* right:72mm, not 44mm: the medallion occupies 143-169mm, and the name must
-   clear it. When the mark and the layout conflict, the layout moves. */
-.cont-head{ position:absolute; left:24mm; right:76mm; top:17mm; z-index:1; text-align:right; }
+.cont-head{ position:absolute; left:24mm; right:80mm; top:17mm; z-index:1; text-align:right; }
 .cont-name{ font-family:var(--name-face),sans-serif; font-weight:600; font-size:10.4pt;
   color:var(--sapphire-800); line-height:1.5; }
 .cont-ref{ position:absolute; left:24mm; top:16mm; direction:ltr; z-index:1;
   font:400 5.2pt/1.8 "Inter",sans-serif; letter-spacing:.22em; color:var(--ink-40); }
 .cont-ref .ref{ color:var(--red-700); font-weight:600; }
-.cont-ref .k{ color:var(--gold-700); }
-.cont-rule{ position:absolute; left:24mm; right:0; top:36mm; height:.4mm; z-index:4; }
+.cont-ref .k{ color:var(--gold-700); font-family:inherit; font-size:5.2pt; letter-spacing:.22em; }
+.cont-rule{ position:absolute; left:24mm; right:38mm; top:36mm; height:.4mm; z-index:1; }
 
 /* ── PRODUCTION SPEC · screen only ─────────────────────────────────────────── */
 .speckit{ position:fixed; top:14px; left:14px; z-index:99;

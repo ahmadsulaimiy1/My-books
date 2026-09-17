@@ -11,8 +11,8 @@
 <button class="speckit" onclick="document.body.classList.toggle('spec')">PRODUCTION SPEC</button>
 
 <div class="sheet">
-  <!-- ══ ONE CUT PLATE: head and binding edge, with a stepped lower edge ══ -->
-  <div class="plate-gold gold-block" data-spec="GOLD FOIL keyline"></div>
+  <!-- ══ ONE MILLED PLATE: head across the sheet, pier down the binding edge ══ -->
+  <div class="plate-gold gold-block" data-spec="GOLD FOIL keyline · lower silhouette only"></div>
   <div class="plate field-sapphire" data-spec="SAPPHIRE FLOOD · offset">
     <div class="plate-guil">
       <svg class="fill" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -28,10 +28,16 @@
       </svg>
     </div>
   </div>
-  <div class="band-thread gold-block gold-block--rich" data-spec="GOLD ENGRAVED · STAINLESS MILLED · GOLD"></div>
-  <div class="band-steel steel-block steel-block--dark"></div>
-  <div class="band-gold gold-block gold-block--dark"></div>
-
+  <div class="edge-arris"></div>
+  <div class="edge" data-spec="MILLED CHANNEL: sill · GOLD RAIL 3.4 · return · PLATINUM 2.2 · cut line">
+    <i class="edge-sill"></i>
+    <i class="edge-cut"></i>
+    <i class="edge-rail gold-block gold-block--rich"></i>
+    <i class="edge-ret"></i>
+    <i class="edge-plat plat-block"></i>
+    <i class="edge-wall"></i>
+    <i class="edge-rule"></i>
+  </div>
   <span class="vert pier-en gold-type gold-type--dark">IMAM AHMAD IBROHIM SULAIMIY</span>
   <span class="vert pier-sub">PERSONAL OFFICE &nbsp;·&nbsp; ĀL-ES-SALAM</span>
 
@@ -55,46 +61,42 @@
   <h1 class="name" data-spec="PEARL, reversed out of sapphire">الإمام أحمد بن إبراهيم السليمي</h1>
   <div class="house gold-type gold-type--dark">(آل سلام)</div>
   <div class="name-rule gold-block gold-block--dark"></div>
+  <p class="scope-ar">للتطوير الأكاديمي والدعوة الإسلامية والعلاقات الدولية والشؤون الأهلية الخاصة</p>
 
   <div class="ident">
     <div class="ident-rule"></div>
     <div class="ident-office">PERSONAL OFFICE</div>
     <div class="ident-name letterpress">IMAM AHMAD IBROHIM SULAIMIY</div>
     <div class="ident-house">ĀL · ES · SALAM</div>
+    <div class="scope-en">Academic Development<i></i>Islamic Da&lsquo;wah<i></i>International Relations<i></i>Private &amp; Civic Affairs</div>
   </div>
 
-  <p class="scope-ar">للتطوير الأكاديمي والدعوة الإسلامية والعلاقات الدولية والشؤون الأهلية الخاصة</p>
-  <div class="scope-en">Academic Development<i></i>Islamic Da&lsquo;wah<i></i>International Relations<i></i>Private &amp; Civic Affairs</div>
-
-  <!-- ══ CLASSIFICATION BAND — the head of the register, full bleed ══ -->
-  <div class="classband-steel steel-block"></div>
-  <div class="classband field-red"></div>
-  <div class="classband-in">
+  <!-- ══ THE RED CHANNEL — the binding section turned through 90° ══ -->
+  <div class="redch-steel steel-block steel-block--dark"></div>
+  <div class="redch field-red"></div>
+  <div class="redch-in">
     <span class="en">OFFICIAL CORRESPONDENCE</span>
     <span class="ar">مراسلة رسمية</span>
   </div>
-  <div class="classband-gold gold-block"></div>
+  <div class="redch-gold gold-block gold-block--rich"></div>
 
 
 
-  <div class="register" data-spec="RED rule · GOLD hairlines · no boxes">
-    <div class="reg-row split">
-      <div class="reg-lab"><span class="ar">رقم</span><span class="en">REF.</span></div>
-      <div class="reg-val lat"><span class="ref"></span></div>
-      <div class="reg-lab"><span class="ar">التاريخ</span><span class="en">DATE</span></div>
-      <div class="reg-val"></div>
+  <div class="register register--blank" data-spec="THE FILE at the left · THE ADDRESSEE at the right · no boxes">
+    <div class="reg-pair">
+      <div class="reg-to">
+        <span class="k">إلى</span>
+        <div class="to-name">&nbsp;</div>
+        <div class="to-role">&nbsp;</div>
+      </div>
+      <div class="reg-file">
+        <div class="rf"><span class="k">رقم</span><span class="v lat"><span class="ref">&nbsp;</span></span></div>
+        <div class="rf"><span class="k">التاريخ</span><span class="v">&nbsp;</span></div>
+        <div class="rf"><span class="k"></span><span class="v sub">&nbsp;</span></div>
+      </div>
     </div>
-    <div class="reg-rule"></div>
-    <div class="reg-row">
-      <div class="reg-lab"><span class="ar">إلى</span><span class="en">TO</span></div>
-      <div class="reg-val"><span class="strong"></span><span class="sub"></span></div>
-    </div>
-    <div class="reg-rule"></div>
-    <div class="reg-row">
-      <div class="reg-lab"><span class="ar">الموضوع</span><span class="en">SUBJECT</span></div>
-      <div class="reg-val reg-val--kufi"></div>
-    </div>
-    <div class="reg-close"></div>
+    <div class="reg-hair gold-block"></div>
+    <div class="reg-subject"><span class="k">الموضوع</span><span class="s">&nbsp;</span></div>
   </div>
 
   <svg class="latent" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

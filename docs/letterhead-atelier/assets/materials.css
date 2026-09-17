@@ -79,6 +79,18 @@
      #6F7B88 0%,  #B7C2CE 10%, #F7FAFD 20%, #A6B2BF 28%,
      #79858F 38%, #E8EEF4 50%, #9FAAB7 60%, #FFFFFF 72%,
      #B9C4D0 82%, #6B7784 92%, #D8E0E8 100%);
+  /* PLATINUM — the SECOND metal of the binding edge, and deliberately NOT a
+     second stainless. It lies on the floor of a channel that the gold rail
+     overhangs, so it receives less light than anything else on the sheet: the
+     ramp is cooler, a stop darker throughout, and its brightest turn is a pale
+     grey-blue rather than white. That is what makes it support the gold
+     instead of competing with it — a recessed metal cannot out-shine a
+     proud one. */
+  --foil-plat:linear-gradient(104deg,
+     #59636F 0%,  #8C97A4 10%, #C6D0DA 20%, #7B8692 28%,
+     #5D6773 38%, #B3BDC8 50%, #7E8995 60%, #D9E1E9 72%,
+     #909BA7 82%, #555F6B 92%, #A6B0BC 100%);
+
   --foil-steel-dark:linear-gradient(104deg,
      #8B96A3 0%,  #CBD5DF 10%, #FDFEFF 20%, #BAC5D1 28%,
      #94A0AC 38%, #F2F7FB 50%, #B4BFCB 60%, #FFFFFF 72%,
@@ -94,7 +106,7 @@ html,body{ margin:0; padding:0; }
 .sheet{
   position:relative; width:210mm; height:297mm; overflow:hidden;
   background:radial-gradient(132% 88% at 44% -10%, #FFFEFB 0%, var(--pearl) 40%, var(--pearl-2) 100%);
-  color:var(--ink); font-family:"EB Garamond","Amiri",Georgia,serif;
+  color:var(--ink); font-family:"EB Garamond","Scheherazade New",Georgia,serif;
 }
 .sheet::before{
   content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
@@ -121,19 +133,23 @@ html,body{ margin:0; padding:0; }
    THREE METALS, ONE JOB EACH. This is the rule the page is built on, and it is
    what separates a considered sheet from a gilded one:
 
-     GOLD       ceremony  — the medallion's outer ring, the insignia, the plate
-                            keyline, the rule beneath the name, the outer thread
-                            of the binding band
-     STAINLESS  instrument— the binding band itself, the medallion's inner
-                            bezel, microtext, latent geometry, the classification
-     SAPPHIRE   ruling    — every hairline in the register, the rule above the
-                            Latin wordmark
+     GOLD       the principal, PROUD metal — the rail of the binding edge, the
+                the medallion's outer ring, the insignia, the plate keyline, the
+                rule beneath the name, the lit lower wall of the red channel
+     PLATINUM   the secondary, RECESSED metal — the floor of the binding
+                channel only. It never appears anywhere gold does not already
+                lead, and it is always the darker of the two
+     STAINLESS  instrument — the medallion's inner bezel, the shaded upper wall
+                of the red channel, microtext, latent geometry
+     SAPPHIRE   ruling — the plate, and every hairline in the register
 
-   Most stationery picks one metal. Two is rare. Three, with a rule about which
-   does what, is what an atelier does. */
+   Most stationery picks one metal. Two is rare. Four, with a rule about which
+   does what and a lighting model they all obey, is what an atelier does. */
 .steel-block     { background-image:url(foil-grain.png), var(--foil-steel);
                    background-size:24mm auto, 100% 100%; background-blend-mode:soft-light, normal; }
 .steel-block--dark{ background-image:url(foil-grain.png), var(--foil-steel-dark); }
+.plat-block      { background-image:url(foil-grain.png), var(--foil-plat);
+                   background-size:24mm auto, 100% 100%; background-blend-mode:soft-light, normal; }
 .steel-type      { color:#7B8794; text-shadow:0 -.25px 0 rgba(52,62,74,.45), 0 .35px .3px rgba(255,255,255,.9); }
 .steel-type--dark{ color:#CDD7E1; text-shadow:0 -.25px 0 rgba(14,26,46,.7),  0 .35px .35px rgba(255,255,255,.45); }
 
