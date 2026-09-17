@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Letterhead — The Personal Office</title>
+<link rel="stylesheet" href="assets/letterhead-typography.css">
+<link rel="stylesheet" href="assets/materials.css">
+<link rel="stylesheet" href="assets/instrument.css">
+</head>
+<body>
+<button class="speckit" onclick="document.body.classList.toggle('spec')">PRODUCTION SPEC</button>
+
+<div class="sheet">
+  <!-- ══ THE PIER — the binding edge, which in Arabic is the RIGHT ═════════ -->
+  <div class="pier field-sapphire" data-spec="SAPPHIRE FLOOD · offset">
+    <div class="pier-guil">
+      <svg class="fill" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <pattern id="pierguil" width="40" height="18" patternUnits="userSpaceOnUse">
+            <g fill="none" stroke="#C6D2E0" stroke-width=".4">
+              <path d="M0 9 C 5 1, 15 1, 20 9 S 35 17, 40 9"/>
+              <path d="M0 9 C 5 17, 15 17, 20 9 S 35 1, 40 9"/>
+            </g>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#pierguil)"/>
+      </svg>
+    </div>
+  </div>
+
+  <img class="pier-mark" src="assets/insignia-foil.png" data-spec="GOLD FOIL"
+       alt="Insignia of the Personal Office">
+  <div class="pier-rule plat-block plat-block--dark" style="top:39mm"></div>
+
+  <span class="vert pier-en plat-type plat-type--dark">IMAM AHMAD IBROHIM SULAIMIY</span>
+  <span class="vert pier-sub">PERSONAL OFFICE &nbsp;·&nbsp; ĀL-ES-SALAM</span>
+
+  <div class="verify" data-spec="QR · ECC Q, scannable at 22mm">
+    <img src="assets/qr-office.png" alt="Scan for the office contact card">
+    <div class="serial">PA/2026/09/0017</div>
+  </div>
+
+  <!-- ══ THE HEAD — the name is right-aligned INSIDE the pier, and clipped
+       against its edge, so it stands in gold there and in sapphire here ═══ -->
+  <div class="office letterpress">المكتب الخاص</div>
+
+  <h1 class="name name--pearl letterpress" data-spec="GOLD FOIL / SAPPHIRE — one line, two materials">الإمام أحمد بن إبراهيم السليمي (آل سلام)</h1>
+  <h1 class="name name--pier" aria-hidden="true">الإمام أحمد بن إبراهيم السليمي (آل سلام)</h1>
+
+  <div class="head-rule plat-block" data-spec="PLATINUM FOIL"></div>
+
+  <p class="scope-ar">للتطوير الأكاديمي والدعوة الإسلامية والعلاقات الدولية والشؤون الأهلية الخاصة</p>
+  <div class="ident">
+    <div class="ident-office">PERSONAL OFFICE</div>
+    <div class="ident-name letterpress">IMAM AHMAD<br>IBROHIM SULAIMIY</div>
+    <div class="ident-house">ĀL·ES·SALAM</div>
+  </div>
+
+  <!-- ══ THE CLASSIFICATION — the first of three strikes of red ═══════════ -->
+  <div class="classbar field-red" data-spec="RED · offset, PMS 186-ish">
+    <span class="ar">مراسلة رسمية</span>
+    <span class="en">OFFICIAL CORRESPONDENCE</span>
+  </div>
+  <div class="classbar-edge plat-block"></div>
+
+  <!-- ══ THE REGISTER — ruled, never boxed ════════════════════════════════ -->
+  <div class="register" data-spec="PLATINUM HAIRLINES · no boxes">
+    <div class="rule rule--heavy"></div>
+    <div class="reg-row split">
+      <div class="reg-lab">الرقم</div>
+      <div class="reg-val lat"></div>
+      <div class="reg-lab">التاريخ</div>
+      <div class="reg-val"></div>
+    </div>
+    <div class="rule"></div>
+    <div class="reg-row">
+      <div class="reg-lab">إلى</div>
+      <div class="reg-val"><span class="strong"></span><span class="sub"></span></div>
+    </div>
+    <div class="rule"></div>
+    <div class="reg-row">
+      <div class="reg-lab">الموضوع</div>
+      <div class="reg-val"></div>
+    </div>
+    <div class="rule rule--heavy"></div>
+  </div>
+
+  <!-- ══ THE SECURITY LAYER — latent geometry, watermark, microtext ═══════ -->
+  <svg class="latent" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g fill="none" stroke="#6B7080" stroke-width="0.5" opacity="0.16">
+      <circle cx="200" cy="200" r="190"/><circle cx="200" cy="200" r="152"/>
+      <circle cx="200" cy="200" r="107"/><circle cx="200" cy="200" r="76"/>
+      <rect x="65.5" y="65.5" width="269" height="269"/>
+      <rect x="65.5" y="65.5" width="269" height="269" transform="rotate(45 200 200)"/>
+      <rect x="105" y="105" width="190" height="190" transform="rotate(22.5 200 200)"/>
+      <path d="M10 200 H390 M200 10 V390 M66 66 L334 334 M334 66 L66 334"/>
+    </g>
+  </svg>
+  <span class="watermark"><img src="assets/insignia-deboss.png" alt="" aria-hidden="true"></span>
+
+  <div class="microtext" data-spec="MICROTEXT · 2.4pt, resolves under a loupe">المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام) · PERSONAL OFFICE · ĀL-ES-SALAM · المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام) · PERSONAL OFFICE · ĀL-ES-SALAM · المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام) · PERSONAL OFFICE · ĀL-ES-SALAM · المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام) · PERSONAL OFFICE · ĀL-ES-SALAM · المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام) · PERSONAL OFFICE · ĀL-ES-SALAM · المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام) · PERSONAL OFFICE · ĀL-ES-SALAM · </div>
+  <div class="foot-rule plat-block"></div>
+  <div class="foot">
+    <span class="contact">+234&nbsp;810&nbsp;430&nbsp;2087<i></i>+44&nbsp;7961&nbsp;869638<i></i>abisulaimiycollege@gmail.com</span>
+    <span class="folio"><span class="ar">صفحة ١</span><span class="sep">·</span>PAGE 1</span>
+  </div>
+
+</div>
+</body>
+</html>

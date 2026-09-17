@@ -1,0 +1,185 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   DIRECTION F — THE INSTRUMENT
+   المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام)
+
+   Not a band at the top of a page. The drama is structural and it runs the
+   whole height:
+
+   · A PIER of flood sapphire holds the binding edge — the RIGHT edge, because
+     Arabic decides the binding, not Latin filing convention. It bleeds off
+     three sides and carries the insignia, the Latin identity set vertically,
+     and the verification block. It is a member of the building, not a border.
+
+   · THE NAME CROSSES IT. The name is set right-aligned to a point INSIDE the
+     pier, so its first letters stand in gold on sapphire and the rest in
+     sapphire on pearl. One line of type, two materials, because it spans two
+     fields. Nothing else on the sheet does this, which is why it reads as the
+     principal statement without being the largest thing on the page.
+
+   · A RED BAR cuts the full width and bleeds off the pier, carrying the
+     classification. Red appears three times on this sheet and never as a wash.
+
+   · THE REGISTER below it is the instrument proper: الرقم، التاريخ، إلى،
+     الموضوع, ruled in platinum hairlines with no boxes anywhere. Stationery
+     that expects to be corresponded ON, not written around.
+
+   · The foot carries microtext, the contact register and the folio, so a letter
+     of five pages is still unmistakably one document.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── THE PIER ──────────────────────────────────────────────────────────────── */
+.pier{ position:absolute; top:0; right:0; bottom:0; width:34mm; z-index:2; overflow:hidden; }
+.pier-guil{ position:absolute; inset:0; opacity:.16; }
+.pier-mark{ position:absolute; top:11mm; right:7mm; width:20mm; height:24mm; z-index:3; }
+.pier-rule{ position:absolute; right:6mm; width:22mm; height:.4px; z-index:3; opacity:.65; }
+
+.pier-en   { left:187mm; top:208mm; z-index:3; direction:ltr;
+  font-family:"Marcellus",serif; font-size:10.4pt; letter-spacing:.2em; }
+.pier-sub  { left:195.6mm; top:208mm; z-index:3; direction:ltr;
+  font:400 5pt/1 "Archivo",sans-serif; letter-spacing:.38em; color:rgba(198,210,224,.72); }
+
+/* the verification block sits at the foot of the pier, where a seal would */
+.verify{ position:absolute; right:6mm; bottom:14mm; width:22mm; z-index:3; text-align:center; }
+.verify img{ width:22mm; height:22mm; display:block; border:.4mm solid rgba(190,204,220,.5); }
+.verify .serial{ margin-top:2mm; direction:ltr;
+  font:400 4.6pt/1.5 "Archivo",sans-serif; letter-spacing:.14em; color:rgba(196,208,222,.8); }
+
+/* ── THE HEAD ──────────────────────────────────────────────────────────────── */
+.office{ position:absolute; top:29mm; left:20mm; right:46mm; text-align:right; z-index:1;
+  font-family:"Noto Kufi Arabic",sans-serif; font-weight:400; font-size:9.6pt;
+  letter-spacing:0; color:var(--sapphire-600); }
+
+/* Two copies of one line, clipped against the pier boundary. The element's
+   right edge sits 8mm from the page edge — 26mm INSIDE the 34mm pier — so the
+   inset values below are exactly that overlap. */
+.name{ position:absolute; top:37mm; right:8mm; left:20mm; margin:0; text-align:right;
+  font-family:var(--name-face),sans-serif; font-weight:700; font-size:20pt;
+  line-height:1.45; white-space:nowrap; z-index:3; }
+.name--pearl{ color:var(--sapphire-800); clip-path:inset(0 26mm 0 0); }
+.name--pier { color:#E6CD93; clip-path:inset(0 0 0 calc(100% - 26mm));
+  text-shadow:0 -.25px 0 rgba(78,56,18,.7), 0 .4px .4px rgba(255,252,240,.4); }
+
+/* the rule runs out of the sheet, across the pier, and off the page */
+.head-rule{ position:absolute; left:20mm; right:0; top:55mm; height:.8mm; z-index:3; }
+
+.scope-ar{ position:absolute; top:60mm; left:70mm; right:40mm; margin:0; text-align:right; z-index:1;
+  font-family:"Noto Naskh Arabic",serif; font-size:9.4pt; line-height:1.8; color:var(--ink-60); }
+.ident{ position:absolute; top:60mm; left:20mm; width:62mm; direction:ltr; z-index:1; }
+.ident-office{ font:400 5.4pt/1 "Archivo",sans-serif; letter-spacing:.34em;
+  color:var(--plat-900); margin-bottom:2.2mm; }
+.ident-name{ font-family:"Marcellus",serif; font-size:11.6pt; letter-spacing:.055em;
+  line-height:1.3; color:var(--sapphire-800); }
+.ident-house{ font:400 6pt/1 "Archivo",sans-serif; letter-spacing:.36em;
+  color:var(--gold-700); margin-top:2.4mm; }
+
+/* ── THE RED BAR ───────────────────────────────────────────────────────────── */
+.classbar{ position:absolute; left:20mm; right:0; top:77mm; height:8mm; z-index:3;
+  display:flex; align-items:center; justify-content:space-between; padding:0 8mm 0 5mm; }
+.classbar .ar{ font-family:"Noto Kufi Arabic",sans-serif; font-weight:400; font-size:8pt;
+  color:#FBEFF0; }
+.classbar .en{ direction:ltr; font:600 6pt/1 "Archivo",sans-serif; letter-spacing:.3em;
+  color:rgba(255,236,238,.92); }
+.classbar-edge{ position:absolute; left:20mm; right:0; top:85mm; height:.4px; z-index:3; opacity:.8; }
+
+/* ── THE REGISTER ──────────────────────────────────────────────────────────── */
+.register{ position:absolute; left:20mm; right:40mm; top:92mm; z-index:1; }
+.register .rule{ height:.4px; background:var(--plat-500); opacity:.85; }
+.register .rule--heavy{ height:.7px; background:var(--plat-700); opacity:.9; }
+.reg-row{ display:grid; grid-template-columns:19mm 1fr; align-items:start;
+  column-gap:0; padding:2.1mm 0 2.3mm; }
+.reg-row.split{ grid-template-columns:19mm 1fr 19mm 1fr; }
+.reg-lab{ font-family:"Noto Kufi Arabic",sans-serif; font-weight:400; font-size:7.4pt;
+  color:var(--sapphire-600); text-align:right; padding-left:3.4mm;
+  border-left:.4px solid var(--plat-500); min-height:4mm; }
+/* padding on BOTH sides: the right clears this row's own label, the left
+   clears the next label in a split row — without it the reference number runs
+   straight into التاريخ */
+.reg-val{ font-family:"Noto Naskh Arabic",serif; font-size:9.4pt; line-height:1.55;
+  color:var(--ink); padding-right:3.4mm; padding-left:6mm; min-height:4mm; }
+.reg-val.lat{ direction:ltr; font:400 8.4pt/1.55 "Archivo",sans-serif; letter-spacing:.06em; }
+.reg-val .strong{ font-weight:700; font-size:10.2pt; }
+.reg-val .sub{ color:var(--ink-60); font-size:8.8pt; }
+
+/* ── THE WRITING FIELD ─────────────────────────────────────────────────────
+   Measured against the printed sheet: the register closes at 126mm and the
+   signature architecture opens at 238mm. About 108mm of set type fits on the
+   first sheet; a longer letter runs on to the continuation sheets, which carry
+   a far smaller head and about 196mm each. */
+.field{ position:absolute; top:134mm; left:20mm; right:40mm; bottom:59mm; z-index:1; }
+.field--continued{ top:52mm; bottom:59mm; }
+
+.bismillah{ text-align:center; font-family:"Noto Naskh Arabic",serif; font-size:9.6pt;
+  color:var(--gold-700); margin:0 0 5mm; }
+.letter{ font-family:"Noto Naskh Arabic",serif; font-size:10.2pt; line-height:1.95;
+  color:var(--ink); text-align:justify; }
+.letter p{ margin:0 0 3.2mm; }
+.letter p.salutation{ margin-bottom:4.2mm; }
+.letter .closing{ margin-top:4mm; }
+
+/* ── SIGNATURE ARCHITECTURE ────────────────────────────────────────────────
+   Two hands: the principal signs at the right, and the office that prepared
+   and dispatched the letter signs at the left. A letter from a private office
+   is issued by somebody as well as signed by somebody. */
+.signatures{ position:absolute; left:20mm; right:40mm; bottom:30mm; z-index:1;
+  display:flex; justify-content:space-between; align-items:flex-end; gap:10mm; }
+.sig{ width:64mm; }
+.sig--principal{ text-align:right; order:2; }
+.sig--issuing{ text-align:left; direction:ltr; order:1; }
+.sig-space{ height:15mm; display:flex; align-items:flex-end; }
+.sig--issuing .sig-space img{ height:13mm; margin-left:-2mm; }
+.sig-rule{ height:.4px; background:var(--plat-700); opacity:.8; margin-bottom:2.2mm; }
+.sig-ar{ font-family:"Noto Kufi Arabic",sans-serif; font-weight:700; font-size:8.6pt;
+  line-height:1.5; color:var(--sapphire-800); }
+.sig-lat{ font-family:"Marcellus",serif; font-size:8.2pt; letter-spacing:.06em;
+  color:var(--ink-60); margin-top:1.2mm; }
+.sig-role{ font:400 5pt/1.7 "Archivo","Noto Kufi Arabic",sans-serif; letter-spacing:.16em;
+  color:var(--plat-900); margin-top:1.8mm; text-transform:uppercase; }
+.sig-role .ref{ color:var(--red-700); }
+
+/* ── THE FOOT ──────────────────────────────────────────────────────────────── */
+.microtext{ position:absolute; left:20mm; right:0; bottom:23mm; height:1.6mm; z-index:1;
+  overflow:hidden; white-space:nowrap;
+  font:400 2.4pt/1.6 "Archivo","Noto Naskh Arabic",sans-serif; letter-spacing:.06em;
+  color:var(--plat-700); opacity:.85; user-select:none; }
+.foot-rule{ position:absolute; left:20mm; right:0; bottom:20.6mm; height:.5px; z-index:1; }
+.foot{ position:absolute; left:20mm; right:40mm; bottom:12mm; z-index:1; direction:ltr;
+  display:flex; justify-content:space-between; align-items:baseline; }
+.foot .contact{ font:400 6.2pt/1 "Archivo",sans-serif; letter-spacing:.11em; color:var(--ink-60); }
+.foot .contact i{ display:inline-block; width:2.4px; height:2.4px; background:var(--red-700);
+  transform:rotate(45deg); margin:0 1.1em; vertical-align:.16em; font-style:normal; }
+.folio{ font:400 6pt/1 "Archivo",sans-serif; letter-spacing:.2em; color:var(--plat-900); }
+.folio .ar{ font-family:"Noto Kufi Arabic",sans-serif; font-size:6.4pt; color:var(--sapphire-600); }
+.folio .sep{ color:var(--red-700); margin:0 .7em; }
+
+/* ── SECURITY AND RELIEF ───────────────────────────────────────────────────── */
+.latent{ position:absolute; left:14mm; top:118mm; width:126mm; height:126mm; z-index:0;
+  opacity:.22; pointer-events:none; }
+.watermark{ position:absolute; left:52mm; top:196mm; width:52mm; z-index:0; pointer-events:none; }
+.watermark img{ width:100%; display:block; opacity:.13; }
+
+/* ── THE CONTINUATION SHEET ────────────────────────────────────────────────
+   The pier continues, because the binding edge does. Everything else is cut
+   back to the mark, the name at text size and one platinum rule. */
+.cont-head{ position:absolute; left:20mm; right:40mm; top:20mm; z-index:1; text-align:right; }
+.cont-name{ font-family:var(--name-face),sans-serif; font-weight:700; font-size:11pt;
+  color:var(--sapphire-800); line-height:1.5; }
+.cont-rule{ position:absolute; left:20mm; right:0; top:32mm; height:.5mm; z-index:3; }
+.cont-ref{ position:absolute; left:20mm; top:20mm; direction:ltr; z-index:1;
+  font:400 5.4pt/1.7 "Archivo",sans-serif; letter-spacing:.2em; color:var(--plat-900); }
+.cont-ref .ref{ color:var(--red-700); }
+
+/* ── PRODUCTION SPEC · screen only ─────────────────────────────────────────── */
+.speckit{ position:fixed; top:14px; left:14px; z-index:99;
+  font:600 10px/1 "Archivo",system-ui,sans-serif; letter-spacing:.16em;
+  background:#082047; color:#D6DEE7; border:1px solid #C8102E; padding:9px 14px;
+  border-radius:2px; cursor:pointer; }
+body.spec [data-spec]{ outline:.7px dashed #C8102E; outline-offset:3px; }
+body.spec [data-spec]:not(.pier):not(.watermark):not(.latent){ position:relative; }
+body.spec [data-spec]::after{
+  content:attr(data-spec); position:absolute; top:-5mm; left:50%; transform:translateX(-50%);
+  font:600 6pt/1.2 "Archivo",system-ui,sans-serif; letter-spacing:.1em; white-space:nowrap;
+  color:#fff; background:#C8102E; padding:1.6px 5px; border-radius:2px; direction:ltr; z-index:60; }
+body.spec [data-spec].below::after{ top:auto; bottom:-5mm; }
+@media print{ .speckit{ display:none !important; }
+  body.spec [data-spec]{ outline:none !important; }
+  body.spec [data-spec]::after{ display:none !important; } }
