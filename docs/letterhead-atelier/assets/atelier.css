@@ -29,22 +29,30 @@
    Two shapes, the same silhouette, the gold one a notch larger. What shows
    along every edge is a gold keyline that turns the chamfer with the plate. */
 .plate, .plate-gold{ position:absolute; top:0; left:0; right:0; height:297mm; z-index:2; }
-.plate-gold{ clip-path:polygon(0 0,210mm 0,210mm 297mm,174.4mm 297mm,174.4mm 30.6mm,
-                               134.6mm 30.6mm,120.4mm 46.6mm,0 46.6mm); }
-.plate     { clip-path:polygon(0 0,210mm 0,210mm 297mm,175mm 297mm,175mm 30mm,
-                               134mm 30mm,120mm 46mm,0 46mm); overflow:hidden; }
+.plate-gold{ clip-path:polygon(0 0,210mm 0,210mm 297mm,169.4mm 297mm,169.4mm 30.6mm,
+                               140.6mm 30.6mm,126.4mm 46.6mm,0 46.6mm); }
+.plate     { clip-path:polygon(0 0,210mm 0,210mm 297mm,170mm 297mm,170mm 30mm,
+                               140mm 30mm,126mm 46mm,0 46mm); overflow:hidden; }
 .plate-guil{ position:absolute; inset:0; opacity:.17; }
 
-/* the red spine, inlaid one millimetre inside the sapphire, gold on both sides */
-.inlay     { position:absolute; top:0; bottom:0; left:176.5mm; width:3mm;   z-index:3; }
-.inlay-edge{ position:absolute; top:0; bottom:0; width:.45mm; z-index:3; }
+/* THE BINDING BAND. Three materials inlaid into the sapphire, reading from the
+   page inward: a RED thread nearest the field; a STAINLESS band at exactly
+   twice its width; and a GOLD hairline closing it toward the page edge. The red
+   is the half-thickness member — it is a thread, not a stripe, and that is why
+   the band reads as jewellery rather than as trim. */
+.band-red  { position:absolute; top:0; bottom:0; left:171.5mm; width:1.5mm; z-index:3; }
+.band-steel{ position:absolute; top:0; bottom:0; left:174.5mm; width:3mm;   z-index:3; }
+.band-gold { position:absolute; top:0; bottom:0; left:178.4mm; width:.45mm; z-index:3; }
 
 /* ── THE MEDALLION ─────────────────────────────────────────────────────────
    Centre (150mm, 44mm): on the plate's lower edge, clear of the binding edge
    by 3mm, and everything else on the page is laid out around it. */
-.medallion{ position:absolute; left:127mm; top:8mm; width:46mm; height:46mm; z-index:5;
+.medallion{ position:absolute; left:124mm; top:8mm; width:46mm; height:46mm; z-index:5;
   border-radius:50%; filter:drop-shadow(0 .5mm .7mm rgba(60,44,10,.3)); }
-.med-field{ position:absolute; inset:1.9mm; border-radius:50%; overflow:hidden; }
+/* gold outer ring · stainless bezel · sapphire field · gold hairline ring.
+   A watch bezel, not a circle with a border. */
+.med-steel{ position:absolute; inset:1.5mm; border-radius:50%; }
+.med-field{ position:absolute; inset:2.6mm; border-radius:50%; overflow:hidden; }
 .med-hair { position:absolute; inset:4.4mm; border-radius:50%;
   border:.4mm solid rgba(240,216,150,.75); }
 .med-mark { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
@@ -53,35 +61,42 @@
 /* ── THE HEAD ──────────────────────────────────────────────────────────────
    Arabic is right-aligned to 122mm — clear of the medallion by 5mm — so the
    name is never crowded and the medallion is never crossed. */
-.office{ position:absolute; top:12mm; left:20mm; right:92mm; text-align:right; z-index:4;
-  font-family:"Reem Kufi",sans-serif; font-weight:400; font-size:10.4pt; letter-spacing:0; }
-.name{ position:absolute; top:17mm; left:20mm; right:92mm; margin:0; text-align:right; z-index:4;
-  font-family:var(--name-face),sans-serif; font-weight:600; font-size:17.5pt;
-  line-height:1.42; color:#FBF7EC; white-space:nowrap; }
-.house{ position:absolute; top:29mm; left:20mm; right:92mm; text-align:right; z-index:4;
-  font-family:var(--name-face),sans-serif; font-weight:600; font-size:12.6pt; }
-.name-rule{ position:absolute; top:40.5mm; right:92mm; width:58mm; height:.5mm; z-index:4; }
+.office{ position:absolute; top:11mm; left:24mm; right:95mm; text-align:right; z-index:4;
+  font-family:"Reem Kufi",sans-serif; font-weight:400; font-size:12pt; letter-spacing:0; }
+.name{ position:absolute; top:16.5mm; left:24mm; right:95mm; margin:0; text-align:right; z-index:4;
+  font-family:var(--name-face),sans-serif; font-weight:600; font-size:21pt;
+  line-height:1.4; color:#FBF7EC; white-space:nowrap; }
+.house{ position:absolute; top:28.5mm; left:24mm; right:95mm; text-align:right; z-index:4;
+  font-family:var(--name-face),sans-serif; font-weight:600; font-size:15pt; }
+.name-rule{ position:absolute; top:39.5mm; right:95mm; width:64mm; height:.5mm; z-index:4; }
 
 /* ── THE SHEET ─────────────────────────────────────────────────────────────── */
-.ident{ position:absolute; top:56mm; left:20mm; width:100mm; direction:ltr; z-index:1; }
-.ident-office{ font:400 5.6pt/1 "Inter",sans-serif; letter-spacing:.42em;
-  color:var(--gold-700); margin-bottom:2.6mm; }
-.ident-name{ font-family:"EB Garamond",serif; font-weight:600; font-size:12.6pt;
-  letter-spacing:.1em; line-height:1.25; color:var(--sapphire-800); }
-.ident-house{ font-family:"EB Garamond",serif; font-size:8.4pt; letter-spacing:.44em;
-  color:var(--gold-700); margin-top:2.8mm; }
+/* Set on ONE line, larger, and on x=24mm — the same left axis as the register,
+   the field, the signatures and the foot. The previous sheet put it on 20mm
+   while everything under it sat on 24mm, which is most of why it read as
+   floating rather than as the Latin half of the identity. The rule above it is
+   SAPPHIRE, not gold: ruling is sapphire's job on this page. */
+.ident{ position:absolute; top:55mm; left:24mm; right:48mm; direction:ltr; z-index:1; }
+.ident-rule{ width:42mm; height:.5px; background:var(--sapphire-700); opacity:.9;
+  margin-bottom:3.2mm; }
+.ident-office{ font:400 5.8pt/1 "Inter",sans-serif; letter-spacing:.44em;
+  color:var(--steel-700); margin-bottom:3mm; }
+.ident-name{ font-family:"EB Garamond",serif; font-weight:600; font-size:14.6pt;
+  letter-spacing:.105em; line-height:1.2; color:var(--sapphire-800); white-space:nowrap; }
+.ident-house{ font-family:"EB Garamond",serif; font-size:8.8pt; letter-spacing:.46em;
+  color:var(--gold-700); margin-top:3mm; }
 
-.scope-ar{ position:absolute; top:80mm; left:24mm; right:44mm; margin:0; text-align:right; z-index:1;
+.scope-ar{ position:absolute; top:80mm; left:24mm; right:48mm; margin:0; text-align:right; z-index:1;
   font-family:"Amiri",serif; font-size:9.8pt; line-height:1.7; color:var(--ink-60); }
-.scope-en{ position:absolute; top:88mm; left:24mm; right:44mm; direction:ltr; z-index:1;
-  font:400 5.4pt/1 "Inter",sans-serif; letter-spacing:.26em; text-transform:uppercase;
-  color:var(--ink-40); }
+.scope-en{ position:absolute; top:88mm; left:24mm; right:48mm; direction:ltr; z-index:1;
+  font:400 5.1pt/1 "Inter",sans-serif; letter-spacing:.235em; text-transform:uppercase;
+  color:var(--ink-40); white-space:nowrap; }
 .scope-en i{ display:inline-block; width:2.2px; height:2.2px; background:var(--gold-600);
   transform:rotate(45deg); margin:0 .9em; vertical-align:.16em; font-style:normal; }
 
 /* the classification: discreet, and paired with the register rather than
    banded across the page */
-.classification{ position:absolute; top:95mm; left:24mm; right:44mm; z-index:1;
+.classification{ position:absolute; top:95mm; left:24mm; right:48mm; z-index:1;
   display:flex; justify-content:space-between; align-items:baseline; direction:ltr; }
 .classification .en{ font:600 5.2pt/1 "Inter",sans-serif; letter-spacing:.32em;
   color:var(--red-700); }
@@ -90,13 +105,13 @@
 
 /* ── THE REGISTER ──────────────────────────────────────────────────────────
    Bilingual labels, gold hairlines, no boxes. Opened by the red rule. */
-.register{ position:absolute; top:101mm; left:24mm; right:44mm; z-index:1; }
+.register{ position:absolute; top:101mm; left:24mm; right:48mm; z-index:1; }
 .reg-open{ height:.8mm; }
-.reg-rule{ height:.35px; background:var(--gold-600); opacity:.6; }
-.reg-close{ height:.5px; background:var(--gold-600); opacity:.85; }
+.reg-rule{ height:.35px; background:var(--sapphire-600); opacity:.5; }
+.reg-close{ height:.5px; background:var(--sapphire-700); opacity:.75; }
 .reg-row{ display:grid; grid-template-columns:20mm 1fr; padding:1.8mm 0 2mm; }
 .reg-row.split{ grid-template-columns:20mm 1fr 20mm 1fr; }
-.reg-lab{ text-align:right; padding-left:3.6mm; border-left:.35px solid var(--gold-600);
+.reg-lab{ text-align:right; padding-left:3.6mm; border-left:.35px solid var(--sapphire-600);
   min-height:4.4mm; }
 .reg-lab .ar{ display:block; font-family:"Reem Kufi",sans-serif; font-weight:400;
   font-size:7.2pt; color:var(--sapphire-700); line-height:1.25; }
@@ -113,7 +128,7 @@
    Amiri at 11.2pt on a 138mm measure, leaded 1.95 — a book page, not a form.
    Measured: the register closes at 130mm, the signature opens at 240mm.
    About 100mm of set type on sheet one, about 200mm on each continuation. */
-.field{ position:absolute; top:146mm; left:24mm; right:44mm; bottom:57mm; z-index:1; }
+.field{ position:absolute; top:146mm; left:24mm; right:48mm; bottom:57mm; z-index:1; }
 .field--continued{ top:44mm; bottom:57mm; }
 
 .bismillah{ text-align:center; font-family:"Amiri",serif; font-size:10pt;
@@ -128,11 +143,12 @@
    The principal signs; the office that prepared the letter is identified
    beneath, deliberately smaller. Space is left for a wet OR a digital
    signature — the block does not assume either. */
-.signatures{ position:absolute; left:24mm; right:44mm; bottom:28mm; z-index:1;
+.signatures{ position:absolute; left:24mm; right:48mm; bottom:28mm; z-index:1;
   display:flex; justify-content:space-between; align-items:flex-end; gap:12mm; }
-.sig--principal{ width:72mm; text-align:right; order:2; }
-.sig--issuing  { width:62mm; text-align:right; order:1; }
-.sig-space{ height:17mm; }
+.sig--principal{ width:80mm; text-align:right; order:2; }
+.sig--issuing  { width:56mm; text-align:right; order:1; }
+.sig-space{ height:17mm; display:flex; align-items:flex-end; justify-content:flex-start; }
+.sig-space img{ height:13.5mm; }
 .sig-space--sm{ height:11mm; display:flex; align-items:flex-end; }
 .sig-space--sm img{ height:10mm; }
 .sig-rule{ height:.45mm; margin-bottom:2.4mm; }
@@ -155,9 +171,9 @@
 .microtext{ position:absolute; left:24mm; right:0; bottom:21mm; height:1.6mm; z-index:1;
   overflow:hidden; white-space:nowrap; user-select:none;
   font:400 2.4pt/1.6 "Inter","Amiri",sans-serif; letter-spacing:.06em;
-  color:var(--plat-700); opacity:.9; }
+  color:var(--steel-700); opacity:.9; }
 .foot-rule{ position:absolute; left:24mm; right:0; bottom:18.6mm; height:.4mm; z-index:1; }
-.foot{ position:absolute; left:24mm; right:44mm; bottom:11mm; z-index:1; direction:ltr;
+.foot{ position:absolute; left:24mm; right:48mm; bottom:11mm; z-index:1; direction:ltr;
   display:flex; justify-content:space-between; align-items:baseline; }
 .foot .contact{ font:400 6.2pt/1 "Inter",sans-serif; letter-spacing:.1em; color:var(--ink-60); }
 .foot .contact i{ display:inline-block; width:2.3px; height:2.3px; background:var(--red-700);
@@ -167,11 +183,11 @@
 .folio .sep{ color:var(--red-700); margin:0 .7em; }
 
 /* ── THE PIER'S OWN FURNITURE ──────────────────────────────────────────────── */
-.pier-en { left:186mm; top:214mm; z-index:4; direction:ltr;
+.pier-en { left:183mm; top:214mm; z-index:4; direction:ltr;
   font-family:"EB Garamond",serif; font-size:10pt; letter-spacing:.22em; }
-.pier-sub{ left:194.4mm; top:214mm; z-index:4; direction:ltr;
+.pier-sub{ left:191.4mm; top:214mm; z-index:4; direction:ltr;
   font:400 4.8pt/1 "Inter",sans-serif; letter-spacing:.36em; color:rgba(226,208,150,.6); }
-.verify{ position:absolute; left:183mm; bottom:13mm; width:22mm; z-index:4; text-align:center; }
+.verify{ position:absolute; left:181mm; bottom:13mm; width:22mm; z-index:4; text-align:center; }
 .verify img{ width:22mm; height:22mm; display:block; }
 .verify .frame{ padding:.9mm; }
 .verify .serial{ margin-top:1.8mm; direction:ltr; font:400 4.4pt/1.5 "Inter",sans-serif;
@@ -186,15 +202,16 @@
 /* ── THE CONTINUATION SHEET ────────────────────────────────────────────────
    The plate becomes a pier only: the binding edge continues, the head does
    not. A 17mm medallion keeps the mark present and complete. Maximum field. */
-.cont-plate{ position:absolute; top:0; right:0; bottom:0; width:35mm; z-index:2; }
-.cont-plate-gold{ position:absolute; top:0; right:0; bottom:0; width:35.6mm; z-index:2; }
-.cont-med{ position:absolute; left:143mm; top:13mm; width:26mm; height:26mm; z-index:5;
+.cont-plate{ position:absolute; top:0; right:0; bottom:0; width:40mm; z-index:2; }
+.cont-plate-gold{ position:absolute; top:0; right:0; bottom:0; width:40.6mm; z-index:2; }
+.cont-med{ position:absolute; left:138mm; top:13mm; width:26mm; height:26mm; z-index:5;
   border-radius:50%; filter:drop-shadow(0 .4mm .5mm rgba(60,44,10,.28)); }
-.cont-med .med-field{ inset:1.2mm; }
+.cont-med .med-steel{ inset:.9mm; }
+.cont-med .med-field{ inset:1.7mm; }
 .cont-med .med-mark{ width:11.6mm; height:14mm; }
 /* right:72mm, not 44mm: the medallion occupies 143-169mm, and the name must
    clear it. When the mark and the layout conflict, the layout moves. */
-.cont-head{ position:absolute; left:24mm; right:72mm; top:17mm; z-index:1; text-align:right; }
+.cont-head{ position:absolute; left:24mm; right:76mm; top:17mm; z-index:1; text-align:right; }
 .cont-name{ font-family:var(--name-face),sans-serif; font-weight:600; font-size:10.4pt;
   color:var(--sapphire-800); line-height:1.5; }
 .cont-ref{ position:absolute; left:24mm; top:16mm; direction:ltr; z-index:1;

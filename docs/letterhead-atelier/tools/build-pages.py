@@ -45,6 +45,7 @@ def medallion(cls="medallion", spec=False):
     return f'''  <!-- the medallion resolves the plate's inner corner AND gives the mark its
        clear space; the architecture is built around it, never the reverse -->
   <div class="{cls} gold-block"{s}>
+    <div class="med-steel steel-block"></div>
     <div class="med-field field-sapphire">
       <div class="med-hair"></div>
       <img class="med-mark" src="assets/insignia-foil.png"
@@ -56,7 +57,7 @@ def medallion(cls="medallion", spec=False):
 def plate(spec=False):
     g = ' data-spec="GOLD FOIL keyline"' if spec else ''
     s = ' data-spec="SAPPHIRE FLOOD · offset"' if spec else ''
-    r = ' data-spec="RED INLAY"' if spec else ''
+    r = ' data-spec="RED THREAD · STAINLESS · GOLD"' if spec else ''
     return f'''  <!-- ══ ONE CUT PLATE: head and binding edge, with a stepped lower edge ══ -->
   <div class="plate-gold gold-block"{g}></div>
   <div class="plate field-sapphire"{s}>
@@ -64,11 +65,11 @@ def plate(spec=False):
 {GUIL}
     </div>
   </div>
-  <div class="inlay-edge gold-block" style="left:175.9mm"></div>
-  <div class="inlay field-red"{r}></div>
-  <div class="inlay-edge gold-block" style="left:179.6mm"></div>
+  <div class="band-red field-red"{r}></div>
+  <div class="band-steel steel-block steel-block--dark"></div>
+  <div class="band-gold gold-block gold-block--dark"></div>
 
-  <span class="vert pier-en gold-type gold-type--dark">IMAM AHMAD IBRAHIM SULAIMIY</span>
+  <span class="vert pier-en gold-type gold-type--dark">IMAM AHMAD IBROHIM SULAIMIY</span>
   <span class="vert pier-sub">PERSONAL OFFICE &nbsp;·&nbsp; ĀL-ES-SALAM</span>
 
   <div class="verify">
@@ -87,9 +88,10 @@ def head(spec=False):
   <div class="name-rule gold-block gold-block--dark"></div>
 
   <div class="ident">
+    <div class="ident-rule"></div>
     <div class="ident-office">PERSONAL OFFICE</div>
-    <div class="ident-name letterpress">IMAM AHMAD<br>IBRAHIM SULAIMIY</div>
-    <div class="ident-house">ĀL·ES·SALAM</div>
+    <div class="ident-name letterpress">IMAM AHMAD IBROHIM SULAIMIY</div>
+    <div class="ident-house">ĀL · ES · SALAM</div>
   </div>
 
   <p class="scope-ar">{SCOPE_AR}</p>
@@ -162,10 +164,11 @@ SIGNATURES = '''
        the English metadata. -->
   <div class="signatures">
     <div class="sig--principal">
-      <div class="sig-space"></div>
+      <div class="sig-space"><img src="assets/signature-imam.png"
+           alt="Signature of Imam Ahmad Ibrohim Sulaimiy"></div>
       <div class="sig-rule gold-block"></div>
       <div class="sig-ar">الإمام أحمد بن إبراهيم السليمي (آل سلام)</div>
-      <div class="sig-lat">Imam Ahmad Ibrahim Sulaimiy</div>
+      <div class="sig-lat">Imam Ahmad Ibrohim Sulaimiy</div>
       <div class="sig-role">المكتب الخاص &nbsp;·&nbsp; Personal Office</div>
     </div>
     <div class="sig--issuing">
@@ -185,11 +188,11 @@ def cont_head(spec=False):
   <div class="cont-plate field-sapphire"><div class="plate-guil">
 {GUIL}
   </div></div>
-  <div class="inlay-edge gold-block" style="left:175.9mm"></div>
-  <div class="inlay field-red"></div>
-  <div class="inlay-edge gold-block" style="left:179.6mm"></div>
+  <div class="band-red field-red"></div>
+  <div class="band-steel steel-block steel-block--dark"></div>
+  <div class="band-gold gold-block gold-block--dark"></div>
 
-  <span class="vert pier-en gold-type gold-type--dark">IMAM AHMAD IBRAHIM SULAIMIY</span>
+  <span class="vert pier-en gold-type gold-type--dark">IMAM AHMAD IBROHIM SULAIMIY</span>
   <span class="vert pier-sub">PERSONAL OFFICE &nbsp;·&nbsp; ĀL-ES-SALAM</span>
   <div class="verify">
     <div class="frame gold-block"><img src="assets/qr-office.png" alt=""></div>

@@ -39,9 +39,12 @@
   --gold-700:#A67F2A;
   --gold-900:#6E5115;
 
-  /* ── platinum — the security layer only, where coolness reads technical ── */
-  --plat-700:#7E8A99;
-  --plat-500:#AFB9C5;
+  /* ── stainless — cooler and brighter than platinum, with a white glint ── */
+  --steel-900:#48535F;
+  --steel-700:#6F7B88;
+  --steel-500:#A6B2BF;
+  --steel-300:#CFD8E1;
+  --steel-100:#EDF2F7;
 
   /* ── pearl ─────────────────────────────────────────────────────────────── */
   --pearl:#FBF9F5;
@@ -61,6 +64,17 @@
      #B08A33 0%,  #E6C878 9%,  #FFF8D8 19%, #EED08A 27%,
      #BE9640 38%, #FBEDBE 50%, #DABA5C 60%, #FFFDF4 72%,
      #E7C877 82%, #A8802E 92%, #F4E4AC 100%);
+
+  /* Diamond stainless: the glint at 72% is pure white. That single stop is the
+     difference between "grey metal" and a polished, faceted surface. */
+  --foil-steel:linear-gradient(104deg,
+     #6F7B88 0%,  #B7C2CE 10%, #F7FAFD 20%, #A6B2BF 28%,
+     #79858F 38%, #E8EEF4 50%, #9FAAB7 60%, #FFFFFF 72%,
+     #B9C4D0 82%, #6B7784 92%, #D8E0E8 100%);
+  --foil-steel-dark:linear-gradient(104deg,
+     #8B96A3 0%,  #CBD5DF 10%, #FDFEFF 20%, #BAC5D1 28%,
+     #94A0AC 38%, #F2F7FB 50%, #B4BFCB 60%, #FFFFFF 72%,
+     #CAD4DE 82%, #86929F 92%, #E6ECF2 100%);
 
   --name-face:"Reem Kufi";
 }
@@ -93,6 +107,26 @@ html,body{ margin:0; padding:0; }
 .gold-block     { background-image:url(foil-grain.png), var(--foil-gold);
                   background-size:24mm auto, 100% 100%; background-blend-mode:soft-light, normal; }
 .gold-block--dark{ background-image:url(foil-grain.png), var(--foil-gold-dark); }
+
+/* ── STAINLESS ─────────────────────────────────────────────────────────────
+   THREE METALS, ONE JOB EACH. This is the rule the page is built on, and it is
+   what separates a considered sheet from a gilded one:
+
+     GOLD       ceremony  — the medallion's outer ring, the insignia, the plate
+                            keyline, the rule beneath the name, the outer thread
+                            of the binding band
+     STAINLESS  instrument— the binding band itself, the medallion's inner
+                            bezel, microtext, latent geometry, the classification
+     SAPPHIRE   ruling    — every hairline in the register, the rule above the
+                            Latin wordmark
+
+   Most stationery picks one metal. Two is rare. Three, with a rule about which
+   does what, is what an atelier does. */
+.steel-block     { background-image:url(foil-grain.png), var(--foil-steel);
+                   background-size:24mm auto, 100% 100%; background-blend-mode:soft-light, normal; }
+.steel-block--dark{ background-image:url(foil-grain.png), var(--foil-steel-dark); }
+.steel-type      { color:#7B8794; text-shadow:0 -.25px 0 rgba(52,62,74,.45), 0 .35px .3px rgba(255,255,255,.9); }
+.steel-type--dark{ color:#CDD7E1; text-shadow:0 -.25px 0 rgba(14,26,46,.7),  0 .35px .35px rgba(255,255,255,.45); }
 
 /* ── FIELDS ────────────────────────────────────────────────────────────────
    Sapphire is layered, not flat: a printed flood on cotton is uneven, and that

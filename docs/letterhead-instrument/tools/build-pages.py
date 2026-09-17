@@ -167,7 +167,7 @@ def signatures(sig_img=True):
       <div class="sig-space"></div>
       <div class="sig-rule"></div>
       <div class="sig-ar">{NAME_AR}</div>
-      <div class="sig-lat">Imam Ahmad Ibrahim Sulaimiy</div>
+      <div class="sig-lat">Imam Ahmad Ibrohim Sulaimiy</div>
       <div class="sig-role">المكتب الخاص &nbsp;·&nbsp; Personal Office</div>
     </div>
     <div class="sig sig--issuing">

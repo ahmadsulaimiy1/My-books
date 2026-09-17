@@ -1,9 +1,9 @@
 # المكتب الخاص — The Atelier Sheet
 
 **الإمام أحمد بن إبراهيم السليمي (آل سلام)**
-PERSONAL OFFICE · IMAM AHMAD IBRAHIM SULAIMIY · ĀL-ES-SALAM
+PERSONAL OFFICE · IMAM AHMAD IBROHIM SULAIMIY · ĀL-ES-SALAM
 
-**SAPPHIRE · RED · PEARL · GOLD** — and the eye should register four, not three.
+**SAPPHIRE · RED · PEARL · GOLD · STAINLESS**
 
 ![the stationery, photographed](presentation.jpg)
 
@@ -12,7 +12,39 @@ PERSONAL OFFICE · IMAM AHMAD IBRAHIM SULAIMIY · ĀL-ES-SALAM
 
 ---
 
-## The two corrections, answered first
+## Three metals, one job each
+
+This is the rule the page is built on, and it is what separates a considered
+sheet from a gilded one. Most stationery picks one metal. Two is rare. **Three,
+with a rule about which does what**, is what an atelier does.
+
+| | Job | Where |
+|---|---|---|
+| **GOLD** | ceremony | the medallion's outer ring · the insignia · the keyline round the whole plate · the rule beneath the Arabic name · the outer thread of the binding band · the signature rule |
+| **STAINLESS** | instrument | the binding band · the medallion's inner bezel · microtext · latent geometry · `PERSONAL OFFICE` |
+| **SAPPHIRE** | ruling | every hairline in the register · the rule above the Latin wordmark |
+
+The stainless is a **diamond** ramp, not a grey one: eleven stops whose glint at
+72% is **pure white**. That single stop is the difference between grey metal and
+a polished, faceted surface.
+
+### The binding band — a couture edge in eight millimetres
+
+Inlaid into the sapphire, reading from the writing field outward:
+
+```
+  field │  RED 1.5mm  │ sapphire │  STAINLESS 3mm  │ sapphire │ GOLD 0.45mm │  sapphire → edge
+        └── a thread ─┘          └─ twice its width ┘         └─ closing it ┘
+```
+
+The red is deliberately the **half-thickness member**. It is a thread, not a
+stripe, and that is why the band reads as jewellery rather than as trim. It runs
+the full height of the sheet, unbroken — the medallion was moved 2mm left so its
+ring lands exactly on the sapphire's inner edge and never crosses it.
+
+---
+
+## The corrections, answered first
 
 **1 · The insignia is never trimmed.** The previous sheet slid the mark inside a
 sapphire column, which then cropped it. The fix is not to shrink the mark — it
@@ -25,7 +57,26 @@ continuation name stops 5mm short of it. When the mark and the layout conflict,
 **the layout moves** — that rule is written into the stylesheet where the
 measurements are.
 
-**2 · The gold is back, and it is fresh.** The last gold was a champagne so
+**2 · `IBROHIM`, not `IBRAHIM`.** My error, in the Latin transliteration only —
+it had propagated into this folder and into `docs/letterhead-instrument/`. Fixed
+in the sources, the generated pages, the PDFs and the documentation of both. The
+**Arabic is unchanged**: `إبراهيم` is the correct Arabic spelling of the name and
+the transliteration does not alter it.
+
+**3 · Both hands now sign.** The signature supplied for **الإمام أحمد** is cut
+to transparency and set above the principal's gold rule, with Abdullah
+Sulaimiy's beneath a finer rule and a narrower block — hierarchy by weight and
+width, not by position. Both were matted on **blueness rather than darkness**,
+because a darkness threshold eats the fast thin strokes at the ends of a
+signature, which is exactly what makes it read as handwritten.
+
+**4 · The Latin wordmark has prominence, and an axis.** `IMAM AHMAD IBROHIM
+SULAIMIY` is now set on **one line at 14.6pt**, under a sapphire rule, and moved
+from x=20mm to **x=24mm** — the same left axis as the register, the field, the
+signatures and the foot. The previous sheet put it 4mm off that axis, which is
+most of why it read as floating rather than as the Latin half of the identity.
+
+**5 · The gold is back, and it is fresh.** The last gold was a champagne so
 restrained it read as warm grey. This ramp is **eleven stops with real white in
 it** (`#FFFCE9`, `#FDF4CE`) — struck foil turns the light several times across a
 single letter, and its brightest turn is nearly white; three-stop "gold" is just
@@ -180,12 +231,18 @@ Press **PRODUCTION SPEC** on `letterhead.html` (screen only, never prints).
 | Element | Process |
 |---|---|
 | The plate | **SAPPHIRE FLOOD**, offset |
-| The keyline, medallion ring, rules, QR frame | **GOLD FOIL** |
+| The keyline, medallion outer ring, name rule, signature rule, QR frame | **GOLD FOIL** |
 | The insignia | **GOLD FOIL**, cut to the strapwork, complete |
-| The inlay | **RED**, offset — clean and unmuddied |
+| The binding band, medallion bezel | **STAINLESS FOIL** — a second foil die, and the reason to specify two |
+| The band's red thread | **RED**, offset — 1.5mm, clean and unmuddied |
+| The register hairlines | **SAPPHIRE**, printed with the flood |
 | Guilloché, microtext, latent geometry | Fine-line, *printed* — foil cannot hold a 2.4pt letterform |
 | The insignia, page centre | **WATERMARK in the stock**, else blind emboss |
 | Body, register, addresses | Letterpress |
+
+**Two foil dies, not one.** Gold and stainless are separate passes. A single-die
+job can have the gold or the steel but not both, and the band is the place the
+difference is most visible.
 
 **Ink coverage ≈ 26%.** Offset or letterpress, not office digital — a toner
 device will band across the plate and drop the microtext. Ask for a wet-proof on
