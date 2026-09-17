@@ -1,0 +1,129 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   MATERIALS — palette and processes
+   المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام)
+
+   SAPPHIRE — RED — PEARL — GOLD, and the viewer should perceive four, not three.
+
+   The last iteration lost its gold: a champagne so restrained it read as warm
+   grey, and a page that announced itself as blue, white and red. The gold here
+   is BRIGHTER and FRESHER — a struck-foil ramp with genuine white highlights in
+   it — and it is placed like jewellery: the medallion ring, the insignia, the
+   rule under the name, the edge of the pier, the register hairlines, the
+   signature rule. Limited, positioned, unmistakable.
+
+   RED is red. Not crimson, not burgundy, not wine. It appears three times and
+   never as a wash: the inlay down the binding edge, the rule that opens the
+   register, and the reference number.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* ── sapphire — dominant, and layered rather than flat ─────────────────── */
+  --sapphire-950:#020B1E;
+  --sapphire-900:#04122E;
+  --sapphire-800:#082349;
+  --sapphire-700:#0B3068;
+  --sapphire-600:#11418F;
+  --sapphire-500:#1A55B4;
+
+  /* ── RED ───────────────────────────────────────────────────────────────── */
+  --red-800:#9E0C21;
+  --red-700:#C8102E;          /* the principal red */
+  --red-600:#E01B37;
+
+  /* ── gold — freshly struck, not antiqued ───────────────────────────────── */
+  --gold-050:#FFFAE6;
+  --gold-100:#FBEFC4;
+  --gold-300:#EFD98F;
+  --gold-500:#D9B65A;
+  --gold-600:#C79E3C;
+  --gold-700:#A67F2A;
+  --gold-900:#6E5115;
+
+  /* ── platinum — the security layer only, where coolness reads technical ── */
+  --plat-700:#7E8A99;
+  --plat-500:#AFB9C5;
+
+  /* ── pearl ─────────────────────────────────────────────────────────────── */
+  --pearl:#FBF9F5;
+  --pearl-2:#F2EFE7;
+  --ink:#121826;
+  --ink-60:#54607A;
+  --ink-40:#8C95A8;
+
+  /* Eleven stops with real white in them. Three-stop "gold" is a yellow
+     gradient; foil turns the light several times across one letter, and the
+     brightest turn is nearly white. */
+  --foil-gold:linear-gradient(104deg,
+     #9A7526 0%,  #D9BA63 9%,  #FDF4CE 19%, #E2C67B 27%,
+     #A8832D 38%, #F6E7B0 50%, #CBA84A 60%, #FFFCE9 72%,
+     #D8B865 82%, #967123 92%, #EEDC9E 100%);
+  --foil-gold-dark:linear-gradient(104deg,
+     #B08A33 0%,  #E6C878 9%,  #FFF8D8 19%, #EED08A 27%,
+     #BE9640 38%, #FBEDBE 50%, #DABA5C 60%, #FFFDF4 72%,
+     #E7C877 82%, #A8802E 92%, #F4E4AC 100%);
+
+  --name-face:"Reem Kufi";
+}
+
+*{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+html,body{ margin:0; padding:0; }
+@page{ size:A4; margin:0; }
+
+.sheet{
+  position:relative; width:210mm; height:297mm; overflow:hidden;
+  background:radial-gradient(132% 88% at 44% -10%, #FFFEFB 0%, var(--pearl) 40%, var(--pearl-2) 100%);
+  color:var(--ink); font-family:"EB Garamond","Amiri",Georgia,serif;
+}
+.sheet::before{
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:url(paper-cotton.png); background-size:33mm 33mm;
+  mix-blend-mode:multiply; opacity:.13;
+}
+.sheet > *{ position:relative; }
+
+/* ── GOLD ──────────────────────────────────────────────────────────────────
+   TYPE and BLOCKS take gold by different means. `background-clip:text` prints a
+   sliver of unclipped background along the element box — a faint gold rule
+   across the page under every line — so gold TYPE is a solid with a micro-bevel
+   (a dark hairline above, a lit one below, which is what the eye reads at text
+   size anyway) and the eleven-stop ramp is kept for BLOCKS, where the element
+   itself is the shape being struck. */
+.gold-type      { color:#B08C30; text-shadow:0 -.25px 0 rgba(96,68,16,.5), 0 .35px .3px rgba(255,252,228,.75); }
+.gold-type--dark{ color:#F0D896; text-shadow:0 -.25px 0 rgba(72,50,8,.75), 0 .4px .4px rgba(255,253,240,.5); }
+.gold-block     { background-image:url(foil-grain.png), var(--foil-gold);
+                  background-size:24mm auto, 100% 100%; background-blend-mode:soft-light, normal; }
+.gold-block--dark{ background-image:url(foil-grain.png), var(--foil-gold-dark); }
+
+/* ── FIELDS ────────────────────────────────────────────────────────────────
+   Sapphire is layered, not flat: a printed flood on cotton is uneven, and that
+   unevenness is most of why it reads as ink rather than as a screen fill. */
+.field-sapphire{ background:
+   radial-gradient(112% 76% at 78% -6%, var(--sapphire-600) 0%, var(--sapphire-800) 44%, var(--sapphire-950) 100%); }
+.field-sapphire::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:url(paper-cotton.png); background-size:33mm 33mm;
+  mix-blend-mode:overlay; opacity:.19; }
+.field-red{ background:linear-gradient(170deg,
+   var(--red-600) 0%, var(--red-700) 46%, var(--red-800) 100%); }
+
+/* ── RELIEF — light fixed top-left across the whole sheet ──────────────────── */
+.emboss{ color:#F6F3EB; text-shadow:-0.35px -0.45px 0.4px rgba(255,255,255,.95),
+                                     0.55px 0.75px 1.1px rgba(116,106,86,.5); }
+.deboss{ color:#ECE8DE; text-shadow: 0.45px 0.6px 0.8px rgba(255,255,255,.92),
+                                    -0.35px -0.45px 0.9px rgba(108,98,78,.55); }
+.letterpress{ text-shadow:0 .45px 0 rgba(255,255,255,.5); }
+
+.vert{ position:absolute; transform-origin:0 0; transform:rotate(-90deg); white-space:nowrap; }
+svg.fill{ display:block; width:100%; height:100%; }
+
+@media screen{
+  body{ background:#141518; padding:30px 16px; }
+  .sheet{ margin:0 auto;
+    box-shadow:0 1px 1px rgba(0,0,0,.3), 0 24px 46px rgba(0,0,0,.46), 0 60px 110px rgba(0,0,0,.34); }
+  .sheet + .sheet{ margin-top:26px; }
+}
+@media print{
+  body{ background:none; padding:0; }
+  .sheet{ box-shadow:none; }
+  .sheet + .sheet{ page-break-before:always; margin-top:0; }
+}
