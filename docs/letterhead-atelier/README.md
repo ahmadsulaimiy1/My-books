@@ -20,27 +20,37 @@ with a rule about which does what**, is what an atelier does.
 
 | | Job | Where |
 |---|---|---|
-| **GOLD** | ceremony | the medallion's outer ring · the insignia · the keyline round the whole plate · the rule beneath the Arabic name · the outer thread of the binding band · the signature rule |
+| **GOLD** | ceremony | the medallion's outer ring · the insignia · the keyline round the whole plate · the rule beneath the Arabic name · **both members of the binding band** · the signature rule |
 | **STAINLESS** | instrument | the binding band · the medallion's inner bezel · microtext · latent geometry · `PERSONAL OFFICE` |
 | **SAPPHIRE** | ruling | every hairline in the register · the rule above the Latin wordmark |
+| **RED** | *not a metal, and not architecture* | the rule that opens the register · the reference · the classification · the contact pips · the folio. It marks what must be **read**, never what must be admired. |
 
 The stainless is a **diamond** ramp, not a grey one: eleven stops whose glint at
 72% is **pure white**. That single stop is the difference between grey metal and
 a polished, faceted surface.
 
-### The binding band — a couture edge in eight millimetres
+### The binding band — all metal, and machined
 
 Inlaid into the sapphire, reading from the writing field outward:
 
 ```
-  field │  RED 1.5mm  │ sapphire │  STAINLESS 3mm  │ sapphire │ GOLD 0.45mm │  sapphire → edge
-        └── a thread ─┘          └─ twice its width ┘         └─ closing it ┘
+  field │ GOLD 1.5mm │ sapphire │ STAINLESS 3mm │ sapphire │ GOLD 0.45mm │ sapphire → edge
+        │  ENGRAVED  │          │    MILLED     │          │  closing it │
 ```
 
-The red is deliberately the **half-thickness member**. It is a thread, not a
-stripe, and that is why the band reads as jewellery rather than as trim. It runs
-the full height of the sheet, unbroken — the medallion was moved 2mm left so its
-ring lands exactly on the sapphire's inner edge and never crosses it.
+- The **gold thread** is engraved, not drawn: a raised bevel catching the light
+  on its left edge and dropping a shadow on its right, so it reads as a member
+  cut into the plate.
+- The **stainless rail** is milled: a bright chamfer on each edge, a fine
+  longitudinal brush across the face, and a darker score down its centre. Those
+  three things are what turn a grey block into a machined inlay.
+- The **1 : 2 proportion** between thread and rail is kept from the earlier
+  band — it was the reason the edge read as jewellery rather than as trim.
+
+The band runs the full height unbroken; the medallion sits 2mm clear of it so
+its ring never crosses the metal. **Red has left the band entirely** and gone to
+where it does more work — the rule that opens the register, the reference
+number, the classification, the contact pips and the folio.
 
 ---
 
@@ -119,7 +129,8 @@ and that unevenness is most of why it reads as ink.
 |---|---|
 | **Amiri** | Arabic text — the body, the register values, the addresses |
 | **Reem Kufi** | Arabic display — the name, the office line, the register labels |
-| **EB Garamond** | Latin display *and* body |
+| **Playfair Display 700** | the Latin wordmark, and the Latin name in the signature |
+| **EB Garamond** | Latin body and subordinate lines |
 | **Inter** | the instrument layer only — references, serials, microtext |
 
 **The body face is the decision this page rests on.** A letterhead with an
@@ -129,6 +140,20 @@ Naskh cut by the Bulaq Press in Cairo: genuine stroke modulation, properly
 resolved connected forms, drawn for **book** setting, which is what a formal
 letter actually is. It is set at **11.2pt on a 138mm measure, leaded 1.95** —
 book proportions, not form proportions.
+
+**Kufi marks what is looked up.** In the register, the **recipient** and the
+**subject** are set in Reem Kufi — the display hand — against the Naskh of
+everything around them, because those are the two lines a reader hunts for
+first. The recipient's *position* stays in Naskh beneath the name so the two do
+not compete. Harakat are dropped from the Kufi subject: vowel marks are a Naskh
+convention and sit awkwardly on Kufi geometry. They stay in the letter body,
+which is Amiri.
+
+**The Latin wordmark is Playfair Display 700, not EB Garamond.** A book face's
+capitals are narrow and old-style *by design*, and at identity size they read as
+reticent — the difference between a name set in a book and a name on a door.
+Playfair at 700 is wide, high-contrast and genuinely bold. EB Garamond keeps the
+body and the subordinate lines, where its reticence is exactly right.
 
 **Reem Kufi is by the same designer as Amiri**, so the display/text pairing is a
 designed relationship rather than an assembled one. **EB Garamond** is the
@@ -233,8 +258,9 @@ Press **PRODUCTION SPEC** on `letterhead.html` (screen only, never prints).
 | The plate | **SAPPHIRE FLOOD**, offset |
 | The keyline, medallion outer ring, name rule, signature rule, QR frame | **GOLD FOIL** |
 | The insignia | **GOLD FOIL**, cut to the strapwork, complete |
-| The binding band, medallion bezel | **STAINLESS FOIL** — a second foil die, and the reason to specify two |
-| The band's red thread | **RED**, offset — 1.5mm, clean and unmuddied |
+| The band's stainless rail, the medallion bezel | **STAINLESS FOIL** — a second foil die, and the reason to specify two |
+| The band's gold thread | **GOLD FOIL + BLIND EMBOSS**, in register — 1.5mm, engraved rather than laid flat |
+| The register rule, reference, classification | **RED**, offset — clean and unmuddied |
 | The register hairlines | **SAPPHIRE**, printed with the flood |
 | Guilloché, microtext, latent geometry | Fine-line, *printed* — foil cannot hold a 2.4pt letterform |
 | The insignia, page centre | **WATERMARK in the stock**, else blind emboss |

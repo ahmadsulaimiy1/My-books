@@ -57,7 +57,7 @@ def medallion(cls="medallion", spec=False):
 def plate(spec=False):
     g = ' data-spec="GOLD FOIL keyline"' if spec else ''
     s = ' data-spec="SAPPHIRE FLOOD · offset"' if spec else ''
-    r = ' data-spec="RED THREAD · STAINLESS · GOLD"' if spec else ''
+    r = ' data-spec="GOLD ENGRAVED · STAINLESS MILLED · GOLD"' if spec else ''
     return f'''  <!-- ══ ONE CUT PLATE: head and binding edge, with a stepped lower edge ══ -->
   <div class="plate-gold gold-block"{g}></div>
   <div class="plate field-sapphire"{s}>
@@ -65,7 +65,7 @@ def plate(spec=False):
 {GUIL}
     </div>
   </div>
-  <div class="band-red field-red"{r}></div>
+  <div class="band-thread gold-block gold-block--dark"{r}></div>
   <div class="band-steel steel-block steel-block--dark"></div>
   <div class="band-gold gold-block gold-block--dark"></div>
 
@@ -123,7 +123,7 @@ def register(ref="", date_ar="", to_name="", to_role="", subject="", spec=False)
     <div class="reg-rule"></div>
     <div class="reg-row">
       {lab("الموضوع","SUBJECT")}
-      <div class="reg-val">{subject}</div>
+      <div class="reg-val reg-val--kufi">{subject}</div>
     </div>
     <div class="reg-close"></div>
   </div>
@@ -188,7 +188,7 @@ def cont_head(spec=False):
   <div class="cont-plate field-sapphire"><div class="plate-guil">
 {GUIL}
   </div></div>
-  <div class="band-red field-red"></div>
+  <div class="band-thread gold-block gold-block--dark"></div>
   <div class="band-steel steel-block steel-block--dark"></div>
   <div class="band-gold gold-block gold-block--dark"></div>
 
@@ -266,7 +266,7 @@ def main():
                    date_ar='٣ ربيع الآخر ١٤٤٨هـ<br><span class="sub">الموافق ١٧ سبتمبر ٢٠٢٦م</span>',
                    to_name="سعادة الدكتور حبيب الله يوسف أديوي المحترم",
                    to_role="مدير كلية منار الهدى العالمية",
-                   subject="تهنئة بمناسبة نَيْل درجة الدكتوراه")
+                   subject="تهنئة بمناسبة نيل درجة الدكتوراه")
         + SECURITY
         + '  <div class="field">\n    <p class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
           '    <div class="letter">\n      ' + "\n      ".join(LETTER_1) + '\n    </div>\n  </div>\n'
@@ -276,7 +276,7 @@ def main():
         + "\n      ".join(LETTER_2) + '\n    </div>\n  </div>\n'
         + SIGNATURES + foot(fa2, fe2))
     open(os.path.join(ROOT, "letter-tahniah-dr-adewuyi.html"), "w", encoding="utf-8").write(
-        HEAD.format(title="تهنئة بمناسبة نَيْل درجة الدكتوراه", speckit="") + p1 + "\n" + p2
+        HEAD.format(title="تهنئة بمناسبة نيل درجة الدكتوراه", speckit="") + p1 + "\n" + p2
         + '</body>\n</html>\n')
     print("letterhead.html · letterhead-continuation.html · letter-tahniah-dr-adewuyi.html")
 

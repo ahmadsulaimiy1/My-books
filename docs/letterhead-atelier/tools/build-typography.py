@@ -68,6 +68,12 @@ FACES = [
     ("EB Garamond",     "family=EB+Garamond:wght@400",  "latin-ext", 400, {"wght":400}),
     ("EB Garamond",     "family=EB+Garamond:wght@600",  "latin",     600, {"wght":600}),
     ("EB Garamond",     "family=EB+Garamond:wght@600",  "latin-ext", 600, {"wght":600}),
+    # PLAYFAIR DISPLAY 700 carries the Latin WORDMARK. EB Garamond's capitals
+    # are a book face's capitals: narrow, old-style, and they read as reticent
+    # at identity size. Playfair at 700 is wide, high-contrast and genuinely
+    # bold — the difference between a name set in a book and a name on a door.
+    ("Playfair Display","family=Playfair+Display:wght@700","latin",     700, {"wght":700}),
+    ("Playfair Display","family=Playfair+Display:wght@700","latin-ext", 700, {"wght":700}),
     # INTER for the instrument layer only — references, serials, microtext.
     # Deliberately impersonal: this part of the page is machinery, not voice.
     ("Inter",           "family=Inter:wght@400",        "latin",     400, {"wght":400,"opsz":14}),
@@ -153,7 +159,8 @@ def main():
 
      Amiri         Arabic text — the Bulaq Naskh revival; the body face
      Reem Kufi     Arabic display — contemporary Kufi, by Amiri's designer
-     EB Garamond   Latin display and body — the European book face
+     Playfair Display  Latin wordmark — wide, bold, high-contrast
+     EB Garamond   Latin body and subordinate lines — the European book face
      Inter         Latin instrument — references, serials, microtext
 
    Two decisions worth keeping:

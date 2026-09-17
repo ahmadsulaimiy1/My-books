@@ -35,14 +35,38 @@
                                140mm 30mm,126mm 46mm,0 46mm); overflow:hidden; }
 .plate-guil{ position:absolute; inset:0; opacity:.17; }
 
-/* THE BINDING BAND. Three materials inlaid into the sapphire, reading from the
-   page inward: a RED thread nearest the field; a STAINLESS band at exactly
-   twice its width; and a GOLD hairline closing it toward the page edge. The red
-   is the half-thickness member — it is a thread, not a stripe, and that is why
-   the band reads as jewellery rather than as trim. */
-.band-red  { position:absolute; top:0; bottom:0; left:171.5mm; width:1.5mm; z-index:3; }
-.band-steel{ position:absolute; top:0; bottom:0; left:174.5mm; width:3mm;   z-index:3; }
-.band-gold { position:absolute; top:0; bottom:0; left:178.4mm; width:.45mm; z-index:3; }
+/* THE BINDING BAND — now all metal, and machined rather than printed.
+   Reading from the writing field outward:
+
+     a GOLD THREAD, 1.5mm, ENGRAVED — a raised bevel catching the light on its
+       left edge and dropping a shadow on its right, so it reads as a member cut
+       into the plate rather than a line drawn on it
+     a STAINLESS RAIL, 3mm, exactly twice its width, MILLED — a bright chamfer
+       on each edge, a fine longitudinal brush across the face, and a darker
+       score down its centre, which is what turns a grey block into a machined
+       inlay
+     a GOLD HAIRLINE closing the band toward the page edge
+
+   The 1:2 proportion between thread and rail is kept from the earlier band —
+   it was the reason it read as jewellery — but the thread is gold now, and the
+   red has gone entirely to where it does more work: the register rule, the
+   reference, the classification and the folio. */
+.band-thread{ position:absolute; top:0; bottom:0; left:171.5mm; width:1.5mm; z-index:3;
+  box-shadow: inset .28mm 0 0 rgba(255,250,224,.62),
+              inset -.28mm 0 0 rgba(84,60,14,.72),
+              .18mm 0 .35mm rgba(40,28,4,.34); }
+.band-steel { position:absolute; top:0; bottom:0; left:174.5mm; width:3mm;   z-index:3;
+  box-shadow: inset .3mm 0 0 rgba(255,255,255,.80),
+              inset -.3mm 0 0 rgba(38,48,60,.68),
+              .18mm 0 .4mm rgba(18,26,38,.36); }
+/* the brush and the centre score ride on top of the steel ramp */
+.band-steel::after{ content:""; position:absolute; inset:0;
+  background-image:
+    linear-gradient(90deg, transparent 49.3%, rgba(40,52,66,.5) 49.3%,
+                           rgba(40,52,66,.5) 50.7%, transparent 50.7%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.16) 0 .12mm,
+                                    transparent .12mm .34mm); }
+.band-gold  { position:absolute; top:0; bottom:0; left:178.4mm; width:.45mm; z-index:3; }
 
 /* ── THE MEDALLION ─────────────────────────────────────────────────────────
    Centre (150mm, 44mm): on the plate's lower edge, clear of the binding edge
@@ -81,8 +105,11 @@
   margin-bottom:3.2mm; }
 .ident-office{ font:400 5.8pt/1 "Inter",sans-serif; letter-spacing:.44em;
   color:var(--steel-700); margin-bottom:3mm; }
-.ident-name{ font-family:"EB Garamond",serif; font-weight:600; font-size:14.6pt;
-  letter-spacing:.105em; line-height:1.2; color:var(--sapphire-800); white-space:nowrap; }
+/* Playfair Display 700, not EB Garamond. A book face's capitals are narrow and
+   old-style by design and they read as reticent at identity size; this is wide,
+   high-contrast and genuinely bold — a name on a door rather than in a book. */
+.ident-name{ font-family:"Playfair Display",serif; font-weight:700; font-size:14.2pt;
+  letter-spacing:.085em; line-height:1.2; color:var(--sapphire-800); white-space:nowrap; }
 .ident-house{ font-family:"EB Garamond",serif; font-size:8.8pt; letter-spacing:.46em;
   color:var(--gold-700); margin-top:3mm; }
 
@@ -121,7 +148,14 @@
   padding-right:3.6mm; padding-left:6mm; min-height:4.4mm; }
 .reg-val.lat{ direction:ltr; font:400 8.6pt/1.6 "Inter",sans-serif; letter-spacing:.07em; }
 .reg-val .ref{ color:var(--red-700); font-weight:600; }
-.reg-val .strong{ font-weight:700; font-size:10.4pt; }
+/* The recipient and the subject are the two things a reader looks for first,
+   so they are set in KUFI — the display hand — against the Naskh of everything
+   else in the register. The recipient's POSITION stays in Naskh beneath it, so
+   the name and the office do not compete. */
+.reg-val .strong{ font-family:"Reem Kufi",sans-serif; font-weight:600;
+  font-size:9.8pt; line-height:1.5; color:var(--sapphire-800); }
+.reg-val--kufi{ font-family:"Reem Kufi",sans-serif; font-weight:400;
+  font-size:9.2pt; line-height:1.55; color:var(--sapphire-800); }
 .reg-val .sub{ color:var(--ink-60); font-size:9pt; }
 
 /* ── THE WRITING FIELD ─────────────────────────────────────────────────────
@@ -155,8 +189,8 @@
 .sig-rule--fine{ height:.3px; background:var(--gold-600); opacity:.6; margin-bottom:2mm; }
 .sig-ar{ font-family:"Reem Kufi",sans-serif; font-weight:600; font-size:9.2pt;
   line-height:1.5; color:var(--sapphire-800); }
-.sig-lat{ direction:ltr; font-family:"EB Garamond",serif; font-size:8.6pt;
-  letter-spacing:.07em; color:var(--ink-60); margin-top:1.4mm; }
+.sig-lat{ direction:ltr; font-family:"Playfair Display",serif; font-weight:700;
+  font-size:8.4pt; letter-spacing:.06em; color:var(--ink-60); margin-top:1.6mm; }
 .sig-role{ font:400 5.2pt/1.7 "Inter","Reem Kufi",sans-serif; letter-spacing:.26em; color:var(--gold-700);
   margin-top:2mm; text-transform:uppercase; direction:ltr; }
 .sig--issuing .sig-ar{ font-family:"Amiri",serif; font-weight:700; font-size:8.6pt;
