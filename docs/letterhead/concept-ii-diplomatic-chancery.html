@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept II — Diplomatic Chancery</title>
+<link rel="stylesheet" href="assets/letterhead-typography.css">
+<style>
+  /* ═══════════════════════════════════════════════════════════════════════
+     CONCEPT II · DIPLOMATIC CHANCERY
+     A ruled chancery frame holds the page. The identity is split by hand,
+     not stacked: the insignia opens at the left, the Arabic closes at the
+     right, and a royal ribbon is threaded onto a gold hairline down the
+     binding edge — the RIGHT edge, because the Arabic reading order decides
+     it, not Latin filing convention. The footer is a three-post register,
+     the way a mission's note paper carries its stations.
+     ═══════════════════════════════════════════════════════════════════════ */
+  :root{
+    --ink:#222222; --ink-70:#4f4d49; --ink-45:#7c7873;
+    --gold:#C5A773; --gold-deep:#9C7F4E;
+    --royal:#002FAB;
+    --paper:#FCFAF6; --paper-deep:#F5F1E7;
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  html,body{margin:0;padding:0;}
+  @page{ size:A4; margin:0; }
+
+  .sheet{
+    position:relative; width:210mm; height:297mm; overflow:hidden;
+    background:linear-gradient(196deg,#FFFEFB 0%,var(--paper) 42%,var(--paper-deep) 100%);
+    color:var(--ink); font-family:"Source Serif 4",Georgia,serif;
+  }
+
+  /* ── chancery frame ──────────────────────────────────────────────────── */
+  .frame{ position:absolute; inset:11mm; border:.6px solid var(--gold); }
+  .frame-inner{ position:absolute; inset:13.4mm; border:.4px solid var(--gold-deep); opacity:.42; }
+  .corner{ position:absolute; width:8.6mm; height:8.6mm; }
+  .corner.tl{ top:9.1mm; left:9.1mm; }
+  .corner.tr{ top:9.1mm; right:9.1mm; transform:scaleX(-1); }
+  .corner.bl{ bottom:9.1mm; left:9.1mm; transform:scaleY(-1); }
+  .corner.br{ bottom:9.1mm; right:9.1mm; transform:scale(-1,-1); }
+
+  /* ── royal ribbon threaded on a gold hairline, binding (right) edge ──── */
+  .thread{ position:absolute; top:15mm; bottom:15mm; right:17.85mm; width:.5px;
+    background:var(--gold); opacity:.8; }
+  .ribbon{ position:absolute; top:96mm; height:112mm; right:17.4mm; width:1.4mm;
+    background:var(--royal); }
+  .ribbon::before,.ribbon::after{ content:""; position:absolute; left:-1.1mm; right:-1.1mm;
+    height:.5px; background:var(--gold-deep); }
+  .ribbon::before{ top:-1.4mm; } .ribbon::after{ bottom:-1.4mm; }
+
+  /* ── masthead ────────────────────────────────────────────────────────── */
+  .masthead{ position:absolute; top:22mm; right:24mm; left:22mm; }
+
+  .band-top{ display:flex; align-items:flex-start; justify-content:space-between; }
+  .mark{ width:17.3mm; height:21mm; display:block; order:2; }
+  .eyebrow-ar{ order:1; font-family:"Reem Kufi","Amiri",serif; font-size:13pt; font-weight:500;
+    color:var(--gold-deep); word-spacing:.16em; line-height:1; padding-top:2.4mm; }
+
+  .name-ar{ font-family:"Amiri",serif; font-weight:700; font-size:24.5pt; line-height:1.3;
+    margin:5.5mm 0 0; color:var(--ink); text-align:right; white-space:nowrap; }
+  .name-ar .kunya{ font-weight:400; color:var(--ink-70); font-size:.78em; }
+  .name-ar .house{ color:var(--gold-deep); font-weight:400; font-size:.78em; }
+
+  .rule-major{ height:.9px; margin-top:5.2mm;
+    background:linear-gradient(90deg,rgba(197,167,115,.18) 0%,var(--gold) 26%,var(--gold) 100%); }
+
+  .band-split{ display:flex; align-items:flex-start; justify-content:space-between;
+    gap:9mm; margin-top:4.6mm; }
+  .scope-ar{ order:1; font-family:"Amiri",serif; font-size:9.4pt; line-height:1.7;
+    color:var(--ink-70); margin:0; text-align:right; flex:1 1 auto; }
+  .en-id{ order:2; direction:ltr; text-align:left; flex:0 0 auto; padding-top:.4mm; }
+  .en-office{ font-family:"Cinzel",serif; font-weight:500; font-size:6.5pt;
+    letter-spacing:.38em; color:var(--gold-deep); margin-bottom:1.9mm; }
+  .en-name{ font-family:"Cinzel",serif; font-weight:600; font-size:9.4pt;
+    letter-spacing:.095em; line-height:1; color:var(--ink); white-space:nowrap; }
+  .en-house{ font-family:"Cinzel",serif; font-weight:400; font-size:7.2pt;
+    letter-spacing:.38em; color:var(--gold-deep); margin-top:2.2mm; }
+
+  .rule-minor{ height:.4px; margin-top:5mm; background:var(--gold-deep); opacity:.34; }
+  .en-scope{ direction:ltr; text-align:center; font-family:"Source Serif 4",Georgia,serif;
+    font-size:6.3pt; letter-spacing:.20em; text-indent:.20em; text-transform:uppercase;
+    color:var(--ink-45); margin-top:3.4mm; white-space:nowrap; }
+  i.pip{ display:inline-block; width:2.5px; height:2.5px; background:var(--gold);
+    transform:rotate(45deg); margin:0 .95em; vertical-align:.14em; }
+
+  /* ── footer register ─────────────────────────────────────────────────── */
+  .foot-rule{ position:absolute; bottom:30mm; right:24mm; left:22mm; height:.9px;
+    background:linear-gradient(90deg,var(--gold) 0%,var(--gold) 74%,rgba(197,167,115,.18) 100%); }
+  .footer{ position:absolute; bottom:17mm; right:24mm; left:22mm; direction:ltr;
+    display:flex; justify-content:space-between; align-items:flex-start; gap:8mm; }
+  .fcol{ flex:1 1 0; } .fcol.mid{ text-align:center; } .fcol.end{ text-align:right; }
+  .flabel{ font-family:"Cinzel",serif; font-size:5.6pt; font-weight:500; letter-spacing:.28em;
+    color:var(--gold-deep); margin-bottom:2mm; }
+  .fval{ font-family:"Source Serif 4",Georgia,serif; font-size:8pt; letter-spacing:.05em;
+    color:var(--ink-70); line-height:1; }
+  .fval a{ color:inherit; text-decoration:none; }
+
+  @media screen{
+    body{ background:#3b3a38; padding:28px 16px; }
+    .sheet{ margin:0 auto; box-shadow:0 30px 70px rgba(0,0,0,.45); }
+  }
+  @media print{ body{background:none;padding:0;} .sheet{box-shadow:none;} }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="frame"></div>
+  <div class="frame-inner"></div>
+  <svg class="corner tl" viewBox="0 0 34 34" aria-hidden="true"><g fill="none" stroke="#C5A773" stroke-width="1.1"><path d="M1 12 V1 H12"/><path d="M6 20 V6 H20" stroke-width=".7" opacity=".55"/></g><rect x="9.4" y="9.4" width="4.6" height="4.6" transform="rotate(45 11.7 11.7)" fill="#C5A773"/></svg>
+  <svg class="corner tr" viewBox="0 0 34 34" aria-hidden="true"><g fill="none" stroke="#C5A773" stroke-width="1.1"><path d="M1 12 V1 H12"/><path d="M6 20 V6 H20" stroke-width=".7" opacity=".55"/></g><rect x="9.4" y="9.4" width="4.6" height="4.6" transform="rotate(45 11.7 11.7)" fill="#C5A773"/></svg>
+  <svg class="corner bl" viewBox="0 0 34 34" aria-hidden="true"><g fill="none" stroke="#C5A773" stroke-width="1.1"><path d="M1 12 V1 H12"/><path d="M6 20 V6 H20" stroke-width=".7" opacity=".55"/></g><rect x="9.4" y="9.4" width="4.6" height="4.6" transform="rotate(45 11.7 11.7)" fill="#C5A773"/></svg>
+  <svg class="corner br" viewBox="0 0 34 34" aria-hidden="true"><g fill="none" stroke="#C5A773" stroke-width="1.1"><path d="M1 12 V1 H12"/><path d="M6 20 V6 H20" stroke-width=".7" opacity=".55"/></g><rect x="9.4" y="9.4" width="4.6" height="4.6" transform="rotate(45 11.7 11.7)" fill="#C5A773"/></svg>
+
+  <div class="thread"></div>
+  <div class="ribbon"></div>
+
+  <div class="masthead">
+    <div class="band-top">
+      <div class="eyebrow-ar">المكتب الخاص</div>
+      <img class="mark" src="assets/insignia-logo.png" alt="Insignia of the Personal Office">
+    </div>
+
+    <h1 class="name-ar">الإمام أحمد <span class="kunya">بن</span> إبراهيم السليمي <span class="house">(آل سلام)</span></h1>
+
+    <div class="rule-major"></div>
+
+    <div class="band-split">
+      <p class="scope-ar">للتطوير الأكاديمي والدعوة الإسلامية والعلاقات الدولية والشؤون الأهلية الخاصة</p>
+      <div class="en-id">
+        <div class="en-office">PERSONAL OFFICE</div>
+        <div class="en-name">IMAM AHMAD IBROHIM SULAIMIY</div>
+        <div class="en-house">ĀL-ES-SALAM</div>
+      </div>
+    </div>
+
+    <div class="rule-minor"></div>
+    <div class="en-scope">Academic Development<i class="pip"></i>Islamic Da&lsquo;wah<i class="pip"></i>International Relations<i class="pip"></i>Private &amp; Civic Affairs</div>
+  </div>
+
+  <div class="foot-rule"></div>
+  <div class="footer">
+    <div class="fcol"><div class="flabel">PERSONAL OFFICE</div><div class="fval">+234&nbsp;810&nbsp;430&nbsp;2087</div></div>
+    <div class="fcol mid"><div class="flabel">INTERNATIONAL</div><div class="fval">+44&nbsp;7961&nbsp;869638</div></div>
+    <div class="fcol end"><div class="flabel">CORRESPONDENCE</div><div class="fval"><a href="mailto:abisulaimiycollege@gmail.com">abisulaimiycollege@gmail.com</a></div></div>
+  </div>
+
+</div>
+</body>
+</html>
