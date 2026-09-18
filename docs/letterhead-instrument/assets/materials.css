@@ -1,0 +1,142 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   MATERIALS — palette and processes
+   المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام)
+
+   RED is red. Not crimson, not oxblood, not burgundy — a rich, unmistakable
+   heraldic red, used as a small number of deliberate strikes rather than as a
+   wash. Sapphire carries the authority and most of the area. Pearl is the
+   field. Metal is MIXED and the mix is the point:
+
+       PLATINUM  carries the architecture — rules, registers, microtext,
+                 guilloché, the instrument layer. Cool, exact, contemporary.
+       GOLD      is held back for two things only: the insignia, and the
+                 principal's name. Warmth appears exactly where authority does.
+
+   Most luxury stationery picks one metal. Using two, with a rule about which
+   goes where, is what stops the page reading as merely gilded.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* ── sapphire — the authority, and most of the coloured area ───────────── */
+  --sapphire-900:#03102A;
+  --sapphire-800:#082047;
+  --sapphire-700:#0C2E68;
+  --sapphire-600:#123F8E;
+  --sapphire-500:#1B52B0;
+
+  /* ── RED — rationed, and never dulled into crimson ─────────────────────── */
+  --red-900:#6E0616;
+  --red-800:#9A0C20;
+  --red-700:#C8102E;          /* the principal red */
+  --red-600:#E01B37;
+
+  /* ── platinum — the instrument metal ───────────────────────────────────── */
+  --plat-900:#4E5866;
+  --plat-700:#7E8A99;
+  --plat-500:#AFB9C5;
+  --plat-300:#D6DEE7;
+  --plat-100:#EEF3F8;
+
+  /* ── gold — the authority metal ────────────────────────────────────────── */
+  --gold-900:#6B5430;
+  --gold-700:#9C7F4E;
+  --gold-500:#C5A773;
+  --gold-300:#E0CB9C;
+  --gold-100:#F7EDD4;
+
+  /* ── pearl ─────────────────────────────────────────────────────────────── */
+  --pearl:#FAF8F4;
+  --pearl-2:#F1EEE6;
+  --ink:#101728;              /* a sapphire-black */
+  --ink-60:#525C70;
+  --ink-40:#8A93A3;
+
+  /* eleven stops each: real metal turns the light several times across a
+     single letter, and three stops reads as a coloured gradient */
+  --foil-plat:linear-gradient(104deg,
+     #6E7986 0%,  #AEB9C6 10%, #F2F7FB 20%, #9FAAB8 28%,
+     #737E8C 38%, #DEE6EE 50%, #97A2B0 60%, #FAFDFF 72%,
+     #A8B3C1 82%, #66707C 92%, #CBD4DE 100%);
+  --foil-plat-dark:linear-gradient(104deg,
+     #8B96A4 0%,  #C4CEDA 10%, #FAFDFF 20%, #B3BECB 28%,
+     #8792A1 38%, #E9F0F7 50%, #ADB8C6 60%, #FFFFFF 72%,
+     #BDC7D4 82%, #7C8694 92%, #DCE4EC 100%);
+  --foil-gold:linear-gradient(104deg,
+     #8B6F3E 0%,  #C2A570 9%,  #EEDFB8 19%, #C8AC78 27%,
+     #9A7C47 38%, #E4D2A6 50%, #B99A63 60%, #F3E7C9 72%,
+     #C0A26C 82%, #8E7343 92%, #D6BF90 100%);
+
+  --name-face:"Noto Kufi Arabic";
+}
+
+*{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+html,body{ margin:0; padding:0; }
+@page{ size:A4; margin:0; }
+
+/* ── THE SHEET ─────────────────────────────────────────────────────────────── */
+.sheet{
+  position:relative; width:210mm; height:297mm; overflow:hidden;
+  background:radial-gradient(130% 86% at 46% -8%, #FFFEFC 0%, var(--pearl) 40%, var(--pearl-2) 100%);
+  color:var(--ink); font-family:"Archivo","Noto Naskh Arabic","Helvetica Neue",sans-serif;
+}
+.sheet::before{
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:url(paper-cotton.png); background-size:33mm 33mm;
+  mix-blend-mode:multiply; opacity:.14;
+}
+.sheet > *{ position:relative; }
+
+/* ── METAL ─────────────────────────────────────────────────────────────────
+   TYPE and BLOCKS are metallised by different means, deliberately.
+   `background-clip:text` gives a real ramp on screen but Chrome's print-to-PDF
+   paints a sliver of the unclipped background along the element box, which
+   prints as a faint rule across the page under every metallic line. So metallic
+   TYPE is a solid with a micro-bevel — a dark hairline above, a lit one below,
+   which is what the eye reads at text size anyway — and the eleven-stop ramp is
+   kept for BLOCKS, where the element itself is the shape being stamped. */
+.plat-type      { color:#7C8896; text-shadow:0 -.25px 0 rgba(58,68,82,.45), 0 .35px .3px rgba(255,255,255,.85); }
+.plat-type--dark{ color:#C9D3DE; text-shadow:0 -.25px 0 rgba(10,22,44,.7),  0 .35px .35px rgba(255,255,255,.4); }
+.gold-type      { color:#A88A50; text-shadow:0 -.25px 0 rgba(96,72,32,.5),  0 .35px .3px rgba(255,250,232,.6); }
+.gold-type--dark{ color:#E3C88C; text-shadow:0 -.25px 0 rgba(78,56,18,.7),  0 .35px .35px rgba(255,252,240,.45); }
+
+.plat-block{ background-image:url(foil-grain.png), var(--foil-plat);
+  background-size:26mm auto, 100% 100%; background-blend-mode:soft-light, normal; }
+.plat-block--dark{ background-image:url(foil-grain.png), var(--foil-plat-dark); }
+.gold-block{ background-image:url(foil-grain.png), var(--foil-gold);
+  background-size:26mm auto, 100% 100%; background-blend-mode:soft-light, normal; }
+
+/* ── FIELDS ────────────────────────────────────────────────────────────────
+   Flood colour on cotton is never perfectly flat, and that unevenness is most
+   of why a printed field reads as printed rather than as a screen fill. */
+.field-sapphire{ background:radial-gradient(118% 62% at 74% 4%,
+    var(--sapphire-600) 0%, var(--sapphire-800) 46%, var(--sapphire-900) 100%); }
+.field-sapphire::after, .field-red::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:url(paper-cotton.png); background-size:33mm 33mm;
+  mix-blend-mode:overlay; opacity:.2; }
+.field-red{ background:linear-gradient(100deg,
+    var(--red-800) 0%, var(--red-700) 44%, var(--red-600) 72%, var(--red-800) 100%); }
+
+/* ── RELIEF ────────────────────────────────────────────────────────────────
+   Light is fixed top-left for the whole sheet, so every pressed element agrees
+   with every other one. */
+.emboss{ color:#F5F2EA; text-shadow:-0.35px -0.45px 0.4px rgba(255,255,255,.95),
+                                     0.55px 0.75px 1.1px rgba(116,106,86,.5); }
+.deboss{ color:#EBE7DC; text-shadow: 0.45px 0.6px 0.8px rgba(255,255,255,.92),
+                                    -0.35px -0.45px 0.9px rgba(108,98,78,.55); }
+.letterpress{ text-shadow:0 .45px 0 rgba(255,255,255,.5); }
+
+.vert{ position:absolute; transform-origin:0 0; transform:rotate(-90deg); white-space:nowrap; }
+svg.fill{ display:block; width:100%; height:100%; }
+
+@media screen{
+  body{ background:#17181B; padding:30px 16px; }
+  .sheet{ margin:0 auto;
+    box-shadow:0 1px 1px rgba(0,0,0,.3), 0 24px 46px rgba(0,0,0,.46), 0 60px 110px rgba(0,0,0,.34); }
+  .sheet + .sheet{ margin-top:26px; }
+}
+@media print{
+  body{ background:none; padding:0; }
+  .sheet{ box-shadow:none; }
+  .sheet + .sheet{ page-break-before:always; margin-top:0; }
+}

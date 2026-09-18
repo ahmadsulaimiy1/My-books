@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Concept III — Heritage Luxe</title>
+<link rel="stylesheet" href="assets/letterhead-typography.css">
+<style>
+  /* ═══════════════════════════════════════════════════════════════════════
+     CONCEPT III · HERITAGE LUXE
+     A contemporary reading of the tradition. A deep charcoal cartouche runs
+     the head of the sheet with a girih lattice worked faintly into it, and
+     the identity is set REVERSED — ivory and gold out of the dark. It is the
+     only one of the three where the gold of the mark is lit rather than
+     merely printed, because gold on charcoal behaves like foil on board.
+     The writing field stays ivory; the register returns at the foot.
+     ═══════════════════════════════════════════════════════════════════════ */
+  :root{
+    --ink:#222222; --ink-70:#4f4d49; --ink-45:#7c7873;
+    --gold:#C5A773; --gold-deep:#9C7F4E; --gold-pale:#E3D4B4;
+    --royal:#002FAB;
+    --paper:#FCFAF5; --paper-deep:#F3EEE1;
+    --char:#222222; --char-2:#1A1A1A;
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  html,body{margin:0;padding:0;}
+  @page{ size:A4; margin:0; }
+
+  .sheet{ position:relative; width:210mm; height:297mm; overflow:hidden;
+    background:linear-gradient(180deg,#FFFEFB 0%,var(--paper) 30%,var(--paper-deep) 100%);
+    color:var(--ink); font-family:"Source Serif 4",Georgia,serif; }
+
+  /* ── the charcoal cartouche ──────────────────────────────────────────── */
+  .band{ position:absolute; top:0; left:0; right:0; height:64mm;
+    background:linear-gradient(135deg,#2A2A28 0%,var(--char) 42%,var(--char-2) 100%); }
+  .lattice{ position:absolute; inset:0; width:100%; height:100%; opacity:.13; }
+  .band-edge{ position:absolute; left:0; right:0; top:64mm; height:1.9mm;
+    background:linear-gradient(90deg,var(--gold-deep) 0%,var(--gold) 26%,var(--gold-pale) 50%,var(--gold) 74%,var(--gold-deep) 100%); }
+  .band-thread{ position:absolute; left:0; right:0; top:65.9mm; height:.7mm; background:var(--royal); }
+
+  .band-inner{ position:absolute; top:0; left:18mm; right:18mm; height:64mm;
+    display:flex; align-items:center; gap:12mm; }
+  .mark{ order:2; flex:0 0 auto; width:27.2mm; height:33mm; display:block; }
+  .band-id{ order:1; flex:1 1 auto; text-align:right; }
+
+  .eyebrow-ar{ font-family:"Reem Kufi","Amiri",serif; font-size:12.4pt; font-weight:500;
+    color:var(--gold); word-spacing:.18em; line-height:1; margin-bottom:3.4mm; }
+  .name-ar{ font-family:"Amiri",serif; font-weight:700; font-size:21pt; line-height:1.28;
+    color:#FBF7EF; margin:0; white-space:nowrap; }
+  .name-ar .kunya{ font-weight:400; color:#C9C3B6; font-size:.78em; }
+  .name-ar .house{ color:var(--gold); font-weight:400; font-size:.78em; }
+  .scope-ar{ font-family:"Amiri",serif; font-size:9.6pt; line-height:1.7; color:#B5AE9F;
+    margin:3.2mm 0 0; }
+
+  /* ── the Latin identity, on the ivory, directly beneath the cartouche ── */
+  .latin{ position:absolute; top:74mm; left:18mm; right:18mm; direction:ltr;
+    display:flex; align-items:baseline; justify-content:space-between; gap:8mm; }
+  .latin-l{ text-align:left; }
+  .latin-office{ font-family:"Cinzel",serif; font-weight:500; font-size:6.7pt;
+    letter-spacing:.40em; color:var(--gold-deep); margin-bottom:2.2mm; }
+  .latin-name{ font-family:"Cinzel",serif; font-weight:600; font-size:11.6pt;
+    letter-spacing:.12em; color:var(--ink); line-height:1; white-space:nowrap; }
+  .latin-house{ font-family:"Cinzel",serif; font-weight:400; font-size:7.6pt;
+    letter-spacing:.42em; color:var(--gold-deep); text-align:right; white-space:nowrap; }
+
+  .latin-scope{ position:absolute; top:88.5mm; left:18mm; right:18mm; direction:ltr;
+    font-size:6.3pt; letter-spacing:.20em; text-indent:.20em; text-transform:uppercase;
+    color:var(--ink-45); border-top:.5px solid rgba(156,127,78,.38); padding-top:2.8mm; }
+  i.pip{ display:inline-block; width:2.5px; height:2.5px; background:var(--gold);
+    transform:rotate(45deg); margin:0 .9em; vertical-align:.14em; }
+
+  /* ── the register at the foot ────────────────────────────────────────── */
+  .foot-thread{ position:absolute; left:0; right:0; bottom:26.8mm; height:.7mm; background:var(--royal); }
+  .foot-edge{ position:absolute; left:0; right:0; bottom:24.9mm; height:1.9mm;
+    background:linear-gradient(90deg,var(--gold-deep) 0%,var(--gold) 26%,var(--gold-pale) 50%,var(--gold) 74%,var(--gold-deep) 100%); }
+  .foot-band{ position:absolute; left:0; right:0; bottom:0; height:24.9mm;
+    background:linear-gradient(135deg,var(--char-2) 0%,var(--char) 58%,#2A2A28 100%); }
+  .footer{ position:absolute; left:18mm; right:18mm; bottom:0; height:24.9mm; direction:ltr;
+    display:flex; align-items:center; justify-content:space-between; gap:8mm; }
+  .fcol{ flex:1 1 0; } .fcol.mid{ text-align:center; } .fcol.end{ text-align:right; }
+  .flabel{ font-family:"Cinzel",serif; font-size:5.5pt; font-weight:500; letter-spacing:.28em;
+    color:var(--gold); margin-bottom:1.9mm; }
+  .fval{ font-size:8pt; letter-spacing:.05em; color:#E6E1D6; line-height:1; }
+  .fval a{ color:inherit; text-decoration:none; }
+
+  /* WATERMARK · blind emboss on the finished stock */
+  .watermark{ position:absolute; left:50%; top:180mm; transform:translate(-50%,-50%);
+    width:50mm; opacity:.04; pointer-events:none; }
+
+  @media screen{ body{ background:#3b3a38; padding:28px 16px; }
+    .sheet{ margin:0 auto; box-shadow:0 30px 70px rgba(0,0,0,.45); } }
+  @media print{ body{background:none;padding:0;} .sheet{box-shadow:none;} }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="band">
+    <!-- girih lattice: two squares per tile, which tessellate into eight-point
+         stars. Geometry only — no borrowed ornament. -->
+    <svg class="lattice" aria-hidden="true">
+      <defs>
+        <pattern id="girih" width="34" height="34" patternUnits="userSpaceOnUse">
+          <g fill="none" stroke="#C5A773" stroke-width="0.7">
+            <rect x="5" y="5" width="24" height="24"/>
+            <polygon points="17,1 33,17 17,33 1,17"/>
+          </g>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#girih)"/>
+    </svg>
+  </div>
+
+  <div class="band-inner">
+    <div class="band-id">
+      <div class="eyebrow-ar">المكتب الخاص</div>
+      <h1 class="name-ar">الإمام أحمد <span class="kunya">بن</span> إبراهيم السليمي <span class="house">(آل سلام)</span></h1>
+      <p class="scope-ar">للتطوير الأكاديمي والدعوة الإسلامية والعلاقات الدولية والشؤون الأهلية الخاصة</p>
+    </div>
+    <img class="mark" src="assets/insignia-logo.png" alt="Insignia of the Personal Office">
+  </div>
+
+  <div class="band-edge"></div>
+  <div class="band-thread"></div>
+
+  <div class="latin">
+    <div class="latin-l">
+      <div class="latin-office">PERSONAL OFFICE</div>
+      <div class="latin-name">IMAM AHMAD IBROHIM SULAIMIY</div>
+    </div>
+    <div class="latin-house">ĀL-ES-SALAM</div>
+  </div>
+  <div class="latin-scope">Academic Development<i class="pip"></i>Islamic Da&lsquo;wah<i class="pip"></i>International Relations<i class="pip"></i>Private &amp; Civic Affairs</div>
+
+  <img class="watermark" src="assets/insignia-logo-grey.png" alt="" aria-hidden="true">
+
+  <div class="foot-thread"></div>
+  <div class="foot-edge"></div>
+  <div class="foot-band"></div>
+  <div class="footer">
+    <div class="fcol"><div class="flabel">PERSONAL OFFICE</div><div class="fval">+234&nbsp;810&nbsp;430&nbsp;2087</div></div>
+    <div class="fcol mid"><div class="flabel">INTERNATIONAL</div><div class="fval">+44&nbsp;7961&nbsp;869638</div></div>
+    <div class="fcol end"><div class="flabel">CORRESPONDENCE</div><div class="fval"><a href="mailto:abisulaimiycollege@gmail.com">abisulaimiycollege@gmail.com</a></div></div>
+  </div>
+
+</div>
+</body>
+</html>

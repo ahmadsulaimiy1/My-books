@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Direction D — Luxury Editorial</title>
+<link rel="stylesheet" href="assets/letterhead-typography.css">
+<link rel="stylesheet" href="assets/materials.css">
+<style>
+  /* ═══════════════════════════════════════════════════════════════════════
+     DIRECTION D · LUXURY EDITORIAL
+     The grammar of a masthead and a colophon, not of a document. The name is
+     set enormous and hung off the right margin the way a fashion title hangs
+     off a cover — it is the picture on the page, not a heading above one. A
+     narrow colophon runs down the left in 5pt Jost: everything the office is,
+     filed as marginalia. One crimson hairline holds the two apart. The mark
+     appears once, small and debossed, signing the foot like a printer's
+     device.
+     ═══════════════════════════════════════════════════════════════════════ */
+  .rail{ position:absolute; left:16mm; top:24mm; width:33mm; direction:ltr; }
+  .rail h2{ font:500 5pt/1 "Jost",sans-serif; letter-spacing:.34em; margin:0 0 2.6mm;
+    color:var(--gold-700); text-transform:uppercase; }
+  .rail p{ font:300 6pt/2.05 "Jost",sans-serif; letter-spacing:.055em; margin:0 0 7mm;
+    color:var(--ink-60); }
+  .rail .strong{ font-weight:400; color:var(--sapphire-800); letter-spacing:.09em; }
+  .rail hr{ border:0; height:.5px; margin:0 0 6.5mm; }
+
+  .crimson-rule{ position:absolute; left:52mm; top:22mm; bottom:22mm; width:.9mm; }
+
+  .office{ position:absolute; right:16mm; top:26mm; font-family:"Amiri",serif;
+    font-size:11pt; color:var(--ink-40); }
+  .name{ position:absolute; right:14mm; top:34mm; left:58mm; margin:0; text-align:right;
+    font-family:var(--name-face),"Amiri",serif; font-weight:700; font-size:46pt;
+    line-height:1.42; color:var(--sapphire-800); }
+  .name .house{ display:block; font-size:.46em; margin-top:1mm; }
+
+  .scope-ar{ position:absolute; right:16mm; top:92mm; left:58mm; margin:0; text-align:right;
+    font-family:"Amiri",serif; font-size:10.6pt; line-height:1.85; color:var(--ink-60); }
+  .scope-rule{ position:absolute; right:16mm; left:58mm; top:104mm; height:.5px; opacity:.8; }
+
+  .colophon{ position:absolute; right:16mm; bottom:18mm; direction:ltr; text-align:right;
+    display:flex; align-items:flex-end; gap:6mm; }
+  .colophon img{ width:12mm; height:14.5mm; }
+  .colophon .num{ font-family:"Bodoni Moda",serif; font-weight:400; font-size:15pt;
+    line-height:1; color:var(--gold-700); }
+  .colophon .cap{ font:300 5pt/1.9 "Jost",sans-serif; letter-spacing:.26em;
+    color:var(--ink-40); text-transform:uppercase; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="rail">
+    <h2>Personal Office</h2>
+    <p class="strong">IMAM AHMAD<br>IBROHIM SULAIMIY<br>ĀL-ES-SALAM</p>
+    <hr class="foil-block">
+    <h2>Offices</h2>
+    <p>Academic Development<br>Islamic Da&lsquo;wah<br>International Relations<br>Private &amp; Civic Affairs</p>
+    <hr class="foil-block">
+    <h2>Correspondence</h2>
+    <p>+234 810 430 2087<br>+44 7961 869638<br>abisulaimiycollege<br>@gmail.com</p>
+  </div>
+
+  <div class="crimson-rule field-crimson"></div>
+
+  <div class="office letterpress">المكتب الخاص</div>
+  <h1 class="name letterpress">الإمام أحمد بن إبراهيم السليمي<span class="house">(آل سلام)</span></h1>
+
+  <p class="scope-ar">للتطوير الأكاديمي والدعوة الإسلامية والعلاقات الدولية والشؤون الأهلية الخاصة</p>
+  <div class="scope-rule foil-block"></div>
+
+  <div class="colophon">
+    <div>
+      <div class="cap">Personal Office</div>
+      <div class="num">Ā·S</div>
+    </div>
+    <img src="assets/insignia-deboss.png" alt="" aria-hidden="true">
+  </div>
+
+</div>
+</body>
+</html>
