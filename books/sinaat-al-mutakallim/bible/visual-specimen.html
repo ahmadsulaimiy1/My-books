@@ -1,0 +1,974 @@
+<title>هوية صناعة المتكلّم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@500;600&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap">
+<style>
+  /* ───────── Brand constants (print specimens: fixed in both themes) ───────── */
+  :root {
+    --sapphire-900: #082567; --sapphire-700: #123C8C; --sapphire-500: #174EA6;
+    --midnight: #060E26; --royal: #2F5FC4;
+    --gold-300: #E1C46A; --gold-400: #D4AF37; --gold-500: #C9A227; --gold-700: #B88A20;
+    --gold-ink: #7F5F12; --gold-hi: #F2DC8F;
+    --pearl-50: #FCFBF7; --pearl-100: #F8F6F0; --pearl-200: #F4F1E8;
+    --sand: #F1E8D4; --stone: #ECE8E1; --hairline: #E3DDCF;
+    --crimson-900: #8E1B2A; --crimson-700: #A51C30; --crimson-600: #B21F35;
+    --charcoal: #1F2329; --graphite: #4A4540;
+    --platinum: #E5E4E2; --silver: #BFC3C8; --emerald: #0B5D47;
+    --foil: linear-gradient(135deg, #B88A20 0%, #E1C46A 24%, #C9A227 46%, #F2DC8F 56%, #C9A227 70%, #B88A20 100%);
+    --lattice:
+      repeating-linear-gradient(45deg, rgba(225,196,106,.07) 0 1px, transparent 1px 30px),
+      repeating-linear-gradient(-45deg, rgba(225,196,106,.07) 0 1px, transparent 1px 30px);
+
+    --f-display: "Reem Kufi", "Noto Kufi Arabic", "Amiri", serif;
+    --f-edit: "Amiri", "Noto Naskh Arabic", "Traditional Arabic", serif;
+    --f-func: "IBM Plex Sans Arabic", "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+    --f-quran: "Amiri Quran", "Amiri", "Noto Naskh Arabic", serif;
+    --f-latin: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --f-mono: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+
+    /* ───────── Theme tokens (page chrome) ───────── */
+    --ground: #FCFBF7;
+    --ink: #1F2329;
+    --ink-2: #4A4540;
+    --ink-3: #6B655D;
+    --heading: #082567;
+    --accent-text: #7F5F12;
+    --rule: #E3DDCF;
+    --table: #ECE8E1;
+    --chip-border: rgba(31,35,41,.14);
+    --focus: #2F5FC4;
+    --pm: #174EA6;
+    --stress: #082567;
+    --no: #A51C30;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #060E26;
+      --ink: #EAE6DC;
+      --ink-2: #BDB6A8;
+      --ink-3: #948D80;
+      --heading: #E1C46A;
+      --accent-text: #D4AF37;
+      --rule: rgba(225,196,106,.2);
+      --table: #0C1838;
+      --chip-border: rgba(244,241,232,.18);
+      --focus: #E1C46A;
+      --pm: #8FB0F0;
+      --stress: #E1C46A;
+      --no: #F08A98;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #060E26;
+    --ink: #EAE6DC;
+    --ink-2: #BDB6A8;
+    --ink-3: #948D80;
+    --heading: #E1C46A;
+    --accent-text: #D4AF37;
+    --rule: rgba(225,196,106,.2);
+    --table: #0C1838;
+    --chip-border: rgba(244,241,232,.18);
+    --focus: #E1C46A;
+    --pm: #8FB0F0;
+    --stress: #E1C46A;
+    --no: #F08A98;
+    color-scheme: dark;
+  }
+
+  body { background: var(--ground); color: var(--ink); }
+  .doc { font-family: var(--f-func); font-size: 16px; line-height: 1.75; }
+  .wrap { max-width: 1180px; margin-inline: auto; padding-inline: clamp(16px, 4vw, 44px); }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+  .ltr { direction: ltr; unicode-bidi: isolate; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+
+  /* ───────── Rhombus (the Nuqta unit) ───────── */
+  .rh { display: inline-block; width: 9px; height: 9px; transform: rotate(45deg); flex: none; }
+  .rh.fill-s { background: var(--sapphire-700); }
+  .rh.line-s { border: 1.5px solid var(--sapphire-700); }
+  .rh.fill-c { background: var(--crimson-700); }
+  .rh.half-c { border: 1.5px solid var(--crimson-700); background: linear-gradient(225deg, var(--crimson-700) 50%, transparent 50%); }
+  .rh.half-g { border: 1.5px solid var(--graphite); background: linear-gradient(225deg, var(--graphite) 50%, transparent 50%); }
+  .rh.line-g { border: 1.5px solid var(--graphite); }
+  .rh.fill-gold { background: var(--gold-500); }
+
+  /* ───────── Masthead ───────── */
+  .mast { background-color: var(--sapphire-900); background-image: var(--lattice); color: var(--pearl-100); }
+  .mast-in { max-width: 1180px; margin-inline: auto; padding: clamp(40px, 7vw, 84px) clamp(16px, 4vw, 44px) clamp(36px, 5vw, 60px); }
+  .mast-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; align-items: baseline; }
+  .mast-eyebrow { font-size: 14px; color: var(--gold-300); }
+  .edition { font-family: var(--f-latin); font-weight: 600; font-variant-caps: all-small-caps; letter-spacing: .16em; font-size: 17px; color: var(--gold-300); direction: ltr; unicode-bidi: isolate; }
+  .mast-title { font-family: var(--f-display); font-weight: 600; font-size: clamp(46px, 9.4vw, 112px); line-height: 1.12; margin: clamp(20px, 4vw, 40px) 0 0; color: var(--gold-400); text-wrap: balance; }
+  .mast-title span { display: block; }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .foil { background: var(--foil); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  }
+  .mast-sub { font-family: var(--f-edit); font-size: clamp(21px, 2.6vw, 30px); margin: 10px 0 0; color: var(--pearl-100); }
+  .nrule { display: flex; align-items: center; margin-block: 22px; }
+  .nrule::before { content: ""; width: 88px; height: 1px; background: var(--gold-500); }
+  .nrule::after { content: ""; width: 7px; height: 7px; background: var(--gold-500); transform: rotate(45deg); margin-inline-start: -1px; }
+  .mast-note { max-width: 40em; margin: 0; font-size: 15px; color: var(--pearl-200); }
+
+  /* ───────── Section index ───────── */
+  .toc { border-bottom: 1px solid var(--rule); }
+  .toc ul { list-style: none; margin: 0; padding: 16px 0; display: flex; flex-wrap: wrap; gap: 6px 22px; }
+  .toc a { text-decoration: none; color: var(--ink-2); font-size: 14.5px; display: inline-flex; align-items: center; gap: 8px; }
+  .toc a::before { content: ""; width: 6px; height: 6px; transform: rotate(45deg); border: 1px solid var(--accent-text); }
+  .toc a:hover { color: var(--heading); }
+  .toc a:hover::before { background: var(--accent-text); }
+
+  /* ───────── Sections ───────── */
+  .sec { padding-block: clamp(48px, 7vw, 88px); border-bottom: 1px solid var(--rule); }
+  .sec:last-of-type { border-bottom: 0; }
+  .eyebrow { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 13.5px; color: var(--accent-text); }
+  .eyebrow::before { content: ""; width: 7px; height: 7px; transform: rotate(45deg); background: var(--accent-text); }
+  .sec h2 { font-family: var(--f-edit); font-weight: 700; font-size: clamp(28px, 3.6vw, 40px); line-height: 1.3; margin: 8px 0 0; color: var(--heading); text-wrap: balance; }
+  .lede { max-width: 44em; margin: 0 0 28px; color: var(--ink-2); font-size: 16px; }
+  .sub-h { font-family: var(--f-edit); font-weight: 700; font-size: 22px; color: var(--heading); margin: 36px 0 14px; }
+
+  /* ───────── DNA ───────── */
+  .dna { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border: 1px solid var(--chip-border); }
+  .dna-t { min-height: 220px; padding: 22px 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; }
+  .dna-t b { font-family: var(--f-display); font-weight: 600; font-size: clamp(30px, 3.4vw, 42px); line-height: 1.2; }
+  .dna-t .m { font-size: 14px; }
+  .dna-t .ltr { font-size: 13px; opacity: .92; }
+  .d-sap { background: var(--sapphire-900); color: var(--pearl-100); }
+  .d-sap .m { color: var(--gold-300); }
+  .d-gold { background: var(--foil); color: var(--sapphire-900); }
+  .d-pearl { background: var(--pearl-100); color: var(--sapphire-900); }
+  .d-pearl .m { color: var(--gold-ink); }
+  .d-crim { background: var(--crimson-700); color: var(--pearl-100); }
+
+  .budget { display: grid; gap: 14px; margin-top: 8px; }
+  .b-row { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 16px; align-items: center; }
+  .b-row > span { font-size: 14px; color: var(--ink-2); }
+  .bar { display: flex; height: 26px; border: 1px solid var(--chip-border); }
+  .bar i { display: block; height: 100%; }
+  .bar .bp { background: var(--pearl-100); }
+  .bar .bs { background: var(--sapphire-900); }
+  .bar .bg { background: var(--foil); }
+  .bar .bc { background: var(--crimson-700); }
+  .bar .bo { background: repeating-linear-gradient(135deg, var(--stone) 0 4px, #d8d2c7 4px 5px); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 16px 0 0; padding: 0; list-style: none; font-size: 13.5px; color: var(--ink-2); }
+  .legend li { display: inline-flex; align-items: center; gap: 8px; }
+  .legend i { width: 14px; height: 14px; border: 1px solid var(--chip-border); display: inline-block; }
+  .note { font-size: 13px; color: var(--ink-3); margin: 12px 0 0; }
+
+  /* ───────── Tokens ───────── */
+  .tok-group { margin-top: 26px; }
+  .tok-group h3 { font-family: var(--f-edit); font-size: 20px; font-weight: 700; margin: 0 0 12px; color: var(--heading); }
+  .chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(136px, 1fr)); gap: 18px 16px; }
+  .chip .sw { aspect-ratio: 16 / 10; border: 1px solid var(--chip-border); }
+  .chip p { margin: 8px 0 0; font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--ink); }
+  .chip small { display: block; font-size: 12.5px; color: var(--ink-3); line-height: 1.5; }
+
+  /* ───────── Contrast ───────── */
+  .pairs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+  .pair { border: 1px solid var(--chip-border); display: flex; flex-direction: column; }
+  .pair .smp { padding: 18px 16px; min-height: 104px; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+  .pair .smp b { font-family: var(--f-edit); font-size: 22px; font-weight: 700; line-height: 1.4; }
+  .pair .smp span { font-family: var(--f-func); font-size: 13.5px; }
+  .pair .meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 9px 12px; font-size: 12.5px; color: var(--ink-2); border-top: 1px solid var(--chip-border); }
+  .verdict { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+  .v-ok { color: var(--heading); }
+  .v-big { color: var(--ink-2); }
+  .v-no { color: var(--no); }
+
+  /* ───────── Type ───────── */
+  .type-row { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 20px 40px; padding-block: 26px; border-top: 1px solid var(--rule); }
+  .type-row:first-of-type { border-top: 0; padding-top: 4px; }
+  .type-meta h3 { font-family: var(--f-edit); font-weight: 700; font-size: 20px; margin: 0; color: var(--heading); }
+  .type-meta p { margin: 4px 0 0; font-size: 13.5px; color: var(--ink-3); line-height: 1.6; }
+  .type-meta .ltr { font-size: 13px; color: var(--ink-2); }
+  .s-display { font-family: var(--f-display); font-weight: 600; font-size: clamp(40px, 6vw, 68px); line-height: 1.25; color: var(--heading); margin: 0; }
+  .s-edit { font-family: var(--f-edit); font-weight: 700; font-size: clamp(24px, 3vw, 32px); line-height: 1.45; color: var(--heading); margin: 0; text-wrap: balance; }
+  .s-read { font-family: var(--f-edit); font-size: 20px; line-height: 1.95; color: var(--ink); max-width: 34em; margin: 0; }
+  .s-voc { font-family: var(--f-edit); font-size: 24px; line-height: 2.3; color: var(--ink); margin: 0; }
+  .pm { font-family: var(--f-func); font-weight: 600; color: var(--pm); font-size: .78em; padding-inline: 2px; }
+  .stress { font-weight: 700; color: var(--stress); }
+  .s-func { display: flex; flex-wrap: wrap; gap: 10px 26px; font-family: var(--f-func); font-size: 15px; color: var(--ink); }
+  .s-func b { font-weight: 600; color: var(--heading); }
+  .s-quran { font-family: var(--f-quran); font-size: clamp(26px, 3.2vw, 34px); line-height: 2.1; color: var(--ink); margin: 0; }
+  .s-quran .br { color: var(--accent-text); }
+  .s-cite { display: block; font-family: var(--f-func); font-size: 13px; color: var(--ink-3); margin-top: 4px; }
+  .s-pair { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; }
+  .s-pair .ar { font-family: var(--f-edit); font-weight: 700; font-size: 30px; color: var(--heading); }
+  .s-pair .la { font-family: var(--f-latin); font-weight: 600; font-size: 26px; color: var(--ink-2); direction: ltr; unicode-bidi: isolate; }
+  .s-pair .la2 { font-family: var(--f-mono); font-size: 14px; color: var(--ink-3); direction: ltr; unicode-bidi: isolate; }
+  .rules { list-style: none; padding: 0; margin: 30px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px 28px; }
+  .rules li { display: flex; gap: 10px; align-items: baseline; font-size: 14.5px; color: var(--ink-2); }
+  .rules li::before { content: ""; width: 7px; height: 7px; transform: rotate(45deg) translateY(-2px); background: var(--crimson-700); flex: none; }
+
+  /* ───────── Paper sheets (print specimens) ───────── */
+  .paper { --pm: #174EA6; --stress: #082567; background: var(--pearl-100); color: var(--charcoal); border: 1px solid var(--hairline); padding: clamp(18px, 3.6vw, 44px); }
+  .paper + .paper { margin-top: 22px; }
+  .lbl { display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-func); font-weight: 600; font-size: 13px; line-height: 1.4; }
+  .lbl::before { content: ""; width: 6px; height: 6px; transform: rotate(45deg); background: currentColor; }
+
+  /* Nuqta sheet */
+  .prims { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .prim { display: grid; justify-items: center; gap: 8px; text-align: center; }
+  .prim svg { width: 84px; height: 84px; }
+  .prim b { font-family: var(--f-edit); font-size: 19px; color: var(--sapphire-900); }
+  .prim span { font-size: 13px; color: var(--graphite); }
+  .scales { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px 40px; margin-top: 34px; padding-top: 28px; border-top: 1px solid var(--hairline); }
+  .scales h3 { font-family: var(--f-edit); font-weight: 700; font-size: 19px; color: var(--sapphire-900); margin: 0 0 12px; }
+  .scale-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .scale-list li { display: grid; grid-template-columns: 6.2rem minmax(0, 1fr); gap: 12px; align-items: center; font-size: 14px; color: var(--graphite); }
+  .scale-list .dots { display: inline-flex; gap: 7px; align-items: center; padding-inline: 2px; }
+  .scale-list b { color: var(--charcoal); font-weight: 600; }
+  .badge { width: 26px; height: 26px; transform: rotate(45deg); display: inline-grid; place-items: center; flex: none; margin-inline: 4px; }
+  .badge > span { transform: rotate(-45deg); font-family: var(--f-func); font-weight: 600; font-size: 13px; line-height: 1; }
+  .b1 { border: 1.5px solid var(--crimson-900); color: var(--crimson-900); background: var(--stone); }
+  .b2 { border: 1.5px solid var(--graphite); background: linear-gradient(225deg, #D9D4CB 50%, var(--pearl-200) 50%); color: var(--charcoal); }
+  .b3 { border: 1.5px solid var(--gold-500); background: var(--sapphire-700); color: var(--pearl-100); }
+  .b4 { border: 1.5px solid var(--gold-700); background: var(--gold-400); color: var(--sapphire-900); }
+
+  /* Components sheet */
+  .pgrid { display: grid; grid-template-columns: minmax(0, 1fr) 12.5rem; gap: 0 36px; }
+  .pgrid > .main { display: grid; gap: 26px; align-content: start; }
+  .pgrid > .rail { border-inline-start: 1px solid var(--hairline); padding-inline-start: 20px; display: grid; gap: 22px; align-content: start; font-size: 13px; color: var(--graphite); line-height: 1.7; }
+  .rail h4 { margin: 0 0 4px; font-family: var(--f-func); font-weight: 600; font-size: 12.5px; color: var(--sapphire-700); }
+  .rail p { margin: 0; }
+  .qr { width: 84px; height: 84px; border: 1px dashed #B9B1A3; display: grid; place-items: center; text-align: center; font-size: 10.5px; line-height: 1.4; color: var(--graphite); padding: 6px; }
+
+  .ctx { background: var(--sand); padding: 16px 20px 18px; }
+  .ctx .lbl { color: var(--sapphire-700); }
+  .ctx dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 28px; margin: 12px 0 0; }
+  .ctx dl > div { display: grid; grid-template-columns: 6.6rem minmax(0, 1fr); gap: 10px; align-items: baseline; }
+  .ctx dt { font-size: 12.5px; font-weight: 600; color: var(--sapphire-700); }
+  .ctx dd { margin: 0; font-size: 14.5px; color: var(--charcoal); line-height: 1.6; }
+  .ctx dd .dots { display: inline-flex; gap: 6px; vertical-align: middle; margin-inline-end: 6px; }
+
+  .ladder { display: grid; gap: 10px; }
+  .tier { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; padding: 16px 18px; align-items: start; }
+  .tier .badge { margin-top: 8px; }
+  .tier .lbl { margin-bottom: 4px; }
+  .tier q { quotes: "«" "»"; font-family: var(--f-edit); font-size: 18.5px; line-height: 1.9; display: block; }
+  .t1 { background: var(--stone); color: var(--graphite); }
+  .t1 .lbl { color: var(--crimson-900); }
+  .t2 { background: var(--pearl-200); border-inline-start: 3px solid var(--graphite); color: var(--charcoal); }
+  .t2 .lbl { color: var(--graphite); }
+  .t3 { background: var(--pearl-50); border-inline-start: 3px solid var(--sapphire-700); color: var(--charcoal); box-shadow: 0 0 0 1px var(--hairline) inset; }
+  .t3 .lbl { color: var(--sapphire-700); }
+  .t4 { background: var(--sapphire-900); border-inline-start: 5px double var(--gold-400); color: var(--pearl-100); }
+  .t4 .lbl { color: var(--gold-300); }
+
+  .tbl-wrap { overflow-x: auto; }
+  .dtab { width: 100%; border-collapse: collapse; font-family: var(--f-func); font-size: 14px; min-width: 520px; }
+  .dtab th, .dtab td { padding: 10px 12px; text-align: start; vertical-align: top; line-height: 1.6; }
+  .dtab thead th { background: var(--sapphire-900); color: var(--pearl-100); font-weight: 600; font-size: 13px; }
+  .dtab tbody th { color: var(--sapphire-700); font-weight: 600; white-space: nowrap; }
+  .dtab tbody tr { border-bottom: 1px solid var(--hairline); }
+  .dtab tbody tr:nth-child(even) { background: var(--pearl-200); }
+  .dtab caption { caption-side: top; text-align: start; font-size: 12.5px; color: var(--graphite); padding-bottom: 8px; }
+
+  .rule-p { background: var(--sapphire-900); padding: 10px; }
+  .rule-p > div { border-block: 1px solid var(--gold-500); padding: 14px 18px 16px; }
+  .rule-p .lbl { color: var(--gold-400); }
+  .rule-p p { margin: 6px 0 0; font-family: var(--f-edit); font-size: 22px; line-height: 1.75; color: var(--pearl-100); }
+
+  .warn { background: var(--pearl-50); border-inline-start: 4px solid var(--crimson-700); padding: 14px 20px; box-shadow: 0 0 0 1px var(--hairline) inset; }
+  .warn .lbl { color: var(--crimson-700); }
+  .warn p { margin: 4px 0 0; font-family: var(--f-edit); font-size: 18.5px; line-height: 1.85; }
+
+  .def { background: var(--pearl-200); border-top: 2px solid var(--sapphire-700); padding: 14px 20px; }
+  .def .lbl { color: var(--sapphire-700); }
+  .def p { margin: 4px 0 0; font-family: var(--f-edit); font-size: 18.5px; line-height: 1.85; }
+
+  .evid { background: var(--sand); padding: 16px 22px 18px; }
+  .evid .lbl { color: var(--gold-ink); }
+  .evid .ayah { font-family: var(--f-quran); font-size: 27px; line-height: 2.1; margin: 4px 0 0; color: var(--charcoal); }
+  .evid .ayah .br { color: var(--gold-ink); }
+  .evid .src { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--graphite); margin-top: 6px; }
+  .evid .src::before { content: ""; width: 36px; height: 1px; background: var(--gold-500); }
+
+  .dia { border-top: 1px solid var(--hairline); }
+  .dia-h { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; align-items: center; padding: 10px 0; }
+  .dia-h .lbl { color: var(--sapphire-700); }
+  .dia-h small { font-size: 12.5px; color: var(--graphite); }
+  .turn { display: grid; grid-template-columns: 5.6rem minmax(0, 1fr) 2.4rem; gap: 14px; padding: 10px 0; border-top: 1px solid var(--hairline); align-items: baseline; }
+  .turn .who { font-weight: 600; font-size: 13.5px; color: var(--sapphire-700); }
+  .turn .say { font-family: var(--f-edit); font-size: 18.5px; line-height: 1.9; }
+  .turn .ln { font-size: 12px; color: var(--graphite); text-align: end; font-variant-numeric: tabular-nums; }
+  .dir { font-family: var(--f-func); font-weight: 300; font-size: 14px; color: var(--graphite); }
+
+  .ex { background: var(--pearl-50); border: 1px solid var(--sapphire-700); }
+  .ex-tab { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; background: var(--sapphire-700); color: var(--pearl-100); padding: 7px 16px; font-size: 13px; font-weight: 600; }
+  .ex-tab span:last-child { font-weight: 400; color: var(--pearl-200); }
+  .ex-body { padding: 14px 18px 18px; }
+  .ex-body > p { margin: 0 0 8px; font-size: 15px; }
+  .ex-body ol { margin: 0; padding-inline-start: 1.6em; list-style: arabic-indic; display: grid; gap: 10px; }
+  .ex-body li { font-family: var(--f-edit); font-size: 18.5px; line-height: 1.8; }
+  .ex-body li::marker { font-family: var(--f-func); font-size: 14px; color: var(--sapphire-700); }
+  .ans { display: block; height: 28px; border-bottom: 1px solid #CFC7B8; }
+
+  .sim { border: 1px solid var(--gold-500); }
+  .sim-h { background: var(--midnight); padding: 12px 18px; display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: center; }
+  .sim-h .lbl { color: var(--gold-400); }
+  .sim-h b { font-family: var(--f-edit); font-weight: 700; font-size: 19px; color: var(--pearl-100); }
+  .sim-b { padding: 14px 18px 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 16px 28px; }
+  .sim-b h4 { margin: 0 0 6px; font-size: 12.5px; font-weight: 600; color: var(--sapphire-700); }
+  .sim-b ul, .sim-b ol { margin: 0; padding-inline-start: 1.2em; font-size: 14.5px; line-height: 1.75; }
+  .sim-b ol { list-style: arabic-indic; }
+  .sim-b .meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 13px; color: var(--graphite); border-top: 1px solid var(--hairline); padding-top: 10px; align-items: center; }
+  .sim-b .meta .dots { display: inline-flex; gap: 6px; margin-inline-start: 6px; }
+
+  .aud { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 16px; background: var(--pearl-50); box-shadow: 0 0 0 1px var(--hairline) inset; padding: 16px 18px; }
+  .aud svg { width: 48px; height: 48px; }
+  .aud .lbl { color: var(--sapphire-700); }
+  .aud p { margin: 4px 0 0; font-size: 14.5px; }
+  .aud .voc { font-family: var(--f-edit); font-size: 22px; line-height: 2.3; margin: 8px 0 0; }
+  .aud .keys { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 12.5px; color: var(--graphite); margin-top: 6px; }
+  .aud .keys .pm { font-size: 13px; }
+
+  .mas { position: relative; border: 1px solid var(--gold-500); padding: 18px 22px; background: var(--pearl-100); }
+  .mas i { position: absolute; width: 8px; height: 8px; background: var(--gold-500); transform: rotate(45deg); }
+  .mas i:nth-of-type(1) { top: -4.5px; right: -4.5px; } .mas i:nth-of-type(2) { top: -4.5px; left: -4.5px; }
+  .mas i:nth-of-type(3) { bottom: -4.5px; right: -4.5px; } .mas i:nth-of-type(4) { bottom: -4.5px; left: -4.5px; }
+  .mas .lbl { color: var(--gold-ink); }
+  .mas p { margin: 4px 0 0; font-family: var(--f-edit); font-size: 18.5px; line-height: 1.85; }
+  .mas strong { color: var(--sapphire-900); }
+
+  /* ───────── Opener spread ───────── */
+  .spread { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 940px; margin-inline: auto; box-shadow: 0 22px 46px -22px rgba(6,14,38,.55); }
+  .pg { aspect-ratio: 20 / 26; container-type: inline-size; position: relative; overflow: hidden; }
+  .pg-open { background-color: var(--sapphire-900); background-image: linear-gradient(to right, rgba(0,0,0,.28) 0%, transparent 7%), var(--lattice); color: var(--pearl-100); padding: 11% 11% 9%; display: flex; flex-direction: column; }
+  .op-num { font-family: var(--f-display); font-weight: 500; font-size: 96px; font-size: 32cqw; line-height: 1; margin: 0; color: var(--gold-400); }
+  .op-alif { width: 1px; height: 60px; height: 14cqw; background: var(--gold-500); margin-block: 5cqw 4cqw; margin-inline-start: 1.5cqw; }
+  .op-title { font-family: var(--f-display); font-weight: 600; font-size: 40px; font-size: 12.5cqw; line-height: 1.2; margin: 0; }
+  .op-q { font-family: var(--f-edit); font-size: 18px; font-size: 5.2cqw; line-height: 1.7; margin: 3cqw 0 0; color: var(--pearl-200); }
+  .op-tag { margin-top: auto; display: flex; align-items: center; gap: 2.4cqw; font-size: 12px; font-size: 3.3cqw; color: var(--gold-300); }
+  .op-tag::before { content: ""; width: 2.2cqw; height: 2.2cqw; min-width: 7px; min-height: 7px; background: var(--crimson-600); transform: rotate(45deg); }
+  .pg-toc { background-color: var(--pearl-100); background-image: linear-gradient(to left, rgba(31,35,41,.09) 0%, transparent 7%); color: var(--charcoal); padding: 11% 11% 9%; display: flex; flex-direction: column; }
+  .pg-toc h3 { font-family: var(--f-edit); font-weight: 700; font-size: 20px; font-size: 6cqw; color: var(--sapphire-900); margin: 0 0 3cqw; }
+  .pg-toc ol { margin: 0; padding-inline-start: 1.3em; list-style: arabic-indic; display: grid; gap: 1.2cqw; }
+  .pg-toc li { font-family: var(--f-edit); font-size: 14px; font-size: 4.25cqw; line-height: 1.55; }
+  .pg-toc li::marker { font-family: var(--f-func); color: var(--sapphire-700); font-size: .85em; }
+  .pg-toc .cap { margin-top: auto; font-size: 11px; font-size: 3cqw; color: var(--graphite); border-top: 1px solid var(--hairline); padding-top: 2.5cqw; }
+
+  /* ───────── Covers ───────── */
+  .table { background: var(--table); padding: clamp(18px, 4vw, 44px); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(18px, 3vw, 34px); }
+  .cv-fig { margin: 0; display: grid; gap: 12px; align-content: start; }
+  .cover { aspect-ratio: 20 / 26; container-type: inline-size; position: relative; overflow: hidden; box-shadow: 0 1px 1px rgba(0,0,0,.1), 0 16px 30px -12px rgba(6,14,38,.5); transition: transform .15s ease; }
+  @media (prefers-reduced-motion: no-preference) { .cover:hover { transform: translateY(-3px); } }
+  .cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to left, rgba(255,255,255,.1) 0, rgba(0,0,0,.14) 2.5%, transparent 5%); pointer-events: none; }
+  .cv-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .cv-fig figcaption b { display: block; font-family: var(--f-edit); font-weight: 700; font-size: 18px; color: var(--heading); line-height: 1.4; }
+  .cv-fig figcaption span { display: block; font-size: 13.5px; color: var(--ink-2); line-height: 1.6; }
+  .cv-fig figcaption small { display: block; font-size: 12.5px; color: var(--ink-3); line-height: 1.6; margin-top: 2px; }
+
+  .cvA { background: var(--sapphire-900); }
+  .cvA .t { position: absolute; top: 14%; right: 11%; left: 24%; }
+  .cvA h4 { font-family: var(--f-display); font-weight: 600; font-size: 34px; font-size: 11.6cqw; line-height: 1.22; margin: 0; color: var(--gold-400); }
+  .cvA h4 span { display: block; }
+  .cvA p { font-family: var(--f-edit); font-size: 13px; font-size: 4.4cqw; color: var(--pearl-100); margin: 3cqw 0 0; line-height: 1.5; }
+  .cvA .vol { position: absolute; top: 70%; right: 11%; left: 24%; }
+  .cvA .vol small { display: block; font-size: 10px; font-size: 3.4cqw; color: var(--gold-300); }
+  .cvA .vol b { display: block; font-family: var(--f-edit); font-weight: 700; font-size: 20px; font-size: 7cqw; color: var(--pearl-100); line-height: 1.3; }
+
+  .cvB { background-color: var(--pearl-100); background-image: repeating-linear-gradient(to bottom, transparent 0 17px, rgba(8,37,103,.045) 17px 18px); }
+  .cvB .t { position: absolute; top: 12%; right: 11%; left: 12%; }
+  .cvB h4 { font-family: var(--f-display); font-weight: 600; font-size: 34px; font-size: 11.6cqw; line-height: 1.22; margin: 0; color: var(--sapphire-900); }
+  .cvB h4 span { display: block; }
+  .cvB p { font-family: var(--f-edit); font-size: 13px; font-size: 4.4cqw; color: var(--graphite); margin: 3cqw 0 0; }
+  .cvB .kind { position: absolute; bottom: 9%; right: 11%; font-size: 11px; font-size: 3.7cqw; font-weight: 600; color: var(--gold-ink); display: flex; align-items: center; gap: 2cqw; }
+  .cvB .kind::before { content: ""; width: 2cqw; height: 2cqw; min-width: 6px; min-height: 6px; background: var(--sapphire-900); transform: rotate(45deg); }
+
+  .cvC { background: radial-gradient(120% 90% at 50% 34%, #123C8C 0%, #082567 56%, #051B4F 100%); text-align: center; }
+  .cvC .fr1, .cvC .fr2 { position: absolute; border: 1px solid rgba(201,162,39,.85); }
+  .cvC .fr1 { inset: 5.5%; }
+  .cvC .fr2 { inset: 7.2%; border-color: rgba(201,162,39,.4); }
+  .cvC .t { position: absolute; top: 25%; right: 12%; left: 12%; }
+  .cvC h4 { font-family: var(--f-display); font-weight: 700; font-size: 36px; font-size: 12.4cqw; line-height: 1.2; margin: 0; color: var(--gold-400); filter: drop-shadow(0 -1px 0 rgba(0,0,0,.35)) drop-shadow(0 1px 0 rgba(255,244,210,.18)); }
+  .cvC h4 span { display: block; }
+  .cvC .dv { display: flex; align-items: center; justify-content: center; gap: 2.6cqw; margin: 5cqw 0 4cqw; }
+  .cvC .dv::before, .cvC .dv::after { content: ""; width: 16cqw; height: 1px; background: var(--gold-500); }
+  .cvC .dv i { width: 2.4cqw; height: 2.4cqw; min-width: 6px; min-height: 6px; background: var(--crimson-600); transform: rotate(45deg); }
+  .cvC p { font-family: var(--f-edit); font-size: 13px; font-size: 4.5cqw; color: var(--pearl-100); margin: 0; }
+  .cvC .ed { position: absolute; bottom: 11%; right: 0; left: 0; display: grid; gap: 1cqw; }
+  .cvC .ed small { font-size: 10px; font-size: 3.4cqw; color: var(--pearl-200); }
+  .cvC .ed span { font-family: var(--f-latin); font-weight: 600; font-variant-caps: all-small-caps; letter-spacing: .14em; font-size: 10px; font-size: 3.6cqw; color: var(--gold-300); direction: ltr; unicode-bidi: isolate; }
+
+  .cvD { background: var(--midnight); }
+  .cvD .alif { position: absolute; left: 36%; top: 11%; bottom: 17%; width: 2px; background: linear-gradient(180deg, #B88A20, #F2DC8F 40%, #C9A227 70%, #B88A20); }
+  .cvD .alif::after { content: ""; position: absolute; left: 50%; bottom: -6px; width: 11px; height: 11px; margin-left: -5.5px; background: var(--crimson-600); transform: rotate(45deg); }
+  .cvD .t { position: absolute; top: 12%; right: 10%; left: 42%; }
+  .cvD h4 { font-family: var(--f-display); font-weight: 500; font-size: 30px; font-size: 10.4cqw; line-height: 1.3; margin: 0; color: var(--pearl-100); }
+  .cvD h4 span { display: block; }
+  .cvD p { font-family: var(--f-edit); font-size: 12px; font-size: 4.2cqw; color: var(--gold-300); margin: 4cqw 0 0; line-height: 1.6; }
+
+  /* ───────── Rhythm ───────── */
+  .rhythm { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .rhythm li { display: grid; gap: 8px; align-content: start; }
+  .rt { aspect-ratio: 20 / 26; border: 1px solid var(--chip-border); position: relative; overflow: hidden; background: var(--pearl-100); }
+  .rhythm .cap { font-size: 12.5px; color: var(--ink-2); line-height: 1.45; text-align: center; }
+  .rhythm .cap b { display: block; color: var(--ink-3); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .rt-open { background: var(--sapphire-900); }
+  .rt-open::before { content: ""; position: absolute; right: 16%; top: 16%; width: 34%; height: 18%; background: var(--foil); }
+  .rt-open::after { content: ""; position: absolute; right: 16%; top: 44%; width: 58%; height: 4%; background: var(--pearl-200); box-shadow: 0 9px 0 -1px rgba(244,241,232,.55); }
+  .rt-quiet { background: var(--pearl-100) repeating-linear-gradient(to bottom, rgba(31,35,41,.34) 0 1.5px, transparent 1.5px 7px) 50% 22% / 70% 14% no-repeat; }
+  .rt-rich { background:
+      linear-gradient(var(--sapphire-900), var(--sapphire-900)) 50% 50% / 70% 17% no-repeat,
+      repeating-linear-gradient(to bottom, rgba(31,35,41,.34) 0 1.5px, transparent 1.5px 6px) 50% 14% / 70% 24% no-repeat,
+      repeating-linear-gradient(to bottom, rgba(31,35,41,.34) 0 1.5px, transparent 1.5px 6px) 50% 88% / 70% 22% no-repeat,
+      var(--pearl-100); }
+  .rt-dia { background:
+      repeating-linear-gradient(to bottom, rgba(18,60,140,.75) 0 2px, transparent 2px 14px) 88% 50% / 12% 74% no-repeat,
+      repeating-linear-gradient(to bottom, rgba(31,35,41,.34) 0 1.5px, transparent 1.5px 7px) 36% 50% / 52% 74% no-repeat,
+      var(--pearl-100); }
+  .rt-bank { background: var(--pearl-100) repeating-linear-gradient(to bottom, rgba(31,35,41,.36) 0 1.5px, transparent 1.5px 4.5px) 50% 50% / 72% 78% no-repeat; }
+  .rt-breath { background:
+      linear-gradient(160deg, #3A4A6E, #8E8469 60%, #C8B98F) 50% 30% / 72% 40% no-repeat,
+      repeating-linear-gradient(to bottom, rgba(31,35,41,.3) 0 1.5px, transparent 1.5px 8px) 50% 78% / 50% 10% no-repeat,
+      var(--sand); }
+  .rt-ex::before, .rt-ex::after { content: ""; position: absolute; right: 14%; left: 14%; border: 1.5px solid var(--sapphire-700); background: repeating-linear-gradient(to bottom, transparent 0 7px, rgba(31,35,41,.22) 7px 8px); }
+  .rt-ex::before { top: 12%; height: 34%; }
+  .rt-ex::after { top: 54%; height: 34%; }
+  .rt-sim { background:
+      linear-gradient(var(--midnight), var(--midnight)) 50% 0 / 100% 24% no-repeat,
+      repeating-linear-gradient(to bottom, rgba(31,35,41,.34) 0 1.5px, transparent 1.5px 7px) 50% 70% / 70% 50% no-repeat,
+      var(--pearl-100); }
+  .rt-sim::before { content: ""; position: absolute; top: 9%; right: 14%; width: 30%; height: 4%; background: var(--gold-400); }
+  .rt-mastery::before { content: ""; position: absolute; inset: 22% 14%; border: 1.5px solid var(--gold-500); background: repeating-linear-gradient(to bottom, transparent 0 9px, rgba(31,35,41,.28) 9px 10.5px) 50% 50% / 76% 70% no-repeat; }
+
+  /* ───────── Flagship test ───────── */
+  .ft { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 48px; }
+  .ft h3 { font-family: var(--f-edit); font-weight: 700; font-size: 21px; margin: 0 0 10px; color: var(--heading); }
+  .ft ol { margin: 0; padding-inline-start: 1.5em; list-style: arabic-indic; display: grid; gap: 8px; }
+  .ft li { font-family: var(--f-edit); font-size: 18.5px; line-height: 1.75; }
+  .ft li::marker { font-family: var(--f-func); color: var(--accent-text); font-size: .8em; }
+  .verdict-line { margin: 28px 0 0; font-family: var(--f-edit); font-weight: 700; font-size: 21px; color: var(--heading); }
+
+  .foot { padding-block: 34px 48px; font-size: 13px; color: var(--ink-3); line-height: 1.8; }
+  .foot p { margin: 0; max-width: 60em; }
+  .foot .path { direction: ltr; unicode-bidi: isolate; font-family: var(--f-mono); font-size: 12.5px; }
+
+  /* ───────── Responsive ───────── */
+  @media (max-width: 980px) {
+    .table { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pgrid { grid-template-columns: minmax(0, 1fr); }
+    .pgrid > .rail { border-inline-start: 0; padding-inline-start: 0; border-top: 1px solid var(--hairline); padding-top: 18px; margin-top: 26px; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+    .type-row { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  }
+  @media (max-width: 760px) {
+    .pairs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .dna { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .dna-t { min-height: 170px; }
+    .ctx dl { grid-template-columns: minmax(0, 1fr); }
+    .sim-b { grid-template-columns: minmax(0, 1fr); }
+    .rhythm { grid-template-columns: repeat(5, minmax(0, 1fr)); row-gap: 18px; }
+    .ft { grid-template-columns: minmax(0, 1fr); }
+    .b-row { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  }
+  @media (max-width: 640px) {
+    .spread { grid-template-columns: minmax(0, 1fr); }
+    .prims { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .prim svg { width: 64px; height: 64px; }
+    .turn { grid-template-columns: minmax(0, 1fr) 2rem; gap: 2px 10px; }
+    .turn .who { grid-column: 1; }
+    .turn .say { grid-column: 1; }
+    .turn .ln { grid-column: 2; grid-row: 1; }
+    .tier { grid-template-columns: 36px minmax(0, 1fr); padding: 14px; gap: 10px; }
+  }
+  @media (max-width: 420px) {
+    .table { gap: 16px; padding: 16px; }
+    .dna-t b { font-size: 28px; }
+  }
+</style>
+
+<div class="doc" dir="rtl" lang="ar">
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="mast-top">
+      <span class="mast-eyebrow">الدليل التحريري والعلمي · الجزء السادس: الهوية البصرية والإخراج الفني</span>
+      <span class="edition">Premium Flagship Edition</span>
+    </div>
+    <h1 class="mast-title foil"><span>صناعة</span><span>المتكلّم العربي</span></h1>
+    <p class="mast-sub">من سلامة اللسان إلى حسن البيان</p>
+    <div class="nrule" aria-hidden="true"></div>
+    <p class="mast-note">عيّنة الهوية البصرية للاعتماد: الألوان، والحروف، ونظام النقطة، والعناصر التعليمية، وفاتحة باب، ومفاهيم الأغلفة الأربعة. هي عيّنة لاتخاذ القرار، لا التصميم النهائي.</p>
+  </div>
+</header>
+
+<nav class="toc" aria-label="أقسام العيّنة">
+  <div class="wrap">
+    <ul>
+      <li><a href="#dna">الحمض البصري</a></li>
+      <li><a href="#tokens">الرموز اللونية</a></li>
+      <li><a href="#contrast">التباين</a></li>
+      <li><a href="#type">الحروف</a></li>
+      <li><a href="#nuqta">نظام النقطة</a></li>
+      <li><a href="#elements">العناصر التعليمية</a></li>
+      <li><a href="#opener">فاتحة الباب</a></li>
+      <li><a href="#covers">الأغلفة</a></li>
+      <li><a href="#rhythm">الإيقاع</a></li>
+      <li><a href="#flagship">اختبار الريادة</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- DNA -->
+  <section class="sec" id="dna" aria-labelledby="h-dna">
+    <p class="eyebrow">الباب ٢٢ · نظام الألوان</p>
+    <h2 id="h-dna">الحمض البصري</h2>
+    <div class="nrule" aria-hidden="true"></div>
+    <p class="lede">أربعة ألوان تُعرف بها المنظومة من بعيد: الياقوتي للمرجعية، والذهبي للتميّز، واللؤلؤي للصفاء، والقرمزي للنبض الإنساني.</p>
+    <div class="dna">
+      <div class="dna-t d-sap"><b>الياقوتي</b><div><div class="m">المرجعية · العقل · المكانة</div><span class="ltr">Sapphire #082567</span></div></div>
+      <div class="dna-t d-gold"><b>الذهبي</b><div><div class="m">التميّز · التراث · الامتياز</div><span class="ltr">Gold #C9A227 – #E1C46A</span></div></div>
+      <div class="dna-t d-pearl"><b>اللؤلؤي</b><div><div class="m">الصفاء · الرقي · المعرفة</div><span class="ltr">Pearl #F8F6F0</span></div></div>
+      <div class="dna-t d-crim"><b>القرمزي</b><div><div class="m">الطاقة · التوكيد · الدفء</div><span class="ltr">Crimson #A51C30</span></div></div>
+    </div>
+
+    <h3 class="sub-h">ميزانية اللون</h3>
+    <div class="budget" role="group" aria-label="ميزانية اللون بحسب نوع الصفحة">
+      <div class="b-row"><span>صفحة قراءة وتدريب</span>
+        <div class="bar" role="img" aria-label="لؤلؤي ٦٥٪، ياقوتي ٢٠٪، ذهبي ٥٪، قرمزي ٢٪، غيرها ٨٪"><i class="bp" style="width:65%"></i><i class="bs" style="width:20%"></i><i class="bg" style="width:5%"></i><i class="bc" style="width:2%"></i><i class="bo" style="width:8%"></i></div></div>
+      <div class="b-row"><span>فاتحة باب</span>
+        <div class="bar" role="img" aria-label="لؤلؤي ٥٪، ياقوتي ٨٧٪، ذهبي ٧٪، قرمزي ١٪"><i class="bp" style="width:5%"></i><i class="bs" style="width:87%"></i><i class="bg" style="width:7%"></i><i class="bc" style="width:1%"></i></div></div>
+      <div class="b-row"><span>الغلاف (المفهوم أ)</span>
+        <div class="bar" role="img" aria-label="لؤلؤي ٤٪، ياقوتي ٨٨٪، ذهبي ٧٪، قرمزي ١٪"><i class="bp" style="width:4%"></i><i class="bs" style="width:88%"></i><i class="bg" style="width:7%"></i><i class="bc" style="width:1%"></i></div></div>
+    </div>
+    <ul class="legend">
+      <li><i style="background:var(--pearl-100)"></i>لؤلؤي</li>
+      <li><i style="background:var(--sapphire-900)"></i>ياقوتي وليلي</li>
+      <li><i style="background:var(--foil)"></i>ذهبي</li>
+      <li><i style="background:var(--crimson-700)"></i>قرمزي</li>
+      <li><i style="background:repeating-linear-gradient(135deg, var(--stone) 0 4px, #d8d2c7 4px 5px)"></i>غيرها</li>
+    </ul>
+    <p class="note">قيم تمثيلية داخل الحدود التي يقررها الدليل؛ يضبطها المخرج الفني صفحةً صفحة. الذهب استثناء يُلحظ، والقرمزي لا يزيد على موضعين في الصفحتين المتقابلتين.</p>
+  </section>
+
+  <!-- Tokens -->
+  <section class="sec" id="tokens" aria-labelledby="h-tok">
+    <p class="eyebrow">الباب ٢٢ · الرموز المعتمدة</p>
+    <h2 id="h-tok">الرموز اللونية</h2>
+    <div class="nrule" aria-hidden="true"></div>
+    <p class="lede">القيمة الرقمية مرجع الشاشة. أما الطباعة فتُحوَّل بملف ألوان المطبعة وتُعتمد ببروفة، والذهب في الأغلفة رقائق حقيقية.</p>
+
+    <div class="tok-group"><h3>الياقوتي والأزرق</h3>
+      <div class="chips">
+        <div class="chip"><div class="sw" style="background:#082567"></div><p>الياقوتي العميق</p><small class="ltr">#082567 · sapphire-900</small></div>
+        <div class="chip"><div class="sw" style="background:#123C8C"></div><p>الياقوتي</p><small class="ltr">#123C8C · sapphire-700</small></div>
+        <div class="chip"><div class="sw" style="background:#174EA6"></div><p>الياقوتي المضيء</p><small class="ltr">#174EA6 · sapphire-500</small></div>
+        <div class="chip"><div class="sw" style="background:#060E26"></div><p>الليلي العميق</p><small class="ltr">#060E26 · midnight</small></div>
+        <div class="chip"><div class="sw" style="background:#2F5FC4"></div><p>الأزرق الملكي</p><small class="ltr">#2F5FC4 · royal</small></div>
+      </div>
+    </div>
+    <div class="tok-group"><h3>الذهبي</h3>
+      <div class="chips">
+        <div class="chip"><div class="sw" style="background:var(--foil)"></div><p>محاكاة الرقائق</p><small>للعناوين الكبيرة والخطوط وحدها</small></div>
+        <div class="chip"><div class="sw" style="background:#E1C46A"></div><p>الذهبي الفاتح</p><small class="ltr">#E1C46A · gold-300</small></div>
+        <div class="chip"><div class="sw" style="background:#D4AF37"></div><p>الذهبي الطازج</p><small class="ltr">#D4AF37 · gold-400</small></div>
+        <div class="chip"><div class="sw" style="background:#C9A227"></div><p>الذهبي المصقول</p><small class="ltr">#C9A227 · gold-500</small></div>
+        <div class="chip"><div class="sw" style="background:#B88A20"></div><p>الذهبي العتيق</p><small class="ltr">#B88A20 · gold-700</small></div>
+        <div class="chip"><div class="sw" style="background:#7F5F12"></div><p>ذهبي الحبر</p><small class="ltr">#7F5F12 · gold-ink</small></div>
+      </div>
+    </div>
+    <div class="tok-group"><h3>اللؤلؤي والمحايدات</h3>
+      <div class="chips">
+        <div class="chip"><div class="sw" style="background:#FCFBF7"></div><p>اللؤلؤي الناصع</p><small class="ltr">#FCFBF7 · pearl-50</small></div>
+        <div class="chip"><div class="sw" style="background:#F8F6F0"></div><p>اللؤلؤي</p><small class="ltr">#F8F6F0 · pearl-100</small></div>
+        <div class="chip"><div class="sw" style="background:#F4F1E8"></div><p>اللؤلؤي العاجي</p><small class="ltr">#F4F1E8 · pearl-200</small></div>
+        <div class="chip"><div class="sw" style="background:#F1E8D4"></div><p>الرملي</p><small class="ltr">#F1E8D4 · sand</small></div>
+        <div class="chip"><div class="sw" style="background:#ECE8E1"></div><p>الحجري</p><small class="ltr">#ECE8E1 · stone</small></div>
+        <div class="chip"><div class="sw" style="background:#1F2329"></div><p>الفحمي</p><small class="ltr">#1F2329 · charcoal</small></div>
+        <div class="chip"><div class="sw" style="background:#4A4540"></div><p>الغرافيتي الدافئ</p><small class="ltr">#4A4540 · graphite</small></div>
+      </div>
+    </div>
+    <div class="tok-group"><h3>القرمزي والمعادن والزمردي</h3>
+      <div class="chips">
+        <div class="chip"><div class="sw" style="background:#8E1B2A"></div><p>العنّابي</p><small class="ltr">#8E1B2A · crimson-900</small></div>
+        <div class="chip"><div class="sw" style="background:#A51C30"></div><p>القرمزي</p><small class="ltr">#A51C30 · crimson-700</small></div>
+        <div class="chip"><div class="sw" style="background:#B21F35"></div><p>الياقوت الأحمر</p><small class="ltr">#B21F35 · crimson-600</small></div>
+        <div class="chip"><div class="sw" style="background:#E5E4E2"></div><p>البلاتيني</p><small class="ltr">#E5E4E2 · platinum</small></div>
+        <div class="chip"><div class="sw" style="background:#BFC3C8"></div><p>الفضي</p><small class="ltr">#BFC3C8 · silver</small></div>
+        <div class="chip"><div class="sw" style="background:#0B5D47"></div><p>الزمردي</p><small>لسجل التقدم وحده</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contrast -->
+  <section class="sec" id="contrast" aria-labelledby="h-con">
+    <p class="eyebrow">الباب ٢٢ · مصفوفة التباين</p>
+    <h2 id="h-con">الفخامة لا تُضعف القراءة</h2>
+    <div class="nrule" aria-hidden="true"></div>
+    <p class="lede">الذهب على الورق الفاتح لا يُقرأ، إذ لا تزيد نسبته على ٢٫٩ إلى ١. لذلك أُضيف «ذهبي الحبر» لكل نص ذهبي على خلفية فاتحة، وبقي الذهب هناك خطوطًا ونقاطًا فقط.</p>
+    <div class="pairs">
+      <div class="pair"><div class="smp" style="background:#F8F6F0;color:#1F2329"><b>نصّ المتن</b><span>الفحمي على اللؤلؤي</span></div><div class="meta"><span class="ltr">14.6 : 1</span><span class="verdict v-ok">✔ مسموح للنص</span></div></div>
+      <div class="pair"><div class="smp" style="background:#F8F6F0;color:#082567"><b>عنوان الفصل</b><span>الياقوتي العميق على اللؤلؤي</span></div><div class="meta"><span class="ltr">13.2 : 1</span><span class="verdict v-ok">✔ مسموح للنص</span></div></div>
+      <div class="pair"><div class="smp" style="background:#F8F6F0;color:#A51C30"><b>تنبيه</b><span>القرمزي على اللؤلؤي</span></div><div class="meta"><span class="ltr">6.9 : 1</span><span class="verdict v-ok">✔ مسموح للنص</span></div></div>
+      <div class="pair"><div class="smp" style="background:#F8F6F0;color:#7F5F12"><b>معيار الإتقان</b><span>ذهبي الحبر على اللؤلؤي</span></div><div class="meta"><span class="ltr">5.5 : 1</span><span class="verdict v-ok">✔ مسموح للنص</span></div></div>
+      <div class="pair"><div class="smp" style="background:#082567;color:#D4AF37"><b>صناعة المتكلّم</b><span>الذهبي الطازج على الياقوتي العميق</span></div><div class="meta"><span class="ltr">6.8 : 1</span><span class="verdict v-ok">✔ مسموح للنص</span></div></div>
+      <div class="pair"><div class="smp" style="background:#174EA6;color:#D4AF37"><b>عنوان كبير</b><span>الذهبي الطازج على الياقوتي المضيء</span></div><div class="meta"><span class="ltr">3.7 : 1</span><span class="verdict v-big">◐ للعناوين الكبيرة فقط</span></div></div>
+      <div class="pair"><div class="smp" style="background:#F8F6F0;color:#C9A227"><b>نصّ ذهبي</b><span>الذهبي المصقول على اللؤلؤي</span></div><div class="meta"><span class="ltr">2.2 : 1</span><span class="verdict v-no">✘ ممنوع للنص</span></div></div>
+      <div class="pair"><div class="smp" style="background:#F8F6F0;color:#E1C46A"><b>نصّ ذهبي</b><span>الذهبي الفاتح على اللؤلؤي</span></div><div class="meta"><span class="ltr">1.6 : 1</span><span class="verdict v-no">✘ ممنوع للنص</span></div></div>
+    </div>
+  </section>
+
+  <!-- Type -->
+  <section class="sec" id="type" aria-labelledby="h-type">
+    <p class="eyebrow">الباب ٢٣ · الحرف العربي والطباعة</p>
+    <h2 id="h-type">أربعة أدوار، ومعها الحرف القرآني</h2>
+    <div class="nrule" aria-hidden="true"></div>
+    <p class="lede">لا يُستعمل خط واحد لكل شيء. الخطوط المعروضة هنا مفتوحة الترخيص، للنماذج الأولية والطبعات الرقمية. وخطوط الطبعة الورقية قرار معلّق يُحسم ببروفة فعلية.</p>
+
+    <div class="type-row">
+      <div class="type-meta"><h3>حرف العرض</h3><p>الأغلفة والفواتح والعبارات المحورية.</p><span class="ltr">Reem Kufi</span></div>
+      <p class="s-display">صناعة المتكلّم</p>
+    </div>
+    <div class="type-row">
+      <div class="type-meta"><h3>الحرف التحريري</h3><p>عناوين الأبواب والفصول والوحدات.</p><span class="ltr">Amiri Bold</span></div>
+      <p class="s-edit">الباب الخامس: المقام — مَن يتكلم؟ ولمن؟ ولماذا؟</p>
+    </div>
+    <div class="type-row">
+      <div class="type-meta"><h3>حرف القراءة</h3><p>المتن الطويل والحوارات والشواهد.</p><span class="ltr">Amiri</span></div>
+      <p class="s-read">الكلام الناجح هو الذي يُبلِّغ مراد المتكلم إلى المخاطَب واضحًا، صحيحًا، مناسبًا، مؤثرًا، مهذبًا، في الوقت والقدر المناسبين. فليس النجاح كثرة الكلام، ولا غرابة الألفاظ، ولا عرض المحفوظات؛ بل أن يصل المعنى ويحفظ العلاقة بين الطرفين.</p>
+    </div>
+    <div class="type-row">
+      <div class="type-meta"><h3>النص المشكول للإلقاء</h3><p>سطر أوسع، ورموز الأداء بالياقوتي.</p><span class="ltr">Amiri · 200%+ leading</span></div>
+      <p class="s-voc">السَّلامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكاتُهُ <span class="pm">//</span> الحَمْدُ لِلَّهِ <span class="pm">/</span> وَالصَّلاةُ وَالسَّلامُ عَلى رَسُولِ اللهِ <span class="pm">//</span> أَمّا بَعْدُ <span class="pm">(ت)</span> فَإِنَّ <span class="stress">الكَلِمَةَ</span> أَمانَةٌ <span class="pm">//</span></p>
+    </div>
+    <div class="type-row">
+      <div class="type-meta"><h3>الحرف الوظيفي</h3><p>الجداول والتمارين والتسميات والملاحة.</p><span class="ltr">IBM Plex Sans Arabic</span></div>
+      <div class="s-func"><span><b>تمرين ٣</b> · التحويل</span><span><b>الزمن:</b> ٥ دقائق</span><span><b>الرسمية:</b> ٤ من ٥</span><span><b>المستوى:</b> م٢</span></div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta"><h3>الحرف القرآني</h3><p>للآيات وحدها. في الطبعة: خط مصحف المدينة من مجمع الملك فهد.</p><span class="ltr">Amiri Quran (screen stand-in)</span></div>
+      <p class="s-quran"><span class="br">﴿</span>وَاحْلُلْ عُقْدَةً مِّن لِّسَانِي ٭ يَفْقَهُوا قَوْلِي<span class="br">﴾</span><span class="s-cite">طه: ٢٧–٢٨ · يُنقل النص في الكتاب من مصدر المصحف الموثق ولا يُكتب يدويًا</span></p>
+    </div>
+    <div class="type-row">
+      <div class="type-meta"><h3>المرافق اللاتيني</h3><p>ضيف في الصفحة: أصغر بصريًا، على خط القاعدة نفسه.</p><span class="ltr">Cormorant Garamond · IBM Plex Sans</span></div>
+      <div class="s-pair"><span class="ar">السجل اللغوي</span><span class="la">(Register)</span><span class="la2">Pace · Pause · Pitch</span></div>
+    </div>
+
+    <ul class="rules">
+      <li>لا تباعد بين الحروف العربية؛ فهو يقطع الوصل.</li>
+      <li>لا ميل صناعي ولا تسطير تحت النص العربي؛ التوكيد بالوزن واللون.</li>
+      <li>النص المشكول بسطر ٢٠٠٪ فأكثر حتى لا تصطدم الحركات.</li>
+      <li>عائلتان في الصفحة على الأكثر، سوى الخط القرآني.</li>
+    </ul>
+  </section>
+
+  <!-- Nuqta -->
+  <section class="sec" id="nuqta" aria-labelledby="h-nq">
+    <p class="eyebrow">الباب ٢٤ · العمارة</p>
+    <h2 id="h-nq">نظام النقطة</h2>
+    <div class="nrule" aria-hidden="true"></div>
+    <p class="lede">وحدة واحدة تُبنى منها العلامات كلها، مستلهمة من هندسة «الخط المنسوب»: النقطة المعيّنية، والألف، والدائرة. فالكلام الفصيح يُبنى من وحدات صغيرة محكمة، كما يُبنى الحرف من النقطة.</p>
+    <div class="paper">
+      <div class="prims">
+        <div class="prim">
+          <svg viewBox="0 0 84 84" aria-hidden="true"><path d="M42 10 L74 42 L42 74 L10 42 Z" fill="#123C8C"/></svg>
+          <b>النقطة</b><span>التعداد، والمقاييس، وإطار رقم الصفحة</span>
+        </div>
+        <div class="prim">
+          <svg viewBox="0 0 84 84" aria-hidden="true"><line x1="42" y1="6" x2="42" y2="66" stroke="#C9A227" stroke-width="2"/><path d="M42 64 L48 70 L42 76 L36 70 Z" fill="#B21F35"/></svg>
+          <b>الألف</b><span>الخط البنائي في الأغلفة والفواتح</span>
+        </div>
+        <div class="prim">
+          <svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="30" fill="none" stroke="#123C8C" stroke-width="1.5"/><g fill="#123C8C"><path d="M42 8 l4 4 -4 4 -4 -4z"/><path d="M42 68 l4 4 -4 4 -4 -4z"/><path d="M71.4 25 l4 4 -4 4 -4 -4z" transform="translate(-4 -4)"/><path d="M71.4 51 l4 4 -4 4 -4 -4z" transform="translate(-4 -4)"/><path d="M12.6 25 l4 4 -4 4 -4 -4z" transform="translate(4 -4)"/><path d="M12.6 51 l4 4 -4 4 -4 -4z" transform="translate(4 -4)"/></g><path d="M42 37 l5 5 -5 5 -5 -5z" fill="#C9A227"/></svg>
+          <b>الدائرة</b><span>النموذج السداسي: ستة أسئلة حول «كيف؟»</span>
+        </div>
+      </div>
+
+      <div class="scales">
+        <div>
+          <h3>سلّم الرسمية</h3>
+          <ul class="scale-list">
+            <li><span class="dots"><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh fill-s"></i></span><span><b>٥ شديد الرسمية</b> · لقاء وزير، وفد رسمي</span></li>
+            <li><span class="dots"><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh line-s"></i></span><span><b>٤ رسمي</b> · مقابلة، محاضرة، خطبة</span></li>
+            <li><span class="dots"><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh line-s"></i><i class="rh line-s"></i></span><span><b>٣ شبه رسمي</b> · حديث مع أستاذ بعد الدرس</span></li>
+            <li><span class="dots"><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh line-s"></i><i class="rh line-s"></i><i class="rh line-s"></i></span><span><b>٢ ودي</b> · الزملاء والأصدقاء</span></li>
+            <li><span class="dots"><i class="rh fill-s"></i><i class="rh line-s"></i><i class="rh line-s"></i><i class="rh line-s"></i><i class="rh line-s"></i></span><span><b>١ أسري</b> · الوالدان والإخوة والأبناء</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3>درجات خطورة الخطأ</h3>
+          <ul class="scale-list">
+            <li><span class="dots"><i class="rh fill-c"></i></span><span><b>قاتل</b> · «إنشاء الله» بدل «إنْ شاءَ اللهُ»</span></li>
+            <li><span class="dots"><i class="rh half-c"></i></span><span><b>مغيّر للمعنى</b> · التباس «ضلّ» بـ«ظلّ»</span></li>
+            <li><span class="dots"><i class="rh half-g"></i></span><span><b>لافت</b> · «سأعطي محاضرة»</span></li>
+            <li><span class="dots"><i class="rh line-g"></i></span><span><b>هنة</b> · خلاف الأولى أو الأفصح</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3>درجات المقارنة</h3>
+          <ul class="scale-list">
+            <li><span class="dots"><span class="badge b1"><span>١</span></span></span><span><b>غير ناجح</b> · كما يقع فيه المتعلم</span></li>
+            <li><span class="dots"><span class="badge b2"><span>٢</span></span></span><span><b>مقبول</b> · يؤدي الغرض ولا يبلغ الغاية</span></li>
+            <li><span class="dots"><span class="badge b3"><span>٣</span></span></span><span><b>ناجح</b> · فصيح طبيعي مناسب للمقام</span></li>
+            <li><span class="dots"><span class="badge b4"><span>٤</span></span></span><span><b>رفيع</b> · لمسة بيان بلا تكلف</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Elements -->
+  <section class="sec" id="elements" aria-labelledby="h-el">
+    <p class="eyebrow">الباب ٢٦ · نظام العناصر التعليمية</p>
+    <h2 id="h-el">عناصر تُعرف من النظرة الأولى</h2>
+    <div class="nrule" aria-hidden="true"></div>
+    <p class="lede">لكل عنصر هيئة واحدة في المجلدات كلها. المحتوى هنا من الدليل نفسه: متقدم لوظيفة في معهد للغة العربية يعرّف بنفسه أمام اللجنة. والاسم والمدينة للتمثيل، والشخص افتراضي.</p>
+
+    <div class="paper">
+      <div class="pgrid">
+        <div class="main">
+          <div class="ctx">
+            <span class="lbl">بطاقة المقام</span>
+            <dl>
+              <div><dt>المتكلم</dt><dd>خريج ماجستير في النحو</dd></div>
+              <div><dt>المخاطَب</dt><dd>لجنة مقابلة في معهد للغة العربية</dd></div>
+              <div><dt>العلاقة</dt><dd>أدنى منزلة، بلا معرفة سابقة</dd></div>
+              <div><dt>الغرض</dt><dd>التعريف بالنفس</dd></div>
+              <div><dt>الأثر المطلوب</dt><dd>أن تطمئن اللجنة إلى كفاءته وأدبه</dd></div>
+              <div><dt>الرسمية</dt><dd><span class="dots"><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh line-s"></i></span>٤ رسمي</dd></div>
+              <div><dt>الزمن المتاح</dt><dd>٣٠ ثانية</dd></div>
+              <div><dt>المكان</dt><dd>قاعة المقابلات</dd></div>
+            </dl>
+          </div>
+
+          <div class="ladder">
+            <div class="tier t1"><span class="badge b1"><span>١</span></span><div><span class="lbl">المتكلم غير الناجح ✘</span><q>إييه… بسم الله… أنا اسمي عبد الرحمن، أنا جئت من كانو، أنا متخرج من الجامعة، أنا عندي ماجستير، وأنا أحب العربية جدًّا جدًّا، وإن شاء الله أنا سأعطي أفضل ما عندي، وشكرًا.</q></div></div>
+            <div class="tier t2"><span class="badge b2"><span>٢</span></span><div><span class="lbl">المتكلم المقبول</span><q>بسم الله الرحمن الرحيم. اسمي عبد الرحمن، من مدينة كانو. تخرجت في قسم اللغة العربية، وحصلت على الماجستير في النحو. أحب التدريس، وأرجو أن أكون مفيدًا لهذا المعهد.</q></div></div>
+            <div class="tier t3"><span class="badge b3"><span>٣</span></span><div><span class="lbl">المتكلم الناجح</span><q>السلام عليكم ورحمة الله. أشكر لكم إتاحة هذه الفرصة. أنا عبد الرحمن، مدرّس لغة عربية من كانو، أحمل الماجستير في النحو، ودرّستُ ثلاث سنوات في المرحلة الثانوية. تقدمت إلى معهدكم لأن برنامجه يُعنى بتعليم الكلام، وهو ما أُحسنه وأحبه.</q></div></div>
+            <div class="tier t4"><span class="badge b4"><span>٤</span></span><div><span class="lbl">المتكلم الرفيع</span><q>السلام عليكم ورحمة الله. أشكر لكم هذا اللقاء. أنا عبد الرحمن، مدرّس لغة عربية من كانو، أحمل الماجستير في النحو، ودرّستُ ثلاث سنوات في المرحلة الثانوية. تقدمت إلى معهدكم لأنه يعلّم الكلام لا القواعد وحدها؛ فإن تعلّم الطالب القاعدة في كتابه، فأرجو أن يتعلم معي كيف يقولها.</q></div></div>
+          </div>
+
+          <div class="tbl-wrap">
+            <table class="dtab">
+              <caption>جدول الفروق: لا يُكتفى بقول «هذا أفضل»</caption>
+              <thead><tr><th scope="col">البعد</th><th scope="col">١ غير الناجح</th><th scope="col">٢ المقبول</th><th scope="col">٣ الناجح</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">الافتتاح</th><td>بسملة بعد تردد، بلا سلام</td><td>بسملة، بلا سلام ولا شكر</td><td>سلام وشكر في جملتين</td></tr>
+                <tr><th scope="row">الحشو</th><td>«إييه»، و«أنا» ست مرات</td><td>لا حشو</td><td>لا حشو</td></tr>
+                <tr><th scope="row">الصلة بالمقام</th><td>معدومة</td><td>عامة: «مفيدًا للمعهد»</td><td>مباشرة: سبب اختيار المعهد</td></tr>
+                <tr><th scope="row">الأسلوب</th><td>«سأعطي أفضل ما عندي» مترجمة</td><td>طبيعي</td><td>طبيعي</td></tr>
+                <tr><th scope="row">الخاتمة</th><td>«وشكرًا» مبتورة</td><td>مقبولة</td><td>تربطه بالوظيفة</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="rule-p"><div><span class="lbl">قاعدة</span><p>غيِّر المخاطَب أو المقام يتغيّر الأسلوب، وإن بقي الموضوع واحدًا.</p></div></div>
+
+          <div class="def"><span class="lbl">تعريف</span><p>الكلام الناجح هو الذي يُبلِّغ مراد المتكلم إلى المخاطَب واضحًا، صحيحًا، مناسبًا، مؤثرًا، مهذبًا، في الوقت والقدر المناسبين.</p></div>
+
+          <div class="warn"><span class="lbl">تنبيه</span><p>«إنشاء الله» خطأ قاتل يغيّر المعنى. الصواب «إنْ شاءَ اللهُ»: ثلاث كلمات، بسكون النون ومدّ الألف.</p></div>
+
+          <div class="evid"><span class="lbl">شاهد</span><p class="ayah"><span class="br">﴿</span>وَاحْلُلْ عُقْدَةً مِّن لِّسَانِي ٭ يَفْقَهُوا قَوْلِي<span class="br">﴾</span></p><div class="src">سورة طه: ٢٧–٢٨</div></div>
+
+          <div class="dia">
+            <div class="dia-h"><span class="lbl">حوار · النسخة المحسّنة</span><small>مقابلة وظيفية · الرسمية ٤</small></div>
+            <div class="turn"><span class="who">المحاور</span><span class="say">السلام عليكم، تفضّل بالجلوس.</span><span class="ln">س١</span></div>
+            <div class="turn"><span class="who">المتقدم</span><span class="say">وعليكم السلام ورحمة الله. <span class="dir">[يجلس بعد أن يُؤذَن له]</span> شكرًا لكم.</span><span class="ln">س٢</span></div>
+            <div class="turn"><span class="who">المحاور</span><span class="say">حدّثنا عن نفسك باختصار.</span><span class="ln">س٣</span></div>
+            <div class="turn"><span class="who">المتقدم</span><span class="say"><span class="dir">[يتمهل لحظة]</span> أنا عبد الرحمن، مدرّس لغة عربية من كانو، أحمل الماجستير في النحو، ودرّستُ ثلاث سنوات في المرحلة الثانوية.</span><span class="ln">س٤</span></div>
+            <div class="turn"><span class="who">المحاور</span><span class="say">ولماذا معهدنا تحديدًا؟</span><span class="ln">س٥</span></div>
+            <div class="turn"><span class="who">المتقدم</span><span class="say">لأن برنامجكم يُعنى بتعليم الكلام، وهذا ما أحسنه وأحبه.</span><span class="ln">س٦</span></div>
+          </div>
+
+          <div class="ex">
+            <div class="ex-tab"><span>تمرين ٣ · التحويل</span><span>فردي · ٥ دقائق</span></div>
+            <div class="ex-body">
+              <p>حوّل كل عبارة مترجمة إلى عربية طبيعية، ثم علّل التحويل في سطر.</p>
+              <ol>
+                <li>«سأعطي محاضرة عن الزكاة يوم الجمعة.»<span class="ans"></span></li>
+                <li>«هذا القرار يلعب دورًا كبيرًا في نجاح المعهد.»<span class="ans"></span></li>
+                <li>«الاجتماع أخذ مكانًا في قاعة المكتبة.»<span class="ans"></span></li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="sim">
+            <div class="sim-h"><span class="lbl">محاكاة</span><b>المقابلة الوظيفية: التعريف بالنفس</b></div>
+            <div class="sim-b">
+              <div><h4>الأدوار</h4><ul><li>المحاور: مدير المعهد</li><li>المتقدم: المتدرب</li><li>المراقب: زميل يملأ سلّم التقييم</li></ul></div>
+              <div><h4>المراحل</h4><ol><li>يدخل المتقدم ويسلّم وينتظر الإذن بالجلوس.</li><li>يعرّف بنفسه في ٣٠ ثانية.</li><li>يجيب عن سؤالين لم يطّلع عليهما.</li><li>يختم بشكر وسؤال واحد مناسب.</li></ol></div>
+              <div class="meta"><span>الزمن: ١٠ دقائق</span><span>الرسمية<span class="dots"><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh line-s"></i></span></span><span>التقييم: سلّم المئة درجة</span></div>
+            </div>
+          </div>
+
+          <div class="aud">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><g stroke="#123C8C" stroke-width="2.2"><line x1="14" y1="20" x2="14" y2="40"/><line x1="24" y1="10" x2="24" y2="40"/><line x1="34" y1="24" x2="34" y2="40"/></g><g fill="#123C8C"><path d="M14 13 l4 4 -4 4 -4 -4z"/><path d="M24 3 l4 4 -4 4 -4 -4z"/><path d="M34 17 l4 4 -4 4 -4 -4z"/></g></svg>
+            <div>
+              <span class="lbl">مهمة صوتية</span>
+              <p>سجّل الافتتاح ثلاث مرات: أمام لجنة، ثم أمام شيخ، ثم أمام طلاب. تثبت المخارج والإعراب، وتتغير السرعة والارتفاع ومقدار السكتات.</p>
+              <p class="voc">السَّلامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ <span class="pm">//</span> أَشْكُرُ لَكُمْ <span class="pm">/</span> إِتاحَةَ هذِهِ <span class="stress">الفُرْصَةِ</span> <span class="pm">//</span></p>
+              <div class="keys"><span><span class="pm">/</span> سكتة قصيرة</span><span><span class="pm">//</span> سكتة طويلة</span><span><span class="pm">↑</span> رفع</span><span><span class="pm">↓</span> خفض</span><span><span class="pm">(ت)</span> تنفّس</span><span><span class="stress">العريض</span> نبر</span></div>
+            </div>
+          </div>
+
+          <div class="mas"><i></i><i></i><i></i><i></i><span class="lbl">معيار الإتقان</span><p>يُعدّ الدرس متقَنًا إذا عرّف المتدرب بنفسه في ٣٠ ثانية أمام لجنة محاكاة، بتقدير كلي لا يقل عن <strong>٨٠ من ١٠٠</strong>، ولا تقل درجة «مراعاة المخاطَب والمقام» عن <strong>١٢ من ١٥</strong>.</p></div>
+        </div>
+
+        <aside class="rail" aria-label="العمود الجانبي">
+          <div><h4>العمود الجانبي</h4><p>ثلاثة أعمدة من اثني عشر، من الجهة الخارجية: أرقام الأسطر، وملاحظات المدرب، ورموز الصوت.</p></div>
+          <div><h4>للمدرب</h4><p>لاحظ تمهّل المتقدم في س٤ قبل الجواب: علامة ثقة لا تردد. اطلب من المتدربين أداء س٢ مرتين: مرة يجلس قبل الإذن، ومرة بعده، ثم ناقش الفرق.</p></div>
+          <div><h4>إحالة</h4><p>بطاقة الخطأ: «سأعطي محاضرة» · خ-١٦ · لافت.</p></div>
+          <div class="qr">موضع رمز QR للتسجيل المرجعي</div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Opener -->
+  <section class="sec" id="opener" aria-labelledby="h-op">
+    <p class="eyebrow">الباب ٢٥ · فواتح الأبواب</p>
+    <h2 id="h-op">دخول إلى فضاء معماري جديد</h2>
+    <div class="nrule" aria-hidden="true"></div>
+    <p class="lede">باب «المقام» مثالًا. تبدأ الفاتحة على الصفحة اليمنى لأنها أول ما يُقرأ في الكتاب العربي، وتقابلها صفحة هادئة لفهرس الباب أو صورة تحريرية.</p>
+    <div class="spread">
+      <div class="pg pg-open" role="img" aria-label="الصفحة اليمنى: فاتحة الباب الخامس، المقام">
+        <p class="op-num foil">٠٥</p>
+        <div class="op-alif" aria-hidden="true"></div>
+        <p class="op-title">المقام</p>
+        <p class="op-q">مَن يتكلم؟ ولمن؟ ولماذا؟<br>وأين؟ ومتى؟ وكيف؟</p>
+        <div class="op-tag">المستوى ٤ · المرحلة الثانية: التواصل</div>
+      </div>
+      <div class="pg pg-toc">
+        <h3>في هذا الباب</h3>
+        <ol>
+          <li>أنماط المتحدثين: الشيخ والخطيب والمحاضر</li>
+          <li>أنماط المتحدثين: المذيع والمتحدث الرسمي والدبلوماسي</li>
+          <li>أنماط المتحدثين: المدير والموظف والباحث والطالب</li>
+          <li>أنماط المتحدثين: الأب والأم والضيف الجديد</li>
+          <li>مخاطبة الأعلى منزلة</li>
+          <li>مخاطبة الأقران والأدنى</li>
+          <li>مخاطبة الجمهور العام</li>
+          <li>مخاطبة الغاضب والمعترض والمسيء</li>
+          <li>مختبر المقام: ثلاثون موقفًا</li>
+        </ol>
+        <p class="cap">الصفحة اليسرى: فهرس الباب على اللؤلؤي، أو صورة تحريرية ممتدة إلى حافة الورق.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Covers -->
+  <section class="sec" id="covers" aria-labelledby="h-cv">
+    <p class="eyebrow">الباب ٢٥ · الأغلفة · القرار المعلّق ١٣</p>
+    <h2 id="h-cv">أربعة مفاهيم للاعتماد</h2>
+    <div class="nrule" aria-hidden="true"></div>
+    <p class="lede">التوصية: نظام واحد تتوزع فيه المفاهيم. أ للمجلدات الأربعة، وب للمكتبة التعبيرية، وج للطبعة الرائدة، ود شارةً للسلسلة. ويُطوَّر لكل مفهوم ثلاثة بدائل قبل الحسم. هذه مخططات اتجاه لا أغلفة نهائية.</p>
+    <div class="table">
+      <figure class="cv-fig">
+        <div class="cover cvA" role="img" aria-label="المفهوم أ: حقل ياقوتي بإطار ذهبي معماري وعنوان ذهبي">
+          <svg class="cv-svg" viewBox="0 0 200 260" aria-hidden="true">
+            <g fill="none" stroke="#C9A227" stroke-width=".8">
+              <rect x="12" y="12" width="176" height="236"/>
+              <line x1="40" y1="12" x2="40" y2="248"/>
+              <line x1="12" y1="170" x2="188" y2="170"/>
+              <line x1="40" y1="206" x2="188" y2="206" stroke-opacity=".45"/>
+            </g>
+            <g fill="#C9A227"><path d="M40 166 l4 4 -4 4 -4 -4z"/><path d="M188 166 l4 4 -4 4 -4 -4z"/><path d="M40 8 l4 4 -4 4 -4 -4z"/></g>
+            <path d="M40 243 l5 5 -5 5 -5 -5z" fill="#B21F35"/>
+          </svg>
+          <div class="t"><h4 class="foil"><span>صناعة</span><span>المتكلّم العربي</span></h4><p>من سلامة اللسان إلى حسن البيان</p></div>
+          <div class="vol"><small>المجلد الأول</small><b>التأسيس</b></div>
+        </div>
+        <figcaption><b>أ · العمارة الياقوتية</b><span>للمجلدات الأربعة</span><small>تذهيب بالرقائق للعنوان والخطوط · كبس غائر للإطار</small></figcaption>
+      </figure>
+
+      <figure class="cv-fig">
+        <div class="cover cvB" role="img" aria-label="المفهوم ب: خلفية لؤلؤية وعنوان ياقوتي وتدخل هندسي ذهبي">
+          <svg class="cv-svg" viewBox="0 0 200 260" aria-hidden="true">
+            <g fill="none" stroke="#C9A227" stroke-width=".9">
+              <path d="M48 142 L128 222 L48 302 L-32 222 Z"/>
+              <path d="M48 166 L104 222 L48 278 L-8 222 Z"/>
+              <path d="M48 190 L80 222 L48 254 L16 222 Z"/>
+              <line x1="48" y1="142" x2="48" y2="302"/>
+              <line x1="-32" y1="222" x2="128" y2="222"/>
+            </g>
+            <path d="M48 216 l6 6 -6 6 -6 -6z" fill="#C9A227"/>
+          </svg>
+          <div class="t"><h4><span>صناعة</span><span>المتكلّم العربي</span></h4><p>المكتبة التعبيرية: بنوك العبارات بحسب المقام</p></div>
+          <div class="kind">مرجع مرافق</div>
+        </div>
+        <figcaption><b>ب · المخطوط والحداثة</b><span>للمكتبة التعبيرية</span><small>الذهب هنا خطوط فقط، لا نص (قاعدة التباين)</small></figcaption>
+      </figure>
+
+      <figure class="cv-fig">
+        <div class="cover cvC" role="img" aria-label="المفهوم ج: غلاف ياقوتي ملكي بعنوان ذهبي مكبوس وإطار مزدوج">
+          <div class="fr1"></div><div class="fr2"></div>
+          <div class="t"><h4 class="foil"><span>صناعة</span><span>المتكلّم العربي</span></h4><div class="dv" aria-hidden="true"><i></i></div><p>من سلامة اللسان إلى حسن البيان</p></div>
+          <div class="ed"><small>الطبعة الرائدة</small><span>Premium Flagship Edition</span></div>
+        </div>
+        <figcaption><b>ج · الياقوت الملكي</b><span>للطبعة الرائدة المجلدة</span><small>كسوة فاخرة · عنوان مكبوس بارز بالذهب · لمسة قرمزية واحدة</small></figcaption>
+      </figure>
+
+      <figure class="cv-fig">
+        <div class="cover cvD" role="img" aria-label="المفهوم د: حقل ليلي يشقه خط ألف ذهبي عند قاعدته نقطة قرمزية">
+          <div class="alif" aria-hidden="true"></div>
+          <div class="t"><h4><span>صناعة</span><span>المتكلّم</span><span>العربي</span></h4><p>من سلامة اللسان<br>إلى حسن البيان</p></div>
+        </div>
+        <figcaption><b>د · النقطة والألف</b><span>شارة السلسلة والمنصات الرقمية</span><small>مقترح اللجنة: ألف ذهبي واحد، ونقطة قرمزية</small></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Rhythm -->
+  <section class="sec" id="rhythm" aria-labelledby="h-rh">
+    <p class="eyebrow">الباب ٢٨ · الإيقاع البصري</p>
+    <h2 id="h-rh">إيقاع الباب النموذجي</h2>
+    <div class="nrule" aria-hidden="true"></div>
+    <p class="lede">لا تُزيَّن الصفحات كلها بقدر واحد، فالفخامة في التنوع المضبوط. ولا تتوالى أكثر من صفحتين كثيفتين دون عنصر تنفّس.</p>
+    <ol class="rhythm">
+      <li><div class="rt rt-open"></div><span class="cap"><b>١</b>فاتحة</span></li>
+      <li><div class="rt rt-quiet"></div><span class="cap"><b>٢</b>السؤال والموقف</span></li>
+      <li><div class="rt rt-rich"></div><span class="cap"><b>٣</b>القاعدة والشرح</span></li>
+      <li><div class="rt rt-dia"></div><span class="cap"><b>٤</b>حوار</span></li>
+      <li><div class="rt rt-dia"></div><span class="cap"><b>٥</b>حوار</span></li>
+      <li><div class="rt rt-bank"></div><span class="cap"><b>٦</b>بنك أمثلة</span></li>
+      <li><div class="rt rt-breath"></div><span class="cap"><b>٧</b>صفحة تنفّس</span></li>
+      <li><div class="rt rt-ex"></div><span class="cap"><b>٨</b>تدريبات</span></li>
+      <li><div class="rt rt-sim"></div><span class="cap"><b>٩</b>محاكاة</span></li>
+      <li><div class="rt rt-mastery"></div><span class="cap"><b>١٠</b>الخلاصة والإتقان</span></li>
+    </ol>
+  </section>
+
+  <!-- Flagship test -->
+  <section class="sec" id="flagship" aria-labelledby="h-ft">
+    <p class="eyebrow">الباب ٢٨ · المراجعة الحادية عشرة</p>
+    <h2 id="h-ft">اختبار الريادة</h2>
+    <div class="nrule" aria-hidden="true"></div>
+    <div class="ft">
+      <div>
+        <h3>أسئلة المشروع</h3>
+        <ol>
+          <li>هل تبدو جديرة بالثقة على طاولة رئيس جامعة سعودية؟</li>
+          <li>هل تبدو جديرة بالثقة في مؤسسة أكاديمية دولية مرموقة؟</li>
+          <li>هل يعدّها أستاذ جامعي إصدارًا علميًا جادًا؟</li>
+          <li>هل يدرك الطالب فورًا أنها إصدار فاخر؟</li>
+          <li>هل يبدو التصميم مهندَسًا لا مزخرَفًا؟</li>
+          <li>هل لكل عنصر بصري وظيفة؟</li>
+        </ol>
+      </div>
+      <div>
+        <h3>أسئلة اللجنة الفنية</h3>
+        <ol start="7">
+          <li>هل اجتازت أزواج النص والخلفية مصفوفة التباين؟</li>
+          <li>هل التزمت الصفحة بميزانية اللون؟</li>
+          <li>هل استُعمل كل دور حرفي في موضعه؟</li>
+          <li>هل تحقق إيقاع التنفّس؟</li>
+        </ol>
+      </div>
+    </div>
+    <p class="verdict-line">فإن كان جواب أيٍّ منها «لا» أُعيد التصميم.</p>
+  </section>
+
+</main>
+
+<footer class="wrap foot">
+  <p>المرجع الحاكم: الدليل التحريري والعلمي، الجزء السادس (دليل الهوية البصرية والإخراج الفني)، في <span class="path">books/sinaat-al-mutakallim/bible/</span> · الإصدار ١٫٠ مسودة للاعتماد. هذه العيّنة لاتخاذ القرار، وليست التصميم النهائي؛ والخطوط المعروضة مفتوحة الترخيص للنماذج الأولية.</p>
+</footer>
+
+</div>
