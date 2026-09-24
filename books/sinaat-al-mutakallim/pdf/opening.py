@@ -30,7 +30,7 @@ BOOK = HERE.parent / "book"
 OUT = HERE.parent / "Volume-I_Opening.pdf"
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 ORD = ["", "الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس", "السابع", "الثامن", "التاسع", "العاشر",
-       "الحادي عشر", "الثاني عشر", "الثالث عشر"]
+       "الحادي عشر", "الثاني عشر", "الثالث عشر", "الرابع عشر"]
 
 CSS = r"""
 @page { size: 200mm 260mm; margin: 25mm 39mm 30mm 39mm;
@@ -49,12 +49,13 @@ body { direction: rtl; color: var(--ink); font: 400 13.2pt/1.85 "Scheherazade Ne
 .chap-band { position: absolute; top: 0; left: 0; right: 0; height: 92mm; background: var(--sapphire); color: #EFE7D6; }
 .chap-band .k { position: absolute; top: 36mm; right: 39mm; font: 300 11pt/1 "Changa"; color: var(--gold-l); display: flex; gap: 3mm; align-items: center; }
 .chap-band .k i { width: 10mm; border-top: .5pt solid var(--gold); display: inline-block; }
-.chap-band h2 { position: absolute; top: 46mm; right: 39mm; left: 39mm; margin: 0; font: 700 29pt/1.25 "Changa"; color: #F4ECD9; string-set: chap content(); }
+.chap-band h2 { position: absolute; top: 46mm; right: 39mm; left: 39mm; margin: 0; font: 700 29pt/1.25 "Changa"; color: #F4ECD9; string-set: chap content(); text-wrap: balance; }
+.chap-band .sub { position: absolute; top: 62mm; right: 39mm; left: 39mm; font: 300 12.5pt/1.5 "Changa"; color: var(--gold-l); }
 .chap-band .dot { position: absolute; bottom: -1.3mm; right: 39mm; width: 2.6mm; height: 2.6mm; border-radius: 50%%; background: var(--crimson); }
 .chap-open { position: relative; }
 p { margin: 0; text-align: justify; }
 p + p { text-indent: 6mm; }
-.chap-open > p:first-of-type { font-size: 14.4pt; line-height: 1.8; text-indent: 0; }
+.chap-open > p:first-child, .chap-open > .keep:first-child > p { font-size: 14.4pt; line-height: 1.8; text-indent: 0; }
 h3 { font: 700 15pt/1.45 "Changa"; color: var(--sapphire); margin: 7mm 0 2.4mm; break-after: avoid; }
 h3::after { content: ""; display: block; width: 12mm; border-top: .8pt solid var(--gold); margin-top: 1.6mm; }
 h3 + p { text-indent: 0; }
@@ -67,6 +68,15 @@ p.ayah .qref { display: block; margin-top: 1mm; }
 blockquote { margin: 4mm 0; padding: 0; break-inside: avoid; }
 blockquote.quote { border-right: 1.4pt solid var(--gold); padding: 1mm 5mm 1mm 0; }
 blockquote.quote p { font: 400 14pt/1.9 "Amiri"; color: var(--sapphire); text-indent: 0; }
+blockquote.lesson { background: var(--paper-2); border-top: .8pt solid var(--gold); padding: 3mm 5mm 3.4mm; margin: 5mm 0 5.5mm; }
+blockquote.lesson p { font: 400 12.4pt/1.75 "Scheherazade New"; color: var(--ink-2); text-indent: 0; text-align: justify; }
+blockquote.lesson p > strong:first-child { display: block; font: 600 10.4pt/1.5 "Changa"; color: var(--gold-ink); margin-bottom: .8mm; }
+blockquote.litany { margin: 6mm 0; padding: 4mm 0; border-top: .5pt solid var(--gold); border-bottom: .5pt solid var(--gold); text-align: center; }
+blockquote.litany .ln { font: 400 14.2pt/2 "Scheherazade New"; color: var(--sapphire); }
+blockquote.litany .ln:first-child { font-weight: 700; }
+blockquote.title-line { margin: 7mm 0 2mm; text-align: center; }
+blockquote.title-line p { font: 600 25pt/1.6 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--sapphire); text-align: center; text-indent: 0; }
+blockquote.title-line p strong { font-weight: 600; }
 blockquote.def p { font: 400 13.6pt/1.8 "Scheherazade New"; color: var(--sapphire); text-align: center; text-indent: 0; }
 .bayt { display: grid; grid-template-columns: 1fr 8mm 1fr; font: 400 14.2pt/2.05 "Amiri"; white-space: nowrap; }
 .bayt span:first-child { text-align: left; } .bayt span:last-child { text-align: right; }
@@ -75,6 +85,9 @@ ol, ul { margin: 1mm 0 2mm; padding: 0 6.5mm 0 0; }
 li { text-align: justify; margin: .4mm 0; }
 ul { list-style: none; } ul > li { position: relative; }
 ul > li::before { content: ""; position: absolute; right: -4.8mm; top: 3.9mm; width: 1.4mm; height: 1.4mm; transform: rotate(45deg); background: var(--gold); }
+.keep { break-inside: avoid; }
+.keep > h3 + p { text-indent: 0; }
+ul.cols { columns: 2; column-gap: 9mm; } ul.cols > li { break-inside: avoid; }
 .sig { margin: 9mm 0 0 0; text-align: left; break-inside: avoid; }
 .sig-name { display: block; font: 700 14pt "Changa"; color: var(--sapphire); }
 .sig-du { display: block; font: 400 11pt/1.6 "Amiri"; color: var(--gold-ink); margin-top: 1mm; }
@@ -102,9 +115,20 @@ sup.fn a { color: inherit; text-decoration: none; }
 .poster { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 30mm; }
 .poster .kick { font: 300 12pt/1 "Changa"; color: var(--gold-l); margin-bottom: 9mm; display: flex; gap: 3mm; align-items: center; }
 .poster .kick i { width: 12mm; border-top: .5pt solid var(--gold); }
-.poster .big { font: 700 60pt/1.2 "Changa"; color: var(--gold-l); }
+.poster .big { font: 700 60pt/1.2 "Changa"; color: var(--gold-l); text-wrap: balance; }
+.poster .big.mid { font-size: 36pt; line-height: 1.45; }
 .poster .big.kufam { font-family: "Kufam SMA"; font-feature-settings: "liga" 0; font-weight: 600; }
 .poster .line { font: 400 16pt/1.8 "Scheherazade New"; color: #E7DFCE; max-width: 120mm; margin-top: 9mm; }
+/* the measure page: four questions turned, on pearl within a double gold rule */
+.mz { position: absolute; top: 24mm; bottom: 24mm; right: 22mm; left: 22mm; border: .6pt solid var(--gold); padding: 3mm; }
+.mz-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; background: var(--paper-2); display: flex; flex-direction: column; justify-content: center; padding: 12mm 13mm; text-align: center; }
+.mz .kick { font: 300 12pt/1 "Changa"; color: var(--gold-ink); margin-bottom: 11mm; display: flex; gap: 3mm; align-items: center; justify-content: center; }
+.mz .kick i { width: 10mm; border-top: .5pt solid var(--gold); }
+.mz-pair { padding: 5.2mm 0; }
+.mz-pair + .mz-pair { border-top: .4pt solid #D9CBA6; }
+.mz .no { font: 300 13pt/1.5 "Changa"; color: var(--ink-3); }
+.mz .yes { font: 700 17.5pt/1.5 "Changa"; color: var(--sapphire); margin-top: 1.4mm; text-wrap: balance; }
+.mz .coda { font: 600 16pt/1.7 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--gold-ink); margin-top: 11mm; text-wrap: balance; }
 .toc-p { font: 400 12pt/1.9 "Scheherazade New"; }
 .toc-row { display: flex; gap: 3mm; align-items: baseline; border-bottom: .4pt dotted #CFC5B1; padding: 1.2mm 0; }
 .toc-row b { font: 600 10pt "Changa"; color: var(--gold-ink); min-width: 22mm; }
@@ -141,10 +165,34 @@ def md_to_html(md):
             for l in lines:
                 a, b = l.split(" ... ")
                 bq.append(BeautifulSoup(f'<div class="bayt"><span>{a}</span><span></span><span>{b}</span></div>', "html.parser"))
+        elif txt.startswith("ما علّم"):
+            bq["class"] = ["lesson"]
+        elif txt.startswith("رأيتُ"):
+            lines = [l.strip() for l in txt.split("\n") if l.strip()]
+            bq.clear()
+            bq["class"] = ["litany"]
+            for l in lines:
+                bq.append(BeautifulSoup(f'<div class="ln">{l}</div>', "html.parser"))
+        elif txt == "«صناعة المتكلّم العربي»":
+            bq["class"] = ["title-line"]
+            bq.find("p").string = txt.strip("«»")
         elif txt.startswith("«"):
             bq["class"] = ["quote"]
         else:
             bq["class"] = ["def"]
+    # a heading never ends a page: it travels with the paragraph or display that follows it
+    for h in soup.find_all("h3"):
+        nxt = h.find_next_sibling()
+        if nxt is not None and nxt.name in ("p", "blockquote"):
+            keep = soup.new_tag("div", attrs={"class": "keep"})
+            h.insert_before(keep)
+            keep.append(h.extract())
+            keep.append(nxt.extract())
+    # a run of short items (a list of acts, sounds, places) reads better in two columns
+    for ul in soup.find_all("ul"):
+        items = ul.find_all("li", recursive=False)
+        if len(items) >= 5 and all(len(li.get_text()) <= 32 and not li.find("ul") for li in items):
+            ul["class"] = ["cols"]
     for t in soup.find_all(string=re.compile(r"[A-Za-z]{3,}")):
         if t.parent.name not in ("style",) and not t.find_parent(class_="lat"):
             t.replace_with(BeautifulSoup(re.sub(r"([A-Za-z][^؀-ۿ]*[A-Za-z.)])", r'<span class="lat">\1</span>', str(t)), "html.parser"))
@@ -161,13 +209,15 @@ def chapter(md, kicker):
     title = m.group(1)
     title = re.sub(r"^الفصل [^:]+:\s*", "", title)
     body = md[m.end():]
+    sub = re.search(r"<!--\s*sub:\s*(.+?)\s*-->", body)
+    body = re.sub(r"<!--.*?-->", "", body, flags=re.S)
     html, notes = md_to_html(body)
-    return f'<section class="chap"><div class="chap-open">{html}{notes}</div></section>', band(kicker, title)
+    return f'<section class="chap"><div class="chap-open">{html}{notes}</div></section>', band(kicker, title, sub.group(1) if sub else "")
 
 
-def band(kicker, title):
+def band(kicker, title, sub=""):
     return (f'<section class="full"><div class="chap-band"><div class="k"><span>{kicker}</span><i></i></div>'
-            f'<h2>{title}</h2><div class="dot"></div></div></section>')
+            f'<h2>{title}</h2>{f"<div class=sub>{sub}</div>" if sub else ""}<div class="dot"></div></div></section>')
 
 
 def full(inner, cls=""):
@@ -178,9 +228,46 @@ def heritage(who, quote, src):
     return full(f'<div class="her"><div class="her-in"><div class="who">{who}</div><div class="qt">{quote}</div><div class="src">{src}</div></div></div>')
 
 
-def poster(kick, big, line, kufam=False):
-    return full(f'<div class="poster"><div class="kick"><span>{kick}</span><i></i></div><div class="big{" kufam" if kufam else ""}">{big}</div>'
+def poster(kick, big, line, kufam=False, mid=False):
+    return full(f'<div class="poster"><div class="kick"><span>{kick}</span><i></i></div><div class="big{" kufam" if kufam else ""}{" mid" if mid else ""}">{big}</div>'
                 f'<div class="line">{line}</div></div>', "dark")
+
+
+MEASURE = [("كم درستَ؟", "ماذا ملكتَ مما درست؟"),
+           ("هل تعرف القاعدة؟", "هل تجري على لسانك حين تحتاج إليها؟"),
+           ("هل تستطيع أن تكتب المعنى؟", "هل تستطيع أن تحمله إلى مخاطبك في وقته ومقامه؟"),
+           ("هل تحفظ الفصيح؟", "هل تعرف متى تستعمله، وكيف، وبأيّ قدر؟")]
+
+
+def measure_page():
+    pairs = "".join(f'<div class="mz-pair"><div class="no">ليس السؤال: {a}</div><div class="yes">بل: {b}</div></div>' for a, b in MEASURE)
+    return full(f'<div class="mz"><div class="mz-in"><div class="kick"><i></i><span>ميزان الملكة</span><i></i></div>{pairs}'
+                f'<div class="coda">فالعبرة ليست بكم تعلّم الإنسان، وإنما بكيف تملّك ما تعلّم</div></div></div>')
+
+
+FIXED_PAGES = {"ميزان الملكة": measure_page}
+CONT_CSS = ('html, body { background: transparent !important; } '
+            '@page :first { margin-top: 25mm; @top-right { content: "صناعة المتكلّم العربي"; } @top-left { content: "%s"; } }')
+
+
+def chapter_parts(md, kicker):
+    """A chapter may carry <!-- page: name --> markers: the flow stops there for a full page, then runs on.
+    The chapter's notes all close its last part."""
+    defs = re.findall(r"^\[\^\d+\]:.*$", md, re.M)
+    body = re.sub(r"^\[\^\d+\]:.*$", "", md, flags=re.M)
+    chunks = re.split(r"<!--\s*page:\s*(.+?)\s*-->", body)
+
+    last = len(chunks) - 1
+
+    def with_notes(t, i):
+        return t + "\n\n" + "\n".join(defs) if i == last else t
+
+    parts = [("flow", chapter(with_notes(chunks[0], 0), kicker))]
+    for k, (name, text) in enumerate(zip(chunks[1::2], chunks[2::2])):
+        parts.append(("fixed", FIXED_PAGES[name]()))
+        html, notes = md_to_html(with_notes(text, 2 * k + 2))
+        parts.append(("cont", f'<section class="chap-cont">{html}{notes}</section>'))
+    return parts
 
 
 def author_word():
@@ -242,13 +329,23 @@ def main():
         if f.name.startswith("05-"):
             pieces.append(("fixed", doc(css, heritage("سيبويه", "«فمنه مستقيمٌ حسن، ومُحال، ومستقيمٌ كذب، ومستقيمٌ قبيح، وما هو مُحالٌ كذب»",
                                                      "الكتاب، باب الاستقامة من الكلام والإحالة"), fixed)))
-        if f.name.startswith("07-"):
+        if f.name.startswith("08-"):
+            pieces.append(("fixed", doc(css, poster("السؤال الذي وُلد منه الكتاب", "كيف نصنع المتكلّم العربي؟",
+                                                    "لا: كيف نعلّم الطالب مزيدًا من العربية؛ بل: كيف نجعل العربية التي تعلّمها تظهر على لسانه حين يحتاج إليها، ثم يُحسن وضعها في موضعها.",
+                                                    kufam=True, mid=True), fixed)))
+        if f.name.startswith("09-"):
             pieces.append(("fixed", doc(css, poster("المقدمة", "فأين الخلل؟", "ليس في علم المتعلّم، ولا في عقله، ولا في دينه؛ بل في صناعةٍ لم تُعلَّم تعليمًا مقصودًا: أن يصير ما يعرفه كلامًا يُقال، لمن يُقال له، حين يُقال."), fixed)))
-        if f.name.startswith("11-"):
+        if f.name.startswith("12-"):
             pieces.append(("fixed", doc(css, heritage("من الصحيفة المنسوبة إلى بشر بن المعتمر",
                                                      "«فيجعل لكلّ طبقةٍ من ذلك كلامًا، ولكلّ حالةٍ من ذلك مقامًا»", "رواها الجاحظ في البيان والتبيين"), fixed)))
         title = re.sub(r"^الفصل [^:]+:\s*", "", re.search(r"^##\s+(.+)$", md, re.M).group(1))
-        pieces.append(("flow", flow(css, chapter(md, f"الفصل {ORD[n]}"), title)))
+        for kind, part in chapter_parts(md, f"الفصل {ORD[n]}"):
+            if kind == "flow":
+                pieces.append(("flow", flow(css, part, title)))
+            elif kind == "fixed":
+                pieces.append(("fixed", doc(css, part, fixed)))
+            else:
+                pieces.append(("cont", doc(css, part, CONT_CSS % title, title)))
     paper = B.render(doc(css, '<div style="width:200mm;height:260mm;background:var(--paper)"></div>', fixed), "opening-paper")
     w = PdfWriter()
     kinds = []
@@ -265,8 +362,12 @@ def main():
             continue
         r = PdfReader(str(B.render(html, f"opening-{i:02d}")))
         for pg in r.pages:
+            if kind == "cont":
+                under = PdfReader(str(paper)).pages[0]
+                under.merge_page(pg)
+                pg = under
             w.add_page(pg)
-            kinds.append(kind)
+            kinds.append("flow" if kind == "cont" else kind)
     # folios: count from the title page; the case wrap and full-bleed pages carry none
     nums, n = [], 0
     for k in kinds:
