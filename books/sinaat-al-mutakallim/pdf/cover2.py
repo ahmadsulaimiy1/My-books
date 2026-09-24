@@ -30,6 +30,7 @@ import lettering as L  # noqa: E402
 FONT_CSS_12 = [
     "https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;500;600;700&display=swap",
     "https://fonts.googleapis.com/css2?family=Kufam:wght@400;500;600;700;800&display=swap",
+    "https://fonts.googleapis.com/css2?family=Changa:wght@300;400;500;600;700&display=swap",
     "https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&display=swap",
     "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap",
     "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap",
@@ -60,7 +61,7 @@ KUFI_FEAT = {"kern": True, "calt": True, "liga": False}
 
 def fonts():
     import fontpatch
-    return fontpatch.apply(B.static_instances(B.ensure_fonts(FONT_CSS_12, "fonts12b")))
+    return fontpatch.apply(B.static_instances(B.ensure_fonts(FONT_CSS_12, "fonts12c")))
 
 
 def face(css, fam, w):

@@ -175,7 +175,11 @@ def md_inline(s):
 
 
 def essay():
-    md = (BOOK / "00-بين-يدي-الكتاب.md").read_text(encoding="utf-8")
+    # the short essay these prototypes were set from was replaced by the treatise in الافتتاحية/;
+    # read it from the commit that last carried it so the prototype set stays reproducible
+    import subprocess
+    md = subprocess.run(["git", "show", "e52c19a:books/sinaat-al-mutakallim/book/00-بين-يدي-الكتاب.md"],
+                        cwd=BOOK, capture_output=True, text=True, check=True).stdout
     secs = re.split(r"^## ", md, flags=re.M)[1:]
     out = {}
     for s in secs:
