@@ -3,11 +3,11 @@
 
 One object across front, spine and back:
 - deep sapphire soft-touch cloth;
-- the word «البيان» from the subtitle, in Qahiri at a huge size, blind-debossed tone on tone, running
+- the word «البيان» from the subtitle, in Kufam at a huge size, blind-debossed tone on tone, running
   from the back over the spine onto the front (the only ornament, and it is the book's own word);
 - one hairline of gold foil crossing the whole case at a single level, with one crimson nuqta;
-- the title as a composed logotype: «صناعة» in Qahiri as a crown over «المتكلّم العربي» in Markazi
-  Text SemiBold, drawn as outlines and spaced by hand, set flush to the spine side (asymmetric);
+- the title as a composed logotype in Kufam (the book's cut, fontpatch.py): «صناعة» over «المتكـلّم
+  العربي» with one hand-set kashida, drawn as outlines, standing on the gold line, flush to the spine side;
 - nothing else: no frame, no rhombi, no measure bands.
 
     python3 cover2.py            writes .cache/cover2/wrap-v1.pdf and front-v1.png
@@ -28,9 +28,9 @@ import cover_kit as K  # noqa: E402
 import lettering as L  # noqa: E402
 
 FONT_CSS_12 = [
+    "https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;500;600;700&display=swap",
+    "https://fonts.googleapis.com/css2?family=Kufam:wght@400;500;600;700;800&display=swap",
     "https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&display=swap",
-    "https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400;500;600;700&display=swap",
-    "https://fonts.googleapis.com/css2?family=Qahiri&display=swap",
     "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap",
     "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap",
     "https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&display=swap",
@@ -54,8 +54,13 @@ VOL_BLURB = {1: "يضع المجلد الأول الأساس: ما العربي�
              4: "يختم المجلد الرابع بالملكة نفسها: الارتجال، وبنك الأخطاء، والأداء الختامي."}
 
 
+KUFI = "Kufam SMA"
+KUFI_FEAT = {"kern": True, "calt": True, "liga": False}
+
+
 def fonts():
-    return B.static_instances(B.ensure_fonts(FONT_CSS_12, "fonts12"))
+    import fontpatch
+    return fontpatch.apply(B.static_instances(B.ensure_fonts(FONT_CSS_12, "fonts12b")))
 
 
 def face(css, fam, w):
@@ -65,50 +70,46 @@ def face(css, fam, w):
 # --------------------------------------------------------------------------- the logotype
 
 class Logotype:
-    """«صناعة» (Qahiri) over «المتكلّم العربي» (Markazi 600), flush right."""
+    """«صناعة» over «المتكـلّم العربي», both Kufam (the book's patched cut), flush right; one
+    hand-set kashida in المتكـلّم gives the line its architectural horizontal."""
 
-    def __init__(self, css, width=142.0, crown_ratio=0.40, gap=4.2):
-        mk, qh = face(css, "Markazi Text", 600), face(css, "Qahiri", 400)
-        p1, p2 = L.Line("المتكلّم", mk, 10.0), L.Line("العربي", mk, 10.0)
-        word_space = 10.0 * 0.22
-        s = width / (p1.width + word_space + p2.width) * 10.0
-        self.w1, self.w2 = L.Line("المتكلّم", mk, s), L.Line("العربي", mk, s)
-        self.space = s * 0.22
-        self.width = self.w1.width + self.space + self.w2.width
-        c = L.Line("صناعة", qh, 10.0)
-        self.crown = L.Line("صناعة", qh, width * crown_ratio / c.width * 10.0)
+    MAIN = "المتكـلّم العربي"
+
+    def __init__(self, css, width=150.0, crown_ratio=0.34, gap=3.2):
+        k6, k5 = face(css, KUFI, 600), face(css, KUFI, 500)
+        p = L.Line(self.MAIN, k6, 10.0, features=KUFI_FEAT)
+        s = width / p.width * 10.0
+        self.main = L.Line(self.MAIN, k6, s, features=KUFI_FEAT)
+        c = L.Line("صناعة", k5, 10.0, features=KUFI_FEAT)
+        self.crown = L.Line("صناعة", k5, width * crown_ratio / c.width * 10.0, features=KUFI_FEAT)
         self.gap = gap
+        self.width = self.main.width
         self.size = s
 
     def svg(self, x_right, top, shadow=True):
-        cb = self.crown.bounds
+        cb, mb = self.crown.bounds, self.main.bounds
         base_c = top - cb[1]
-        tb = (min(self.w1.bounds[1], self.w2.bounds[1]), max(self.w1.bounds[3], self.w2.bounds[3]))
-        base_t = base_c + cb[3] + self.gap - tb[0]
-        items = [(self.crown, x_right - self.crown.width, base_c),
-                 (self.w1, x_right - self.w1.width, base_t),
-                 (self.w2, x_right - self.w1.width - self.space - self.w2.width, base_t)]
+        base_m = base_c + cb[3] + self.gap - mb[1]
         out = []
-        for ln, x, b in items:
-            if shadow:   # the foil is stamped into the cloth: a crisp dark lip below and right
+        for ln, x, b in ((self.crown, x_right - self.crown.width, base_c), (self.main, x_right - self.main.width, base_m)):
+            if shadow:
                 out.append(L.svg_path(ln, x + 0.18, b + 0.24, fill="#020A1E", fill_opacity="0.6"))
             out.append(L.svg_path(ln, x, b, fill=GOLD))
             out.append(L.svg_path(ln, x - 0.05, b - 0.08, fill="#FFF4D8", fill_opacity="0.18"))
-        bottom = base_t + tb[1]
-        return "".join(out), bottom
+        return "".join(out), base_m + mb[3]
 
 
 # --------------------------------------------------------------------------- blind deboss: «البيان»
 
 def deboss_map(css, size_px, dpi, centre_x_mm, baseline_mm, height_mm):
-    """Height map of «البيان» in Qahiri, centred on the spine so the word runs from the back over the
+    """Height map of «البيان» in Kufam, centred on the spine so the word runs from the back over the
     spine onto the front, whole and legible, below the gold line."""
     w, h = size_px
     k = dpi / 25.4
-    font_path = face(css, "Qahiri", 400)
+    font_path = face(css, KUFI, 500)
     from fontTools.ttLib import TTFont
     import io
-    ttf = CACHE / "qahiri.ttf"
+    ttf = CACHE / "kufam-sma-500.ttf"
     if not ttf.exists():
         CACHE.mkdir(parents=True, exist_ok=True)
         f = TTFont(font_path)
@@ -140,16 +141,16 @@ def cloth_tex(css, name, wmm, hmm, dpi, deboss):
 
 TEXT_CSS = """
 .cv { position: absolute; color: %(pearl)s; direction: rtl; }
-.cv-sub { font-family: "Markazi Text"; font-weight: 400; font-size: 17pt; line-height: 1.3; }
+.cv-sub { font-family: "Scheherazade New"; font-weight: 400; font-size: 18pt; line-height: 1.3; }
 .cv-by { font-family: "IBM Plex Sans Arabic"; font-weight: 400; font-size: 7.6pt; color: #C9B27A; }
-.cv-author { font-family: "Markazi Text"; font-weight: 500; font-size: 15pt; line-height: 1.3; }
+.cv-author { font-family: "Scheherazade New"; font-weight: 600; font-size: 16pt; line-height: 1.3; }
 .cv-vol { font-family: "IBM Plex Sans Arabic"; font-weight: 400; font-size: 7.8pt; color: #C9B27A; }
-.cv-blurb { font-family: "Amiri"; font-size: 11.6pt; line-height: 1.95; text-align: justify; color: %(pearl)s; }
+.cv-blurb { font-family: "Scheherazade New"; font-size: 12.4pt; line-height: 1.8; text-align: justify; color: %(pearl)s; }
 .cv-blurb p { margin: 0 0 3.2mm; }
 .cv-steps { font-family: "IBM Plex Sans Arabic"; font-size: 8pt; color: #B7AE9C; display: flex; gap: 5mm; align-items: baseline; }
 .cv-steps b { font-weight: 500; color: #E9D7A6; }
-.cv-spine-part { font-family: "Markazi Text"; font-weight: 500; font-size: 12pt; color: %(pearl)s; text-align: center; }
-.cv-spine-author { font-family: "Markazi Text"; font-weight: 500; font-size: 11pt; color: %(pearl)s; white-space: nowrap;
+.cv-spine-part { font-family: "Kufam SMA"; font-feature-settings: "liga" 0; font-weight: 500; font-size: 11pt; color: %(pearl)s; text-align: center; }
+.cv-spine-author { font-family: "Scheherazade New"; font-weight: 600; font-size: 12pt; color: %(pearl)s; white-space: nowrap;
   position: absolute; transform: translate(-50%%, -50%%) rotate(-90deg); }
 """ % dict(pearl=PEARL)
 
@@ -159,15 +160,17 @@ def front(css, x0, y0, vol):
     logo = Logotype(css)
     xr = x0 + W - MARGIN
     svg, bottom = logo.svg(xr, y0 + 36.0)
+    shift = (y0 + LINE_Y - 7.0) - bottom      # the title stands on the gold line
+    svg = f'<g transform="translate(0 {shift:.2f})">{svg}</g>'
     ord_, part, num = VOLUMES[vol]
-    html = (f'<div class="cv cv-sub" style="right:{MARGIN + (BLEED if x0 else 0) + (0)}mm;top:{y0 + LINE_Y - 12.6:.2f}mm;'
+    html = (f'<div class="cv cv-sub" style="right:{MARGIN + (BLEED if x0 else 0) + (0)}mm;top:{y0 + LINE_Y + 3.2:.2f}mm;'
             f'right:auto;left:{x0 + MARGIN:.2f}mm;width:{W - 2 * MARGIN:.2f}mm;text-align:right">{SUBTITLE}</div>'
             f'<div class="cv cv-by" style="left:{x0 + MARGIN:.2f}mm;width:{W - 2 * MARGIN:.2f}mm;top:{y0 + 219:.2f}mm;text-align:right">تأليف</div>'
             f'<div class="cv cv-author" style="left:{x0 + MARGIN:.2f}mm;width:{W - 2 * MARGIN:.2f}mm;top:{y0 + 224:.2f}mm;text-align:right">{AUTHOR}</div>'
             f'<div class="cv cv-vol" style="left:{x0 + MARGIN:.2f}mm;top:{y0 + 219:.2f}mm">المجلد {ord_}</div>')
-    # volume word in Qahiri, gold, at the free (outer) corner, on the author's baseline
-    qh = face(css, "Qahiri", 400)
-    pv = L.Line(part, qh, 13.0)
+    # volume word in Kufam, gold, at the free (outer) corner, on the author's baseline
+    qh = face(css, KUFI, 500)
+    pv = L.Line(part, qh, 11.0, features=KUFI_FEAT)
     svg += L.svg_path(pv, x0 + MARGIN + 0.18, y0 + 236.2 + 0.24, fill="#020A1E", fill_opacity="0.6")
     svg += L.svg_path(pv, x0 + MARGIN, y0 + 236.2, fill=GOLD)
     return svg, html
@@ -176,22 +179,22 @@ def front(css, x0, y0, vol):
 def spine(css, x0, y0, sw, vol):
     ord_, part, num = VOLUMES[vol]
     cx = x0 + sw / 2
-    qh, mk = face(css, "Qahiri", 400), face(css, "Markazi Text", 600)
-    n = L.Line(num, mk, 17.0)
+    qh, mk = face(css, KUFI, 600), face(css, KUFI, 600)
+    n = L.Line(num, mk, 17.0, features=KUFI_FEAT)
     out = [L.svg_path(n, cx - n.width / 2 + 0.16, y0 + 36 + 0.22, fill="#020A1E", fill_opacity="0.6"),
            L.svg_path(n, cx - n.width / 2, y0 + 36, fill=GOLD)]
     # the title reads top to bottom: rotate the line so its tops face the front (left)
-    t = L.Line("صناعة المتكلّم العربي", mk, 10.0)
-    size = min(sw * 0.40, 104.0 / t.width * 10.0)
-    t = L.Line("صناعة المتكلّم العربي", mk, size)
-    ymid = y0 + LINE_Y + 10 + t.width / 2
+    t = L.Line("صناعة المتكلّم العربي", mk, 10.0, features=KUFI_FEAT)
+    size = min(sw * 0.40, 96.0 / t.width * 10.0)
+    t = L.Line("صناعة المتكلّم العربي", mk, size, features=KUFI_FEAT)
+    ymid = y0 + LINE_Y + 14 + t.width / 2
     b = t.bounds
     base_off = -(b[1] + b[3]) / 2            # centre the ink on the spine axis
     tr = f"translate({cx:.3f} {ymid:.3f}) rotate(-90) translate({-t.width / 2:.3f} {base_off:.3f})"
     out.append(f'<path transform="translate(0.2 0.18) {tr}" d="{t.d}" fill="#020A1E" fill-opacity="0.6"/>')
     out.append(f'<path transform="{tr}" d="{t.d}" fill="{GOLD}"/>')
     html = (f'<div class="cv cv-spine-part" style="left:{x0:.2f}mm;width:{sw:.2f}mm;top:{y0 + 42:.2f}mm">{part}</div>'
-            f'<div class="cv cv-spine-author" style="left:{cx:.2f}mm;top:{y0 + 236:.2f}mm">{AUTHOR}</div>')
+            f'<div class="cv cv-spine-author" style="left:{cx:.2f}mm;top:{y0 + 76:.2f}mm">{AUTHOR}</div>')
     return "".join(out), html
 
 
