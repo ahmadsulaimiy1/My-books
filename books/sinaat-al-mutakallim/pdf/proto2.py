@@ -206,7 +206,7 @@ def title_page(css):
 
 def verse_page():
     return page('''<div class="verse">
-<div class="q">﴿الرَّحْمَٰنُ ۝١ عَلَّمَ الْقُرْآنَ ۝٢<br>خَلَقَ الْإِنسَانَ ۝٣ عَلَّمَهُ الْبَيَانَ ۝٤﴾</div>
+<div class="q">﴿ٱلرَّحْمَٰنُ ۝١ عَلَّمَ ٱلْقُرْءَانَ ۝٢<br>خَلَقَ ٱلْإِنسَٰنَ ۝٣ عَلَّمَهُ ٱلْبَيَانَ ۝٤﴾</div>
 <div class="rule"></div><div class="qref" style="font-size:9pt">سورة الرحمن: ١–٤</div></div>''')
 
 

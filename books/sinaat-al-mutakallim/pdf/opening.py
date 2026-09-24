@@ -305,9 +305,13 @@ FIXED_CSS = "@page { size: %(w)smm %(h)smm; margin: 0; } html, body { margin: 0;
 
 
 def doc(css, body, page_css, head=""):
+    # the running heads live in page-margin boxes, which do not make Chromium load a web font on their own:
+    # an invisible line in the same face does, so the heads never fall back to a system font
+    preload = (f'<div aria-hidden="true" style="position:absolute;visibility:hidden;font:400 7.4pt \'IBM Plex Sans Arabic\'">'
+               f'صناعة المتكلّم العربي {head}</div>')
     return (f'<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>صناعة المتكلّم العربي</title>'
             f'<style>{css}</style><style>{CSS % dict(wrapw=0, wraph=0, head=head)}{C2.TEXT_CSS}{extra_css()}</style>'
-            f'<style>{page_css}</style></head><body>{body}</body></html>')
+            f'<style>{page_css}</style></head><body>{preload}{body}</body></html>')
 
 
 def flow(css, piece, head):
@@ -397,7 +401,21 @@ def main():
             pg.merge_page(fr.pages[i])
     w.add_metadata({"/Title": "صناعة المتكلّم العربي — المجلد الأول: الافتتاحية", "/Author": "أحمد بن إبراهيم السليمي"})
     w.write(str(OUT))
+    guard_fonts(OUT)
     print(OUT, len(w.pages), "pages")
+
+
+def guard_fonts(pdf):
+    """Stop if any glyph fell back to a system font: every face in the book is one we chose."""
+    from pypdf import PdfReader
+    bad = set()
+    for pg in PdfReader(str(pdf)).pages:
+        for f in ((pg.get("/Resources") or {}).get("/Font") or {}).values():
+            name = str(f.get_object().get("/BaseFont"))
+            if any(x in name for x in ("DejaVu", "Liberation", "FreeSerif", "FreeSans", "Noto")):
+                bad.add(name.split("+")[-1])
+    if bad:
+        raise SystemExit(f"system fonts in the PDF: {sorted(bad)}")
 
 
 def extra_css():
