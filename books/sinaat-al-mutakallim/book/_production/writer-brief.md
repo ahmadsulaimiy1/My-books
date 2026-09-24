@@ -111,3 +111,10 @@ File `00-فاتحة-الباب-<ordinal>.md`, following the Bab 1 opener: `# ا�
 - **Pedagogical:** objectives measurable; all anatomy parts present; progression; 11 exercise types.
 - **Editorial:** conventions of §5; terminology of §3; banned phrases absent; no «·» beside digits; minimum counts met.
 Fix problems in the files. Then write a short report `book/_production/qa/<your-agent-id>.md` (English or Arabic): files written, approximate word count per file, verification tags used, anything you were unsure about. Your final message to the orchestrator: list of files + word counts + open issues (brief).
+
+## 10. Round two (supersedes lengths above)
+
+- Standard chapter: 4,500–6,000 Arabic words. Pivotal chapter: 6,500–8,500 words. Minimums: ≥ 2 graded comparisons, ≥ 15 coded examples, 1 extended dialogue (≥ 14 lines) with analysis + full improved version + «ماذا تغيّر؟», scenario bank ≥ 8, all 11 exercise types with ≥ 3 items, assessment block, summary, mastery, trainer notes.
+- Some chapters already have partial files (e.g. `ف03-أ-…md`). Read them first; NEVER rewrite or delete existing files; add the missing continuation as the next file(s) (`ف03-ب-…md`, `ف03-ج-…md`) starting with `# الفصل الثالث: <same title> (تابع)`, continuing the example numbering, so that the chapter ends with the full anatomy. A chapter counts as complete only when it contains `### الخلاصة` and `### معيار الإتقان`.
+- Chapter titles and scope: `02-خريطة-الكتاب.md` (the map; «القسم» there = «الباب» here).
+- Write each file in one Write call of moderate size (≤ ~4,000 words per file) to avoid losing work.
