@@ -161,7 +161,7 @@ def scripture_index():
     from quran import chapters as qch, name_key  # the sura numbers, for the order of the mushaf
     q = json.loads((OUT / "مطابقة-القرآن.json").read_text(encoding="utf-8"))
     names = qch()
-    CH = {"02": "ف١", "03": "ف٢", "04": "ف٣", "05": "ف٤", "06": "ف٥", "07": "ف٦", "08": "ف٧", "09": "ف٨", "10": "ف٩"}
+    CH = {f"{k:02d}": "ف" + str(k - 1).translate(AR) for k in range(2, 30)}
     verses = []
     for r in q:
         sura, v = r["ref"].split(":")

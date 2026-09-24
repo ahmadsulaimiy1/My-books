@@ -30,7 +30,8 @@ BOOK = HERE.parent / "book"
 OUT = HERE.parent / "Volume-I_Opening.pdf"
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 ORD = ["", "الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس", "السابع", "الثامن", "التاسع", "العاشر",
-       "الحادي عشر", "الثاني عشر", "الثالث عشر", "الرابع عشر"]
+       "الحادي عشر", "الثاني عشر", "الثالث عشر", "الرابع عشر", "الخامس عشر", "السادس عشر", "السابع عشر",
+       "الثامن عشر", "التاسع عشر", "العشرون"]
 
 CSS = r"""
 @page { size: 200mm 260mm; margin: 25mm 39mm 30mm 39mm;
@@ -149,6 +150,25 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .mz .no { font: 300 13pt/1.5 "Changa"; color: var(--ink-3); }
 .mz .yes { font: 700 17.5pt/1.5 "Changa"; color: var(--sapphire); margin-top: 1.4mm; text-wrap: balance; }
 .mz .coda { font: 600 16pt/1.7 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--gold-ink); margin-top: 11mm; text-wrap: balance; }
+/* the map of formation: a chain of growing rings on pearl, within the double gold rule of the measure page */
+.mp { position: absolute; top: 18mm; bottom: 18mm; right: 16mm; left: 16mm; border: .6pt solid var(--gold); padding: 3mm; }
+.mp-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; background: var(--paper-2); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 8mm 0; }
+.mp .kick { font: 600 13pt/1 "Changa"; color: var(--sapphire); margin-bottom: 6mm; display: flex; gap: 3mm; align-items: center; }
+.mp .kick i { width: 10mm; border-top: .5pt solid var(--gold); }
+.mp-draw { position: relative; width: 160mm; }
+.mp-svg { position: absolute; top: 0; left: 0; width: 160mm; }
+.mp-n { position: absolute; transform: translate(-50%%, -52%%); font: 600 10.5pt/1 "Changa"; color: var(--gold-ink); }
+.mp-l { position: absolute; transform: translateY(-50%%); font: 500 12.4pt/1.2 "Changa"; color: var(--sapphire); white-space: nowrap; }
+.mp-right { text-align: right; } .mp-left { text-align: left; }
+.mp-band { position: absolute; right: 0; width: 7mm; border-right: .5pt solid var(--gold); }
+.mp-band span { position: absolute; top: 50%%; right: 1.6mm; transform: translateY(-50%%); writing-mode: vertical-rl; font: 400 9.4pt "Changa"; color: var(--gold-ink); letter-spacing: .3pt; }
+.mp-band.b2 { border-right-color: var(--sapphire-2); }
+.mp-note { font: 300 10.4pt/1.6 "Changa"; color: var(--ink-3); margin-top: 6mm; }
+.mp-coda { font: 600 14pt/1.6 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--gold-ink); margin-top: 3mm; }
+.vp { align-items: center; text-align: center; } .vp .kick { justify-content: center; }
+.vp-a { font: 400 30pt/2 "Amiri Quran"; color: var(--gold-l); text-wrap: balance; }
+.vp-r { font: 300 11pt/1.4 "Changa"; color: #E7DFCE; margin-top: 7mm; }
+.arw { display: inline-block; width: 1.05em; height: .66em; vertical-align: .05em; margin: 0 1.4mm; color: var(--gold-ink); }
 .toc-p { font: 400 12pt/1.9 "Scheherazade New"; }
 .toc-row { display: flex; gap: 3mm; align-items: baseline; border-bottom: .4pt dotted #CFC5B1; padding: 1.2mm 0; }
 .toc-row b { font: 600 10pt "Changa"; color: var(--gold-ink); min-width: 22mm; }
@@ -184,6 +204,10 @@ def note_kind(text):
     if text.startswith(("أخرجه", "رواه", "متفق")):
         return "takhrij"
     return "tawthiq"
+
+
+ARROW = ('<svg class="arw" viewBox="0 0 16 10" aria-hidden="true"><path d="M15 5 H2.2 M6 1.4 L2 5 L6 8.6" fill="none" '
+         'stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>')
 
 
 def latinize(soup):
@@ -258,7 +282,9 @@ def md_to_html(md):
         if len(items) >= 5 and all(len(li.get_text()) <= 32 and not li.find("ul") for li in items):
             ul["class"] = ["cols"]
     latinize(soup)
-    html = re.sub(r"⟦(\d+)⟧", lambda m: note_span(m.group(1), notes[m.group(1)]), str(soup))
+    # «←» is in none of the book's faces: it is drawn, so no system font enters the page
+    html = str(soup).replace("←", ARROW)
+    html = re.sub(r"⟦(\d+)⟧", lambda m: note_span(m.group(1), notes[m.group(1)]), html)
     missing = set(notes) - set(re.findall(r'class="fn-note fn-n(\d+) ', html))
     if missing:
         raise SystemExit(f"notes defined but never called: {sorted(missing, key=int)}")
@@ -279,6 +305,12 @@ def chapter(md, kicker):
 def band(kicker, title, sub=""):
     return (f'<section class="full"><div class="chap-band"><div class="k"><span>{kicker}</span><i></i></div>'
             f'<h2>{title}</h2>{f"<div class=sub>{sub}</div>" if sub else ""}<div class="dot"></div></div></section>')
+
+
+def verse_poster(kick, ayah, ref):
+    """A sapphire page that carries one verse in the mushaf face (never Changa or Kufam), with its reference."""
+    return full(f'<div class="poster vp"><div class="kick"><span>{kick}</span><i></i></div><div class="vp-a">﴿{ayah}﴾</div>'
+                f'<div class="vp-r">{ref}</div></div>', "dark")
 
 
 def full(inner, cls=""):
@@ -306,7 +338,37 @@ def measure_page():
                 f'<div class="coda">فالعبرة ليست بكم تعلّم الإنسان، وإنما بكيف تملّك ما تعلّم</div></div></div>')
 
 
-FIXED_PAGES = {"ميزان الملكة": measure_page}
+STATIONS = ["القراءة والنطق", "المفردات والاستعمال", "النحو", "الصرف", "البلاغة", "الأدب والنصوص", "فقه اللغة والدلالة",
+            "التطبيق والقراءة الموسّعة", "الكتابة", "المحادثة والخطاب", "القدرة على الفهم والتحليل", "التخصّص العلمي"]
+
+
+def map_page():
+    """خريطة التكوين العربي لطالب العلم: twelve stations as a chain of rings, each overlapping the next and a little
+    larger than it, because the stations are not separate stages in time but circles that overlap and grow together."""
+    cx, w = 80.0, 160.0   # mm: ring axis and drawing width
+    rings, labels, y, split = [], [], 2.0, 0.0
+    rs = [5.2 + i * 0.7 for i in range(len(STATIONS))]
+    for i, (name, r) in enumerate(zip(STATIONS, rs)):
+        y += r
+        fill = "rgba(201,169,92,.16)" if i < 7 else "rgba(12,39,102,.07)"
+        rings.append(f'<circle cx="{cx}" cy="{y:.2f}" r="{r:.2f}" fill="{fill}" stroke="#0C2766" stroke-width=".32"/>')
+        labels.append(f'<div class="mp-n" style="top:{y:.2f}mm;left:{cx}mm">{str(i + 1).translate(AR)}</div>')
+        pos = f"left:{cx + r + 4:.2f}mm" if i % 2 == 0 else f"right:{w - cx + r + 4:.2f}mm"
+        labels.append(f'<div class="mp-l" style="top:{y:.2f}mm;{pos}">{name}</div>')
+        if i == 6:
+            split = y + r * 0.2
+        y += r * 0.42   # the next ring overlaps this one
+    h = y + rs[-1] * 0.6 + 2
+    svg = f'<svg class="mp-svg" viewBox="0 0 {w:.0f} {h:.1f}" style="height:{h:.1f}mm">{"".join(rings)}</svg>'
+    bands = (f'<div class="mp-band" style="top:0;height:{split:.1f}mm"><span>علوم الآلة</span></div>'
+             f'<div class="mp-band b2" style="top:{split + 1.5:.1f}mm;height:{h - split - 1.5:.1f}mm"><span>من المعرفة إلى الملكة</span></div>')
+    return full(f'<div class="mp"><div class="mp-in"><div class="kick"><i></i><span>خريطة التكوين العربي لطالب العلم</span><i></i></div>'
+                f'<div class="mp-draw" style="height:{h:.1f}mm">{bands}{svg}{"".join(labels)}</div>'
+                f'<div class="mp-note">ليست هذه مراحل زمنية منفصلة، بل دوائر تتداخل وتتنامى معًا</div>'
+                f'<div class="mp-coda">هذه من أهمّ آلات التكوين، وليست التكوين كله</div></div></div>')
+
+
+FIXED_PAGES = {"ميزان الملكة": measure_page, "خريطة التكوين": map_page}
 CONT_CSS = ('html, body { background: transparent !important; } '
             '@page :first { margin-top: 25mm; @top-right { content: "صناعة المتكلّم العربي"; } @top-left { content: "%s"; } }')
 
@@ -405,13 +467,15 @@ def main():
         if f.name.startswith("05-"):
             pieces.append(("fixed", doc(css, heritage("سيبويه", "«فمنه مستقيمٌ حسن، ومُحال، ومستقيمٌ كذب، ومستقيمٌ قبيح، وما هو مُحالٌ كذب»",
                                                      "الكتاب، باب الاستقامة من الكلام والإحالة"), fixed)))
-        if f.name.startswith("08-"):
+        if f.name.startswith("07-"):
+            pieces.append(("fixed", doc(css, verse_poster("العربية والوحي", "إِنَّا نَحْنُ نَزَّلْنَا ٱلذِّكْرَ وَإِنَّا لَهُۥ لَحَٰفِظُونَ", "(الحجر: ٩)"), fixed)))
+        if f.name.startswith("10-"):
             pieces.append(("fixed", doc(css, poster("السؤال الذي وُلد منه الكتاب", "كيف نصنع المتكلّم العربي؟",
                                                     "لا: كيف نعلّم الطالب مزيدًا من العربية؛ بل: كيف نجعل العربية التي تعلّمها تظهر على لسانه حين يحتاج إليها، ثم يُحسن وضعها في موضعها.",
                                                     kufam=True, mid=True), fixed)))
-        if f.name.startswith("09-"):
+        if f.name.startswith("11-"):
             pieces.append(("fixed", doc(css, poster("المقدمة", "فأين الخلل؟", "ليس في علم المتعلّم، ولا في عقله، ولا في دينه؛ بل في صناعةٍ لم تُعلَّم تعليمًا مقصودًا: أن يصير ما يعرفه كلامًا يُقال، لمن يُقال له، حين يُقال."), fixed)))
-        if f.name.startswith("12-"):
+        if f.name.startswith("14-"):
             pieces.append(("fixed", doc(css, heritage("من الصحيفة المنسوبة إلى بشر بن المعتمر",
                                                      "«فيجعل لكلّ طبقةٍ من ذلك كلامًا، ولكلّ حالةٍ من ذلك مقامًا»", "رواها الجاحظ في البيان والتبيين"), fixed)))
         title = re.sub(r"^الفصل [^:]+:\s*", "", re.search(r"^##\s+(.+)$", md, re.M).group(1))
@@ -430,14 +494,14 @@ def main():
             body, bandhtml = html
             r = PdfReader(str(B.render(body, f"opening-{i:02d}")))
             band = B.render(bandhtml, f"opening-{i:02d}-band")
-            for j, pg in enumerate(r.pages):
+            for j, pg in enumerate(r.pages[:body_pages(r)]):
                 under = PdfReader(str(band if j == 0 else paper)).pages[0]
                 under.merge_page(pg)
                 w.add_page(under)
                 kinds.append(kind)
             continue
         r = PdfReader(str(B.render(html, f"opening-{i:02d}")))
-        for pg in r.pages:
+        for pg in (r.pages[:body_pages(r)] if kind == "cont" else r.pages):
             if kind == "cont":
                 under = PdfReader(str(paper)).pages[0]
                 under.merge_page(pg)
@@ -460,6 +524,14 @@ def main():
     w.write(str(OUT))
     guard_fonts(OUT)
     print(OUT, len(w.pages), "pages")
+
+
+def body_pages(reader):
+    """Paged.js may close a flow with a page that holds nothing but the running heads: it is not a page of the book."""
+    n = len(reader.pages)
+    while n > 1 and len("".join((reader.pages[n - 1].extract_text() or "").split())) < 60:
+        n -= 1
+    return n
 
 
 def guard_fonts(pdf):
