@@ -15,7 +15,7 @@
 
 | المرحلة | الملف | الحالة |
 |---|---|---|
-| **الدليل التحريري والعلمي (Editorial & Scholarly Bible) ١٫٠** | [bible/00-الفهرس-والقرارات-المعلقة.md](./bible/00-الفهرس-والقرارات-المعلقة.md) | **معتمد** (القرارات العشرون بتوصيات اللجنة) |
+| **الدليل التحريري والعلمي (Editorial & Scholarly Bible) ١٫١** | [bible/00-الفهرس-والقرارات-المعلقة.md](./bible/00-الفهرس-والقرارات-المعلقة.md) | **معتمد** (القرارات العشرون بتوصيات اللجنة) |
 | **الدليل في ملف PDF رسمي — Edition 1.1 — PDF Master** | [Editorial-Scholarly-Bible_Edition-1.1_PDF-Master.pdf](./Editorial-Scholarly-Bible_Edition-1.1_PDF-Master.pdf) | للمشاركة والطباعة |
 | **دليل الهوية البصرية والإخراج الفني (الجزء السادس من الدليل)** | [bible/06-الهوية-البصرية-والإخراج-الفني.md](./bible/06-الهوية-البصرية-والإخراج-الفني.md) | **معتمد** |
 | العيّنة البصرية التطبيقية | [bible/visual-specimen.html](./bible/visual-specimen.html) · [النسخة المعروضة](https://claude.ai/artifact/KSz42ssv5JyNAW1fCcQvT4) | عيّنة للاعتماد، لا تصميم نهائي |
@@ -25,8 +25,10 @@
 | المستويات ومخرجات التعلم | [03-المستويات-والمخرجات.md](./03-المستويات-والمخرجات.md) | مسودة |
 | نظام التقييم | [04-نظام-التقييم.md](./04-نظام-التقييم.md) | مسودة |
 | **التكليف الرسمي بالتأليف** | [book/00-التكليف-الرسمي.md](./book/00-التكليف-الرسمي.md) | مرجع ملزم للتأليف بعد الدليل |
-| **الكتاب: الجزء الأول (التأسيس)** | [book/](./book/README.md) | **قيد التأليف**: الواجهة، والمقدمة، وفاتحة الجزء، وفاتحة الباب الأول، والفصل الأول كاملًا (مسودة التأليف ١) |
-
+| **الكتاب كاملًا في ملف PDF واحد (طبعة المراجعة)** | [Sinaat-al-Mutakallim-al-Arabi_Complete-Book.pdf](./Sinaat-al-Mutakallim-al-Arabi_Complete-Book.pdf) | الأجزاء الأربعة، والأبواب الأربعة عشر (٩٥ فصلًا)، والملاحق السبعة، والمسرد والمراجع وتقرير ضبط الجودة |
+| **أغلفة الطبعة الورقية (أربعة مجلدات، غلاف كامل بالكعب)** | [Sinaat-al-Mutakallim-al-Arabi_Cover-Wraps.pdf](./Sinaat-al-Mutakallim-al-Arabi_Cover-Wraps.pdf) | عرض الكعب محسوب من عدد صفحات كل مجلد |
+| نموذج عرض المجلدات | [Sinaat-al-Mutakallim-al-Arabi_Mockup.png](./Sinaat-al-Mutakallim-al-Arabi_Mockup.png) | للعرض فقط |
+| مخطوط الكتاب (Markdown) | [book/](./book/README.md) | مكتمل التأليف، وعليه وسوم تحقق للجنة المراجعة |
 ## قواعد ثابتة للمشروع
 
 1. **لا اقتباس بلا مصدر، ولا مصدر مخترع.** ما لم يُتحقق من رقم صفحته يوسم بعبارة: «يحتاج إلى تحقق من المصدر».
@@ -52,6 +54,16 @@
 python3 books/sinaat-al-mutakallim/pdf/build.py            # توليد الملف
 python3 books/sinaat-al-mutakallim/pdf/build.py --review   # مع صفحات مصغّرة وتقرير للمراجعة الصفحية
 ```
+
+والكتاب نفسه:
+
+```bash
+python3 books/sinaat-al-mutakallim/pdf/qa_report.py    # تقرير ضبط الجودة من ملفات المخطوط
+python3 books/sinaat-al-mutakallim/pdf/book_build.py   # الكتاب كاملًا في ملف واحد (مروران لترقيم الفهرس)
+python3 books/sinaat-al-mutakallim/pdf/release.py      # أغلفة المجلدات الأربعة ونموذج العرض
+```
+
+وتحتاج الأغلفة فوق ذلك إلى `numpy` و`uharfbuzz`.
 
 المتطلبات: Python 3.9 فأحدث مع `markdown` و`beautifulsoup4` و`pypdf` و`fonttools` و`brotli` (ومعها `pypdfium2` و`Pillow` للمراجعة)، وNode.js مع `playwright` ومتصفح Chromium. وتُنزَّل الخطوط (بترخيص SIL OFL) مرة واحدة إلى `pdf/.cache/`.
 ويتوقف التوليد إذا جاورت نقطةٌ وسطى رقمًا مشرقيًا، أو دخل الملفَّ خطٌّ غير معتمد، أو تغيّر ترقيم الصفحات بين مرحلتي الإخراج.
