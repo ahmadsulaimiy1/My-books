@@ -85,7 +85,7 @@ def cover(date_line):
     <p class="s">الوثيقة التأسيسية الحاكمة لكتب المنظومة وبرامجها وموادها</p>
   </div>
   <div class="cv-ed">
-    <span>الإصدار ١٫١<i class="sep" aria-hidden="true"></i><span class="en">Edition 1.1 · PDF Master</span></span>
+    <span>الإصدار ١٫٢<i class="sep" aria-hidden="true"></i><span class="en">Edition 1.2 · PDF Master</span></span>
     <span class="d">{date_line}</span>
   </div>
 </section>'''
@@ -107,7 +107,7 @@ def title_page(date_line, n_decisions):
     <div class="tp-desc">الوثيقة التأسيسية الحاكمة لكتب المنظومة وبرامجها وموادها</div>
     <div class="tp-rule"><i></i></div>
     <div class="tp-meta">
-      <div><small>الإصدار</small><b>١٫١ <span class="en">(Edition 1.1)</span></b></div>
+      <div><small>الإصدار</small><b>١٫٢ <span class="en">(Edition 1.2)</span></b></div>
       <div><small>النسخة</small><b><span class="en">PDF Master</span> · للطباعة والشاشة</b></div>
       <div><small>تاريخ الإصدار</small><b>{date_line}</b></div>
     </div>
@@ -127,7 +127,7 @@ def back_cover():
     <p class="s">من سلامة اللسان إلى حسن البيان</p>
   </div>
   <p class="bk-q">«كلما قرأ الطالب قاعدة وجد مثالًا، وكلما رأى مثالًا وجد تحليلًا، وكلما فهم التحليل وجد تدريبًا، وكلما تدرب وجد موقفًا واقعيًا — حتى يصير الكلام العربي الفصيح عنده ملكةً لا محفوظات.»</p>
-  <div class="bk-f">الدليل التحريري والعلمي · الإصدار ١٫١<span class="en">Editorial &amp; Scholarly Bible — Edition 1.1 — PDF Master</span></div>
+  <div class="bk-f">الدليل التحريري والعلمي · الإصدار ١٫٢<span class="en">Editorial &amp; Scholarly Bible — Edition 1.2 — PDF Master</span></div>
 </section>'''
 
 
@@ -147,7 +147,7 @@ def opener(anchor, kicker, kicker_en, numeral, title, lede, items, alt=False, ou
   <h1 class="op-title"{data}>{title}</h1>
   <p class="op-lede">{lede}</p>
   <div class="op-list"><p class="h">في هذا الجزء</p><ol>{lis}</ol></div>
-  <div class="op-foot"><span>صناعة المتكلّم العربي · الدليل التحريري والعلمي</span><span>الإصدار ١٫١</span></div>
+  <div class="op-foot"><span>صناعة المتكلّم العربي · الدليل التحريري والعلمي</span><span>الإصدار ١٫٢</span></div>
 </section>'''
 
 
