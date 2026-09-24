@@ -84,7 +84,6 @@ blockquote.def p { font: 400 13.6pt/1.8 "Scheherazade New"; color: var(--sapphir
 .bayt { display: grid; grid-template-columns: 47mm 10mm 47mm; justify-content: center; font: 400 14.4pt/2.1 "Amiri"; color: var(--ink); }
 .bayt span { text-align: justify; text-align-last: justify; white-space: nowrap; }
 blockquote.poem { background: var(--paper-2); padding: 4.5mm 0; margin: 6mm 0; border-top: .5pt solid var(--gold); border-bottom: .5pt solid var(--gold); }
-blockquote.poem sup.fn { position: absolute; }
 ol, ul { margin: 1mm 0 2mm; padding: 0 6.5mm 0 0; }
 li { text-align: justify; margin: .4mm 0; }
 ul { list-style: none; } ul > li { position: relative; }
@@ -101,14 +100,31 @@ th { font: 600 9.2pt/1.4 "Changa"; text-align: right; color: #F3ECDC; background
 td { border-bottom: .4pt solid #D8D0C0; padding: 1.4mm 2mm; vertical-align: top; color: var(--ink-2); }
 tr:nth-child(even) td { background: #F6F1E6; }
 td:first-child { font-weight: 600; color: var(--ink); }
-sup.fn { font: 600 7pt/0 "IBM Plex Sans Arabic"; color: var(--gold-ink); vertical-align: super; margin: 0 .3mm; }
-sup.fn a { color: inherit; text-decoration: none; }
-.notes { margin-top: 9mm; break-inside: auto; }
-.notes h4 { font: 300 11pt/1 "Changa"; color: var(--gold-ink); margin: 0 0 2mm; display: flex; gap: 3mm; align-items: center; }
-.notes h4::after { content: ""; flex: 1; border-top: .5pt solid var(--gold); }
-.notes ol { padding-right: 6mm; }
-.notes li { font: 400 9.6pt/1.55 "Scheherazade New"; color: var(--ink-2); }  /* Bible, ch. 45 */
-.notes li::marker { font: 500 8pt "IBM Plex Sans Arabic"; color: var(--gold-ink); }
+/* notes at the foot of the page where they are called (Bible, chs. 45 and 82): a short gold rule from the
+   right, then the notes in a smaller Scheherazade, each hanging on its chapter number */
+.fn-note { float: footnote; footnote-policy: line; }
+.pagedjs_page_content, .pagedjs_footnote_inner_content { direction: ltr; }
+/* Paged.js builds the margin boxes as a grid that follows the writing direction: kept LTR, so @top-right stays right */
+.pagedjs_margin-top, .pagedjs_margin-bottom { direction: ltr; }
+.pagedjs_margin-content { direction: rtl; }
+.pagedjs_page_content > div, .fn-note { direction: rtl; }
+.pagedjs_footnote_content { margin-top: 4mm; padding-top: 2.8mm; position: relative; }
+.pagedjs_footnote_content::before { content: ""; position: absolute; top: .8mm; right: 0; width: 22mm; border-top: .5pt solid var(--gold); }
+.pagedjs_footnote_content::after { content: ""; position: absolute; top: .1mm; right: 21.3mm; width: 1.4mm; height: 1.4mm;
+  background: var(--gold); transform: rotate(45deg); }
+.fn-note[data-footnote-marker] { display: block; position: relative; padding-right: 5.2mm; margin-bottom: 1mm;
+  font: 400 9.6pt/1.55 "Scheherazade New"; color: var(--ink-2); text-align: justify; text-indent: 0; letter-spacing: 0; }
+.fn-note[data-footnote-marker]::before { content: attr(data-n); position: absolute; right: 0; top: 0;
+  font: 500 8pt/1.95 "Changa"; color: var(--sapphire); }
+.fn-tag { font: 300 8pt "Changa"; color: var(--gold-ink); margin-left: .8mm; }
+.fn-note[data-split-from]::before { content: none; }
+.fn-note .q { font-size: 10.4pt; line-height: 1.5; }
+.fn-note .qref { font-size: 7pt; }
+.fn-note i, .fn-note em { font-style: normal; color: var(--sapphire); }
+.fn-note .lat em { font-style: italic; color: inherit; }
+.fn-note[data-footnote-call]::after { vertical-align: super; font: 600 7pt/0 "Changa"; font-variant-position: normal;
+  color: var(--gold-ink); margin: 0 .35mm; }
+%(calls)s
 .lat { direction: ltr; unicode-bidi: isolate; font-family: "Source Serif 4"; font-size: .86em; }
 /* heritage and poster interludes */
 .her { position: absolute; top: 40mm; bottom: 40mm; right: 24mm; left: 24mm; border: .6pt solid var(--gold); padding: 3mm; }
@@ -149,17 +165,50 @@ def ayat(html):
 
 def is_hadith(bq, notes):
     """A quotation whose note is a takhrij of a marfu' report (رواه/متفق عليه/أخرجه, not موقوف)."""
-    sup = bq.find("sup", class_="fn")
-    if not sup:
+    m = re.search(r"⟦(\d+)⟧", bq.get_text())
+    if not m:
         return False
-    note = notes.get(sup.get_text().translate(str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")), "")
+    note = notes.get(m.group(1), "")
     return note.startswith(("رواه", "متفق", "أخرجه")) and "موقوف" not in note
+
+
+TAGS = {"تحقيق": "tahqiq", "لغة": "lugha", "انظر": "ihala", "تعقيب": "taqib", "تنبيه": "tanbih"}
+
+
+def note_kind(text):
+    """The kind of a note (Bible, chs. 44 and 82). A note that opens with its label (تحقيق: لغة: انظر: تعقيب: تنبيه:)
+    is of that kind; a takhrij opens with أخرجه; every other note documents a source and carries no label."""
+    head = re.match(r"(\S+?)[:\s]", text)
+    if head and head.group(1) in TAGS:
+        return TAGS[head.group(1)]
+    if text.startswith(("أخرجه", "رواه", "متفق")):
+        return "takhrij"
+    return "tawthiq"
+
+
+def latinize(soup):
+    """A Latin run inside Arabic is isolated left-to-right in Source Serif, so its word order holds."""
+    for t in soup.find_all(string=re.compile(r"[A-Za-z]{3,}")):
+        if t.parent.name not in ("style",) and not t.find_parent(class_="lat"):
+            t.replace_with(BeautifulSoup(re.sub(r"([A-Za-z][^؀-ۿ]*[A-Za-z.)])", r'<span class="lat">\1</span>', str(t)), "html.parser"))
+
+
+def note_span(n, text):
+    """A note as the page carries it: an inline element at its call, which the paginator floats to the foot
+    of the page where the call falls (float: footnote). Its number is the chapter's, never the page's."""
+    # a whole Latin reference (title in italics and all) is one left-to-right isolate, not a run per word group
+    text = re.sub(r"([A-Za-z][^؀-ۿ]*[A-Za-z.)])", r'<span class="lat">\1</span>', text)
+    body = markdown.markdown(text).removeprefix("<p>").removesuffix("</p>")
+    body = re.sub(r"^(%s):" % "|".join(TAGS), r'<span class="fn-tag">\1:</span>', body)
+    body = re.sub(r"(?<![*\w])\*([^*]+)\*", r"<i>\1</i>", ayat(body))
+    num = n.translate(AR)
+    return f'<span class="fn-note fn-n{n} fn-{note_kind(text)}" data-n="{num}">{body}</span>'
 
 
 def md_to_html(md):
     notes = dict(re.findall(r"^\[\^(\d+)\]:\s*(.+)$", md, re.M))
     md = re.sub(r"^\[\^\d+\]:.*$", "", md, flags=re.M)
-    md = re.sub(r"\[\^(\d+)\]", lambda m: f'<sup class="fn">{m.group(1).translate(AR)}</sup>', md)
+    md = re.sub(r"\[\^(\d+)\]", lambda m: f"⟦{m.group(1)}⟧", md)
     md = re.sub(r"^\*\*(أحمد بن إبراهيم السليمي)\*\*\n(.+)$",
                 r'<div class="sig"><span class="sig-name">\1</span><span class="sig-du">\2</span></div>', md, flags=re.M)
     html = markdown.markdown(md, extensions=["tables"])
@@ -208,15 +257,12 @@ def md_to_html(md):
         items = ul.find_all("li", recursive=False)
         if len(items) >= 5 and all(len(li.get_text()) <= 32 and not li.find("ul") for li in items):
             ul["class"] = ["cols"]
-    for t in soup.find_all(string=re.compile(r"[A-Za-z]{3,}")):
-        if t.parent.name not in ("style",) and not t.find_parent(class_="lat"):
-            t.replace_with(BeautifulSoup(re.sub(r"([A-Za-z][^؀-ۿ]*[A-Za-z.)])", r'<span class="lat">\1</span>', str(t)), "html.parser"))
-    note_html = ""
-    if notes:
-        items = "".join(f'<li>{ayat(v)}</li>' for k, v in sorted(notes.items(), key=lambda kv: int(kv[0])))
-        items = re.sub(r"(\*)([^*]+)\*", r"<i>\2</i>", items)
-        note_html = f'<section class="notes"><h4>حواشي الفصل</h4><ol>{items}</ol></section>'
-    return str(soup), note_html
+    latinize(soup)
+    html = re.sub(r"⟦(\d+)⟧", lambda m: note_span(m.group(1), notes[m.group(1)]), str(soup))
+    missing = set(notes) - set(re.findall(r'class="fn-note fn-n(\d+) ', html))
+    if missing:
+        raise SystemExit(f"notes defined but never called: {sorted(missing, key=int)}")
+    return html, ""
 
 
 def chapter(md, kicker):
@@ -267,15 +313,16 @@ CONT_CSS = ('html, body { background: transparent !important; } '
 
 def chapter_parts(md, kicker):
     """A chapter may carry <!-- page: name --> markers: the flow stops there for a full page, then runs on.
-    The chapter's notes all close its last part."""
-    defs = re.findall(r"^\[\^\d+\]:.*$", md, re.M)
+    Each part carries the notes it calls, so every note sits at the foot of the page of its call."""
+    defs = dict(re.findall(r"^\[\^(\d+)\]:(.*)$", md, re.M))
     body = re.sub(r"^\[\^\d+\]:.*$", "", md, flags=re.M)
     chunks = re.split(r"<!--\s*page:\s*(.+?)\s*-->", body)
-
-    last = len(chunks) - 1
+    called = set(re.findall(r"\[\^(\d+)\]", body))
+    if set(defs) != called:
+        raise SystemExit(f"notes and calls differ: {sorted(set(defs) ^ called, key=int)}")
 
     def with_notes(t, i):
-        return t + "\n\n" + "\n".join(defs) if i == last else t
+        return t + "\n\n" + "\n".join(f"[^{n}]:{defs[n]}" for n in dict.fromkeys(re.findall(r"\[\^(\d+)\]", t)))
 
     parts = [("flow", chapter(with_notes(chunks[0], 0), kicker))]
     for k, (name, text) in enumerate(zip(chunks[1::2], chunks[2::2])):
@@ -304,21 +351,31 @@ def contents(files):
 FIXED_CSS = "@page { size: %(w)smm %(h)smm; margin: 0; } html, body { margin: 0; }"
 
 
-def doc(css, body, page_css, head=""):
+PAGED = HERE / "vendor" / "paged.polyfill.min.js"   # Paged.js 0.4.3, MIT (vendor/paged.LICENSE.md)
+CALLS = "\n".join(f'.fn-n{n}[data-footnote-call]::after {{ content: "{str(n).translate(AR)}"; }}' for n in range(1, 100))
+# Paged.js lays the text out once every face is loaded, and says when it has finished (render.js waits for it)
+PAGED_CONFIG = ("<script>window.PagedConfig = { auto: true, before: async () => { "
+                "await Promise.all([...document.fonts].map(f => f.load().catch(() => null))); await document.fonts.ready; }, "
+                "after: () => { window.__pagedDone = true; } };</script>")
+
+
+def doc(css, body, page_css, head="", paged=False):
     # the running heads live in page-margin boxes, which do not make Chromium load a web font on their own:
     # an invisible line in the same face does, so the heads never fall back to a system font
     preload = (f'<div aria-hidden="true" style="position:absolute;visibility:hidden;font:400 7.4pt \'IBM Plex Sans Arabic\'">'
                f'صناعة المتكلّم العربي {head}</div>')
+    # a page that carries notes is paginated by Paged.js, which alone places a note at the foot of its page
+    script = f'{PAGED_CONFIG}<script src="{PAGED.as_uri()}"></script>' if paged else ""
     return (f'<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>صناعة المتكلّم العربي</title>'
-            f'<style>{css}</style><style>{CSS % dict(wrapw=0, wraph=0, head=head)}{C2.TEXT_CSS}{extra_css()}</style>'
-            f'<style>{page_css}</style></head><body>{preload}{body}</body></html>')
+            f'<style>{css}</style><style>{CSS % dict(wrapw=0, wraph=0, head=head, calls=CALLS)}{C2.TEXT_CSS}{extra_css()}</style>'
+            f'<style>{page_css}</style>{script}</head><body>{"" if paged else preload}{body}</body></html>')
 
 
 def flow(css, piece, head):
     body, bandhtml = piece
     # the text flows on a transparent page laid over a full-bleed paper (or band) underlay,
     # so the paper colour reaches the trim instead of stopping at the text block
-    return (doc(css, body, "html, body { background: transparent !important; }", head),
+    return (doc(css, body, "html, body { background: transparent !important; }", head, paged="fn-note" in body),
             doc(css, bandhtml, FIXED_CSS % dict(w=200, h=260)))
 
 
@@ -364,7 +421,7 @@ def main():
             elif kind == "fixed":
                 pieces.append(("fixed", doc(css, part, fixed)))
             else:
-                pieces.append(("cont", doc(css, part, CONT_CSS % title, title)))
+                pieces.append(("cont", doc(css, part, CONT_CSS % title, title, paged="fn-note" in part)))
     paper = B.render(doc(css, '<div style="width:200mm;height:260mm;background:var(--paper)"></div>', fixed), "opening-paper")
     w = PdfWriter()
     kinds = []
