@@ -85,7 +85,7 @@ def cover(date_line):
     <p class="s">الوثيقة التأسيسية الحاكمة لكتب المنظومة وبرامجها وموادها</p>
   </div>
   <div class="cv-ed">
-    <span>الإصدار ١٫٠<i class="sep" aria-hidden="true"></i><span class="en">Edition 1.0 · PDF Master</span></span>
+    <span>الإصدار ١٫١<i class="sep" aria-hidden="true"></i><span class="en">Edition 1.1 · PDF Master</span></span>
     <span class="d">{date_line}</span>
   </div>
 </section>'''
@@ -107,7 +107,7 @@ def title_page(date_line, n_decisions):
     <div class="tp-desc">الوثيقة التأسيسية الحاكمة لكتب المنظومة وبرامجها وموادها</div>
     <div class="tp-rule"><i></i></div>
     <div class="tp-meta">
-      <div><small>الإصدار</small><b>١٫٠ <span class="en">(Edition 1.0)</span></b></div>
+      <div><small>الإصدار</small><b>١٫١ <span class="en">(Edition 1.1)</span></b></div>
       <div><small>النسخة</small><b><span class="en">PDF Master</span> · للطباعة والشاشة</b></div>
       <div><small>تاريخ الإصدار</small><b>{date_line}</b></div>
     </div>
@@ -127,7 +127,7 @@ def back_cover():
     <p class="s">من سلامة اللسان إلى حسن البيان</p>
   </div>
   <p class="bk-q">«كلما قرأ الطالب قاعدة وجد مثالًا، وكلما رأى مثالًا وجد تحليلًا، وكلما فهم التحليل وجد تدريبًا، وكلما تدرب وجد موقفًا واقعيًا — حتى يصير الكلام العربي الفصيح عنده ملكةً لا محفوظات.»</p>
-  <div class="bk-f">الدليل التحريري والعلمي · الإصدار ١٫٠<span class="en">Editorial &amp; Scholarly Bible — Edition 1.0 — PDF Master</span></div>
+  <div class="bk-f">الدليل التحريري والعلمي · الإصدار ١٫١<span class="en">Editorial &amp; Scholarly Bible — Edition 1.1 — PDF Master</span></div>
 </section>'''
 
 
@@ -147,7 +147,7 @@ def opener(anchor, kicker, kicker_en, numeral, title, lede, items, alt=False, ou
   <h1 class="op-title"{data}>{title}</h1>
   <p class="op-lede">{lede}</p>
   <div class="op-list"><p class="h">في هذا الجزء</p><ol>{lis}</ol></div>
-  <div class="op-foot"><span>صناعة المتكلّم العربي · الدليل التحريري والعلمي</span><span>الإصدار ١٫٠</span></div>
+  <div class="op-foot"><span>صناعة المتكلّم العربي · الدليل التحريري والعلمي</span><span>الإصدار ١٫١</span></div>
 </section>'''
 
 
@@ -362,19 +362,23 @@ def foil(num):
 
 def type_specimen(num):
     rows = [
-        ("حرف العرض", "Reem Kufi", '<div class="s-display">صناعة المتكلّم</div>'),
-        ("الحرف التحريري", "Amiri Bold", '<div class="s-edit">الباب الخامس: المقام — مَن يتكلم؟ ولمن؟</div>'),
+        ("الشعار الكتابي", "Amiri Bold · outlined lettering", '<div class="s-logo">صناعة المتكلّم العربي</div>'),
+        ("الكوفي العرضي", "Reem Kufi", '<div class="s-display">الباب الخامس: المقام</div>'),
+        ("العرض الهجين", "El Messiri", '<div class="s-hybrid">الفصل الثالث: فنّ الافتتاح</div><div class="s-hybrid s">أولًا: سلامة النطق</div>'),
+        ("لمسة الكوفي", "Noto Kufi Arabic", '<div class="s-label"><i>مثال</i><i class="d">حوار</i><i class="p">تدريب</i><i class="a">معيار الإتقان</i>'
+                                            '<span><i class="rh fill-s"></i><i class="rh fill-s"></i><i class="rh fill-s"></i> المتكلم الناجح</span></div>'),
         ("حرف القراءة", "Amiri", '<div class="s-read">حرف القراءة يحمل المتن الطويل: الشرح، والحوار، والشاهد. فإذا طال الدرس لم يتعب القارئ، وإذا شُكِّل النص لم تصطدم حركاته.</div>'),
         ("النص المشكول للإلقاء", "Amiri · 200%+", '<div class="s-voc">إِنَّ الكَلِمَةَ أَمانَةٌ <span class="pm">/</span> فَأَحْسِنْ حَمْلَها <span class="pm">//</span> وَأَحْسِنْ <span class="stress">أَداءَها</span> <span class="pm">↓ //</span></div>'),
-        ("الحرف الوظيفي", "IBM Plex Sans Arabic", '<div class="s-func"><span><b>تمرين ٣:</b> التحويل</span><span><b>الزمن:</b> ٥ دقائق</span><span><b>الرسمية:</b> ٤ من ٥</span><span><b>المستوى:</b> م٢</span></div>'),
+        ("الحرف الوظيفي", "IBM Plex Sans Arabic", '<div class="s-func"><span><b>كيف تؤثر الحركات في وضوح الكلام؟</b></span><span><b>الزمن:</b> ٥ دقائق</span><span><b>الرسمية:</b> ٤ من ٥</span></div>'),
+        ("حرف الزينة", "Aref Ruqaa", '<div class="s-accent">هل أعرف لمن أتكلم، وكيف أغيّر كلامي بتغيّر المقام؟</div>'),
         ("الحرف القرآني", "Amiri Quran (screen) · KFGQPC (print)", '<div class="s-quran"><span class="br">﴿</span>وَاقْصِدْ فِي مَشْيِكَ وَاغْضُضْ مِن صَوْتِكَ<span class="br">﴾</span></div>'),
-        ("المرافق اللاتيني", "Cormorant Garamond · IBM Plex Sans", '<div class="s-pair"><span class="a">السجل اللغوي</span><span class="l">(Register)</span><span class="l2">Pace · Pause · Pitch</span></div>'),
+        ("المرافق اللاتيني", "Source Serif 4 · IBM Plex Sans", '<div class="s-pair"><span class="a">السجل اللغوي</span><span class="l">(Register)</span><span class="l2">Pace · Pause · Pitch</span></div>'),
     ]
     html = '<div class="tspec">' + "".join(
         f'<div class="trow"><div class="m"><b>{a}</b><span>{b}</span></div><div>{c}</div></div>'
         for a, b, c in rows) + '</div>'
     return fig(f'<div class="panel">{html}</div>', num,
-               "الأدوار الحرفية بالخطوط المفتوحة الترخيص؛ والآية للتمثيل (لقمان: ١٩)، وتُنقل في الكتب من مصدر المصحف الموثق.")
+               "قانون الحرف: لكل عائلة دور مكتوب (الباب ٢٣)؛ والآية للتمثيل (لقمان: ١٩)، وتُنقل في الكتب من مصدر المصحف الموثق.")
 
 
 def nuqta(num):

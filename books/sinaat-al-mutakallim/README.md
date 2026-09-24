@@ -16,7 +16,7 @@
 | المرحلة | الملف | الحالة |
 |---|---|---|
 | **الدليل التحريري والعلمي (Editorial & Scholarly Bible) ١٫٠** | [bible/00-الفهرس-والقرارات-المعلقة.md](./bible/00-الفهرس-والقرارات-المعلقة.md) | **معتمد** (القرارات العشرون بتوصيات اللجنة) |
-| **الدليل في ملف PDF رسمي — Edition 1.0 — PDF Master** | [Editorial-Scholarly-Bible_Edition-1.0_PDF-Master.pdf](./Editorial-Scholarly-Bible_Edition-1.0_PDF-Master.pdf) | للمشاركة والطباعة |
+| **الدليل في ملف PDF رسمي — Edition 1.1 — PDF Master** | [Editorial-Scholarly-Bible_Edition-1.1_PDF-Master.pdf](./Editorial-Scholarly-Bible_Edition-1.1_PDF-Master.pdf) | للمشاركة والطباعة |
 | **دليل الهوية البصرية والإخراج الفني (الجزء السادس من الدليل)** | [bible/06-الهوية-البصرية-والإخراج-الفني.md](./bible/06-الهوية-البصرية-والإخراج-الفني.md) | **معتمد** |
 | العيّنة البصرية التطبيقية | [bible/visual-specimen.html](./bible/visual-specimen.html) · [النسخة المعروضة](https://claude.ai/artifact/KSz42ssv5JyNAW1fCcQvT4) | عيّنة للاعتماد، لا تصميم نهائي |
 | الوثيقة الحاكمة المختصرة (برومبت لأي ذكاء اصطناعي) | [00-الوثيقة-الحاكمة.md](./00-الوثيقة-الحاكمة.md) | مسودة، تُحدَّث بعد اعتماد الدليل |

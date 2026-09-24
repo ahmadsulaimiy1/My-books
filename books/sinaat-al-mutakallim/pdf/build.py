@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build «الدليل التحريري والعلمي» — Editorial & Scholarly Bible — Edition 1.0 — PDF Master.
+"""Build «الدليل التحريري والعلمي» — Editorial & Scholarly Bible — Edition 1.1 — PDF Master.
 
     python3 build.py            build the PDF from the Markdown sources in ../bible
     python3 build.py --review   also render page thumbnails and a layout report for review
@@ -43,7 +43,7 @@ from components import ar  # noqa: E402
 ROOT = HERE.parent
 BIBLE = ROOT / "bible"
 CACHE = HERE / ".cache"
-OUT = ROOT / "Editorial-Scholarly-Bible_Edition-1.0_PDF-Master.pdf"
+OUT = ROOT / "Editorial-Scholarly-Bible_Edition-1.1_PDF-Master.pdf"
 DATE_LINE = "سبتمبر ٢٠٢٦م / ١٤٤٨هـ"
 N_DECISIONS = 20
 
@@ -52,6 +52,9 @@ FONT_CSS = [
     "&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap",
     "https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&display=swap",
     "https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap",
+    # the book's typographic constitution (Part Six, ch. 23), shown in the type specimen
+    "https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Noto+Kufi+Arabic:wght@600;700"
+    "&family=Aref+Ruqaa:wght@400&family=Source+Serif+4:opsz,wght@8..60,400&display=swap",
 ]
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 
@@ -195,11 +198,16 @@ def static_instances(css: str) -> str:
             dest = path.with_name(f"{path.stem}-w{wt}.woff2")
             if not dest.exists():
                 limits = {tag: a.defaultValue for tag, a in axes.items()}
-                limits["wght"] = min(max(wt, axes["wght"].minValue), axes["wght"].maxValue)
+                if "wght" in axes:
+                    limits["wght"] = min(max(wt, axes["wght"].minValue), axes["wght"].maxValue)
                 try:   # name the instance after its weight (e.g. ReemKufi-SemiBold) where the font allows
                     inst = instancer.instantiateVariableFont(TTFont(path), limits, updateFontNames=True)
                 except Exception:
                     inst = instancer.instantiateVariableFont(TTFont(path), limits)
+                if "CFF2" in inst:
+                    # Chromium cannot embed CFF2 outlines in a PDF and falls back to Type 3 glyphs
+                    from fontTools.cffLib.CFF2ToCFF import convertCFF2ToCFF
+                    convertCFF2ToCFF(inst)
                 inst.flavor = "woff2"
                 inst.save(dest)
             b = re.sub(r"font-weight:\s*[^;]+;", f"font-weight: {wt};", block.replace(url, dest.as_uri()))
@@ -669,7 +677,7 @@ def build_part(p: dict, bab_counter: list):
         insert_after_section(soup, "ميزانية اللون", C.budget(fignum()), after="first-table")
         insert_after_section(soup, "مصفوفة التباين", C.contrast(fignum()), after="last-table")
         insert_after_section(soup, "الذهب بين الطباعة والشاشة", C.foil(fignum()))
-        insert_after_section(soup, "سلّم الأحجام", C.type_specimen(fignum()), after="first-table")
+        insert_after_section(soup, "والأحجام", C.type_specimen(fignum()), after="first-table")
         insert_after_section(soup, "«نظام النقطة»", C.nuqta(fignum()), after="lead")
         insert_after_section(soup, "الشبكة وقياس الصفحة", C.page_grid(fignum()), after="lead")
         insert_after_section(soup, "المفاهيم الأربعة", C.covers(fignum()), after="lead")
@@ -746,10 +754,10 @@ def pgref(anchor):
 def mgmt_page():
     rows = [
         ("عنوان الوثيقة", "الدليل التحريري والعلمي لمنهج «صناعة المتكلّم العربي» — <span class=\"en\">Editorial &amp; Scholarly Bible</span>"),
-        ("رمز الوثيقة", '<span class="ltr" style="font-family:var(--f-mono)">SMA-BIBLE-1.0</span>'),
-        ("الإصدار", "١٫٠ (<span class=\"en\">Edition 1.0</span>) — <span class=\"en\">PDF Master</span>: نسخة رئيسية للطباعة والقراءة الرقمية"),
+        ("رمز الوثيقة", '<span class="ltr" style="font-family:var(--f-mono)">SMA-BIBLE-1.1</span>'),
+        ("الإصدار", "١٫١ (<span class=\"en\">Edition 1.1</span>) — <span class=\"en\">PDF Master</span>: نسخة رئيسية للطباعة والقراءة الرقمية"),
         ("تاريخ الإصدار", DATE_LINE),
-        ("الحالة", f"مُعَدّ للاعتماد — {ar(N_DECISIONS)} قرارًا معلّقًا (ص {pgref('sec-decisions')})"),
+        ("الحالة", f"معتمد مع قراراته العشرين (ص {pgref('sec-decisions')})؛ ومعدَّل في الإصدار ١٫١ بقانون الحرف وموجّه الإخراج الفني للغلاف"),
         ("المرجعية", "المرجع الأعلى للمشروع بعد اعتماده؛ لا يُخالَف إلا بتوجيه صريح من صاحب المشروع، ويُسجَّل كل تعديل في سجل الإصدارات."),
         ("نطاق الحكم", "الكتب والمجلدات والوحدات والدروس والأمثلة والحوارات والتدريبات والسيناريوهات والاختبارات، وأدلة المعلمين، والمواد الصوتية والرقمية، ونصوص المحاضرات، وأوراق العمل."),
         ("الجمهور", "لجنة العلماء، ولجنة المناهج، والمؤلفون، والمحررون، والمصممون، والمدربون، وفريق إنتاج الكتب، وفريق إنتاج المواد الصوتية والرقمية."),
@@ -760,7 +768,8 @@ def mgmt_page():
         ("الحقوق", "© ٢٠٢٦ صاحب مشروع «صناعة المتكلّم العربي». جميع الحقوق محفوظة. تُشارَك الوثيقة مع لجان المشروع وفرقه للمراجعة والاعتماد والإنتاج، ولا تُنشر خارجها إلا بإذن صاحب المشروع."),
     ]
     trs = "".join(f'<tr><th scope="row">{k}</th><td>{v}</td></tr>' for k, v in rows)
-    policy = ("<ul><li><strong>١٫٠</strong> الإصدار الأول، مُعَدّ للاعتماد.</li>"
+    policy = ("<ul><li><strong>١٫٠</strong> الإصدار الأول، واعتُمد مع قراراته العشرين.</li>"
+              "<li><strong>١٫١</strong> قانون الحرف (الباب ٢٣)، وموجّه الإخراج الفني للغلاف ودراسة اتجاهاته الثلاثة (الباب ٢٥).</li>"
               "<li><strong>١٫١، ١٫٢…</strong> تعديلات جزئية لا تغيّر البنية، ومنها تسجيل القرارات بعد اعتمادها.</li>"
               "<li><strong>٢٫٠</strong> تغيير بنيوي في الأجزاء أو الأبواب أو المصطلحات الحاكمة.</li>"
               "<li>كل إصدار يُسجَّل في سجل الإصدارات والتعديلات مع سببه، ويُعاد توليد الملف من مصادره.</li></ul>")
@@ -999,7 +1008,7 @@ def assemble(font_css: str):
 
     css = (HERE / "print.css").read_text(encoding="utf-8")
     doc = (f'<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">'
-           f'<title>الدليل التحريري والعلمي — صناعة المتكلّم العربي — الإصدار ١٫٠</title>'
+           f'<title>الدليل التحريري والعلمي — صناعة المتكلّم العربي — الإصدار ١٫١</title>'
            f'<style>{font_css}</style><style>{css}\n{page_rules()}</style></head><body>{"".join(body)}</body></html>')
     soup = BeautifulSoup(doc, "html.parser")
     linkify(soup, n_babs)
@@ -1141,10 +1150,10 @@ def finalize(pdf_in: Path, titles: list, pdf_out: Path):
     rebuild(reader.outline)
 
     writer.add_metadata({
-        "/Title": "الدليل التحريري والعلمي — صناعة المتكلّم العربي — الإصدار ١٫٠",
-        "/Subject": "Editorial & Scholarly Bible — Edition 1.0 — PDF Master",
+        "/Title": "الدليل التحريري والعلمي — صناعة المتكلّم العربي — الإصدار ١٫١",
+        "/Subject": "Editorial & Scholarly Bible — Edition 1.1 — PDF Master",
         "/Author": "فريق مشروع «صناعة المتكلّم العربي»",
-        "/Keywords": "صناعة المتكلّم العربي; الدليل التحريري والعلمي; Editorial & Scholarly Bible; Edition 1.0; PDF Master",
+        "/Keywords": "صناعة المتكلّم العربي; الدليل التحريري والعلمي; Editorial & Scholarly Bible; Edition 1.1; PDF Master",
         "/Creator": "books/sinaat-al-mutakallim/pdf/build.py (Chromium)",
     })
     writer._root_object[NameObject("/Lang")] = TextStringObject("ar")
@@ -1215,7 +1224,7 @@ def check_separators(soup: BeautifulSoup):
                          "<i class=\"sep\"></i>:\n  " + "\n  ".join(hits))
 
 
-FONT_FAMILIES = ("Amiri", "IBMPlexSans", "CormorantGaramond", "ReemKufi")
+FONT_FAMILIES = ("Amiri", "IBMPlexSans", "CormorantGaramond", "ReemKufi", "ElMessiri", "NotoKufiArabic", "ArefRuqaa", "SourceSerif4")
 
 
 def check_fonts(pdf: Path, families=None):

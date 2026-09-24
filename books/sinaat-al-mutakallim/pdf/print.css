@@ -22,6 +22,7 @@
   --f-func: "IBM Plex Sans Arabic", "DejaVu Sans", sans-serif;
   --f-quran: "Amiri Quran", "Amiri", serif;
   --f-latin: "Cormorant Garamond", "Liberation Serif", serif;
+  --f-latin-book: "Source Serif 4", "Cormorant Garamond", serif;
   --f-mono: "IBM Plex Sans", "Liberation Sans", sans-serif;
 }
 
@@ -31,7 +32,7 @@
   margin: 24mm 20mm 22mm 20mm;
   background: #F8F6F0;
   @top-left {
-    content: "الدليل التحريري والعلمي · الإصدار ١٫٠";
+    content: "الدليل التحريري والعلمي · الإصدار ١٫١";
     font-family: "IBM Plex Sans Arabic"; font-size: 7.4pt; color: #6B655D;
     vertical-align: bottom; padding-bottom: 6mm;
   }
@@ -369,6 +370,15 @@ figure.fig > figcaption b { color: var(--sapphire-900); font-weight: 600; white-
 .trow .m span { display: block; font-family: var(--f-mono); font-size: 7.4pt; color: var(--graphite); direction: ltr; unicode-bidi: isolate; text-align: right; }
 .s-display { font-family: var(--f-display); font-weight: 600; font-size: 26pt; line-height: 1.25; color: var(--sapphire-900); }
 .s-edit { font-family: var(--f-edit); font-weight: 700; font-size: 15pt; line-height: 1.4; color: var(--sapphire-900); }
+.s-logo { font-family: var(--f-edit); font-weight: 700; font-size: 24pt; line-height: 1.35; color: var(--sapphire-900); }
+.s-hybrid { font-family: "El Messiri", var(--f-edit); font-weight: 700; font-size: 17pt; line-height: 1.4; color: var(--sapphire-900); }
+.s-hybrid.s { font-weight: 600; font-size: 13pt; margin-top: 1mm; }
+.s-label { display: flex; flex-wrap: wrap; align-items: center; gap: 1.6mm; font-family: "Noto Kufi Arabic", var(--f-func); font-weight: 700; font-size: 7.6pt; }
+.s-label i { font-style: normal; color: #F8F6F0; background: var(--sapphire-700); padding: .4mm 2.2mm .6mm; border-radius: .6mm; }
+.s-label i.d { background: #2F5FC4; } .s-label i.p { background: var(--crimson-700); } .s-label i.a { background: #060E26; color: var(--gold-300); }
+.s-label span { color: var(--sapphire-700); font-size: 8.2pt; margin-inline-start: 3mm; }
+.s-label span .rh { background: var(--sapphire-700); margin-inline: .5mm; padding: 0; border-radius: 0; }
+.s-accent { font-family: "Aref Ruqaa", var(--f-edit); font-size: 15pt; line-height: 1.6; color: var(--sapphire-900); }
 .s-read { font-family: var(--f-edit); font-size: 11.8pt; line-height: 1.85; }
 .s-voc { font-family: var(--f-edit); font-size: 14pt; line-height: 2.1; }
 .pm { font-family: var(--f-func); font-weight: 600; font-size: .7em; color: var(--sapphire-500); padding-inline: .6mm; }
@@ -379,7 +389,7 @@ figure.fig > figcaption b { color: var(--sapphire-900); font-weight: 600; white-
 .s-quran .br { color: var(--gold-ink); }
 .s-pair { display: flex; flex-wrap: wrap; align-items: baseline; gap: 1mm 3mm; }
 .s-pair .a { font-family: var(--f-edit); font-weight: 700; font-size: 16pt; color: var(--sapphire-900); }
-.s-pair .l { font-family: var(--f-latin); font-weight: 600; font-size: 14pt; color: var(--graphite); direction: ltr; unicode-bidi: isolate; }
+.s-pair .l { font-family: var(--f-latin-book); font-weight: 400; font-size: 14pt; color: var(--graphite); direction: ltr; unicode-bidi: isolate; }
 .s-pair .l2 { font-family: var(--f-mono); font-size: 8pt; color: var(--graphite-2); direction: ltr; unicode-bidi: isolate; }
 
 /* nuqta figure */
