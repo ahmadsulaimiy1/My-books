@@ -25,6 +25,7 @@ sys.path.insert(0, str(HERE))
 import build as B  # noqa: E402
 import cover2 as C2  # noqa: E402
 import proto2 as P2  # noqa: E402
+import frontmatter as FM  # noqa: E402
 
 BOOK = HERE.parent / "book"
 OUT = HERE.parent / "Volume-I_Opening.pdf"
@@ -39,7 +40,7 @@ CSS = r"""
   @top-left { content: "%(head)s"; font: 400 7.4pt "IBM Plex Sans Arabic"; color: #7C7467; vertical-align: bottom; padding-bottom: 6mm; }
 }
 @page :first { margin-top: 104mm; @top-right { content: none; } @top-left { content: none; } }
-:root { --ink: #1C1915; --ink-2: #4A443C; --ink-3: #7C7467; --paper: #FBF8F1; --paper-2: #F2ECDF;
+:root { --ink: #1C1915; --ink-2: #4A443C; --ink-3: #7C7467; --paper: #F8F6F1; --paper-2: #EFECE5;
   --sapphire: #0C2766; --sapphire-2: #2B4A8F; --gold: #C9A95C; --gold-l: #E4CB8C; --gold-ink: #8A6A1F; --crimson: #A8172E; }
 html, body { margin: 0; background: var(--paper); }
 body { direction: rtl; color: var(--ink); font: 400 13.2pt/1.85 "Scheherazade New", serif; }
@@ -116,15 +117,15 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .fn-note[data-footnote-marker] { display: block; position: relative; padding-right: 5.2mm; margin-bottom: 1mm;
   font: 400 9.6pt/1.55 "Scheherazade New"; color: var(--ink-2); text-align: justify; text-indent: 0; letter-spacing: 0; }
 .fn-note[data-footnote-marker]::before { content: attr(data-n); position: absolute; right: 0; top: 0;
-  font: 500 8pt/1.95 "Changa"; color: var(--sapphire); }
+  font: 700 9.4pt/1.62 "Amiri"; color: var(--sapphire); }
 .fn-tag { font: 300 8pt "Changa"; color: var(--gold-ink); margin-left: .8mm; }
 .fn-note[data-split-from]::before { content: none; }
 .fn-note .q { font-size: 10.4pt; line-height: 1.5; }
 .fn-note .qref { font-size: 7pt; }
 .fn-note i, .fn-note em { font-style: normal; color: var(--sapphire); }
 .fn-note .lat em { font-style: italic; color: inherit; }
-.fn-note[data-footnote-call]::after { vertical-align: super; font: 600 7pt/0 "Changa"; font-variant-position: normal;
-  color: var(--gold-ink); margin: 0 .35mm; }
+.fn-note[data-footnote-call]::after { vertical-align: 42%%; font: 700 8.2pt/0 "Amiri"; font-variant-position: normal;
+  color: var(--gold-ink); margin: 0 .25mm 0 .5mm; }
 %(calls)s
 .lat { direction: ltr; unicode-bidi: isolate; font-family: "Source Serif 4"; font-size: .86em; }
 /* heritage and poster interludes */
@@ -169,11 +170,33 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .vp-a { font: 400 30pt/2 "Amiri Quran"; color: var(--gold-l); text-wrap: balance; }
 .vp-r { font: 300 11pt/1.4 "Changa"; color: #E7DFCE; margin-top: 7mm; }
 .arw { display: inline-block; width: 1.05em; height: .66em; vertical-align: .05em; margin: 0 1.4mm; color: var(--gold-ink); }
+h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
+.sc-draw { position: relative; width: 160mm; }
+.sc-core { position: absolute; transform: translate(-50%%, -50%%); width: 27mm; text-align: center; }
+.sc-core b { display: block; font: 600 12.2pt/1.25 "Changa"; color: var(--sapphire); }
+.sc-core span { display: block; font: 400 8.3pt/1.4 "Scheherazade New"; color: var(--ink-2); margin-top: .8mm; }
+.sc-mid { position: absolute; transform: translate(-50%%, -50%%); font: 500 8.6pt/1.25 "Changa"; color: var(--gold-l); text-align: center; }
+.sc-sup { position: absolute; transform: translate(-50%%, -50%%); font: 400 9.2pt/1 "Changa"; color: var(--ink-2); background: var(--paper-2); padding: 1.2mm 2mm; white-space: nowrap; display: flex; gap: 1.6mm; align-items: center; }
+.sc-sup i { width: 1.2mm; height: 1.2mm; background: var(--gold); transform: rotate(45deg); }
+.sc-leg { display: flex; gap: 8mm; font: 300 8.6pt/1 "Changa"; color: var(--ink-3); margin-top: 1mm; }
+.sc-leg span { display: flex; gap: 2mm; align-items: center; }
+.sc-leg i.c { width: 3.4mm; height: 3.4mm; border-radius: 50%%; background: rgba(201,169,92,.25); border: .35pt solid #0C2766; }
+.sc-leg i.s { width: 1.4mm; height: 1.4mm; background: var(--gold); transform: rotate(45deg); }
+.sc-arrow { font: 300 9.6pt/1 "Changa"; color: var(--gold-ink); margin-top: 7mm; }
+.sc-band { margin-top: 3mm; background: var(--sapphire); padding: 3.4mm 4mm; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.4mm 3.2mm; max-width: 146mm; box-sizing: border-box; }
+.sc-band span { font: 500 9.8pt/1.3 "Changa"; color: #F1EADB; white-space: nowrap; }
+.sc-band span + span::before { content: ""; display: inline-block; width: 1.2mm; height: 1.2mm; background: var(--gold); transform: rotate(45deg); margin-left: 3.2mm; vertical-align: middle; }
 .toc-p { font: 400 12pt/1.9 "Scheherazade New"; }
 .toc-row { display: flex; gap: 3mm; align-items: baseline; border-bottom: .4pt dotted #CFC5B1; padding: 1.2mm 0; }
 .toc-row b { font: 600 10pt "Changa"; color: var(--gold-ink); min-width: 22mm; }
 .toc-row span { font: 400 13pt "Scheherazade New"; }
+
+/* «فإن قيل… قلنا»: the objection in its own block, the answer after it (Bible, ch. 100) */
+p.obj { background: var(--paper-2); border-right: 1.3pt solid var(--sapphire-2); padding: 2.6mm 4.5mm 2.8mm 3mm; margin: 5mm 0 0; text-indent: 0; }
+p.ans { border-right: 1.3pt solid var(--gold); padding: 2.4mm 4.5mm 2.6mm 3mm; margin: 0 0 5mm; text-indent: 0; }
+p.obj + p.ans { margin-top: 0; }
 """
+CSS += FM.CSS
 
 
 def ayat(html):
@@ -233,6 +256,8 @@ def md_to_html(md):
     notes = dict(re.findall(r"^\[\^(\d+)\]:\s*(.+)$", md, re.M))
     md = re.sub(r"^\[\^\d+\]:.*$", "", md, flags=re.M)
     md = re.sub(r"\[\^(\d+)\]", lambda m: f"⟦{m.group(1)}⟧", md)
+    # the call hugs the word or quotation it documents; the full stop, comma or colon follows it
+    md = re.sub(r"([.،؛:])((?:⟦\d+⟧)+)", r"\2\1", md)
     md = re.sub(r"^\*\*(أحمد بن إبراهيم السليمي)\*\*\n(.+)$",
                 r'<div class="sig"><span class="sig-name">\1</span><span class="sig-du">\2</span></div>', md, flags=re.M)
     html = markdown.markdown(md, extensions=["tables"])
@@ -268,7 +293,19 @@ def md_to_html(md):
             bq["class"] = ["quote"]
         else:
             bq["class"] = ["def"]
+    for p in soup.find_all("p"):
+        t = p.get_text().lstrip()
+        if t.startswith("فإن قيل"):
+            p["class"] = (p.get("class") or []) + ["obj"]
+        elif t.startswith(("قلنا", "قلتُ:")) and (prev := p.find_previous_sibling()) is not None and "obj" in (prev.get("class") or []):
+            p["class"] = (p.get("class") or []) + ["ans"]
     # a heading never ends a page: it travels with the paragraph or display that follows it
+    for h in soup.find_all("h3"):
+        m = re.match(r"^([٠-٩]+)\.\s*", h.get_text())
+        if m and h.string:
+            h.string = h.string[m.end():]
+            num = soup.new_tag("span", attrs={"class": "hn"}); num.string = m.group(1)
+            h.insert(0, num)
     for h in soup.find_all("h3"):
         nxt = h.find_next_sibling()
         if nxt is not None and nxt.name in ("p", "blockquote"):
@@ -338,37 +375,42 @@ def measure_page():
                 f'<div class="coda">فالعبرة ليست بكم تعلّم الإنسان، وإنما بكيف تملّك ما تعلّم</div></div></div>')
 
 
-STATIONS = ["القراءة والنطق", "المفردات والاستعمال", "النحو", "الصرف", "البلاغة", "الأدب والنصوص", "فقه اللغة والدلالة",
-            "التطبيق والقراءة الموسّعة", "الكتابة", "المحادثة والخطاب", "القدرة على الفهم والتحليل", "التخصّص العلمي"]
+CORE = [("النحو", "أبوابه ومسائله"), ("الصرف", "أبنيته وأحواله"), ("البلاغة", "المعاني · البيان · البديع"),
+        ("الأدب العربي", "فنونه ونصوصه وعصوره"), ("فقه اللغة", "خصائص العربية وأصولها")]
+SUPPORT = ["العروض والقافية", "علم اللغة", "علم الأصوات", "علم الدلالة", "تاريخ اللغة العربية", "اللهجات العربية", "تحقيق النصوص"]
+SHARIA = ["علوم القرآن", "التفسير", "علوم الحديث", "العقيدة والتوحيد", "أصول الفقه", "الفقه"]
 
 
-def map_page():
-    """خريطة التكوين العربي لطالب العلم: twelve stations as a chain of rings, each overlapping the next and a little
-    larger than it, because the stations are not separate stages in time but circles that overlap and grow together."""
-    cx, w = 80.0, 160.0   # mm: ring axis and drawing width
-    rings, labels, y, split = [], [], 2.0, 0.0
-    rs = [5.2 + i * 0.7 for i in range(len(STATIONS))]
-    for i, (name, r) in enumerate(zip(STATIONS, rs)):
-        y += r
-        fill = "rgba(201,169,92,.16)" if i < 7 else "rgba(12,39,102,.07)"
-        rings.append(f'<circle cx="{cx}" cy="{y:.2f}" r="{r:.2f}" fill="{fill}" stroke="#0C2766" stroke-width=".32"/>')
-        labels.append(f'<div class="mp-n" style="top:{y:.2f}mm;left:{cx}mm">{str(i + 1).translate(AR)}</div>')
-        pos = f"left:{cx + r + 4:.2f}mm" if i % 2 == 0 else f"right:{w - cx + r + 4:.2f}mm"
-        labels.append(f'<div class="mp-l" style="top:{y:.2f}mm;{pos}">{name}</div>')
-        if i == 6:
-            split = y + r * 0.2
-        y += r * 0.42   # the next ring overlaps this one
-    h = y + rs[-1] * 0.6 + 2
-    svg = f'<svg class="mp-svg" viewBox="0 0 {w:.0f} {h:.1f}" style="height:{h:.1f}mm">{"".join(rings)}</svg>'
-    bands = (f'<div class="mp-band" style="top:0;height:{split:.1f}mm"><span>علوم الآلة</span></div>'
-             f'<div class="mp-band b2" style="top:{split + 1.5:.1f}mm;height:{h - split - 1.5:.1f}mm"><span>من المعرفة إلى الملكة</span></div>')
-    return full(f'<div class="mp"><div class="mp-in"><div class="kick"><i></i><span>خريطة التكوين العربي لطالب العلم</span><i></i></div>'
-                f'<div class="mp-draw" style="height:{h:.1f}mm">{bands}{svg}{"".join(labels)}</div>'
-                f'<div class="mp-note">ليست هذه مراحل زمنية منفصلة، بل دوائر تتداخل وتتنامى معًا</div>'
-                f'<div class="mp-coda">هذه من أهمّ آلات التكوين، وليست التكوين كله</div></div></div>')
+def sciences_page():
+    """خريطة العلوم: the sciences themselves, not their chapters or the skills built from them (Bible, ch. 92).
+    Five core sciences as petals round «علوم العربية», each with what falls under it in small type; the supporting
+    sciences on an outer ring; the Sharia sciences, which Arabic serves, on a band beneath."""
+    import math
+    cx, cy, R, r, ring = 80.0, 66.0, 33.5, 15.5, 60.0
+    svg, html = [], []
+    svg.append(f'<circle cx="{cx}" cy="{cy}" r="{ring}" fill="none" stroke="#C9A95C" stroke-width=".35" stroke-dasharray="1 1.6"/>')
+    for k, (name, sub) in enumerate(CORE):
+        ang = math.radians(-90 + k * 72)
+        x, y = cx + R * math.cos(ang), cy + R * math.sin(ang)
+        svg.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="{r}" fill="rgba(201,169,92,.15)" stroke="#0C2766" stroke-width=".35"/>')
+        html.append(f'<div class="sc-core" style="left:{x:.2f}mm;top:{y:.2f}mm"><b>{name}</b><span>{sub}</span></div>')
+    svg.append(f'<circle cx="{cx}" cy="{cy}" r="11" fill="#0C2766"/>')
+    html.append(f'<div class="sc-mid" style="left:{cx}mm;top:{cy}mm">علوم<br>العربية</div>')
+    for k, name in enumerate(SUPPORT):
+        ang = math.radians(-90 + 36 + k * (360 / len(SUPPORT)))
+        x, y = cx + ring * math.cos(ang), cy + ring * math.sin(ang)
+        html.append(f'<div class="sc-sup" style="left:{x:.2f}mm;top:{y:.2f}mm"><i></i>{name}</div>')
+    h = cy + ring + 8
+    draw = (f'<div class="sc-draw" style="height:{h:.1f}mm"><svg viewBox="0 0 160 {h:.1f}" style="position:absolute;inset:0;width:160mm;height:{h:.1f}mm">'
+            f'{"".join(svg)}</svg>{"".join(html)}</div>')
+    legend = ('<div class="sc-leg"><span><i class="c"></i>العلوم الأساسية</span><span><i class="s"></i>العلوم المساندة والتخصّصية</span></div>')
+    band = "".join(f'<span>{x}</span>' for x in SHARIA)
+    return full(f'<div class="mp"><div class="mp-in"><div class="kick"><i></i><span>خريطة علوم العربية وعلوم الشريعة</span><i></i></div>'
+                f'{draw}{legend}<div class="sc-arrow">والعربية آلةٌ لعلوم الشريعة</div><div class="sc-band">{band}</div>'
+                f'<div class="mp-note">في الخريطة العلوم وحدها؛ وأبوابها ومسائلها تحتها، والمهارات تتكوّن منها ومن الممارسة</div></div></div>')
 
 
-FIXED_PAGES = {"ميزان الملكة": measure_page, "خريطة التكوين": map_page}
+FIXED_PAGES = {"ميزان الملكة": measure_page, "خريطة العلوم": sciences_page}
 CONT_CSS = ('html, body { background: transparent !important; } '
             '@page :first { margin-top: 25mm; @top-right { content: "صناعة المتكلّم العربي"; } @top-left { content: "%s"; } }')
 
@@ -411,6 +453,7 @@ def contents(files):
 
 
 FIXED_CSS = "@page { size: %(w)smm %(h)smm; margin: 0; } html, body { margin: 0; }"
+TP_MARK = '<div style="position:absolute;bottom:13mm;left:0;right:0">' + FM.mark() + '</div></section>'
 
 
 PAGED = HERE / "vendor" / "paged.polyfill.min.js"   # Paged.js 0.4.3, MIT (vendor/paged.LICENSE.md)
@@ -441,55 +484,109 @@ def flow(css, piece, head):
             doc(css, bandhtml, FIXED_CSS % dict(w=200, h=260)))
 
 
-def folios(css, numbers):
-    pages = "".join(f'<section style="position:relative;width:200mm;height:260mm;break-after:page">'
-                    + (f'<div style="position:absolute;bottom:16mm;left:0;right:0;text-align:center;font:600 9.4pt Changa;color:#0C2766">'
-                       f'{str(n).translate(AR)}</div>' if n else "") + '</section>' for n in numbers)
-    return doc(css, pages, FIXED_CSS % dict(w=200, h=260) + " html, body { background: transparent !important; }")
+ABJAD = "أ ب ج د هـ و ز ح ط ي ك ل م ن س ع ف ص ق ر ش ت ث خ ذ ض ظ غ".split()
+
+
+def folios(css, marks):
+    """marks: one (text, style) per page after the wrap; style is "run" (an ordinary page: the number between two gold
+    hairlines), "open" (a chapter opening: smaller, gold, under a diamond) or "" (counted, not shown). The numerals are
+    Amiri's, chosen by eye against the other faces of the book (Bible, ch. 104)."""
+    out = []
+    for text, style in marks:
+        f = ""
+        if style == "run":
+            f = f'<div class="fo-run"><i></i><span>{text}</span><i></i></div>'
+        elif style == "open":
+            f = f'<div class="fo-open"><b></b><span>{text}</span></div>'
+        out.append(f'<section style="position:relative;width:200mm;height:260mm;break-after:page">{f}</section>')
+    fcss = ('.fo-run{position:absolute;bottom:14.5mm;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:2.6mm}'
+            '.fo-run i{width:5.5mm;border-top:.4pt solid #C9A95C}'
+            '.fo-run span{font:400 10.5pt/1 Amiri;color:#1C1915;min-width:6mm;text-align:center}'
+            '.fo-open{position:absolute;bottom:14mm;left:0;right:0;text-align:center}'
+            '.fo-open b{display:block;width:1.3mm;height:1.3mm;margin:0 auto 2mm;background:#C9A95C;transform:rotate(45deg)}'
+            '.fo-open span{font:400 9pt/1 Amiri;color:#7F5F12}')
+    return doc(css, "".join(out), FIXED_CSS % dict(w=200, h=260) + " html, body { background: transparent !important; }" + fcss)
+
+
+def sections(md):
+    """The numbered sections of a chapter (### ١. …), for the contents."""
+    return [(m.group(1), m.group(2).strip()) for m in re.finditer(r"^###\s+([٠-٩]+)\.\s+(.+)$", md, re.M)]
 
 
 def main():
-    from pypdf import PdfReader, PdfWriter
+    from pypdf import PdfReader
     css = C2.fonts()
     wrap, wmm, hmm = C2.wrap(css, 1, 48.2, dpi=300)
     files = sorted((BOOK / "الافتتاحية").glob("*.md"))
     fixed = FIXED_CSS % dict(w=200, h=260)
-    pieces = [("wrap", doc(css, wrap, FIXED_CSS % dict(w=wmm, h=hmm))),
-              ("fixed", doc(css, P2.title_page(css).replace('class="pg', 'class="full'), fixed)),
-              ("fixed", doc(css, P2.verse_page().replace('class="pg', 'class="full'), fixed)),
-              ("flow", flow(css, author_word(), "كلمة المؤلف")),
-              ("fixed", doc(css, poster("الافتتاحية", "المقدمة", "في صناعة الكلام: البيان في خلق الإنسان وفي الكتاب والسنة وعند علماء العربية، والفرق بين أن تعرف اللغة وأن تملكها، وأيّ عربيةٍ نتكلّم.", kufam=True), fixed)),
-              ("flow", flow(css, contents(files[1:]), "المقدمة"))]
+    R = {"recto": True}
+    # (kind, html, meta): meta may ask the piece to open on a recto, and name it as a target of the contents
+    pieces = [("wrap", doc(css, wrap, FIXED_CSS % dict(w=wmm, h=hmm)), {}),
+              ("fixed", doc(css, FM.half_title(), fixed), R),
+              ("fixed", doc(css, FM.volumes_map(), fixed), {}),
+              ("fixed", doc(css, P2.title_page(css).replace('class="pg', 'class="full').replace("</section>", "") + TP_MARK, fixed), R),
+              ("fixed", doc(css, FM.imprint(), fixed), {}),
+              ("fixed", doc(css, FM.rights(), fixed), R),
+              ("fixed", doc(css, P2.verse_page().replace('class="pg', 'class="full'), fixed), R),
+              ("flow", flow(css, author_word(), "كلمة المؤلف"), {"recto": True, "anchor": "author"}),
+              ("toc", None, {"recto": True}),
+              ("cont", doc(css, FM.symbols(), CONT_CSS % "الرموز والاصطلاحات", "الرموز والاصطلاحات"), {"recto": True, "anchor": "symbols"}),
+              ("fixed", doc(css, poster("الافتتاحية", "المقدمة", "في صناعة الكلام: البيان في خلق الإنسان وفي الكتاب والسنة وعند علماء العربية، ومنزلة العربية وعلومها، والفرق بين أن تعرف اللغة وأن تملكها، وأيّ عربيةٍ نتكلّم.", kufam=True), fixed), {"recto": True, "anchor": "main"})]
     tamhid = files[0].read_text(encoding="utf-8").replace("# المقدمة: في صناعة الكلام\n", "")
-    pieces.append(("flow", flow(css, chapter(tamhid, "المقدمة"), "تمهيد")))
+    pieces.append(("flow", flow(css, chapter(tamhid, "المقدمة"), "تمهيد"), {"anchor": "01"}))
+    toc_rows = [("part", "", "المقدّمات"), ("e", "", "كلمة المؤلف", "author", []), ("e", "", "الرموز والاصطلاحات", "symbols", []),
+                ("part", "", "المقدمة: في صناعة الكلام"), ("e", "", "تمهيد", "01", [])]
     for n, f in enumerate(files[1:], 1):
         md = f.read_text(encoding="utf-8")
         if f.name.startswith("05-"):
             pieces.append(("fixed", doc(css, heritage("سيبويه", "«فمنه مستقيمٌ حسن، ومُحال، ومستقيمٌ كذب، ومستقيمٌ قبيح، وما هو مُحالٌ كذب»",
-                                                     "الكتاب، باب الاستقامة من الكلام والإحالة"), fixed)))
+                                                     "الكتاب، باب الاستقامة من الكلام والإحالة"), fixed), {}))
         if f.name.startswith("07-"):
-            pieces.append(("fixed", doc(css, verse_poster("العربية والوحي", "إِنَّا نَحْنُ نَزَّلْنَا ٱلذِّكْرَ وَإِنَّا لَهُۥ لَحَٰفِظُونَ", "(الحجر: ٩)"), fixed)))
+            pieces.append(("fixed", doc(css, verse_poster("العربية والوحي", "إِنَّا نَحْنُ نَزَّلْنَا ٱلذِّكْرَ وَإِنَّا لَهُۥ لَحَٰفِظُونَ", "(الحجر: ٩)"), fixed), {}))
         if f.name.startswith("10-"):
             pieces.append(("fixed", doc(css, poster("السؤال الذي وُلد منه الكتاب", "كيف نصنع المتكلّم العربي؟",
                                                     "لا: كيف نعلّم الطالب مزيدًا من العربية؛ بل: كيف نجعل العربية التي تعلّمها تظهر على لسانه حين يحتاج إليها، ثم يُحسن وضعها في موضعها.",
-                                                    kufam=True, mid=True), fixed)))
+                                                    kufam=True, mid=True), fixed), {}))
         if f.name.startswith("11-"):
-            pieces.append(("fixed", doc(css, poster("المقدمة", "فأين الخلل؟", "ليس في علم المتعلّم، ولا في عقله، ولا في دينه؛ بل في صناعةٍ لم تُعلَّم تعليمًا مقصودًا: أن يصير ما يعرفه كلامًا يُقال، لمن يُقال له، حين يُقال."), fixed)))
+            pieces.append(("fixed", doc(css, poster("المقدمة", "فأين الخلل؟", "ليس في علم المتعلّم، ولا في عقله، ولا في دينه؛ بل في صناعةٍ لم تُعلَّم تعليمًا مقصودًا: أن يصير ما يعرفه كلامًا يُقال، لمن يُقال له، حين يُقال."), fixed), {}))
         if f.name.startswith("14-"):
             pieces.append(("fixed", doc(css, heritage("من الصحيفة المنسوبة إلى بشر بن المعتمر",
-                                                     "«فيجعل لكلّ طبقةٍ من ذلك كلامًا، ولكلّ حالةٍ من ذلك مقامًا»", "رواها الجاحظ في البيان والتبيين"), fixed)))
+                                                     "«فيجعل لكلّ طبقةٍ من ذلك كلامًا، ولكلّ حالةٍ من ذلك مقامًا»", "رواها الجاحظ في البيان والتبيين"), fixed), {}))
         title = re.sub(r"^الفصل [^:]+:\s*", "", re.search(r"^##\s+(.+)$", md, re.M).group(1))
+        key = f.name[:2]
+        toc_rows.append(("e", f"الفصل {ORD[n]}", title, key, sections(md)))
         for kind, part in chapter_parts(md, f"الفصل {ORD[n]}"):
             if kind == "flow":
-                pieces.append(("flow", flow(css, part, title)))
+                pieces.append(("flow", flow(css, part, title), {"anchor": key}))
             elif kind == "fixed":
-                pieces.append(("fixed", doc(css, part, fixed)))
+                pieces.append(("fixed", doc(css, part, fixed), {}))
             else:
-                pieces.append(("cont", doc(css, part, CONT_CSS % title, title, paged="fn-note" in part)))
+                pieces.append(("cont", doc(css, part, CONT_CSS % title, title, paged="fn-note" in part), {}))
+    pieces.append(("fixed", doc(css, FM.colophon(), fixed), {"recto": True}))
+
+    def toc_html(numbers):
+        rows = []
+        for r in toc_rows:
+            if r[0] == "part":
+                rows.append(r)
+            else:
+                rows.append(("e", r[1], r[2], numbers.get(r[3], "٠٠٠"), r[4]))
+        return doc(css, FM.contents(rows), CONT_CSS % "المحتويات", "المحتويات", paged=True)
+
     paper = B.render(doc(css, '<div style="width:200mm;height:260mm;background:var(--paper)"></div>', fixed), "opening-paper")
-    w = PdfWriter()
-    kinds = []
-    for i, (kind, html) in enumerate(pieces):
+    blank = PdfReader(str(paper)).pages[0]
+    out, anchors, toc_slot = [], {}, None   # out: [(page, kind)]; the first entry is the case wrap
+    for i, (kind, html, meta) in enumerate(pieces):
+        if meta.get("recto") and len(out) >= 1 and len(out) % 2 == 0:
+            out.append((PdfReader(str(paper)).pages[0], "blank"))   # the next page would be a verso: leave it white
+        if meta.get("anchor"):
+            anchors[meta["anchor"]] = len(out)
+        if kind == "toc":
+            r = PdfReader(str(B.render(toc_html({}), "opening-toc")))
+            toc_slot = (len(out), len(r.pages[:body_pages(r)]))
+            for pg in r.pages[:toc_slot[1]]:
+                out.append((pg, "toc"))
+            continue
         if kind == "flow":
             body, bandhtml = html
             r = PdfReader(str(B.render(body, f"opening-{i:02d}")))
@@ -497,8 +594,7 @@ def main():
             for j, pg in enumerate(r.pages[:body_pages(r)]):
                 under = PdfReader(str(band if j == 0 else paper)).pages[0]
                 under.merge_page(pg)
-                w.add_page(under)
-                kinds.append(kind)
+                out.append((under, "open" if j == 0 else "flow"))
             continue
         r = PdfReader(str(B.render(html, f"opening-{i:02d}")))
         for pg in (r.pages[:body_pages(r)] if kind == "cont" else r.pages):
@@ -506,21 +602,29 @@ def main():
                 under = PdfReader(str(paper)).pages[0]
                 under.merge_page(pg)
                 pg = under
-            w.add_page(pg)
-            kinds.append("flow" if kind == "cont" else kind)
-    # folios: count from the title page; the case wrap and full-bleed pages carry none
-    nums, n = [], 0
-    for k in kinds:
-        if k == "wrap":
-            nums.append(0)
-            continue
-        n += 1
-        nums.append(n if k == "flow" else 0)
-    fr = PdfReader(str(B.render(folios(css, nums[1:]), "opening-folios")))
-    for i, pg in enumerate(w.pages[1:]):
-        if nums[i + 1]:
-            pg.merge_page(fr.pages[i])
-    w.add_metadata({"/Title": "صناعة المتكلّم العربي — المجلد الأول: الافتتاحية", "/Author": "أحمد بن إبراهيم السليمي"})
+            out.append((pg, "flow" if kind == "cont" else kind))
+    # the preliminaries are counted in abjad letters from the half-title; the text is counted from ١ at the Muqaddima
+    main_at = anchors["main"]
+    label = [""] + [ABJAD[i - 1] if i < main_at else str(i - main_at + 1).translate(AR) for i in range(1, len(out))]
+    numbers = {a: label[ix] for a, ix in anchors.items()}
+    r = PdfReader(str(B.render(toc_html(numbers), "opening-toc")))
+    if len(r.pages[:body_pages(r)]) != toc_slot[1]:
+        raise SystemExit("the contents changed length when its page numbers were filled in")
+    for k in range(toc_slot[1]):
+        under = PdfReader(str(paper)).pages[0]
+        under.merge_page(r.pages[k])
+        out[toc_slot[0] + k] = (under, "flow")
+    style = {"flow": "run", "open": "open"}
+    marks = [(label[i], style.get(out[i][1], "")) for i in range(1, len(out))]
+    fr = PdfReader(str(B.render(folios(css, marks), "opening-folios")))
+    from pypdf import PdfWriter
+    w = PdfWriter()
+    for i, (pg, _) in enumerate(out):
+        if i and marks[i - 1][1]:
+            pg.merge_page(fr.pages[i - 1])
+        w.add_page(pg)
+    w.add_metadata({"/Title": "صناعة المتكلّم العربي — المجلد الأول: الافتتاحية", "/Author": "أحمد بن إبراهيم السليمي",
+                    "/Publisher": FM.PUBLISHER_EN})
     w.write(str(OUT))
     guard_fonts(OUT)
     print(OUT, len(w.pages), "pages")
