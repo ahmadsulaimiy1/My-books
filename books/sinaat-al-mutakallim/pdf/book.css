@@ -417,6 +417,11 @@ dl.gloss dt .en { display: block; font-family: var(--f-latin); font-size: 8.8pt;
 dl.gloss dd { margin: 0; font-size: 10.8pt; line-height: 1.75; }
 .biblio { padding-inline-start: 0; }
 .biblio li { font-size: 10.8pt; line-height: 1.75; margin: 1.2mm 0; text-align: start; padding-inline-start: 5.2mm; }
+.biblio.lat { padding: 0; }
+.biblio.lat li { direction: ltr; text-align: left; padding: 0 0 0 6mm; text-indent: -6mm; }
+.biblio.lat li::before { display: none; }
+.biblio.lat .ltr { font-family: var(--f-latin); font-size: 9.6pt; line-height: 1.6; }
+.biblio.lat .ltr b { font-weight: 600; }
 .idx { columns: 2; column-gap: 8mm; column-rule: .5pt solid var(--hairline); }
 .idx p { margin: 0; font-size: 10pt; line-height: 1.75; text-align: start; break-inside: avoid; }
 .idx p b { font-weight: 700; color: var(--sapphire-900); }
