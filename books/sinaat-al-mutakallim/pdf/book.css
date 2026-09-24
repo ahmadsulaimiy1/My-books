@@ -455,3 +455,6 @@ tbody tr > * { border-top: .9pt solid #FCFBF7; }
 .neq { position: relative; display: inline-block; font-family: var(--f-read); padding: 0 .1em; }
 .neq::after { content: ""; position: absolute; left: 50%; top: 18%; height: 64%; border-left: .7pt solid currentColor; transform: rotate(28deg); }
 i.ctx-ico { width: 2.2mm; height: 2.2mm; border: .9pt solid var(--gold-300); display: inline-block; transform: rotate(45deg); margin: 0 .6mm; vertical-align: .1em; }
+
+/* a heading never splits: its label chip stays on the page with the title */
+h4.lesson, h5, p.hx { break-inside: avoid; }
