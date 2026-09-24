@@ -498,6 +498,27 @@ def wrap_latin_runs(soup):
             s.replace_with(frag("".join(out)))
 
 
+WAQF = re.compile(r"\s+(?=[\u06D6-\u06DC])")
+
+
+def fix_glyphs(soup):
+    """Characters the approved faces lack in the running text: pause marks are joined to their word
+    (a mark after a space is shaped alone and falls back to a system font), arrows go to IBM Plex
+    Sans Arabic (its Latin subset carries them), ≠ and a stray ▣ are drawn in CSS."""
+    for s in list(soup.find_all(string=True)):
+        if s.parent.name in ("style", "script"):
+            continue
+        t = str(s)
+        if not any(ch in t for ch in "▣↑↓≠\u06D6\u06D7\u06D8\u06D9\u06DA\u06DB\u06DC"):
+            continue
+        t = WAQF.sub("", t)
+        h = esc(t)
+        h = h.replace("↑", '<span class="sym">↑</span>').replace("↓", '<span class="sym">↓</span>')
+        h = h.replace("≠", '<span class="neq" role="img" aria-label="لا تساوي">=</span>')
+        h = h.replace("▣", '<i class="ctx-ico" role="img" aria-label="بطاقة المقام"></i>')
+        s.replace_with(frag(h))
+
+
 def transform(soup):
     transform_context_cards(soup)
     transform_models(soup)
@@ -512,6 +533,7 @@ def transform(soup):
     B.style_tables(soup)
     B.style_code(soup)
     B.replace_symbols(soup)
+    fix_glyphs(soup)
     wrap_latin_runs(soup)
     for t in soup.find_all("table"):
         if "dlg" in (t.get("class") or []):

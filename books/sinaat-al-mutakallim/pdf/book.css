@@ -449,3 +449,9 @@ tbody tr > * { border-top: .9pt solid #FCFBF7; }
 .speech::before { content: ""; position: absolute; top: 1.2pt; bottom: 0; inset-inline-start: 0; width: 1.2pt; background: var(--gold-500); }
 .keep-with { break-inside: avoid; }
 .keep-with > .keep { break-inside: auto; }
+
+/* glyphs the reading faces lack, drawn or routed (book_build.fix_glyphs) */
+.sym { font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 400; }
+.neq { position: relative; display: inline-block; font-family: var(--f-read); padding: 0 .1em; }
+.neq::after { content: ""; position: absolute; left: 50%; top: 18%; height: 64%; border-left: .7pt solid currentColor; transform: rotate(28deg); }
+i.ctx-ico { width: 2.2mm; height: 2.2mm; border: .9pt solid var(--gold-300); display: inline-block; transform: rotate(45deg); margin: 0 .6mm; vertical-align: .1em; }
