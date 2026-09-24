@@ -38,6 +38,9 @@ SUBTITLE = "من سلامة اللسان إلى حسن البيان"
 AUTHOR = "أحمد بن إبراهيم السليمي"
 DUA = "غفر الله له ولوالديه ولجميع المسلمين"
 EDITION = "الطبعة الأولى، ١٤٤٨هـ / ٢٠٢٦م"
+# the student book in four volumes, one per part (Bible, Part Six, ch. 25 §4)
+VOLUMES = {1: ("الأول", "التأسيس"), 2: ("الثاني", "التواصل"), 3: ("الثالث", "المنصات"), 4: ("الرابع", "التمكين")}
+AR_DIGITS = "٠١٢٣٤٥٦٧٨٩"
 
 W, H = 200.0, 260.0
 BLEED = 3.0
@@ -238,6 +241,9 @@ TEXT_CSS = """
 .cv-a .au { top: 196mm; font-family: "Amiri"; font-weight: 700; font-size: 20pt; line-height: 1.3; color: #F4EFE3;
   text-shadow: 0 .4pt 0 rgba(2, 10, 32, .6); }
 .cv-a .dua { top: 236.5mm; font-family: "Amiri"; font-size: 8.8pt; color: #93A2CB; }
+.cv-a .vol { top: 172.5mm; display: flex; align-items: center; justify-content: center; gap: 2.6mm;
+  font-family: "Noto Kufi Arabic"; font-weight: 600; font-size: 8.6pt; color: #D9BE7C; }
+.cv-a .vol i { width: 1.5mm; height: 1.5mm; transform: rotate(45deg); background: #D9BE7C; }
 
 .cv-b .hd { top: 53mm; left: 34mm; right: 34mm; white-space: normal; font-family: "Amiri"; font-weight: 700; font-size: 19pt;
   line-height: 1.45; color: #F4EFE3; text-wrap: balance; }
@@ -299,8 +305,9 @@ def tiers_html():
 
 
 class Front:
-    def __init__(self, font_css):
+    def __init__(self, font_css, volume=None):
         self.title = Lettering(font_css)
+        self.volume = volume
 
     def relief(self, x0, y0):
         px1, py1, px2, py2 = PANEL
@@ -323,12 +330,19 @@ class Front:
         return "".join(g)
 
     def html(self, x0, y0):
+        vol = ""
+        if self.volume:
+            word, part = VOLUMES[self.volume]
+            vol = f'<p class="tx vol"><span>المجلد {word}</span><i></i><span>{part}</span></p>'
         return (f'<div class="cv-a" style="left:{x0}mm; width:200mm; top:{y0}mm">'
-                f'<p class="tx sub"><i></i><span>{SUBTITLE}</span><i></i></p>'
+                f'<p class="tx sub"><i></i><span>{SUBTITLE}</span><i></i></p>{vol}'
                 f'<p class="tx by">تأليف</p><p class="tx au">{AUTHOR}</p><p class="tx dua">{DUA}</p></div>')
 
 
 class Back:
+    def __init__(self, volume=None):
+        self.volume = volume
+
     def relief(self, x0, y0):
         return []
 
@@ -346,21 +360,25 @@ class Back:
                 f'<p class="tx hd">{BACK_HEAD}</p><p class="tx rl"><i></i></p><p class="tx p">{BACK_TEXT}</p>'
                 f'<ul class="lad">{rows}</ul>'
                 f'<p class="tx me">{tiers_html()}<span>{METHOD}</span></p>'
-                f'<p class="tx au">{AUTHOR}</p><p class="tx dua">{DUA}</p><p class="tx ed">{EDITION}</p></div>')
+                f'<p class="tx au">{AUTHOR}</p><p class="tx dua">{DUA}</p>'
+                f'<p class="tx ed">{(f"المجلد {VOLUMES[self.volume][0]}: {VOLUMES[self.volume][1]}؛ " if self.volume else "") + EDITION}</p></div>')
 
 
 class Spine:
-    """Hardcover spine in panels: head measure, title panel, author, the signature, edition, foot
-    measure. The gold rules sit at the same heights on every copy, so a row of copies on a shelf
-    reads as one architecture."""
+    """Hardcover spine in panels: head measure, title panel with its ruby, the volume (number in a
+    nuqta and the part's name), the author, the signature, the edition, foot measure. The gold rules
+    sit at the same heights on every volume, so the set on a shelf reads as one architecture."""
 
-    def __init__(self, font_css, width):
+    def __init__(self, font_css, width, volume=None):
         self.w = width
         self.font_css = font_css
+        self.volume = volume
         inner = width - 14.0
         self.title, self.tsize = word_stack(font_css, [TITLE_1, "المتكلّم", "العربي"], inner, 13.5)
         au_words = ["أحمد بن إبراهيم", "السليمي"] if width < 70 else [AUTHOR]
-        self.author, self.asize = word_stack(font_css, au_words, width - 12.0, 6.4)
+        self.author, self.asize = word_stack(font_css, au_words, width - 12.0, 6.2)
+        if volume:
+            self.part, _ = word_stack(font_css, [VOLUMES[volume][1]], width - 14.0, 6.6, face=("Amiri", 700))
 
     def relief(self, x0, y0):
         return []
@@ -373,12 +391,22 @@ class Spine:
         t_h = sum(l.bounds[3] - l.bounds[1] for l in self.title) + 3.6 * (len(self.title) - 1)
         svg, _ = stack_svg(self.title, cx, (py1 + py2) / 2 - t_h / 2, 3.6)
         out.append(svg)
+        if self.volume:
+            vy = y0 + 139.0
+            out.append(f'<path d="{K.rhomb_path(cx, vy, 6.0)}" fill="#0B2461" stroke="{GOLD}" stroke-width="0.45"/>')
+            out.append(f'<text x="{cx:.2f}" y="{vy + 2.9:.2f}" font-family="Reem Kufi" font-weight="700" font-size="8.4" '
+                       f'text-anchor="middle" fill="{GOLD}">{AR_DIGITS[self.volume]}</text>')
+            psvg, _ = stack_svg(self.part, cx, y0 + 149.0, 1.0, fill=PEARL, shadow=False)
+            out.append(psvg)
+            a_top, sig_top, sig_h, r1, r2 = 160.5, 183.0, 24.0, 178.5, 214.0
+        else:
+            a_top, sig_top, sig_h, r1, r2 = 140.0, 166.0, min(34.0, w * 0.5), 152.0, 214.0
         a_h = sum(l.bounds[3] - l.bounds[1] for l in self.author) + 1.6 * (len(self.author) - 1)
-        asvg, _ = stack_svg(self.author, cx, y0 + 140.0 - a_h / 2, 1.6, fill=PEARL, shadow=False)
+        asvg, _ = stack_svg(self.author, cx, y0 + a_top - (a_h / 2 if not self.volume else 0), 1.6, fill=PEARL, shadow=False)
         out.append(asvg)
-        out.append(hairline(x1 + 4, x2 - 4, y0 + 152.0, 0.25))
-        out.append(signature(cx, y0 + 166.0, min(34.0, w * 0.5)))
-        out.append(hairline(x1 + 4, x2 - 4, y0 + 214.0, 0.25))
+        out.append(hairline(x1 + 4, x2 - 4, y0 + r1, 0.25))
+        out.append(signature(cx, y0 + sig_top, sig_h))
+        out.append(hairline(x1 + 4, x2 - 4, y0 + r2, 0.25))
         if bands:
             out += [hairline(x0, x0 + w, y0 + BAND_TOP), hairline(x0, x0 + w, y0 + BAND_BOT)]
             out += [K.foil_rhomb(cx, y0 + BAND_TOP, 1.1), K.foil_rhomb(cx, y0 + BAND_BOT, 1.1)]
@@ -443,12 +471,12 @@ def spine_width(pages, caliper=0.1, boards=6.0):
     return round(pages / 2 * caliper + boards, 1)
 
 
-def wrap_section(font_css, spine, dpi=300, bleed=BLEED):
+def wrap_section(font_css, spine, dpi=300, bleed=BLEED, volume=None):
     """Front | spine | back, left to right as the flat case lies (an Arabic book opens from the right).
     The two gold measures run unbroken across all three panels."""
     wmm, hmm = 2 * W + spine + 2 * bleed, H + 2 * bleed
     fx, sx, bx = bleed, bleed + W, bleed + W + spine
-    f, s, b = Front(font_css), Spine(font_css, spine), Back()
+    f, s, b = Front(font_css, volume), Spine(font_css, spine, volume), Back(volume)
     svg = (f.gold(fx, bleed, bands=False) + s.gold(sx, bleed, bands=False) + b.gold(bx, bleed, bands=False)
            + hairline(fx + 28, bx + 172, bleed + BAND_TOP) + hairline(fx + 28, bx + 172, bleed + BAND_BOT)
            + measure_band(fx + 28, fx + 172, bleed + BAND_TOP) + measure_band(bx + 28, bx + 172, bleed + BAND_TOP)
@@ -456,7 +484,7 @@ def wrap_section(font_css, spine, dpi=300, bleed=BLEED):
            + K.foil_rhomb(sx + spine / 2, bleed + BAND_TOP, 1.1) + K.foil_rhomb(sx + spine / 2, bleed + BAND_BOT, 1.1))
     pf, pb = PANEL, BACK_PANEL
     prims = f.relief(fx, bleed)
-    tex = texture(f"wrap-a-{spine}", (wmm, hmm), dpi, prims,
+    tex = texture(f"wrap-a-{spine}-{volume or 0}", (wmm, hmm), dpi, prims,
                   recesses=[(fx + pf[0], bleed + pf[1], fx + pf[2], bleed + pf[3]),
                             (bx + pb[0], bleed + pb[1], bx + pb[2], bleed + pb[3])],
                   knock=f.boxes)
@@ -465,18 +493,36 @@ def wrap_section(font_css, spine, dpi=300, bleed=BLEED):
     return section(font_css, tex, svg, html, wmm, hmm, folds), wmm, hmm
 
 
+def volume_wraps(font_css, pages_by_volume, out_pdf, dpi=300):
+    """One case wrap per volume (each spine sized to its page count), merged into one print file."""
+    import build as B
+    from pypdf import PdfWriter, PdfReader
+    w = PdfWriter()
+    spines = {}
+    for v, pages in pages_by_volume.items():
+        sp = spine_width(pages)
+        spines[v] = sp
+        sec, wmm, hmm = wrap_section(font_css, sp, dpi, volume=v)
+        pdf = B.render(doc(font_css, sec, wmm, hmm, f"غلاف المجلد {VOLUMES[v][0]}"), f"cover-wrap-v{v}")
+        w.append(PdfReader(str(pdf)))
+    w.add_metadata({"/Title": f"{TITLE_1} {TITLE_2}: أغلفة المجلدات الأربعة", "/Author": AUTHOR})
+    with open(out_pdf, "wb") as fh:
+        w.write(fh)
+    import json
+    (Path(out_pdf).parent / "spines.json").write_text(json.dumps(spines), encoding="utf-8")
+    return spines
+
+
 def main():
     import build as B
     import book_build as BB
     font_css = B.static_instances(B.ensure_fonts(BB.BOOK_FONT_CSS, "bookfonts"))
     dpi = 200 if "--draft" in sys.argv else 300
-    pages = next((int(a.split("=")[1]) for a in sys.argv if a.startswith("--pages=")), 1400)
     print(B.render(doc(font_css, front_section(font_css, dpi), W, H), "cover-front"))
     print(B.render(doc(font_css, back_section(font_css, dpi), W, H), "cover-back"))
-    sp = spine_width(pages)
-    sec, wmm, hmm = wrap_section(font_css, sp, dpi)
-    print("spine", sp, "mm for", pages, "pages")
-    print(B.render(doc(font_css, sec, wmm, hmm, "الغلاف الكامل"), "cover-wrap"))
+    vols = next((a.split("=")[1] for a in sys.argv if a.startswith("--volumes=")), "800,800,800,900")
+    pages = {i + 1: int(n) for i, n in enumerate(vols.split(","))}
+    print(volume_wraps(font_css, pages, K.CACHE / "wraps.pdf", dpi))
 
 
 if __name__ == "__main__":

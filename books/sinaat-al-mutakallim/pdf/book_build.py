@@ -472,6 +472,32 @@ def keep_headings(soup):
             w.append(nxt.extract())
 
 
+LATIN_RUN = re.compile(r"[A-Za-z][A-Za-z0-9'’\-]*(?:[ ,.:;!?/&–-]+[A-Za-z0-9][A-Za-z0-9'’\-]*)*[.?!]?")
+
+
+def wrap_latin_runs(soup):
+    """Latin words inside Arabic text take the Latin companion face (Source Serif 4 in reading
+    text, IBM Plex Sans in functional text) and a short phrase is never broken across lines."""
+    for s in list(soup.find_all(string=LATIN_RUN)):
+        if s.find_parent(["code", "pre", "style", "script", "svg", "a"]) or s.find_parent(class_=["en", "ltr", "pmk", "mono"]):
+            continue
+        txt = str(s)
+        out, last = [], 0
+        for m in LATIN_RUN.finditer(txt):
+            run = m.group(0).strip()
+            if len(run) < 2 or not re.search(r"[A-Za-z]{2}", run):
+                continue
+            a = m.start() + (len(m.group(0)) - len(m.group(0).lstrip()))
+            b = a + len(run)
+            out.append(esc(txt[last:a]))
+            cls = "en nw" if len(run) <= 32 else "en"
+            out.append(f'<span class="{cls}">{esc(run)}</span>')
+            last = b
+        if out:
+            out.append(esc(txt[last:]))
+            s.replace_with(frag("".join(out)))
+
+
 def transform(soup):
     transform_context_cards(soup)
     transform_models(soup)
@@ -486,6 +512,7 @@ def transform(soup):
     B.style_tables(soup)
     B.style_code(soup)
     B.replace_symbols(soup)
+    wrap_latin_runs(soup)
     for t in soup.find_all("table"):
         if "dlg" in (t.get("class") or []):
             wrap = t.find_parent("div", class_="tbl")
@@ -905,10 +932,50 @@ def assemble(font_css):
     doc = (f'<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>{TITLE}: {SUBTITLE}</title>'
            f'<style>{font_css}</style><style>{css}\n{CVR.TEXT_CSS}\n{page_rules()}</style></head><body>{"".join(body)}</body></html>')
     soup = BeautifulSoup(doc, "html.parser")
+    dialogue_index(soup)
     linkify(soup, ch_ids)
     keep_wrappers(soup)
     keep_headings(soup)
     return soup, all_entries, missing
+
+
+DLG_RE = re.compile(r"^(?:[٠-٩]+[.)]\s*)?(?:الحوار|حوار)(?!\s*(?:ات|ية))|الحوار الممتد")
+
+
+def dialogue_index(soup):
+    """Index of the dialogues: every chapter heading (level 4) that opens a dialogue,
+    grouped by bab, with its page; listed at the end of the table of contents."""
+    groups, n = {}, 0
+    for sec in soup.select("section.ch"):
+        m = re.search(r"page:\s*b(\d+)", sec.get("style", ""))
+        if not m:
+            continue
+        bab = int(m.group(1))
+        kick = sec.select_one(".ch-h .ck span")
+        kicker = kick.get_text(strip=True) if kick else ""
+        for h in sec.find_all("h5"):
+            title = h.get("data-outline") or h.get_text(" ", strip=True)
+            if not DLG_RE.search(title) or len(title) > 120:
+                continue
+            n += 1
+            h["id"] = f"dlg-{n}"
+            groups.setdefault(bab, []).append((kicker, title, h["id"]))
+    if not n:
+        return
+    rows = []
+    for bab in sorted(groups):
+        rows.append(f'<div class="toc-bab"><span class="k">الباب {ORD[bab]}</span><a href="#bab-{bab}">{esc(BABS[bab][0])}</a><span class="lead"></span></div>')
+        for kicker, title, a in groups[bab]:
+            rows.append(f'<div class="toc-row"><span class="k">{esc(kicker)}</span><a href="#{a}">{esc(title)}</a><span class="lead"></span>{pgref(a)}</div>')
+    html = (f'<section class="fm-sec appx" style="page: appx">{sec_header("dlg-index", "كشاف", "كشاف الحوارات")}'
+            f'<div class="sec-body"><p>كل حوار في الكتاب، مرتبًا على الأبواب والفصول، بأرقام صفحاته؛ ويتبع كلَّ حوار ممتد تحليله سطرًا سطرًا ونسخته المحسّنة وجدول «ماذا تغيّر؟». '
+            f'والعدد: {ar(n)}.</p><div class="toc dlg-idx">{"".join(rows)}</div></div></section>')
+    back = soup.select_one("section.back-page")
+    if back is not None:
+        back.insert_before(frag(html))
+    toc = soup.select_one("div.toc")
+    if toc is not None:
+        toc.append(frag(f'<div class="toc-row"><span class="k"></span><a href="#dlg-index">كشاف الحوارات</a><span class="lead"></span>{pgref("dlg-index")}</div>'))
 
 
 # --------------------------------------------------------------------------- markers / finalize
