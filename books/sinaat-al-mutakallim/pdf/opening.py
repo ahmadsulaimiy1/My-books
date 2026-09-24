@@ -62,11 +62,14 @@ h3 + p { text-indent: 0; }
 strong { font-weight: 700; }
 .q { font: 400 14.6pt/1.9 "Amiri Quran", "Amiri"; color: var(--sapphire); }
 .qref { font: 400 8.2pt/1 "IBM Plex Sans Arabic"; color: var(--ink-3); margin-right: 1.4mm; white-space: nowrap; }
-p.ayah { text-align: center; text-indent: 0; margin: 4mm 0; break-inside: avoid; }
+p.ayah { text-align: center; text-indent: 0; margin: 6.5mm 0; break-inside: avoid; }
 p.ayah .q { font-size: 17pt; line-height: 2.05; }
-p.ayah .qref { display: block; margin-top: 1mm; }
+p.ayah .qref { display: block; margin: 1.2mm 0 0; font: 300 8.6pt/1.4 "Changa"; color: var(--gold-ink); }
 blockquote { margin: 4mm 0; padding: 0; break-inside: avoid; }
 blockquote.quote { border-right: 1.4pt solid var(--gold); padding: 1mm 5mm 1mm 0; }
+blockquote.hadith { margin: 6mm 4mm; text-align: center; }
+blockquote.hadith::before, blockquote.hadith::after { content: ""; display: block; width: 14mm; margin: 0 auto; border-top: .6pt solid var(--gold); }
+blockquote.hadith p { font: 400 14.6pt/1.95 "Amiri"; color: #1F2F57; text-align: center; text-indent: 0; padding: 2.2mm 0; text-wrap: balance; }
 blockquote.quote p { font: 400 14pt/1.9 "Amiri"; color: var(--sapphire); text-indent: 0; }
 blockquote.lesson { background: var(--paper-2); border-top: .8pt solid var(--gold); padding: 3mm 5mm 3.4mm; margin: 5mm 0 5.5mm; }
 blockquote.lesson p { font: 400 12.4pt/1.75 "Scheherazade New"; color: var(--ink-2); text-indent: 0; text-align: justify; }
@@ -78,9 +81,10 @@ blockquote.title-line { margin: 7mm 0 2mm; text-align: center; }
 blockquote.title-line p { font: 600 25pt/1.6 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--sapphire); text-align: center; text-indent: 0; }
 blockquote.title-line p strong { font-weight: 600; }
 blockquote.def p { font: 400 13.6pt/1.8 "Scheherazade New"; color: var(--sapphire); text-align: center; text-indent: 0; }
-.bayt { display: grid; grid-template-columns: 1fr 8mm 1fr; font: 400 14.2pt/2.05 "Amiri"; white-space: nowrap; }
-.bayt span:first-child { text-align: left; } .bayt span:last-child { text-align: right; }
-blockquote.poem { background: var(--paper-2); padding: 3mm 6mm; border-top: .5pt solid var(--gold); border-bottom: .5pt solid var(--gold); }
+.bayt { display: grid; grid-template-columns: 47mm 10mm 47mm; justify-content: center; font: 400 14.4pt/2.1 "Amiri"; color: var(--ink); }
+.bayt span { text-align: justify; text-align-last: justify; white-space: nowrap; }
+blockquote.poem { background: var(--paper-2); padding: 4.5mm 0; margin: 6mm 0; border-top: .5pt solid var(--gold); border-bottom: .5pt solid var(--gold); }
+blockquote.poem sup.fn { position: absolute; }
 ol, ul { margin: 1mm 0 2mm; padding: 0 6.5mm 0 0; }
 li { text-align: justify; margin: .4mm 0; }
 ul { list-style: none; } ul > li { position: relative; }
@@ -143,6 +147,15 @@ def ayat(html):
     return html
 
 
+def is_hadith(bq, notes):
+    """A quotation whose note is a takhrij of a marfu' report (رواه/متفق عليه/أخرجه, not موقوف)."""
+    sup = bq.find("sup", class_="fn")
+    if not sup:
+        return False
+    note = notes.get(sup.get_text().translate(str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")), "")
+    return note.startswith(("رواه", "متفق", "أخرجه")) and "موقوف" not in note
+
+
 def md_to_html(md):
     notes = dict(re.findall(r"^\[\^(\d+)\]:\s*(.+)$", md, re.M))
     md = re.sub(r"^\[\^\d+\]:.*$", "", md, flags=re.M)
@@ -176,6 +189,8 @@ def md_to_html(md):
         elif txt == "«صناعة المتكلّم العربي»":
             bq["class"] = ["title-line"]
             bq.find("p").string = txt.strip("«»")
+        elif txt.startswith("«") and is_hadith(bq, notes):
+            bq["class"] = ["hadith"]
         elif txt.startswith("«"):
             bq["class"] = ["quote"]
         else:
