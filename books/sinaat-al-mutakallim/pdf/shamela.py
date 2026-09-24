@@ -25,7 +25,7 @@ DIAC = re.compile(r"[ؐ-ًؚ-ٰٟۖ-ۭـ]")
 def _get(url: str, data: dict | None = None) -> str:
     key = hashlib.sha1((url + json.dumps(data, sort_keys=True, ensure_ascii=False)).encode()).hexdigest()
     f = CACHE / key
-    if f.exists():
+    if f.exists() and f.stat().st_size:
         return f.read_text(encoding="utf-8")
     cmd = ["curl", "-s", "--max-time", "60", url]
     if data is not None:
@@ -39,7 +39,8 @@ def _get(url: str, data: dict | None = None) -> str:
             break
         time.sleep(2 ** (attempt + 1))
     time.sleep(0.6)
-    f.write_text(out, encoding="utf-8")
+    if out.strip():  # an empty answer is not cached: the next run asks again
+        f.write_text(out, encoding="utf-8")
     return out
 
 

@@ -107,7 +107,7 @@ sup.fn a { color: inherit; text-decoration: none; }
 .notes h4 { font: 300 11pt/1 "Changa"; color: var(--gold-ink); margin: 0 0 2mm; display: flex; gap: 3mm; align-items: center; }
 .notes h4::after { content: ""; flex: 1; border-top: .5pt solid var(--gold); }
 .notes ol { padding-right: 6mm; }
-.notes li { font: 400 9.8pt/1.55 "Scheherazade New"; color: var(--ink-2); }
+.notes li { font: 400 9.6pt/1.55 "Scheherazade New"; color: var(--ink-2); }  /* Bible, ch. 45 */
 .notes li::marker { font: 500 8pt "IBM Plex Sans Arabic"; color: var(--gold-ink); }
 .lat { direction: ltr; unicode-bidi: isolate; font-family: "Source Serif 4"; font-size: .86em; }
 /* heritage and poster interludes */
