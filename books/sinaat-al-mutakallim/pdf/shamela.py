@@ -48,6 +48,8 @@ def plain(s: str) -> str:
     s = DIAC.sub("", html.unescape(s))
     s = re.sub("[إأآٱ]", "ا", s).replace("ى", "ي").replace("ة", "ه").replace("ؤ", "و").replace("ئ", "ي")
     s = re.sub(r"[^ء-ي\s]", " ", s)
+    # the salutation is written out in some editions and as a ligature (ﷺ) in others: neither counts in a comparison
+    s = re.sub(r"صلي\s+الله\s+عليه\s+وسلم", " ", s)
     return re.sub(r"\s+", " ", s).strip()
 
 
