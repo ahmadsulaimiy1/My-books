@@ -160,13 +160,13 @@ def fetch(url: str) -> bytes:
         return subprocess.run(["curl", "-sSf", "-A", UA, url], check=True, capture_output=True).stdout
 
 
-def ensure_fonts() -> str:
-    fdir = CACHE / "fonts"
+def ensure_fonts(font_css=None, cache="fonts") -> str:
+    fdir = CACHE / cache
     css_path = fdir / "fonts.css"
     if css_path.exists():
         return css_path.read_text(encoding="utf-8")
     fdir.mkdir(parents=True, exist_ok=True)
-    css = "".join(fetch(u).decode("utf-8") for u in FONT_CSS)
+    css = "".join(fetch(u).decode("utf-8") for u in (font_css or FONT_CSS))
     urls = sorted(set(re.findall(r"url\((https://fonts\.gstatic\.com/[^)]+)\)", css)))
     for i, u in enumerate(urls):
         dest = fdir / f"f{i:02d}{Path(u).suffix}"
@@ -1218,8 +1218,9 @@ def check_separators(soup: BeautifulSoup):
 FONT_FAMILIES = ("Amiri", "IBMPlexSans", "CormorantGaramond", "ReemKufi")
 
 
-def check_fonts(pdf: Path):
+def check_fonts(pdf: Path, families=None):
     """Every font in the PDF must be an approved embedded face: no Type 3, no system fallback."""
+    families = tuple(families or FONT_FAMILIES)
     bad: dict = {}
 
     def scan(res, page_no):
@@ -1227,7 +1228,7 @@ def check_fonts(pdf: Path):
         for f in (res.get("/Font") or {}).values():
             f = f.get_object()
             name = "Type3" if f.get("/Subtype") == "/Type3" else str(f.get("/BaseFont", "?")).split("+")[-1]
-            if name == "Type3" or not name.replace("-", "").startswith(FONT_FAMILIES):
+            if name == "Type3" or not name.replace("-", "").startswith(families):
                 bad.setdefault(name, set()).add(page_no)
         for x in (res.get("/XObject") or {}).values():
             x = x.get_object()

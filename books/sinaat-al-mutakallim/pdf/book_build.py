@@ -22,6 +22,8 @@ from pypdf.generic import BooleanObject, NameObject, TextStringObject, Fit
 
 import build as B
 import components as C
+import cover as CVR
+import cover_kit as CK
 from components import ar, badge
 
 HERE = Path(__file__).resolve().parent
@@ -35,6 +37,7 @@ DESC = "منهج شامل في النطق والتعبير والخطاب وآد
 AUTHOR = "أحمد بن إبراهيم السليمي"
 DUA = "غفر الله له ولوالديه ولجميع المسلمين"
 EDITION = "الطبعة الأولى، ١٤٤٨هـ / ٢٠٢٦م"
+DPI = 300                      # cover rasters (the --fast preview uses 150)
 
 ORD = ["", "الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس", "السابع", "الثامن", "التاسع", "العاشر",
        "الحادي عشر", "الثاني عشر", "الثالث عشر", "الرابع عشر"]
@@ -78,6 +81,27 @@ BAB_PART = {b: p["n"] for p in PARTS for b in p["babs"]}
 
 APPX_ORDER = ["أ", "ب", "ج", "د", "هـ", "و", "ز"]
 
+# Typographic constitution (Bible, Part Six, ch. 23 §1): each family has one written role.
+#   title lettering    engineered Amiri Bold outlines (cover, spine, half-title, title page)
+#   Amiri              reading: body, long quotations, dialogue speech, examples, references
+#   Reem Kufi          contemporary Kufi: part and bab titles, opener numerals
+#   El Messiri         display hybrid: chapter titles, major topics, front/back matter titles, rules
+#   Noto Kufi Arabic   Kufi accent: practical labels, speaker tiers, speaker names, kickers
+#   IBM Plex Sans Arabic  subheadings, navigation, tables, instructions, metadata, page furniture
+#   Aref Ruqaa         accent only: the guiding question of each bab, the dedication
+#   Source Serif 4 / IBM Plex Sans  Latin companions; Amiri Quran for the ayat
+BOOK_FONT_CSS = [
+    "https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&display=swap",
+    "https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;600;700&display=swap",
+    "https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800&display=swap",
+    "https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;600;700&display=swap",
+    "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700"
+    "&family=IBM+Plex+Sans:wght@400;500;600&display=swap",
+    "https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap",
+    "https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap",
+]
+BOOK_FAMILIES = ("Amiri", "ReemKufi", "ElMessiri", "NotoKufiArabic", "IBMPlexSans", "ArefRuqaa", "SourceSerif4")
+
 
 # --------------------------------------------------------------------------- utilities
 
@@ -113,17 +137,26 @@ def text_of(el) -> str:
 # --------------------------------------------------------------------------- manuscript transforms
 
 KINDS = [
-    (("التدريب الصوتي", "تدريب النطق", "تمارين النطق", "التدريب على النطق", "الأداء المتعدد"), "تدريب صوتي", "k-drill"),
+    (("التدريب الصوتي", "تدريب النطق", "تمارين النطق", "التدريب على النطق", "الأداء المتعدد", "سجّل صوتك", "سجل صوتك"), "سجّل صوتك", "k-drill"),
     (("المحاكاة",), "محاكاة", "k-sim"),
     (("الاستماع", "السماع"), "استماع", "k-listen"),
+    (("جرّب بنفسك", "جرب بنفسك"), "جرّب بنفسك", "k-practice"),
     (("تدريب", "التدريبات", "تمرين", "التمارين"), "تدريب", "k-practice"),
+    (("التطبيق", "تطبيق"), "تطبيق", "k-practice"),
+    (("مهمة الأداء", "المهمة الواقعية", "مهمة التسجيل"), "مهمة الأداء", "k-practice"),
     (("الموقف", "بطاقة المقام", "المواقف الواقعية"), "الموقف", "k-ctx"),
     (("من التراث", "الشاهد", "التأصيل"), "من التراث", "k-heritage"),
     (("المقارنة", "النماذج", "جدول تحليل الفروق"), "المقارنة المتدرجة", "k-model"),
+    (("الصياغة الأفضل",), "الصياغة الأفضل", "k-model"),
     (("القاعدة", "القواعد"), "القاعدة", "k-rule"),
+    (("مثال", "أمثلة", "الأمثلة"), "مثال", "k-rule"),
     (("الحوار", "حوار"), "حوار", "k-dialogue"),
     (("دراسة حالة", "بنك المواقف", "حالات"), "حالات ومواقف", "k-case"),
-    (("التقويم", "اختبار", "معيار الإتقان", "قائمة الفحص", "مهمة التسجيل", "المهمة الواقعية"), "تقويم", "k-assess"),
+    (("خطأ شائع", "أخطاء شائعة"), "خطأ شائع", "k-sim"),
+    (("راجع أداءك", "التقييم الذاتي"), "راجع أداءك", "k-assess"),
+    (("اختبار الفصل", "اختبار"), "اختبار الفصل", "k-assess"),
+    (("معيار الإتقان",), "معيار الإتقان", "k-assess"),
+    (("التقويم", "قائمة الفحص"), "تقويم", "k-assess"),
     (("الخلاصة",), "خلاصة", "k-summary"),
     (("للمدرب",), "للمدرب", "k-trainer"),
     (("من علم التواصل", "من علم اللغة"), "تحليل حديث", "k-listen"),
@@ -141,6 +174,7 @@ LABELS = {
     "تعريف": "def", "قاعدة": "rule", "قاعدة جامعة": "rule", "قاعدة الترتيب": "rule", "تنبيه": "warn",
     "فائدة": "tip", "للمدرب": "trainer", "دراسة حالة": "case", "ملاحظة": "note", "من علم التواصل": "comm",
     "من علم اللغة الحديث": "comm", "تحليل حديث": "comm", "مثال": "note", "تذكير": "tip", "خلاصة": "tip",
+    "خطأ شائع": "warn", "الصياغة الأفضل": "tip", "جرّب بنفسك": "note", "سجّل صوتك": "note", "راجع أداءك": "note",
 }
 
 DIR_RE = re.compile(r"\[([^\]\[]{1,80})\]")
@@ -228,8 +262,9 @@ def transform_models(soup):
         label = esc(t[1:].strip().rstrip(":："))
         wrap_dirs(nxt, soup)
         inner = nxt.decode_contents()
-        html = (f'<div class="model t{n}">{badge(n)}<div><p class="ml">{label}</p>'
-                f'<div class="mq">{inner}</div></div></div>')
+        dots = "".join('<i class="on"></i>' if k < n else "<i></i>" for k in range(max(3, n)))
+        html = (f'<div class="model t{n}"><p class="ml"><span class="lv" aria-hidden="true">{dots}</span>'
+                f'<span>{label}</span></p><div class="mq">{inner}</div></div>')
         nxt.decompose()
         p.replace_with(frag(html))
 
@@ -505,12 +540,24 @@ def load_chapter(files):
     return eyebrow, title, sub, note, "\n\n".join(body_parts)
 
 
-def ch_grid_svg():
-    lines = []
-    for c in range(-60, 200, 9):
-        lines.append(f'<line x1="{c}" y1="0" x2="{c + 60}" y2="60" stroke="#0E2D72" stroke-width="0.25"/>')
-        lines.append(f'<line x1="{c + 60}" y1="0" x2="{c}" y2="60" stroke="#0E2D72" stroke-width="0.25"/>')
-    return f'<svg class="grid" viewBox="0 0 166 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true">{"".join(lines)}</svg>'
+GOLD_FLAT = "#C9A227"      # printed gold inside the book: flat ink, never a fake foil gradient
+GOLD_SOFT = "#D9BE7C"
+
+
+def ch_signature():
+    """The chapter's signature (44 x 62 mm): the ring whose diameter is the alif, the alif measured
+    in dots with the nuqta at its head, both standing on the line; the number sits in the ring."""
+    rx, base, r, ax = 16.6, 50.0, 14.6, 38.4
+    top = base - 2 * r
+    parts = [f'<svg class="sig" viewBox="0 0 44 62" aria-hidden="true">',
+             f'<circle cx="{rx}" cy="{base - r}" r="{r}" fill="none" stroke="{GOLD_FLAT}" stroke-width="0.32"/>',
+             f'<rect x="0.4" y="{base - 0.14}" width="{ax + 3.2}" height="0.28" fill="{GOLD_FLAT}"/>',
+             f'<rect x="{ax - 0.13}" y="{top}" width="0.26" height="{2 * r}" fill="{GOLD_FLAT}"/>']
+    for k in range(1, 4):
+        parts.append(f'<path d="{CK.rhomb_path(ax, base - 2 * r * k / 4, 0.7)}" fill="#FCFBF7" stroke="{GOLD_FLAT}" stroke-width="0.22"/>')
+    parts.append(f'<path d="{CK.rhomb_path(ax, top - 1.7, 1.35)}" fill="{GOLD_FLAT}"/>')
+    parts.append("</svg>")
+    return "".join(parts)
 
 
 def chapter_html(bab, n, files, anchor):
@@ -518,16 +565,17 @@ def chapter_html(bab, n, files, anchor):
     soup = md_soup(body)
     transform(soup)
     code = f"م{ar(BAB_PART[bab])}-ب{ar(bab)}-ف{ar(n)}"
-    eb = f"الباب {ORD[bab]}{'<i class=sep></i>' if eyebrow else ''}{esc(eyebrow)}"
-    header = (f'<header class="ch-h">{ch_grid_svg()}<div class="bar"></div>'
-              f'<div class="nbox"><span>{ar(n)}</span></div>'
-              f'<p class="eb"><span>{eb}</span><span class="code">{code}</span></p>'
-              f'<h3 data-outline="{esc((eyebrow + ": ") if eyebrow else "")}{esc(title)}">{B.wrap_latin(title)}</h3>'
-              f'{f"<p class=sub>{esc(sub)}</p>" if sub else ""}</header>')
-    note_html = f'<p class="chnote">{esc(note)}</p>' if note else ""
+    kicker = f"الفصل {ORD[n]}"
+    header = (f'<header class="ch-h">{ch_signature()}<p class="num" aria-hidden="true">{ar(n)}</p>'
+              f'<p class="ck"><span>{kicker}</span><i></i><span class="b">الباب {ORD[bab]}: {esc(BABS[bab][0])}</span></p>'
+              f'<h3 data-outline="{esc(kicker)}: {esc(title)}">{B.wrap_latin(title)}</h3>'
+              f'{f"<p class=sub>{esc(sub)}</p>" if sub else ""}'
+              f'{f"<p class=chnote>{esc(note)}</p>" if note else ""}'
+              f'<p class="code">{code}</p><div class="base"></div></header>')
+    note_html = ""
     root = soup.find("div", class_="root")
     return (f'<section class="ch" id="{anchor}" style="page: b{bab}">{header}{note_html}{root.decode_contents()}</section>',
-            eyebrow, title)
+            kicker, title)
 
 
 def bab_intro_html(bab, path: Path):
@@ -546,56 +594,89 @@ def bab_intro_html(bab, path: Path):
 
 # --------------------------------------------------------------------------- designed pages
 
-def frame_svg(W=200, H=259.6, bg="#082567", lattice=True, alif_x=30, hline=None, frame=True):
-    gold = "#C9A227"
-    line = C._mix(bg, gold, 0.85)
-    lat = C._mix(bg, "#E1C46A", 0.07)
-    parts = [f'<svg class="arch" viewBox="0 0 {W} {H}" preserveAspectRatio="none" aria-hidden="true">']
-    if lattice:
-        for c in range(-int(H), int(W) + 1, 14):
-            parts.append(f'<line x1="{c}" y1="0" x2="{c + H}" y2="{H}" stroke="{lat}" stroke-width="0.2"/>')
-        for c in range(0, int(W + H) + 1, 14):
-            parts.append(f'<line x1="{c}" y1="0" x2="{c - H}" y2="{H}" stroke="{lat}" stroke-width="0.2"/>')
-    if frame:
-        parts.append(f'<rect x="11" y="11" width="{W - 22}" height="{H - 22}" fill="none" stroke="{line}" stroke-width="0.3"/>')
-    if alif_x:
-        parts.append(f'<line x1="{alif_x}" y1="11" x2="{alif_x}" y2="{H - 11}" stroke="{line}" stroke-width="0.3"/>')
-        parts.append(C._rhombus(alif_x, 11, 1.5, gold))
-        parts.append(C._rhombus(alif_x, H - 11, 2.1, "#B21F35"))
-    if hline:
-        parts.append(f'<line x1="11" y1="{hline}" x2="{W - 11}" y2="{hline}" stroke="{line}" stroke-width="0.3"/>')
-        parts.append(C._rhombus(W - 11, hline, 1.5, gold))
-        if alif_x:
-            parts.append(C._rhombus(alif_x, hline, 1.5, gold))
-    parts.append("</svg>")
-    return "".join(parts)
+def arch_svg(H=259.6, panel=None, bands=(22.0, 231.0), band_ticks=(True, False), top_node=True, W=200.0):
+    """Architecture of the full-page openers, continuing the cover: the measure bands and a ruled
+    panel whose outer lines run past the corners, with a nuqta at every crossing (flat gold ink)."""
+    g, gs = GOLD_FLAT, GOLD_SOFT
+    out = [f'<svg class="arch" viewBox="0 0 {W} {H}" preserveAspectRatio="none" aria-hidden="true">']
+
+    def node(x, y, s):
+        return f'<path d="{CK.rhomb_path(x, y, s)}" fill="{gs}"/>'
+    for y, ticks in zip(bands, band_ticks):
+        if y is None:
+            continue
+        out.append(f'<rect x="28" y="{y - 0.14}" width="144" height="0.28" fill="{g}"/>')
+        out += [node(28, y, 1.25), node(172, y, 1.25)]
+        if ticks:
+            out.append(f'<circle cx="100" cy="{y}" r="2.9" fill="none" stroke="{g}" stroke-width="0.3"/>')
+            out.append(node(100, y, 1.05))
+            for k in range(1, 14):
+                x = 28 + 144 * k / 14
+                if abs(x - 100) > 5:
+                    out.append(f'<rect x="{x - 0.09:.2f}" y="{y - 1.1}" width="0.18" height="2.2" fill="{g}"/>')
+    if panel:
+        x1, y1, x2, y2 = panel
+        ext, t_ = 3.6, 0.5
+        out += [f'<rect x="{x1 - ext}" y="{y - t_ / 2}" width="{x2 - x1 + 2 * ext}" height="{t_}" fill="{g}"/>' for y in (y1, y2)]
+        out += [f'<rect x="{x - t_ / 2}" y="{y1 - ext}" width="{t_}" height="{y2 - y1 + 2 * ext}" fill="{g}"/>' for x in (x1, x2)]
+        out.append(f'<rect x="{x1 + 2.2}" y="{y1 + 2.2}" width="{x2 - x1 - 4.4}" height="{y2 - y1 - 4.4}" fill="none" stroke="{g}" stroke-width="0.2"/>')
+        out += [node(x, y, 1.5) for x in (x1, x2) for y in (y1, y2)]
+        if top_node:
+            out.append(f'<path d="{CK.rhomb_path((x1 + x2) / 2, y1, 3.0)}" fill="#082567" stroke="{gs}" stroke-width="0.45"/>')
+            out.append(node((x1 + x2) / 2, y1, 1.4))
+    out.append("</svg>")
+    return "".join(out)
 
 
-def cover():
-    return f'''<section class="full cover" aria-label="الغلاف">{frame_svg(hline=160)}
-<div class="cv-kick"><span>الكتاب كاملًا</span><span class="en">The Complete Book</span></div>
-<p class="cv-mark foil"><span>صناعة</span><span>المتكلّم العربي</span></p>
-<p class="cv-sub">{SUBTITLE}</p>
-<p class="cv-desc">{DESC}</p>
-<p class="cv-ed"><span>الأجزاء الأربعة</span><i class="sep"></i><span>أربعة عشر بابًا</span><i class="sep"></i><span>والملاحق</span></p>
-<p class="cv-auth"><span class="l">تأليف</span><span class="n">{AUTHOR}</span><span class="d">{DUA}</span></p>
-</section>'''
+def band_svg(H=76.0):
+    """The bab opener's band: a sapphire field with the rhombic lattice in a tint of gold and the
+    measure band."""
+    lat = C._mix("#082567", "#E1C46A", 0.08)
+    out = [f'<svg viewBox="0 0 200 {H}" preserveAspectRatio="none" aria-hidden="true">']
+    for c in range(-int(H), 200 + int(H), 7):
+        out.append(f'<line x1="{c}" y1="0" x2="{c + H}" y2="{H}" stroke="{lat}" stroke-width="0.22"/>')
+        out.append(f'<line x1="{c + H}" y1="0" x2="{c}" y2="{H}" stroke="{lat}" stroke-width="0.22"/>')
+    out.append(arch_svg(H=H, bands=(22.0, None))[len('<svg class="arch" viewBox="0 0 200.0 76.0" preserveAspectRatio="none" aria-hidden="true">'):-6])
+    out.append("</svg>")
+    return "".join(out)
 
 
-def front_pages():
-    half = (f'<section class="fp-center halftitle"><p class="t">{TITLE}</p><p class="s">{SUBTITLE}</p></section>')
+_LETTERING = {}
+
+
+def logotype(font_css, scale, fill="#082567", standalone=True, cx=None, top=None):
+    """The title lettering (cover.py) as a sapphire logotype on pearl pages."""
+    if "L" not in _LETTERING:
+        _LETTERING["L"] = CVR.Lettering(font_css)
+    L_ = _LETTERING["L"]
+    w, h = L_.width2 * scale + 2, L_.height() * scale + 2
+    if standalone:
+        svg, _ = L_.svg(w / 2, 1.0, scale=scale, shadow=False, rim=False, fill=fill)
+        return (f'<svg class="logo" width="{w:.1f}mm" height="{h:.1f}mm" viewBox="0 0 {w:.2f} {h:.2f}" '
+                f'role="img" aria-label="{TITLE}">{svg}</svg>')
+    svg, _ = L_.svg(cx, top, scale=scale, shadow=False, rim=False, fill=fill)
+    return svg
+
+
+def cover(font_css):
+    return f'<section class="full cover-page" aria-label="الغلاف">{CVR.front_section(font_css, DPI)}</section>'
+
+
+def front_pages(font_css):
+    half = (f'<section class="halftitle"><div class="logo-wrap">{logotype(font_css, 0.46)}</div><p class="s">{SUBTITLE}</p></section>')
     authorp = (f'<section class="fp-center authorpage"><p class="l">المؤلف</p><p class="n">{AUTHOR}</p>'
                f'<p class="du">{DUA}</p></section>')
-    tp = (f'<section class="fp-center tp" style="position:relative"><p class="t">{TITLE}</p><p class="s">{SUBTITLE}</p>'
-          f'<p class="d">{DESC}</p><div class="rule"><i></i></div><p class="by">تأليف</p><p class="n">{AUTHOR}</p>'
-          f'<p class="du">{DUA}</p><p class="ed">{EDITION}</p></section>')
+    tp = (f'<section class="full tp-page" aria-label="صفحة العنوان">'
+          + arch_svg(bands=(30.0, 226.0), band_ticks=(True, False)).replace("</svg>", logotype(font_css, 0.8, standalone=False, cx=100, top=52) + "</svg>")
+          + f'<p class="tp-s">{SUBTITLE}</p><p class="tp-d">{DESC}</p>'
+          f'<p class="tp-by">تأليف</p><p class="tp-n">{AUTHOR}</p><p class="tp-du">{DUA}</p><p class="tp-ed">{EDITION}</p></section>')
     rows = [
         ("العنوان", f"{TITLE}: {SUBTITLE}"), ("العنوان الشارح", DESC), ("المؤلف", f"{AUTHOR}، {DUA}"),
         ("الطبعة", f"{EDITION}، نسخة كاملة معدّة للجنة المراجعة العلمية والنشر"),
         ("البنية", "أربعة أجزاء، وأربعة عشر بابًا تقابل مستويات البرنامج من ٠ إلى ١٢ وبنك الأخطاء، وسبعة ملاحق"),
         ("المقاس", "٢٠ × ٢٦ سم (مقاس كتاب الطالب المعتمد)"),
         ("الناشر", "يُحدَّد عند النشر"), ("رقم الإيداع والترقيم الدولي", "يُضافان عند النشر"),
-        ("المرجع الحاكم", "الدليل التحريري والعلمي للمشروع، الإصدار ١٫٠ (معتمد)"),
+        ("المرجع الحاكم", "الدليل التحريري والعلمي للمشروع، الإصدار ١٫١"),
     ]
     trs = "".join(f'<tr><th scope="row">{k}</th><td>{v}</td></tr>' for k, v in rows)
     copy = f'''<section class="copy-page" aria-label="صفحة الحقوق">
@@ -604,7 +685,8 @@ def front_pages():
 <p><b>حقوق التأليف والنشر محفوظة للمؤلف.</b> لا يجوز نسخ هذا الكتاب أو جزء منه، ولا اختزانه في نظام استرجاع، ولا نقله بأي وسيلة ورقية أو إلكترونية أو صوتية أو مرئية، إلا بإذن مكتوب من المؤلف؛ ويُستثنى الاقتباس اليسير لأغراض البحث والتعليم مع العزو إلى الكتاب ومؤلفه.</p>
 <p><b>الأسماء في الأمثلة والحوارات</b> أسماء افتراضية للتمثيل التدريبي، لا يُقصد بها أشخاص حقيقيون، وما ذُكر من مدن فهو خلفية للموقف.</p>
 <p><b>وسوم التوثيق:</b> تظهر في هذه الطبعة علامات مثل «يحتاج إلى تحقق من الصفحة» بجوار بعض النقول، وهي من منهج الكتاب في الأمانة العلمية، وتُزال في طبعة النشر بعد مطابقة كل نقل على طبعته المعتمدة.</p>
-<p><b>الصور:</b> الصور الفوتوغرافية في فواتح الأجزاء والأبواب من الملك العام أو مرخصة بترخيص CC0، ومصادرها مثبتة في صفحة «مصادر الصور» آخر الكتاب.</p>
+<p><b>الحروف:</b> Amiri للمتن، وReem Kufi للأجزاء والأبواب، وEl Messiri للفصول والموضوعات، وIBM Plex Sans Arabic للعناوين الفرعية والجداول والملاحة، وNoto Kufi Arabic للتسميات، وAref Ruqaa للأسئلة الموجِّهة والإهداء، وSource Serif 4 وIBM Plex Sans للحرف اللاتيني، وAmiri Quran للآيات؛ وكلها بترخيص الخطوط المفتوحة (SIL Open Font License). وحروف العنوان في الغلاف وصفحتي العنوان مرسومة من Amiri العريض.</p>
+<p><b>الغلاف:</b> «هندسة البيان»: النقطة والألف والسطر والدائرة، وحدات القياس في هندسة الخط العربي، مقروءةً سُلّمًا للكلام من الصوت إلى البيان.</p>
 </section>'''
     return half + authorp + tp + copy
 
@@ -625,32 +707,24 @@ def pgref(anchor):
     return f'<span class="pg" data-for="{anchor}">٠٠٠٠</span>'
 
 
-def part_opener(p, bab_rows, photo):
+def part_opener(p):
     lis = "".join(f'<li><span>الباب {ORD[b]}</span><b><a href="#bab-{b}">{esc(BABS[b][0])}</a></b></li>' for b in p["babs"])
-    img = ""
-    if photo:
-        img = (f'<img class="photo" src="{photo["src"]}" alt=""><div class="photo-edge"></div>'
-               f'<span class="po-credit">{esc(photo["credit"])}</span>')
-    return f'''<section class="full part-op" id="part-{p["n"]}">{frame_svg(alif_x=None, frame=False, lattice=not photo)}{img}
-<div class="nbox po-nbox"><span>{ar(p["n"])}</span></div>
-<p class="po-kick">الجزء {ORD[p["n"]]}<span class="en">{p["en"]}</span></p>
+    return f'''<section class="full part-op" id="part-{p["n"]}">{arch_svg(panel=(22.0, 50.0, 178.0, 178.0))}
+<p class="po-kick">الجزء {ORD[p["n"]]}<span class="en">{p["en"].upper()}</span></p>
 <h1 data-outline="الجزء {ORD[p["n"]]}: {esc(p["title"])}">{esc(p["title"])}</h1>
 <p class="po-sub">{esc(p["sub"])}</p>
+<div class="nbox po-nbox"><span>{ar(p["n"])}</span></div>
 <p class="po-lede">{esc(p["lede"])}</p>
 <ul class="po-list">{lis}</ul>
 </section>'''
 
 
-def bab_opener(b, chapters, photo):
+def bab_opener(b, chapters):
     name, sub, level, q = BABS[b]
     lis = "".join(f'<li><span>{esc(eb or "")}</span><b><a href="#{a}">{esc(t)}</a></b><i>{pgref(a)}</i></li>'
                   for eb, t, a in chapters)
     lvl = "مرجع لكل المستويات" if level == "مرجع" else f"المستوى {level}"
-    img = ""
-    if photo:
-        img = f'<img src="{photo["src"]}" alt="">'
-    credit = f'<span class="bo-credit">{esc(photo["credit"])}</span>' if photo else ""
-    return f'''<section class="full bab-op" id="bab-{b}"><div class="band">{img if img else frame_svg(W=200, H=74, lattice=True, frame=False, alif_x=None)}</div><div class="band-edge"></div>{credit}
+    return f'''<section class="full bab-op" id="bab-{b}"><div class="band">{band_svg()}</div><div class="band-edge"></div>
 <div class="nbox bo-nbox"><span>{ar(b)}</span></div>
 <p class="bo-kick"><span>الباب {ORD[b]}</span><span class="lvl">{lvl}</span></p>
 <h2 data-outline="الباب {ORD[b]}: {esc(name)}">{esc(name)}</h2>
@@ -663,12 +737,11 @@ def bab_opener(b, chapters, photo):
 
 def appx_opener(items):
     lis = "".join(f'<li><span>ملحق {l}</span><b><a href="#{a}">{esc(t)}</a></b></li>' for l, t, a in items)
-    return f'''<section class="full part-op" id="part-appx">{frame_svg(alif_x=None, frame=False)}
-
-<p class="po-kick">الملاحق<span class="en">Appendices</span></p>
+    return f'''<section class="full part-op appx-op" id="part-appx">{arch_svg(panel=(22.0, 50.0, 178.0, 178.0))}
+<p class="po-kick">الملاحق<span class="en">APPENDICES</span></p>
 <h1 data-outline="الملاحق">الملاحق والمراجع</h1>
 <p class="po-sub">أدوات يعود إليها المتدرب والمدرب</p>
-<p class="po-lede">معجم تطبيقي للعبارات، ومعجم لأخطاء الترجمة الحرفية، وملاحظات على ما قد يظهر لدى المتعلمين، وسكريبتات الحلقات، ونماذج كاملة للإلقاء، وبرنامج نطق يومي، وأدوات التقييم، ثم المسرد والمصادر والكشاف.</p>
+<p class="po-lede">معجم تطبيقي للعبارات، ومعجم لأخطاء الترجمة الحرفية، وملاحظات على ما قد يظهر لدى المتعلمين، ونصوص الحلقات، ونماذج كاملة للإلقاء، وبرنامج نطق يومي، وأدوات التقييم، ثم المسرد والمصادر.</p>
 <ul class="po-list">{lis}</ul>
 </section>'''
 
@@ -687,14 +760,8 @@ def toc(entries):
             + "".join(out) + "</section>")
 
 
-def back_cover():
-    return f'''<section class="full back" aria-label="الغلاف الخلفي"><div class="bk-alif"></div>
-<div class="bk-t"><p class="m">{TITLE}</p><p class="s">{SUBTITLE}</p></div>
-<div class="bk-q"><p>قد يملك الإنسان سنوات من الدراسة، وشهادات، وقراءة واسعة، ثم لا يظهر علمه حين يتكلم.</p>
-<p>هذا الكتاب منهج تدريبي متدرج في ثلاثة عشر مستوى: من سلامة الصوت، إلى الجملة العربية الطبيعية، إلى مراعاة المقام وأدب الخطاب، إلى المجلس والمنبر والمقابلة والإعلام واللقاء الرسمي، حتى الارتجال في الموقف الذي لم يُستعد له.</p>
-<p>في كل مهارة: نموذج غير ناجح، ونموذج مقبول، ونموذج ناجح، ثم تحليل، ثم تدريب، ثم محاكاة، ثم تقويم.</p></div>
-<div class="bk-f">تأليف: {AUTHOR}<br>{DUA}</div>
-</section>'''
+def back_cover(font_css):
+    return f'<section class="full back-page" aria-label="الغلاف الخلفي">{CVR.back_section(font_css, DPI)}</section>'
 
 
 # --------------------------------------------------------------------------- cross references
@@ -724,22 +791,6 @@ def linkify(soup, ch_ids):
         s.replace_with(frag("".join(out)))
 
 
-# --------------------------------------------------------------------------- photos
-
-def load_photos():
-    import json
-    meta = IMG / "photos.json"
-    if not meta.exists():
-        return {}
-    data = json.loads(meta.read_text(encoding="utf-8"))
-    out = {}
-    for key, d in data.items():
-        f = IMG / d["file"]
-        if f.exists():
-            out[key] = {"src": f.as_uri(), "credit": d.get("credit", ""), **d}
-    return out
-
-
 # --------------------------------------------------------------------------- assembly
 
 def page_rules():
@@ -751,7 +802,6 @@ def page_rules():
 
 
 def assemble(font_css):
-    photos = load_photos()
     missing = []
     entries = []
     body_parts = []
@@ -768,7 +818,7 @@ def assemble(font_css):
     for p in PARTS:
         pfold = BOOK / p["folder"]
         entries.append(("part", f"الجزء {ORD[p['n']]}", f"{p['title']}: {p['sub']}", f"part-{p['n']}"))
-        part_body = [part_opener(p, None, photos.get(f"part{p['n']}"))]
+        part_body = [part_opener(p)]
         for b in p["babs"]:
             bfold = pfold / BAB_FOLDER[b]
             groups = chapter_files(bfold) if bfold.exists() else []
@@ -784,7 +834,7 @@ def assemble(font_css):
                 missing.append(f"bab {b}: no chapters in {bfold}")
             entries.append(("bab", f"الباب {ORD[b]}", f"{BABS[b][0]}: {BABS[b][1]}", f"bab-{b}"))
             entries += [("row", eb, t, a) for eb, t, a in chapters]
-            part_body.append(bab_opener(b, chapters, photos.get(f"bab{b}")))
+            part_body.append(bab_opener(b, chapters))
             intro = next(iter(sorted(bfold.glob("00-فاتحة*.md"))), None) if bfold.exists() else None
             if intro:
                 part_body.append(f'<section class="bab-intro" style="page: b{b}">{bab_intro_html(b, intro)}</section>')
@@ -812,23 +862,9 @@ def assemble(font_css):
         appx_html.append(md_section(a, eb or f"ملحق {letter}", t, md, page="appx", extra_cls="appx"))
     back_files = [("gloss", "المسرد", "مسرد المصطلحات", BOOK / "الخواتيم" / "المسرد.md"),
                   ("biblio", "المراجع", "المصادر والمراجع", BOOK / "الخواتيم" / "المصادر-والمراجع.md"),
-                  ("photos", "الصور", "مصادر الصور", None),
                   ("audit", "ضبط الجودة", "تقرير المراجعة وضبط الجودة", BOOK / "الخواتيم" / "تقرير-ضبط-الجودة.md")]
     back_html = []
     for a, eb, t, f in back_files:
-        if f is None:
-            rows = "".join(f"<tr><td>{esc(v.get('where', k))}</td><td>{esc(v.get('title', ''))}</td>"
-                           f"<td>{esc(v.get('credit', ''))}</td><td>{esc(v.get('license', ''))}</td></tr>"
-                           for k, v in photos.items())
-            if not rows:
-                continue
-            html = (f'<section class="fm-sec appx" style="page: appx">{sec_header(a, eb, t)}<div class="sec-body">'
-                    f'<p>الصور في فواتح الأجزاء والأبواب صور فوتوغرافية حقيقية لأماكن العلم والكلام، من الملك العام أو بترخيص CC0، '
-                    f'عولجت لونيًّا بدرجات الياقوتي لتوافق هوية الكتاب.</p><div class="tbl"><table><thead><tr><th>الموضع</th><th>الصورة</th>'
-                    f'<th>المصدر</th><th>الترخيص</th></tr></thead><tbody>{rows}</tbody></table></div></div></section>')
-            back_html.append(html)
-            entries.append(("row", "", t, a))
-            continue
         if not f.exists():
             missing.append(f"back matter missing: {f.name}")
             continue
@@ -859,15 +895,15 @@ def assemble(font_css):
     if first_appx is not None:
         all_entries.insert(first_appx, ("part", "الملاحق", "الملاحق والمراجع", "part-appx"))
 
-    body = [cover(), front_pages(), "".join(fm_html), toc(all_entries), "".join(parts_html)]
+    body = [cover(font_css), front_pages(font_css), "".join(fm_html), toc(all_entries), "".join(parts_html)]
     if appx_items:
         body.append(appx_opener(appx_items))
     body += appx_html + back_html
-    body.append(back_cover())
+    body.append(back_cover(font_css))
 
     css = (HERE / "book.css").read_text(encoding="utf-8")
     doc = (f'<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>{TITLE}: {SUBTITLE}</title>'
-           f'<style>{font_css}</style><style>{css}\n{page_rules()}</style></head><body>{"".join(body)}</body></html>')
+           f'<style>{font_css}</style><style>{css}\n{CVR.TEXT_CSS}\n{page_rules()}</style></head><body>{"".join(body)}</body></html>')
     soup = BeautifulSoup(doc, "html.parser")
     linkify(soup, ch_ids)
     keep_wrappers(soup)
@@ -976,7 +1012,10 @@ def main():
     ap.add_argument("--fast", action="store_true", help="single pass, no page numbers (layout preview)")
     args = ap.parse_args()
 
-    font_css = B.static_instances(B.ensure_fonts())
+    global DPI
+    if args.fast:
+        DPI = 150
+    font_css = B.static_instances(B.ensure_fonts(BOOK_FONT_CSS, "bookfonts"))
     soup, entries, missing = assemble(font_css)
     for m in missing:
         print("MISSING:", m)
@@ -1005,7 +1044,7 @@ def main():
     n2 = len(PdfReader(str(p2)).pages)
     if n2 != n1:
         raise SystemExit(f"layout changed between passes: {n1} vs {n2}")
-    B.check_fonts(p2)
+    B.check_fonts(p2, BOOK_FAMILIES)
     finalize(p2, B.outline_titles(s2), OUT)
     print(f"wrote {OUT} ({n2} pages)")
     for line in report[:200]:
