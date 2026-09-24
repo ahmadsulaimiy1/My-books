@@ -762,6 +762,12 @@ def bab_opener(b, chapters):
 </section>'''
 
 
+def appx_part(p: Path):
+    """An appendix may be written in several files: «…-٢.md», «…-٣.md» follow the unnumbered first."""
+    m = re.search(r"-([٠-٩0-9]+)$", p.stem)
+    return (int(m.group(1)) if m else 1, p.name)
+
+
 def appx_opener(items):
     lis = "".join(f'<li><span>ملحق {l}</span><b><a href="#{a}">{esc(t)}</a></b></li>' for l, t, a in items)
     return f'''<section class="full part-op appx-op" id="part-appx">{arch_svg(panel=(22.0, 50.0, 178.0, 178.0))}
@@ -874,7 +880,7 @@ def assemble(font_css):
     appx_dir = BOOK / "الملاحق"
     appx_items, appx_html = [], []
     for letter in APPX_ORDER:
-        files = sorted(appx_dir.glob(f"ملحق-{letter}-*.md")) if appx_dir.exists() else []
+        files = sorted(appx_dir.glob(f"ملحق-{letter}-*.md"), key=appx_part) if appx_dir.exists() else []
         if not files:
             missing.append(f"appendix {letter} missing")
             continue
