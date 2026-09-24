@@ -26,6 +26,7 @@
 | نظام التقييم | [04-نظام-التقييم.md](./04-نظام-التقييم.md) | مسودة |
 | **التكليف الرسمي بالتأليف** | [book/00-التكليف-الرسمي.md](./book/00-التكليف-الرسمي.md) | مرجع ملزم للتأليف بعد الدليل |
 | **الكتاب كاملًا في ملف PDF واحد (طبعة المراجعة)** | [Sinaat-al-Mutakallim-al-Arabi_Complete-Book.pdf](./Sinaat-al-Mutakallim-al-Arabi_Complete-Book.pdf) | الأجزاء الأربعة، والأبواب الأربعة عشر (٩٥ فصلًا)، والملاحق السبعة، والمسرد والمراجع وتقرير ضبط الجودة |
+| نسخة رقمية مضغوطة من الكتاب الكامل (للمشاركة) | [delivery/Sinaat-al-Mutakallim-al-Arabi_Complete-Book_Digital.pdf](./delivery/Sinaat-al-Mutakallim-al-Arabi_Complete-Book_Digital.pdf) | الصفحات والروابط والإشارات نفسها في نصف الحجم، دون وسوم الإتاحة |
 | **أغلفة الطبعة الورقية (أربعة مجلدات، غلاف كامل بالكعب)** | [Sinaat-al-Mutakallim-al-Arabi_Cover-Wraps.pdf](./Sinaat-al-Mutakallim-al-Arabi_Cover-Wraps.pdf) | عرض الكعب محسوب من عدد صفحات كل مجلد |
 | نموذج عرض المجلدات | [Sinaat-al-Mutakallim-al-Arabi_Mockup.png](./Sinaat-al-Mutakallim-al-Arabi_Mockup.png) | للعرض فقط |
 | مخطوط الكتاب (Markdown) | [book/](./book/README.md) | مكتمل التأليف، وعليه وسوم تحقق للجنة المراجعة |
