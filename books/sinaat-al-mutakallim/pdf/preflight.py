@@ -74,8 +74,18 @@ def keywords(text, k=4):
     return ws[:k]
 
 
-def main(v=1):
-    pdf = V.OUT[v]
+def isbn_ok(x):
+    """An ISBN-13's check digit (ISBN-10 is not issued since 2007)."""
+    d = [int(c) for c in re.sub(r"[^0-9]", "", x or "")]
+    return len(d) == 13 and sum(c * (1 if i % 2 == 0 else 3) for i, c in enumerate(d)) % 10 == 0
+
+
+# the small type: no text under this size (pt) in the edition; the publisher's mark is drawn, not set, and exempt
+FLOOR = 7.8
+
+
+def main(v=1, proof=False):
+    pdf = V.out_path(v, proof)
     doc = pymupdf.open(str(pdf))
     meta = json.loads((HERE / ".cache" / f"vol{v:02d}-anchors.json").read_text(encoding="utf-8"))
     labels, kinds, anchors = meta["labels"], meta["kinds"], meta["anchors"]
@@ -256,8 +266,9 @@ def main(v=1):
     add("التقنية", "الإشارات المرجعية (Bookmarks)", "يجتاز" if len(toc) >= 30 else "لا يجتاز",
         f"{n(len(toc))} إشارة؛ في المستوى الأول: " + "، ".join(t for lvl, t, _ in toc if lvl == 1))
     md = doc.metadata
-    add("التقنية", "بيانات الملف: العنوان والمؤلف ووسم نسخة المراجعة", "يجتاز" if "نسخة المراجعة" in (md.get("title") or "") else "لا يجتاز",
-        f"{md.get('title')}؛ {md.get('author')}")
+    tagged = "نسخة المراجعة" in (md.get("title") or "")
+    add("التقنية", "بيانات الملف: العنوان والمؤلف" + ("، ووسم نسخة المراجعة" if proof else "، بلا وسم المراجعة"),
+        "يجتاز" if tagged == proof and md.get("author") == FM.AUTHOR_SHORT else "لا يجتاز", f"{md.get('title')}؛ {md.get('author')}؛ {md.get('subject')}")
 
     # ------------------------------------------------------------------ 7. the notes and the cross-references
     lost = []
@@ -314,6 +325,55 @@ def main(v=1):
     add("العلمية", "الثبت: لا يدخله كتابٌ لم يُحَل إليه في حواشي المجلد (الدليل ٣٤ §٤)", "يجتاز" if not uncited else "للمراجعة",
         f"{n(len(entries))} مدخلًا" + (f"؛ لم يُعثر على الإحالة إلى: {'؛ '.join(uncited)}" if uncited else ""))
 
+    # ------------------------------------------------------------------ the small type: symbols, the scale, the apparatus, notes, folios
+    small, sizes_seen = {}, {}
+    for p in doc:
+        for b in p.get_text("dict")["blocks"]:
+            for l in b.get("lines", []):
+                for sp in l["spans"]:
+                    t = sp["text"].strip()
+                    if not t:
+                        continue
+                    sz = round(sp["size"], 1)
+                    fam = re.sub(r"^[A-Z]{6}\+", "", sp["font"]).split("-")[0]
+                    sizes_seen[(fam, sz)] = sizes_seen.get((fam, sz), 0) + 1
+                    if sz < FLOOR - 0.05 and not re.fullmatch(r"[A-ZĀ&\- ]+", t):     # the mark's letter-spaced line is exempt
+                        small.setdefault(labels[p.number], []).append(f"{fam} {sz}: «{t[:24]}»")
+    low = sorted({(f, z) for f, z in sizes_seen if z < 8.5}, key=lambda x: x[1])
+    add("الحرفية", f"لا نصّ أصغر من {n(FLOOR)} نقطة (الرموز، وسلّم الرسمية، والجهاز العلمي، والحواشي، وأرقام الصفحات)",
+        "يجتاز" if not small else "لا يجتاز",
+        ("أصغر المقاسات المستعملة: " + "، ".join(f"{f} {n(z)} (×{n(sizes_seen[(f, z)])})" for f, z in low))
+        + (f"؛ تحت الحدّ في: {'؛ '.join(f'{k}: {v[0]}' for k, v in list(small.items())[:10])}" if small else ""))
+    for k, v_ in small.items():
+        review.append((k, f"نصٌّ تحت {n(FLOOR)} نقطة: {v_[0]}"))
+
+    # ------------------------------------------------------------------ the publication data (Bible, chs. 98–99)
+    proofish = [labels[p.number] for p in doc if re.search(r"نسخة المراجعة|ليست للنشر|\bProof\b", p.get_text())]
+    if proof:
+        add("النشر", "وسم نسخة المراجعة على الصفحات", "يجتاز" if proofish else "لا يجتاز", f"على {n(len(proofish))} صفحة")
+    else:
+        add("النشر", "لا «نسخة المراجعة» ولا «ليست للنشر» في النسخة النهائية (المتن، والرأس، والخاتمة، وبيانات الملف)",
+            "يجتاز" if not proofish and "Proof" not in (md.get("subject") or "") else "لا يجتاز", "، ".join(proofish) or "لا شيء")
+    bible14 = (HERE.parent / "bible" / "14-النشر-والإخراج-وهوية-الدار.md").read_text(encoding="utf-8")
+    imp = doc[labels.index(anchors["imprint"])] if anchors.get("imprint") else None
+    imp_text = unicodedata.normalize("NFKC", imp.get_text()) if imp else ""
+    checks = [("الناشر", FM.PUBLISHER_AR in bible14 and FM.PUBLISHER_EN in bible14),
+              ("التواصل", all(x in bible14 for x in FM.PHONES + [FM.EMAIL])),
+              ("السنة", FM.YEAR == "١٤٤٨هـ / ٢٠٢٦م" and "١٤٤٨هـ / ٢٠٢٦م" in bible14),
+              ("الطبعة", FM.EDITION == "الطبعة الأولى"),
+              ("المؤلف", FM.AUTHOR_LONG.split()[0] in imp_text),
+              ("المجلد في بيانات النشر", norm(FM.VOLUMES[v - 1][1]) in words(imp) and norm("عشر") in words(imp))]
+    bad = [k for k, ok in checks if not ok]
+    add("النشر", "بيانات النشر مطابقةٌ للدليل (الناشر وتواصله، والسنتان، والطبعة، والمؤلف، والمجلد)", "يجتاز" if not bad else "لا يجتاز",
+        "لا يطابق: " + "، ".join(bad) if bad else "كلها مطابقة، وصفحة بيانات النشر " + (anchors.get("imprint") or "؟"))
+    issued = [("ردمك المجلد", FM.ISBN.get(v)), ("ردمك المجموعة", FM.ISBN_SET), ("رقم الإيداع", FM.DEPOSIT.get(v)), ("مكان النشر", FM.CITY)]
+    malformed = [f"{k}: {x}" for k, x in issued[:2] if x and not isbn_ok(x)]
+    missing_pub = [k for k, x in issued if not x]
+    add("النشر", "ردمك المجلد والمجموعة ورقم الإيداع ومكان النشر (يصدرها الناشر؛ لا يُطبع بدلها نصٌّ مؤقت)",
+        "لا يجتاز" if malformed else ("ينتظر الناشر" if missing_pub else "يجتاز"),
+        ("خطأ في رقم التحقق: " + "، ".join(malformed) + "؛ ") * bool(malformed)
+        + ("لم يصدر بعد: " + "، ".join(missing_pub) + "؛ وسطورها غير مطبوعة" if missing_pub else "مطبوعة كلها"))
+
     # ------------------------------------------------------------------ 9. the indices
     add("التقنية", "فهرس المحتويات بأرقام صفحاته", "يجتاز", "لا مدخل بلا رقم")
     add("التقنية", "فهارس المجلد (الآيات، والأحاديث والآثار، والأشعار، والأعلام، والمصطلحات، والمصادر بالصفحة) — الدليل ١١١ §٤",
@@ -366,11 +426,12 @@ def main(v=1):
     verdicts = {}
     for gate, _, verdict, _ in rows:
         verdicts.setdefault(gate, []).append(verdict)
-    order = ["العلمية", "اللغوية", "التربوية", "التحريرية", "الحرفية", "الإخراج الفني", "التقنية"]
+    order = ["العلمية", "اللغوية", "التربوية", "التحريرية", "الحرفية", "الإخراج الفني", "التقنية", "النشر"]
     summary = []
     for g in order:
         vs = verdicts.get(g, [])
-        state = "لا يجتاز" if "لا يجتاز" in vs else "للمراجعة" if ("للمراجعة" in vs or "لم يُبنَ" in vs) else "يجتاز"
+        state = ("لا يجتاز" if "لا يجتاز" in vs else "للمراجعة" if ("للمراجعة" in vs or "لم يُبنَ" in vs)
+                 else "ينتظر الناشر" if "ينتظر الناشر" in vs else "يجتاز")
         summary.append((g, state))
     OUTDIR.mkdir(parents=True, exist_ok=True)
     base = OUTDIR / f"فحص-المجلد-{ORD[v - 1]}"
@@ -384,7 +445,7 @@ def main(v=1):
         w.writerow([])
         w.writerow(["الملف", "السطر", "نوع الوسم", "نصّه"])
         w.writerows([(f.relative_to(BOOK).as_posix(), i, k, t) for f, i, k, t in tags])
-    md = [f"# فحص ما قبل الطبع: {FM.volume_line(v)} (نسخة المراجعة)", "",
+    md = [f"# فحص ما قبل الطبع: {FM.volume_line(v)} ({'نسخة المراجعة' if proof else 'النسخة النهائية قبل الطبع'})", "",
           f"> أداة `pdf/preflight.py {v}` على `{pdf.name}` ({n(len(doc))} صفحة). الدليل، الباب الأربعون: البوابات الثماني؛ "
           "والبوابة الثامنة (الإصدار البشري) قراءة إنسانٍ لا فحصٌ آلي. والتفصيل كله في الجدول المرافق.", "",
           "## الخلاصة", "", "| البوابة | الحكم |", "|---|---|"] + [f"| {g} | {s} |" for g, s in summary] + [
@@ -405,4 +466,5 @@ def main(v=1):
 
 
 if __name__ == "__main__":
-    main(int(sys.argv[1]) if len(sys.argv) > 1 else 1)
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    main(int(args[0]) if args else 1, proof="--review" in sys.argv)

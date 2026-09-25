@@ -91,6 +91,15 @@ def scan(path, vol, text, bab_of_file):
             ids.teaching_id(m)
         except ValueError as e:
             yield "معرّف مثال", m.group(0), "fail", str(e)
+    # «المجلد السادس (المنصّات)»: a volume named by its name must bear that name, or its stage's
+    for m in re.finditer(rf"المجلد ({'|'.join(sorted(VOLW, key=len, reverse=True))})\s*[(،:]\s*«?([^)»،.\n]{{2,30}})", text):
+        k = VOLW.index(m.group(1)) + 1
+        v = VOLUMES[k - 1]
+        own = {v["name"], {1: "التأسيس", 2: "التواصل", 3: "المنصّات", 4: "التمكين"}.get(v["stage"], "المرجع")}
+        nm = m.group(2).strip().replace("المنصات", "المنصّات")
+        if nm.startswith(("الباب", "فليس", "قبل", "وهو", "هو")) or any(nm.startswith(x) or x.startswith(nm) for x in own):
+            continue
+        yield "اسم المجلد", m.group(0), "fail", f"المجلد {m.group(1)} هو «{v['name']}»"
     # references to a bab in another volume carry the volume (Bible, ch. 111 §٢); the named volume must be right
     for m in re.finditer(rf"(?:(المجلد ({'|'.join(sorted(VOLW, key=len, reverse=True))}))،\s*)?الباب ({ORD_RE}){LETTER}"
                          rf"(?:،\s*الفصل ({ORD_RE}|[ء-ي]+))?(?:\s*\(([^)]*)\))?", text):

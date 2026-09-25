@@ -28,12 +28,15 @@ FICTIONAL_NAMES = ("الأسماء الواردة في أمثلة هذا الك�
                    "ولا يُقصد بها أشخاصٌ بأعيانهم؛ وما ذُكر فيها من مدنٍ فهو إطارٌ للموقف لا غير.")
 RIGHTS_HOLDER = "حقوق التأليف للمؤلف، وحقوق الطبع والنشر لدار الإحسان للتصميم والنشر"
 CITY = None
-ISBN = None
-DEPOSIT = None
+# the ISBNs are the publisher's to issue: one for each volume, and one for the set if the publisher prints it on every
+# volume; the legal deposit likewise. None: not yet issued, and the line is not printed (the release check reports it)
+ISBN = {n: None for n in range(1, 12)}
+ISBN_SET = None
+DEPOSIT = {n: None for n in range(1, 12)}
 
 # the series in eleven volumes: ten in four stages and thirteen babs, then the reference (Bible, chs. 112c–112و).
 # (ordinal, name, what it holds, stage, its babs); the babs' numbers are set in Amiri (<b>)
-VOLUMES = [("الأول", "الأصول", "المقدمة والمدخل، ثم أسس الكلام: معاييره، والمتكلّم، والبيان، والمقام، والسماع", "التأسيس", "الباب <b>١</b>"),
+VOLUMES = [("الأول", "الأصول", "المقدمة والمدخل، ثم أسس الكلام: معاييره، والمتكلّم، والبيان، وأصل المقام، وأصل السماع", "التأسيس", "الباب <b>١</b>"),
            ("الثاني", "اللسان", "المخارج والصفات، والأصوات الحرجة، والوقف والصوت؛ وبرنامج النطق اليومي", "التأسيس", "الباب <b>٢</b>"),
            ("الثالث", "العبارة", "الجملة العربية الطبيعية: الإعراب، والترجمة الحرفية، والحشو، واختيار الكلمة", "التأسيس", "الباب <b>٣</b>"),
            ("الرابع", "البيان", "ترتيب الكلام: الافتتاح والتعريف بالنفس، والانتقال والخاتمة، والبلاغة التطبيقية", "التأسيس", "الباب <b>٤</b>"),
@@ -135,7 +138,7 @@ CSS = r"""
 .smr .x { font: 400 8.6pt/1.6 "IBM Plex Sans Arabic"; color: var(--gold-ink); margin-top: 1.6mm; display: flex; gap: 2.2mm; align-items: center; }
 .smr .x i { width: 1.9mm; height: 1.9mm; border: .5pt solid var(--gold-ink); transform: rotate(45deg); box-sizing: border-box; flex: none; }
 .smc { margin-top: 8mm; font: 400 10.4pt/1.7 "Scheherazade New"; color: var(--ink-2); }
-.sml { position: absolute; bottom: 30mm; right: 0; left: 0; display: flex; flex-wrap: wrap; gap: 1.6mm 6mm; font: 400 7.8pt/1.4 "IBM Plex Sans Arabic"; color: var(--ink-3); border-top: .3pt solid #DCD6CA; padding-top: 2.6mm; }
+.sml { position: absolute; bottom: 30mm; right: 0; left: 0; display: flex; flex-wrap: wrap; gap: 1.6mm 6mm; font: 400 8pt/1.4 "IBM Plex Sans Arabic"; color: var(--ink-3); border-top: .3pt solid #DCD6CA; padding-top: 2.6mm; }
 .sml span { display: inline-flex; align-items: center; gap: 1.8mm; }
 .sml .f, .sml .e { width: 2.1mm; height: 2.1mm; transform: rotate(45deg); box-sizing: border-box; }
 .sml .f { background: var(--gold); } .sml .e { border: .5pt solid var(--gold-ink); }
@@ -283,10 +286,12 @@ def imprint(n=1):
             ("الناشر", f"{PUBLISHER_AR}<small>{PUBLISHER_EN}</small>")]
     if CITY:
         rows.append(("مكان النشر", CITY))
-    if ISBN:
-        rows.append(("ردمك", f'<small>ISBN {ISBN}</small>'))
-    if DEPOSIT:
-        rows.append(("رقم الإيداع", DEPOSIT))
+    if ISBN.get(n):
+        rows.append(("ردمك المجلد", f'<small>ISBN {ISBN[n]}</small>'))
+    if ISBN_SET:
+        rows.append(("ردمك المجموعة", f'<small>ISBN {ISBN_SET}</small>'))
+    if DEPOSIT.get(n):
+        rows.append(("رقم الإيداع", DEPOSIT[n]))
     body = "".join(f'<div class="im-row"><div class="l">{a}</div><div class="v">{b}</div></div>' for a, b in rows)
     contact = "".join(f'<div class="ltr">{x}</div>' for x in PHONES + [EMAIL])
     return page(f'<div class="im"><h4><span>بيانات النشر</span><i></i></h4>{body}'

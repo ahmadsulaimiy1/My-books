@@ -48,7 +48,7 @@ CSS = f"""
 .hd-o .l {{ font-weight: 300; color: {SAPPHIRE_2}; }}
 .hd-o .n {{ font: 400 9pt/1 "Amiri"; }}
 .hd-o .s {{ font: 400 8.6pt/1 "Amiri"; }}
-.hd-i {{ font: 300 7.3pt/1 "Changa"; color: {QUIET}; }}
+.hd-i {{ font: 300 7.8pt/1 "Changa"; color: {QUIET}; }}
 .hd-rule, .fo-rule, .fo-mark {{ position: absolute; overflow: visible; }}
 .fo-n {{ position: absolute; left: 0; right: 0; text-align: center; font: 400 10.5pt/1 "Amiri"; color: {INK}; }}
 .fo-n.open {{ font-size: 9.2pt; color: {GOLD_INK}; }}

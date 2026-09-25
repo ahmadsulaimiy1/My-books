@@ -135,7 +135,7 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .fn-note[data-footnote-call]::after { vertical-align: .44em; font: 700 11pt/0 "Amiri"; font-variant-position: normal;
   color: var(--sapphire); margin: 0 .45mm 0 .15mm; }
 %(calls)s
-.lat { direction: ltr; unicode-bidi: isolate; font-family: "Source Serif 4"; font-size: .86em; }
+.lat { direction: ltr; unicode-bidi: isolate; font-family: "Source Serif 4"; font-size: max(.86em, 7.8pt); }
 /* heritage and poster interludes */
 .her { position: absolute; top: 40mm; bottom: 40mm; right: 24mm; left: 24mm; border: .6pt solid var(--gold); padding: 3mm; }
 .her-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; padding: 16mm 12mm; display: flex; flex-direction: column; justify-content: center; background: var(--paper-2); text-align: center; }
@@ -202,7 +202,7 @@ h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
 .app-91 ul:last-of-type { direction: ltr; }
 .app-91 ul:last-of-type > li { padding: 0 0 0 6mm; text-indent: -6mm; text-align: left; font: 400 10.6pt/1.6 "Source Serif 4"; }
 .app-91 ul:last-of-type .lat { font-size: 1em; }
-.app-91 .deg { font: 400 7.6pt/1 "Changa"; color: var(--gold-ink); white-space: nowrap; margin-right: 1.2mm; }
+.app-91 .deg { font: 400 8pt/1 "Changa"; color: var(--gold-ink); white-space: nowrap; margin-right: 1.2mm; }
 .app-91 ul:last-of-type .deg { font-family: "Changa"; direction: rtl; unicode-bidi: isolate; }
 .toc-p { font: 400 12pt/1.9 "Scheherazade New"; }
 .toc-row { display: flex; gap: 3mm; align-items: baseline; border-bottom: .4pt dotted #CFC5B1; padding: 1.2mm 0; }
@@ -219,6 +219,7 @@ p:has(+ p.ayah), p:has(+ blockquote), p:has(+ .keep > blockquote) { break-after:
 .summary { background: var(--paper-2); border-top: .8pt solid var(--gold); border-bottom: .4pt solid var(--gold); padding: 1mm 5.5mm 4.2mm; margin: 7mm 0 2mm; }
 .summary > h3 { margin-top: 3.4mm; }
 .summary p, .summary li { font-size: 12.8pt; }
+.summary.whole { break-inside: avoid; }
 .summary table { margin-bottom: 1mm; }
 """
 CSS += FM.CSS
@@ -351,6 +352,8 @@ def md_to_html(md):
             nxt = node.find_next_sibling()
             panel.append(node.extract())
             node = nxt
+        if len(panel.get_text()) < 700:                  # a short close is never split: two lines alone on a page read as a remnant
+            panel["class"] = ["summary", "whole"]
     # a run of short items (a list of acts, sounds, places) reads better in two columns
     for ul in soup.find_all("ul"):
         items = ul.find_all("li", recursive=False)

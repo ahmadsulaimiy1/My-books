@@ -5,6 +5,7 @@ Eleven volumes. Ten carry the programme in four stages and thirteen abwab, numbe
 is always the number of its bab. The eleventh, «مرجع المتكلّم العربي», is a reference outside both numberings.
 Every tool that needs the structure reads it from here; the files live under book/<volume folder>/<unit folder>/.
 """
+import re
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -86,12 +87,18 @@ def unit_dir(vol, u):
         if u[0] != "bab" else base / bab_folder(u[1])
 
 
+def reading_order(f):
+    """A file split in parts reads in its order: «…-برنامج-النطق.md» before «…-برنامج-النطق-٢.md» and «-٣»."""
+    m = re.match(r"^(.*?)-([٠-٩]+)$", f.stem)
+    return (m.group(1), int(m.group(2).translate(str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")))) if m else (f.stem, 1)
+
+
 def unit_files(vol, u):
     d = unit_dir(vol, u)
     if u[0] == "app":
-        return sorted(f for f in d.glob("*.md") if f.stem.split("-")[1] == u[1])
+        return sorted((f for f in d.glob("*.md") if f.stem.split("-")[1] == u[1]), key=reading_order)
     if u[0] == "program":
-        return sorted(d.glob("ملحق-الباب-الثاني-*.md"))
+        return sorted(d.glob("ملحق-الباب-الثاني-*.md"), key=reading_order)
     if u[0] == "back":
         return [d / f"{u[1]}.md"]
-    return sorted(d.glob("*.md"))
+    return sorted(d.glob("*.md"), key=reading_order)

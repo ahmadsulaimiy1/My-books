@@ -4,14 +4,14 @@
 The book is bound on the right. Page 1 stands alone on the left; after it each spread shows an even page on the
 right and the odd page after it on the left. The case wrap, if the PDF carries one, is left out.
 
-    python3 spreads.py ../Volume-01_Al-Usul_Proof.pdf      writes ../book/_production/الإخراج/<name>_Spreads.pdf
+    python3 spreads.py ../Volume-01_Al-Usul_Final-Proof.pdf      writes ../book/_production/الإخراج/<name>_Spreads.pdf
 """
 import sys
 from pathlib import Path
 
 import pymupdf
 
-src = Path(sys.argv[1] if len(sys.argv) > 1 else Path(__file__).resolve().parent.parent / "Volume-01_Al-Usul_Proof.pdf")
+src = Path(sys.argv[1] if len(sys.argv) > 1 else Path(__file__).resolve().parent.parent / "Volume-01_Al-Usul_Final-Proof.pdf")
 out_dir = Path(__file__).resolve().parent.parent / "book" / "_production" / "الإخراج"
 out_dir.mkdir(parents=True, exist_ok=True)
 d = pymupdf.open(str(src))

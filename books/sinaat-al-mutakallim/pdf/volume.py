@@ -19,7 +19,8 @@ opening's (opening.py); the lesson elements are set as the Bible sets them (part
 The glyphs of the lessons (✔ ✘ ◐ ▣ ① ② ③ ④) are in none of the book's faces: they are drawn, as «←» is, so no system
 font enters the page; ↑ and ↓ are set in Plex.
 
-    python3 volume.py 1        writes ../Volume-01_Al-Usul_Proof.pdf
+    python3 volume.py N             writes ../Volume-NN_<name>_Final-Proof.pdf: no slug, no proof line, the edition's metadata
+    python3 volume.py N --review    writes ../Volume-NN_<name>_Proof.pdf, slugged «نسخة المراجعة» on every page
 """
 from __future__ import annotations
 
@@ -45,7 +46,16 @@ from volumes import BOOK, VOLUMES, unit_files  # noqa: E402
 AR = O.AR
 ORD = O.ORD
 PROOF_DATE = "٢٥ سبتمبر ٢٠٢٦م"
-OUT = {1: HERE.parent / "Volume-01_Al-Usul_Proof.pdf"}
+
+
+def out_path(n, review=False):
+    """The volume's file: the final proof by default; the review proof (slugged «نسخة المراجعة») on request."""
+    base = f"Volume-{n:02d}_{LATIN[n]}"
+    return HERE.parent / (base + ("_Proof.pdf" if review else "_Final-Proof.pdf"))
+
+
+LATIN = {1: "Al-Usul", 2: "Al-Lisan", 3: "Al-Ibara", 4: "Al-Bayan", 5: "Al-Maqam", 6: "Al-Adab", 7: "Al-Hiwar",
+         8: "Al-Majalis-wal-Minbar", 9: "Al-Muassasa", 10: "Al-Tamkin", 11: "Marji-al-Mutakallim"}
 
 # ------------------------------------------------------------------------------------------------ the drawn glyphs
 
@@ -63,6 +73,12 @@ GLYPHS = {
     "▣": _svg('<rect x="1.3" y="1.3" width="7.4" height="7.4" fill="none" stroke="currentColor" stroke-width=".9"/>'
               '<rect x="3.5" y="3.5" width="3" height="3" fill="currentColor"/>', "sq"),
     "ﷺ": '<span class="salla">ﷺ</span>',
+    "●": _svg('<circle cx="5" cy="5" r="3.6" fill="currentColor"/>', "sev s1"),
+    "◔": _svg('<circle cx="5" cy="5" r="3.6" fill="none" stroke="currentColor" stroke-width=".9"/>'
+              '<path d="M5 5 V1.4 A3.6 3.6 0 0 1 8.6 5 Z" fill="currentColor"/>', "sev s3"),
+    "○": _svg('<circle cx="5" cy="5" r="3.6" fill="none" stroke="currentColor" stroke-width=".9"/>', "sev s4"),
+    "≠": _svg('<path d="M1.8 3.8 H8.2 M1.8 6.4 H8.2 M6.6 1.6 L3.4 8.6" fill="none" stroke="currentColor" stroke-width=".9" '
+              'stroke-linecap="round"/>', "ne"),
     "↑": '<span class="gp">↑</span>',
     "↓": '<span class="gp">↓</span>',
 }
@@ -80,8 +96,18 @@ def glyphs(html):
 LESSON_CSS = r"""
 .gl { display: inline-block; width: .8em; height: .8em; vertical-align: -.06em; margin: 0 .4mm; overflow: visible; }
 .gl.ok { color: var(--sapphire-2); } .gl.no { color: var(--crimson); } .gl.mid { color: var(--gold-ink); } .gl.sq { color: var(--sapphire); }
+.gl.s1 { color: var(--crimson); } .gl.s3 { color: var(--gold-ink); } .gl.s4 { color: var(--ink-3); } .gl.ne { color: var(--ink-2); }
+/* code spans of the manuscript (the marks of the voice drills) are set in Plex, never in a system face */
+code { font: 500 .92em "IBM Plex Sans Arabic"; color: var(--gold-ink); background: none; }
+/* the glossary and the bibliography of the reference */
+dl.gloss { margin: 3mm 0; } dl.gloss > div { padding: 1.8mm 0; border-bottom: .35pt solid #E2DACB; break-inside: avoid; }
+dl.gloss dt { font: 600 12pt/1.5 "Changa"; color: var(--sapphire); }
+dl.gloss dt .en { font: 400 9pt "Source Serif 4"; color: var(--ink-3); margin-right: 3mm; direction: ltr; unicode-bidi: isolate; }
+dl.gloss dd { margin: .6mm 0 0; font: 400 12pt/1.75 "Scheherazade New"; color: var(--ink-2); }
+ul.biblio { list-style: none; padding: 0; } ul.biblio > li { padding-right: 6mm; text-indent: -6mm; margin: 0 0 1.4mm; font-size: 11.8pt; line-height: 1.7; }
+ul.biblio > li::before { content: none; } ul.biblio b { color: var(--sapphire); }
 .gm { display: inline-flex; align-items: center; justify-content: center; width: 1.32em; height: 1.32em; box-sizing: border-box;
-  border-radius: 50%; border: .6pt solid currentColor; font: 700 .74em/1 "Amiri"; padding-top: .14em; vertical-align: .06em; margin: 0 .5mm; }
+  border-radius: 50%; border: .6pt solid currentColor; font: 700 max(.74em, 8.2pt)/1 "Amiri"; padding-top: .14em; min-width: 11.5pt; min-height: 11.5pt; vertical-align: .06em; margin: 0 .5mm; }
 .gm.g1 { color: var(--ruby); } .gm.g2 { color: var(--gold-ink); } .gm.g3 { color: var(--sapphire); }
 .gm.g4 { color: #F4ECD9; background: var(--sapphire); border-color: var(--sapphire); }
 .gp { font-family: "IBM Plex Sans Arabic"; font-weight: 500; color: var(--gold-ink); }
@@ -89,7 +115,7 @@ LESSON_CSS = r"""
 h1 .salla, h2 .salla, h3 .salla, h4 .salla, .chap-band .salla, .toc2 .salla, .poster .salla, .sm .salla, .k .salla, .t .salla,
 .card .ch .salla, .pl .who .salla { font-family: "Amiri"; font-weight: 400; }
 /* the review tags of the proof: visible, never mistaken for the text */
-.rv { font: 400 7.6pt/1.5 "IBM Plex Sans Arabic"; color: var(--crimson); background: #F6E7E4; padding: .2mm 1.2mm; border-radius: .6mm;
+.rv { font: 400 8pt/1.5 "IBM Plex Sans Arabic"; color: var(--crimson); background: #F6E7E4; padding: .2mm 1.2mm; border-radius: .6mm;
   -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 /* the chapter of a bab: its scope under the band, its sections, its headings */
 p.scope { font: 400 9pt/1.7 "IBM Plex Sans Arabic"; color: var(--ink-3); text-align: right; text-indent: 0; margin: 0 0 3mm;
@@ -127,7 +153,7 @@ h4 + p, h4 + ol, h4 + ul { text-indent: 0; }
 /* the example: a line in the text, its code small in the margin (Bible, part eight, §٣) */
 .exm { position: relative; margin: 3.2mm 0 3.6mm; break-inside: avoid; }
 .exm .exh { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; margin-bottom: .4mm; }
-.exm .exid { font: 400 6.8pt/1.3 "IBM Plex Sans Arabic"; color: #9A9282; letter-spacing: .15pt; white-space: nowrap; flex: none; }
+.exm .exid { font: 400 7.8pt/1.3 "IBM Plex Sans Arabic"; color: #9A9282; letter-spacing: .15pt; white-space: nowrap; flex: none; }
 .exm .exg { font: 400 9.4pt/1.6 "IBM Plex Sans Arabic"; color: var(--ink-3); }
 .exl { display: grid; grid-template-columns: 5.2mm 1fr; align-items: baseline; margin: .5mm 0; }
 .exl .mk .gl { width: .92em; height: .92em; }
@@ -183,7 +209,7 @@ blockquote.note { border-right: .6pt solid #CFC5B1; padding: 0 4.5mm 0 0; }
 /* the dialogue: a play text */
 .play { margin: 4mm 0 5mm; border-top: .6pt solid var(--gold); border-bottom: .35pt solid var(--gold); padding: 1.6mm 0; }
 .pl { display: grid; grid-template-columns: 7mm 21mm 1fr; column-gap: 2.4mm; align-items: baseline; padding: .9mm 0; break-inside: avoid; }
-.pl .ln { font: 300 7pt/1 "IBM Plex Sans Arabic"; color: #A39A8A; text-align: right; }
+.pl .ln { font: 400 7.8pt/1 "IBM Plex Sans Arabic"; color: #978E7E; text-align: right; }
 .pl .who { font: 600 8.8pt/1.5 "IBM Plex Sans Arabic"; color: var(--sapphire); }
 .pl .say { font: 400 13.2pt/1.8 "Amiri"; color: var(--ink); text-align: right; }
 .pl .say .sd { font: 400 9.4pt/1.6 "IBM Plex Sans Arabic"; color: var(--ink-3); }
@@ -255,10 +281,10 @@ def spectrum():
            '.fsp .fz { position: absolute; top: 15mm; height: 14mm; display: flex; align-items: center; justify-content: center; text-align: center; }'
            '.fsp .fz b { font: 600 8.4pt/1.25 "IBM Plex Sans Arabic"; padding: 0 1.4mm; }'
            '.fsp .fw { position: absolute; top: 30.6mm; font: 400 8pt/1.35 "IBM Plex Sans Arabic"; color: var(--ink-3); text-align: center; padding: 0 1mm; box-sizing: border-box; }'
-           '.fsp .fe { position: absolute; top: 0; font: 300 7.8pt/1 "Changa"; color: var(--gold-ink); background: var(--paper); padding: 0 1.6mm; }'
+           '.fsp .fe { position: absolute; top: 0; font: 300 8pt/1 "Changa"; color: var(--gold-ink); background: var(--paper); padding: 0 1.6mm; }'
            '.fsp .ff { position: absolute; top: 6.4mm; text-align: center; font: 500 8.2pt/1 "Changa"; color: var(--gold-ink); }'
            '.fsp .fp { position: absolute; top: 42.5mm; height: 10.5mm; display: flex; align-items: center; justify-content: center; text-align: center; '
-           'font: 400 7.6pt/1.45 "IBM Plex Sans Arabic"; color: var(--sapphire-2); padding: 0 3mm; box-sizing: border-box; }</style>')
+           'font: 400 8pt/1.4 "IBM Plex Sans Arabic"; color: var(--sapphire-2); padding: 0 3mm; box-sizing: border-box; }</style>')
     return (f'<div class="fig">{css}<div class="ft">طيف مستويات العربية</div><div class="fsp">{svg}{"".join(under)}{labels}</div>'
             f'<div class="fc"><b>الرسم ١</b>الطيف متصلٌ لا غرفٌ منفصلة: يتنقّل المتكلّم الواحد بين مواضعه في الحديث الواحد؛ '
             f'وميدان هذا الكتاب الفصحى المنطوقة.</div></div>')
@@ -342,8 +368,8 @@ def card(p, table):
         k, v = tds[0].get_text(" ", strip=True), tds[1].decode_contents().strip()
         v = re.sub(r"([٠-٩]+(?:–[٠-٩]+)?)", r'<span class="n">\1</span>', v)
         fields.append(f'<div class="cf"><b>{k}:</b> {v}</div>')
-    title = p.get_text(" ", strip=True).lstrip("▣").strip() if p is not None else "بطاقة المقام"
-    new = BeautifulSoup(f'<div class="card"><div class="ch">▣<span>{title}</span></div>{"".join(fields)}</div>', "html.parser")
+    head = f'<div class="ch">▣<span>{p.get_text(" ", strip=True).lstrip("▣").strip()}</span></div>' if p is not None else ""
+    new = BeautifulSoup(f'<div class="card{"" if p is not None else " bare"}">{head}{"".join(fields)}</div>', "html.parser")
     table.replace_with(new)
     if p is not None:
         p.decompose()
@@ -428,8 +454,8 @@ def keep_headings(soup):
             keep.append(nxt.extract())
 
 
-def lesson_html(md):
-    """A bab's chapter (or its opener) as the page carries it."""
+def lesson_html(md, breaks=True):
+    """A bab's chapter (or its opener) as the page carries it. breaks: a lesson opens its page."""
     md = loosen_lists(IDS.printed(md))
     md = re.sub(r"^---+\s*$", "", md, flags=re.M)
     md = REVIEW.sub(lambda m: f'<span class="rv">{m.group(1)}</span>', md)
@@ -443,9 +469,9 @@ def lesson_html(md):
     for h in soup.find_all("h2"):
         t = h.get_text(" ", strip=True)
         lite = t == "مدخل الفصل" or first
-        m = re.match(r"^(الدرس [^:]+):\s*(.+)$", t)
+        m = re.match(r"^((?:الدرس|اليوم) [^:]+):\s*(.+)$", t)
         k, title = (m.group(1), m.group(2)) if m else ("", t)
-        h["class"] = ["sec"] + (["lite"] if lite else ["brk"])
+        h["class"] = ["sec"] + (["lite"] if lite or not breaks else ["brk"])
         h.clear()
         if k:
             h.append(BeautifulSoup(f'<span class="k"><span>{k}</span><i></i></span>', "html.parser"))
@@ -628,11 +654,12 @@ def threshold(kick, big, line):
     return O.poster(kick, big, line, kufam=True)
 
 
-def folios(css, pages, slug):
-    """The heads and folios (heads.py), and on every page the proof's slug."""
+def folios(css, pages, slug=None):
+    """The heads and folios (heads.py); the review proof also carries its slug on every page, the final never."""
     measure = H.Measure(css)
     body = H.overlay(pages, measure)
-    body = body.replace('<section class="hd-page">', f'<section class="hd-page"><div class="slug">{slug}</div>')
+    if slug:
+        body = body.replace('<section class="hd-page">', f'<section class="hd-page"><div class="slug">{slug}</div>')
     return doc(css, body, O.FIXED_CSS % dict(w=200, h=260) + " html, body { background: transparent !important; }" + H.CSS
                + '.slug { position: absolute; bottom: 5.2mm; left: 0; right: 0; text-align: center; font: 400 6.2pt/1 "IBM Plex Sans Arabic"; '
                  'color: #A39A8A; letter-spacing: .4pt; }')
@@ -640,7 +667,7 @@ def folios(css, pages, slug):
 
 # ------------------------------------------------------------------------------------------------ the volume
 
-def main(n=1):
+def main(n=1, review=False):
     if n != 1:
         raise SystemExit("only the first volume is built now")
     from pypdf import PdfReader, PdfWriter
@@ -657,7 +684,7 @@ def main(n=1):
     pieces = [("fixed", doc(css, FM.half_title(n), fixed), R),
               ("fixed", doc(css, FM.volumes_map(n), fixed), {"spread": True}),
               ("fixed", doc(css, title_page, fixed), R),
-              ("fixed", doc(css, FM.imprint(n), fixed), {}),
+              ("fixed", doc(css, FM.imprint(n), fixed), {"anchor": "imprint"}),
               ("fixed", doc(css, FM.rights(), fixed), R),
               ("fixed", doc(css, FM.dedication(), fixed), {}),
               ("fixed", doc(css, P2.verse_page().replace('class="pg', 'class="full'), fixed), R),
@@ -770,7 +797,8 @@ def main(n=1):
                 body, bandhtml = part
                 part = (body.replace('<section class="chap">', f'<section class="chap app-{key}">', 1), bandhtml)
                 pieces.append(("flow", flow(css, part), {"recto": True, "anchor": key, "head": ([("title", "الملاحق")], [("title", title)])}))
-    pieces.append(("fixed", doc(css, FM.colophon(n, proof=f"نسخة المراجعة (<span class='lat'>Proof</span>)، أُخرجت في {PROOF_DATE} لفحصها قبل الطبع؛ وليست الطبعة المعتمدة."), fixed), {"recto": True}))
+    proof = f"نسخة المراجعة (<span class='lat'>Proof</span>)، أُخرجت في {PROOF_DATE} لفحصها قبل الطبع؛ وليست الطبعة المعتمدة." if review else None
+    pieces.append(("fixed", doc(css, FM.colophon(n, proof=proof), fixed), {"recto": True}))
 
     def toc_html(numbers):
         rows = [r if r[0] == "part" else ("e", r[1], r[2], numbers.get(r[3], "٠٠٠"), r[4]) for r in toc]
@@ -836,7 +864,8 @@ def main(n=1):
                 raise SystemExit(f"the head reaches the mark ({measure.head(parts):.1f} mm of {H.REACH:.1f}): {parts}"
                                  " — give the chapter a short head: <!-- head: … -->")
         marks.append((label[i], st, parts, "odd" if p % 2 else "even"))
-    fr = PdfReader(str(B.render(folios(css, marks, f"نسخة المراجعة · {FM.volume_line(n)} · ليست للنشر"), f"{tag}-folios")))
+    slug = f"نسخة المراجعة · {FM.volume_line(n)} · ليست للنشر" if review else None
+    fr = PdfReader(str(B.render(folios(css, marks, slug), f"{tag}-folios")))
     w = PdfWriter()
     for i, (pg, _, _) in enumerate(out):
         pg.merge_page(fr.pages[i])
@@ -848,10 +877,13 @@ def main(n=1):
             continue
         parent = parents.get(level - 1) if level else None
         parents[level] = w.add_outline_item(title, ix, parent=parent)
-    w.add_metadata({"/Title": f"{FM.TITLE} — {FM.volume_line(n)} (نسخة المراجعة)", "/Author": FM.AUTHOR_SHORT,
-                    "/Publisher": FM.PUBLISHER_EN, "/Subject": "Proof — not for publication"})
+    meta = {"/Title": f"{FM.TITLE} — {FM.volume_line(n)}" + (" (نسخة المراجعة)" if review else ""), "/Author": FM.AUTHOR_SHORT,
+            "/Publisher": FM.PUBLISHER_EN, "/Subject": "Proof — not for publication" if review else FM.volume_line(n)}
+    if FM.ISBN.get(n):
+        meta["/ISBN"] = FM.ISBN[n]
+    w.add_metadata(meta)
     w.page_mode = "/UseOutlines"
-    dest = OUT[n]
+    dest = out_path(n, review)
     w.write(str(dest))
     import pymupdf
     # every piece carries its own copy of the faces and pypdf writes them uncompressed: one lossless pass merges
@@ -877,4 +909,5 @@ p.op-s { font: 300 12.6pt/1.5 "Changa"; color: var(--gold-ink); text-indent: 0; 
 """
 
 if __name__ == "__main__":
-    main(int(sys.argv[1]) if len(sys.argv) > 1 else 1)
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    main(int(args[0]) if args else 1, review="--review" in sys.argv)
