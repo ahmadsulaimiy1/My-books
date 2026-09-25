@@ -167,11 +167,6 @@ def match(key, only=None, offset=-1):
     return results
 
 
-if __name__ == "__main__":
-    keys = sys.argv[1:] or list(SOURCES)
-    for k in keys:
-        match(k)
-
 
 # ------------------------------------------------------------------ hadith: the first source of each takhrij
 BUKHARI = ("03-54504", {n: f"صحيح البخاري - ط السلطانية/{n:02d}_{c}" for n, c in
@@ -241,3 +236,26 @@ def hadith():
     old = json.loads(f.read_text(encoding="utf-8")) if f.exists() else []
     keep = [x for x in old if x["id"] not in {y["id"] for y in results}]
     f.write_text(json.dumps(keep + results, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
+def record(vid, who, item, file, leaf, printed, edition, text_read, page_read="بالعين على الصفحة", also=None):
+    """Enter a quotation read by eye on the scan of the printed edition, keeping the page as evidence."""
+    import pymupdf
+    d = pymupdf.open(str(fetch(item, file)))
+    crop = EVID / f"{vid}.png"
+    d[leaf].get_pixmap(dpi=80).pil_image().convert("L").save(crop, optimize=True)
+    entry = {"id": vid, "who": who, "cited": printed, "leaf": leaf, "printed": printed, "on_print": True,
+             "crop": str(crop.relative_to(OUT)), "edition": edition, "url": f"https://archive.org/details/{item}/page/n{leaf}",
+             "page_read": page_read, "text_read": text_read}
+    if also:
+        entry["also"] = also
+    f = OUT / "مطابقة-المصوّرات.json"
+    old = json.loads(f.read_text(encoding="utf-8")) if f.exists() else []
+    f.write_text(json.dumps([x for x in old if x["id"] != vid] + [entry], ensure_ascii=False, indent=1), encoding="utf-8")
+    return entry
+
+
+if __name__ == "__main__":
+    keys = sys.argv[1:] or list(SOURCES)
+    for k in keys:
+        match(k)
