@@ -866,7 +866,8 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
         ohtml = (f'<section class="chap chap-open"><div class="opener-k"><span>{title}</span><i></i></div>'
                  f'<h2 class="op-t">{"فاتحة الباب" if b else "فاتحة المرجع"}</h2><p class="op-s">{sub}</p>{lesson_html(obody)}</section>')
         oname = "فاتحة الباب" if b else "فاتحة المرجع"
-        pieces.append(("cont", doc(css, ohtml, O.CONT_CSS + OPENER_CSS), {"anchor": f"{tag}o", "head": (head, [("title", oname)]), "opens": True}))
+        pieces.append(("cont", doc(css, ohtml, O.CONT_CSS + OPENER_CSS, paged="fn-note" in ohtml),
+                       {"anchor": f"{tag}o", "head": (head, [("title", oname)]), "opens": True}))
         toc.append(("part", "", title))
         toc.append(("e", "", oname, f"{tag}o", []))
         outline.append((oname, f"{tag}o", 1))
