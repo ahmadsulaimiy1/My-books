@@ -27,7 +27,7 @@ sys.path.insert(0, str(HERE))
 import frontmatter as FM  # noqa: E402
 import volume as V  # noqa: E402
 from paths import INTRO, OPENING  # noqa: E402
-from volumes import BOOK, unit_files  # noqa: E402
+from volumes import BOOK, VOLUMES, unit_files  # noqa: E402
 
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 EN = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
@@ -51,8 +51,20 @@ def n(x):
 
 def sources(v):
     """The files of the volume's text, in the order of the volume."""
-    files = [BOOK / "المجلد-الأول" / "00-كلمة-المؤلف.md"] + sorted(OPENING.glob("*.md")) + sorted(INTRO.glob("*.md"))
-    return files + unit_files(v, ("bab", 1))
+    if v == 1:
+        files = [BOOK / "المجلد-الأول" / "00-كلمة-المؤلف.md"] + sorted(OPENING.glob("*.md")) + sorted(INTRO.glob("*.md"))
+        return files + unit_files(v, ("bab", 1))
+    return [f for u in VOLUMES[v - 1]["units"] for f in unit_files(v, u)]
+
+
+def babs(v):
+    """The volume's babs (not the reference): [(bab, its chapters {n: [files]})]."""
+    return [(u[1], V.bab_chapters(u[1])[1]) for u in VOLUMES[v - 1]["units"] if u[0] == "bab"]
+
+
+def lesson_files(v):
+    """The files of the volume's babs and reference, where the lessons are."""
+    return [f for u in VOLUMES[v - 1]["units"] if u[0] in ("bab", "reference") for f in unit_files(v, u)]
 
 
 def norm(w):
@@ -110,7 +122,8 @@ def main(v=1, proof=False):
     add("العلمية", "الوسوم الظاهرة في المتن (المطلوب للنشر: صفر)", "لا يجتاز" if tags else "يجتاز",
         f"{n(len(tags))} وسمًا: " + "، ".join(f"{k} {n(c)}" for k, c in sorted(by_kind.items(), key=lambda x: -x[1])))
     sources_pending = sorted({re.split(r"[؛;]", t)[0].strip() for _, _, k, t in tags if k == "يحتاج إلى تحقق" and "،" in t})
-    add("العلمية", "مصادر في الباب الأول تنتظر التحقيق (لم تدخل الثبت)", "للمراجعة", "؛ ".join(sources_pending))
+    add("العلمية", f"مصادر في {FM.volume_line(v)} تنتظر التحقيق (لم تدخل الثبت)", "للمراجعة" if sources_pending else "يجتاز",
+        "؛ ".join(sources_pending) or "لا شيء")
     q = json.loads((BOOK / "_production" / "التحقيق" / "مطابقة-القرآن.json").read_text(encoding="utf-8"))
     names = {f.name for f in files}
     qv = [r for r in q if r["file"] in names]
@@ -118,11 +131,11 @@ def main(v=1, proof=False):
     add("العلمية", "الآيات بالرسم العثماني لمصحف المدينة (quran.py)", "يجتاز" if not bad else "لا يجتاز",
         f"{n(len(qv))} موضعًا، {n(len(qv) - len(bad))} مطابقًا")
     inline_refs = []
-    for f in unit_files(v, ("bab", 1)):
+    for f in lesson_files(v):
         for i, line in enumerate(texts[f].splitlines(), 1):
             if re.search(r"\([^()]*[A-Z][a-z]+[^()]*\b(1[89][0-9]{2}|20[0-2][0-9])\.?\)", line):
                 inline_refs.append(f"{f.name}:{n(i)}")
-    add("العلمية", "إحالاتٌ إلى مصادر في متن الباب الأول لا في حاشية (الدليل ٠٨ §٣: «من علم التواصل» يُحال إليه في حاشية)",
+    add("العلمية", "إحالاتٌ إلى مصادر في متن الدروس لا في حاشية (الدليل ٠٨ §٣: «من علم التواصل» يُحال إليه في حاشية)",
         "للمراجعة" if inline_refs else "يجتاز", "، ".join(inline_refs))
 
     # ------------------------------------------------------------------ 2. the linguistic and editorial gates
@@ -151,20 +164,29 @@ def main(v=1, proof=False):
         t = p.get_text()
         if re.search(r"[٠-٩]\s?·|·\s?[٠-٩]", t):
             dots.append(labels[p.number])
+    leaks = []
+    for p in doc:
+        t = p.get_text()
+        for mark in ("<!--", "-->", "head", "figure", "page:", "sub:", "**", "##", "|---", "*[", "]*"):
+            if (re.search(rf"(?<![A-Za-z]){mark}(?![A-Za-z])", t) if mark.isalpha() else mark in t):
+                leaks.append(f"{labels[p.number]} «{mark}»")
+                review.append((labels[p.number], f"علامةٌ من المصدر ظاهرة في الصفحة: «{mark}»"))
+    add("الحرفية", "لا يظهر من علامات المصدر شيء (التعليقات، والنجوم، والعناوين، وخطوط الجداول)", "يجتاز" if not leaks else "لا يجتاز",
+        "، ".join(leaks) or "لا شيء")
     add("اللغوية", "لا نقطة وسطى «·» بجوار رقمٍ مشرقي (الدليل ٠٦)", "يجتاز" if not dots else "لا يجتاز", "، ".join(dots))
 
     # ------------------------------------------------------------------ 3. the pedagogical gate
-    _, chapters = V.bab_chapters(1)
     need = {"أهداف الفصل": r"^###\s+أهداف الفصل", "الخلاصة": r"^###\s+الخلاصة", "معيار الإتقان": r"^###\s+معيار الإتقان",
             "تدريبات الفصل": r"^###\s+تدريبات", "قائمة الفحص الذاتي": r"قائمة الفحص الذاتي", "للمدرّب": r"^###\s+للمدر"}
     table = []
-    for c, fs in sorted(chapters.items()):
-        md = V.chapter_md(fs)
-        have = {k: bool(re.search(p, md, re.M)) for k, p in need.items()}
-        table.append((c, have))
-        missing = [k for k, ok in have.items() if not ok]
-        add("التربوية", f"الباب الأول، الفصل {ORD[c - 1]}: أركان الفصل", "يجتاز" if not missing else "لا يجتاز",
-            "كلها حاضرة" if not missing else "ينقصه: " + "، ".join(missing))
+    for b, chapters in babs(v):
+        for c, fs in sorted(chapters.items()):
+            md = V.chapter_md(fs)
+            have = {k: bool(re.search(p, md, re.M)) for k, p in need.items()}
+            table.append((b, c, have))
+            missing = [k for k, ok in have.items() if not ok]
+            add("التربوية", f"الباب {ORD[b - 1]}، الفصل {ORD[c - 1]}: أركان الفصل", "يجتاز" if not missing else "لا يجتاز",
+                "كلها حاضرة" if not missing else "ينقصه: " + "، ".join(missing))
 
     # ------------------------------------------------------------------ 4. the typographic gate
     fonts, type3, unembedded = set(), set(), set()
@@ -185,6 +207,10 @@ def main(v=1, proof=False):
     # ------------------------------------------------------------------ 5. the art direction and the pages
     sizes = {(round(p.rect.width / MM), round(p.rect.height / MM)) for p in doc}
     add("التقنية", "مقاس الصفحات واحد ٢٠٠×٢٦٠ مم", "يجتاز" if sizes == {(200, 260)} else "لا يجتاز", str(sizes))
+    if v == 11:
+        add("التقنية", "مقاس المرجع المحمول ١٥×٢١ سم (الدليل ١٥، والقرار ١٦: يُراجَع بعد نموذج صفحاتٍ فعلي، والأمر فيه للناشر)",
+            "ينتظر الناشر", "بُني على نظام السلسلة (٢٠×٢٦ سم)؛ ونقله إلى المقاس المحمول هندسةُ صفحاتٍ جديدة للمقدّمات الثابتة "
+            "(الخريطة، والبيانات، والحقوق) لا تصغيرٌ لها، إذ يهبط به الحرف الصغير تحت حدّه")
     top, bottom = 25 * MM, 232 * MM
     blanks = [i for i, k in enumerate(kinds) if k == "blank"]
     add("الإخراج الفني", "الصفحات البيضاء المقصودة (قبل ما يُفتتح على صفحةٍ فردية)", "للعلم",
@@ -222,11 +248,14 @@ def main(v=1, proof=False):
                 review.append((labels[i], f"صفحةٌ قصيرة ({n(round(fill * 100))}٪) في وسط فصل"))
     add("الإخراج الفني", "لا عنوان في أسفل صفحةٍ بلا نصّ بعده", "يجتاز" if not orphan else "للمراجعة", "، ".join(labels[i] for i in orphan))
     add("الإخراج الفني", "لا صفحة قصيرة في وسط فصل إلا قبل درسٍ يفتتح صفحته", "يجتاز" if not short else "للمراجعة", "، ".join(labels[i] for i in short))
-    planned = re.findall(r"^\|\s*(المدخل، ف[٠-٩]+|الباب ١، ف[٠-٩]+)\s*\|\s*(.+?)\s*\|$",
-                         (HERE.parent / "bible" / "08-مواصفة-مراجعة-المجلد-الأول.md").read_text(encoding="utf-8"), re.M)
-    built = ["المدخل، ف١"]
-    add("الإخراج الفني", "الرسوم المقرّرة للمجلد الأول (الدليل ٠٨ §٤)", "لا يجتاز" if len(built) < len(planned) else "يجتاز",
-        f"رُسم {n(len(built))} من {n(len(planned))}: " + "؛ ".join(f"{w} ({'مرسوم' if w in built else 'لم يُرسم'}): {d}" for w, d in planned))
+    if v == 1:
+        planned = re.findall(r"^\|\s*(المدخل، ف[٠-٩]+|الباب ١، ف[٠-٩]+)\s*\|\s*(.+?)\s*\|$",
+                             (HERE.parent / "bible" / "08-مواصفة-مراجعة-المجلد-الأول.md").read_text(encoding="utf-8"), re.M)
+        built = ["المدخل، ف١"]
+        add("الإخراج الفني", "الرسوم المقرّرة للمجلد الأول (الدليل ٠٨ §٤)", "لا يجتاز" if len(built) < len(planned) else "يجتاز",
+            f"رُسم {n(len(built))} من {n(len(planned))}: " + "؛ ".join(f"{w} ({'مرسوم' if w in built else 'لم يُرسم'}): {d}" for w, d in planned))
+    else:
+        add("الإخراج الفني", "الرسوم المقرّرة", "للعلم", "لا رسوم مقرّرة لهذا المجلد؛ مواصفة الرسوم (الدليل ٠٨ §٤) للمجلد الأول")
     full = sum(1 for k in kinds if k == "fixed")
     add("الإخراج الفني", "الصفحات الكاملة (العتبات، والملصقات، وصفحات التراث، والمقدّمات الثابتة)", "للعلم", f"{n(full)} صفحة من {n(len(doc))}")
 
@@ -245,12 +274,19 @@ def main(v=1, proof=False):
         f"المقدّمات {n(main_at)} صفحة (أ–{seq[main_at - 1]})، والمتن {n(len(seq) - main_at)} صفحة")
     # the contents: every entry points at the page that opens it, and a chapter's page carries its ordinal
     wrong = []
-    keys = {"publisher": [], "author": [], "symbols": [], "01": [], "i1": ["الفصل", "الأول"], "b1o": ["فاتحة"],
-            "90": [], "91": []}
-    for k, f in enumerate(sorted(OPENING.glob("*.md"))[1:18], 1):
-        keys[f.name[:2]] = ["الفصل"] + ORD[k - 1].split()
-    for c in chapters:
-        keys[f"b1c{c}"] = ["الفصل"] + ORD[c - 1].split()
+    keys = {"symbols": []}
+    if v == 1:
+        keys.update({"publisher": [], "author": [], "01": [], "i1": ["الفصل", "الأول"], "90": [], "91": []})
+        for k, f in enumerate(sorted(OPENING.glob("*.md"))[1:18], 1):
+            keys[f.name[:2]] = ["الفصل"] + ORD[k - 1].split()
+    for key in anchors:
+        m = re.fullmatch(r"(?:b\d+|r)c(\d+)", key)
+        if m:
+            keys[key] = ["الفصل"] + ORD[int(m.group(1)) - 1].split()
+        elif re.fullmatch(r"(?:b\d+|r)o", key):
+            keys[key] = ["فاتحة"]
+        elif key in ("prog", "closing-t") or key.startswith(("app-", "back-")):
+            keys[key] = []
     for key, need_words in keys.items():
         label = anchors.get(key)
         if label is None:
@@ -263,7 +299,7 @@ def main(v=1, proof=False):
     add("التقنية", "المحتويات: كل مدخلٍ على الصفحة التي تفتتحه، وعليها رتبة الفصل", "يجتاز" if not wrong else "لا يجتاز",
         f"{n(len(keys))} مدخلًا" + (f"؛ لا يصحّ: {'، '.join(wrong)}" if wrong else ""))
     toc = doc.get_toc()
-    add("التقنية", "الإشارات المرجعية (Bookmarks)", "يجتاز" if len(toc) >= 30 else "لا يجتاز",
+    add("التقنية", "الإشارات المرجعية (Bookmarks)", "يجتاز" if len(toc) >= len(keys) else "لا يجتاز",
         f"{n(len(toc))} إشارة؛ في المستوى الأول: " + "، ".join(t for lvl, t, _ in toc if lvl == 1))
     md = doc.metadata
     tagged = "نسخة المراجعة" in (md.get("title") or "")
@@ -272,7 +308,8 @@ def main(v=1, proof=False):
 
     # ------------------------------------------------------------------ 7. the notes and the cross-references
     lost = []
-    note_files = [f for f in files if f.parent in (OPENING, INTRO) or f.name.startswith("00-")]
+    note_files = [f for f in files if (f.parent in (OPENING, INTRO) or f.name.startswith("00-")) and v == 1
+                  or re.search(r"^\[\^\d+\]:", texts[f], re.M)]
     all_words = set()
     for p in doc:
         all_words |= words(p)
@@ -285,45 +322,52 @@ def main(v=1, proof=False):
                 lost.append(f"{f.name}، الحاشية {n(num)}")
     add("التقنية", "الحواشي كلها في الصفحات (حواشي صفحة بـPaged.js)", "يجتاز" if not lost else "للمراجعة",
         f"{n(total_notes)} حاشية" + (f"؛ لم تُعثر ألفاظ: {'، '.join(lost)}" if lost else ""))
-    xref_bad = []
-    muq = {k: f for k, f in enumerate(sorted(OPENING.glob("*.md"))[1:18], 1)}
-    for f in note_files:
-        for m in re.finditer(r"الفصل (" + "|".join(sorted(ORD, key=len, reverse=True)) + r")،\s*§([٠-٩]+)", texts[f]):
-            c, sec = ORD.index(m.group(1)) + 1, m.group(2)
-            target = muq.get(c)
-            if target is None or not re.search(rf"^###\s+{sec}\.", texts[target], re.M):
-                xref_bad.append(f"{f.name}: {m.group(0)}")
-        for m in re.finditer(r"ملحق التحقيق، المسألة (" + "|".join(ORD) + r")", texts[f]):
-            k = n(ORD.index(m.group(1)) + 1)
-            if not re.search(rf"^###\s+{k}\.", texts[OPENING / "90-ملحق-التحقيق.md"], re.M):
-                xref_bad.append(f"{f.name}: {m.group(0)}")
-    count_x = sum(len(re.findall(r"الفصل (?:" + "|".join(ORD) + r")،\s*§[٠-٩]+|ملحق التحقيق، المسألة", texts[f])) for f in note_files)
-    add("التقنية", "الإحالات الداخلية في المقدمة والمدخل (الفصل و§ والمسألة)", "يجتاز" if not xref_bad else "لا يجتاز",
-        f"{n(count_x)} إحالة" + (f"؛ لا تصحّ: {'؛ '.join(xref_bad)}" if xref_bad else ""))
-    bab_bad = []
-    for f in unit_files(v, ("bab", 1)):
-        for m in re.finditer(r"الفصل (" + "|".join(sorted(ORD[6:17], key=len, reverse=True)) + r")", texts[f]):
-            if re.search(r"الباب (?!الأول)|المجلد", texts[f][max(0, m.start() - 70): m.start()]):
-                continue                                    # a chapter of another bab, named with its bab and volume
-            bab_bad.append(f"{f.name}: {m.group(0)}")
-    add("التقنية", "إحالات الباب الأول إلى فصوله (١–٦)", "يجتاز" if not bab_bad else "للمراجعة", "؛ ".join(bab_bad[:8]))
+    if v == 1:
+        xref_bad = []
+        muq = {k: f for k, f in enumerate(sorted(OPENING.glob("*.md"))[1:18], 1)}
+        for f in note_files:
+            for m in re.finditer(r"الفصل (" + "|".join(sorted(ORD, key=len, reverse=True)) + r")،\s*§([٠-٩]+)", texts[f]):
+                c, sec = ORD.index(m.group(1)) + 1, m.group(2)
+                target = muq.get(c)
+                if target is None or not re.search(rf"^###\s+{sec}\.", texts[target], re.M):
+                    xref_bad.append(f"{f.name}: {m.group(0)}")
+            for m in re.finditer(r"ملحق التحقيق، المسألة (" + "|".join(ORD) + r")", texts[f]):
+                k = n(ORD.index(m.group(1)) + 1)
+                if not re.search(rf"^###\s+{k}\.", texts[OPENING / "90-ملحق-التحقيق.md"], re.M):
+                    xref_bad.append(f"{f.name}: {m.group(0)}")
+        count_x = sum(len(re.findall(r"الفصل (?:" + "|".join(ORD) + r")،\s*§[٠-٩]+|ملحق التحقيق، المسألة", texts[f])) for f in note_files)
+        add("التقنية", "الإحالات الداخلية في المقدمة والمدخل (الفصل و§ والمسألة)", "يجتاز" if not xref_bad else "لا يجتاز",
+            f"{n(count_x)} إحالة" + (f"؛ لا تصحّ: {'؛ '.join(xref_bad)}" if xref_bad else ""))
+    for b, chapters in babs(v):
+        bab_bad = []
+        for fs in chapters.values():
+            for f in fs:
+                for m in re.finditer(r"الفصل (" + "|".join(sorted(ORD[len(chapters):17], key=len, reverse=True)) + r")\b", texts[f]):
+                    if re.search(rf"الباب (?!{ORD[b - 1]})|المجلد|المرجع|المقدمة|المدخل", texts[f][max(0, m.start() - 70): m.start()]):
+                        continue                            # a chapter of another bab, named with its bab and volume
+                    bab_bad.append(f"{f.name}: {m.group(0)}")
+        add("التقنية", f"إحالات الباب {ORD[b - 1]} إلى فصوله (١–{n(len(chapters))})", "يجتاز" if not bab_bad else "للمراجعة", "؛ ".join(bab_bad[:8]))
 
     # ------------------------------------------------------------------ 8. the thabat against the notes
-    notes_text = " ".join(" ".join(re.findall(r"^\[\^\d+\]:\s*(.+)$", texts[f], re.M)) for f in note_files)
-    notes_text += " ".join(texts[f] for f in note_files if f.name.startswith("90-"))
-    notes_norm = " ".join(norm(w) for w in notes_text.split())
-    thabat = texts[OPENING / "91-ثبت-المصادر.md"]
-    uncited = []
-    entries = re.findall(r"^- \*\*(.+?)\*\*، ([^،]+)", thabat, re.M) + [(a, "") for a in re.findall(r"^- ([A-Z][^,.]+)", thabat, re.M)]
-    for author, title in entries:
-        if "مصحف" in title:
-            continue                                        # the Qur'an is cited by sura and verse throughout
-        head = [norm(w) for w in re.sub(r"\(.*?\)|«|»", "", title).split(":")[0].split()[:2]]
-        name = re.split(r"[،,]", author)[0].split()[-1]
-        if title and not all(w in notes_norm for w in head) or not title and name not in notes_text:
-            uncited.append(f"{author}{'، ' + title if title else ''}")
-    add("العلمية", "الثبت: لا يدخله كتابٌ لم يُحَل إليه في حواشي المجلد (الدليل ٣٤ §٤)", "يجتاز" if not uncited else "للمراجعة",
-        f"{n(len(entries))} مدخلًا" + (f"؛ لم يُعثر على الإحالة إلى: {'؛ '.join(uncited)}" if uncited else ""))
+    if v == 1:
+        notes_text = " ".join(" ".join(re.findall(r"^\[\^\d+\]:\s*(.+)$", texts[f], re.M)) for f in note_files)
+        notes_text += " ".join(texts[f] for f in note_files if f.name.startswith("90-"))
+        notes_norm = " ".join(norm(w) for w in notes_text.split())
+        thabat = texts[OPENING / "91-ثبت-المصادر.md"]
+        uncited = []
+        entries = re.findall(r"^- \*\*(.+?)\*\*، ([^،]+)", thabat, re.M) + [(a, "") for a in re.findall(r"^- ([A-Z][^,.]+)", thabat, re.M)]
+        for author, title in entries:
+            if "مصحف" in title:
+                continue                                        # the Qur'an is cited by sura and verse throughout
+            head = [norm(w) for w in re.sub(r"\(.*?\)|«|»", "", title).split(":")[0].split()[:2]]
+            name = re.split(r"[،,]", author)[0].split()[-1]
+            if title and not all(w in notes_norm for w in head) or not title and name not in notes_text:
+                uncited.append(f"{author}{'، ' + title if title else ''}")
+        add("العلمية", "الثبت: لا يدخله كتابٌ لم يُحَل إليه في حواشي المجلد (الدليل ٣٤ §٤)", "يجتاز" if not uncited else "للمراجعة",
+            f"{n(len(entries))} مدخلًا" + (f"؛ لم يُعثر على الإحالة إلى: {'؛ '.join(uncited)}" if uncited else ""))
+    else:
+        add("العلمية", "الثبت (الدليل ٣٤ §٤)", "للعلم" if not total_notes else "لا يجتاز",
+            "لا حواشي في هذا المجلد، فلا ثبت له؛ ولا يدخل ثبتًا كتابٌ لم يُحَل إليه" if not total_notes else "للمجلد حواشٍ ولا ثبت له")
 
     # ------------------------------------------------------------------ the small type: symbols, the scale, the apparatus, notes, folios
     small, sizes_seen = {}, {}
@@ -362,7 +406,7 @@ def main(v=1, proof=False):
               ("السنة", FM.YEAR == "١٤٤٨هـ / ٢٠٢٦م" and "١٤٤٨هـ / ٢٠٢٦م" in bible14),
               ("الطبعة", FM.EDITION == "الطبعة الأولى"),
               ("المؤلف", FM.AUTHOR_LONG.split()[0] in imp_text),
-              ("المجلد في بيانات النشر", norm(FM.VOLUMES[v - 1][1]) in words(imp) and norm("عشر") in words(imp))]
+              ("المجلد في بيانات النشر", all(norm(w) in norm("".join(imp_text.split())) for w in FM.VOLUMES[v - 1][1].split()) and norm("عشر") in words(imp))]
     bad = [k for k, ok in checks if not ok]
     add("النشر", "بيانات النشر مطابقةٌ للدليل (الناشر وتواصله، والسنتان، والطبعة، والمؤلف، والمجلد)", "يجتاز" if not bad else "لا يجتاز",
         "لا يطابق: " + "، ".join(bad) if bad else "كلها مطابقة، وصفحة بيانات النشر " + (anchors.get("imprint") or "؟"))
@@ -382,7 +426,7 @@ def main(v=1, proof=False):
 
     # ------------------------------------------------------------------ the spreads, and their pictures
     subprocess.run([sys.executable, str(HERE / "spreads.py"), str(pdf)], check=True, capture_output=True)
-    pics = OUTDIR / f"مراجعة-المجلد-{ORD[v - 1]}"
+    pics = OUTDIR / f"مراجعة-المجلد-{ORD[v - 1].replace(' ', '-')}"
     pics.mkdir(parents=True, exist_ok=True)
     for old in pics.glob("*.png"):
         old.unlink()
@@ -412,6 +456,15 @@ def main(v=1, proof=False):
                       ("91", "١٠-ثبت-المصادر")):
         if anchors.get(key):
             shots.append((even(anchors[key]), name))
+    if v > 1:
+        k = 0
+        for key in anchors:
+            if key in ("main",) or not (key.startswith(("b", "r", "prog", "closing", "app-", "back-"))):
+                continue
+            m = re.fullmatch(r"(b\d+|r)(o|c1)?", key)
+            if m or key in ("prog", "closing", "app-أ", "back-المسرد"):
+                k += 1
+                shots.append((even(anchors[key]), f"{n(k).rjust(2, '٠')}-{key}"))
     # a page of the exercises and of the mastery, found by their headings
     for i, p in enumerate(doc):
         ws = words(p)
@@ -434,7 +487,7 @@ def main(v=1, proof=False):
                  else "ينتظر الناشر" if "ينتظر الناشر" in vs else "يجتاز")
         summary.append((g, state))
     OUTDIR.mkdir(parents=True, exist_ok=True)
-    base = OUTDIR / f"فحص-المجلد-{ORD[v - 1]}"
+    base = OUTDIR / f"فحص-المجلد-{ORD[v - 1].replace(' ', '-')}"
     with open(base.with_suffix(".tsv"), "w", encoding="utf-8", newline="") as fh:
         w = csv.writer(fh, delimiter="\t", lineterminator="\n")
         w.writerow(["البوابة", "الفحص", "الحكم", "التفصيل"])
@@ -456,8 +509,8 @@ def main(v=1, proof=False):
     md += ["", "## الأطباق المتقابلة المصوّرة", "",
            f"في `{pics.relative_to(BOOK).as_posix()}/`، والملف كاملًا أطباقًا متقابلة في `_production/الإخراج/{pdf.stem}_Spreads.pdf`:", ""]
     md += [f"- {name}" for _, name in shots]
-    md += ["", "## أركان فصول الباب الأول", "", "| الفصل | " + " | ".join(need) + " |", "|---|" + "---|" * len(need)]
-    md += [f"| {ORD[c - 1]} | " + " | ".join("✓" if have[k] else "—" for k in need) + " |" for c, have in table]
+    md += ["", "## أركان فصول الأبواب", "", "| الباب | الفصل | " + " | ".join(need) + " |", "|---|---|" + "---|" * len(need)]
+    md += [f"| {ORD[b - 1]} | {ORD[c - 1]} | " + " | ".join("✓" if have[k] else "—" for k in need) + " |" for b, c, have in table]
     base.with_suffix(".md").write_text("\n".join(md) + "\n", encoding="utf-8")
     print(base.with_suffix(".md"))
     for g, s in summary:

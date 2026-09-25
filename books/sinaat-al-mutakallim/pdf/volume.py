@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """A volume of the series, typeset whole in the edition-1.2 system, from the authoritative map (volumes.py).
 
-The first volume is built now, as a proof (نسخة المراجعة): the front matter with the series map as a spread, the
-Muqaddima, the introduction, the first bab with its lessons, the verification appendix and the volume's thabat, and
-the colophon that hands the reader to the second volume. The page types and the machinery of the notes are the
+Every volume is built by one system: the front matter of Bible ch. 99 with the series map as a spread, then the
+volume's units in the order of the map (the first volume's Muqaddima and introduction; a bab or the reference by
+one builder, as threshold, opener and chapters; the programme of the second bab; the book's closing; the reference's
+appendices and closing lists), and the colophon that hands the reader to the next volume. The page types and the machinery of the notes are the
 opening's (opening.py); the lesson elements are set as the Bible sets them (part eight, §٣):
 
     the example         a line in the text, its code small in the margin
@@ -94,6 +95,10 @@ def glyphs(html):
 # ------------------------------------------------------------------------------------------------ the lesson styles
 
 LESSON_CSS = r"""
+/* a heading never ends a page: it travels with the first grade of the models (the frame runs on unbroken after it),
+   and a panel's title with the panel's first block (keep_headings) */
+.grades.gfirst { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.grades.gcont { margin-top: 0; padding-top: 0; border-top: .35pt solid #E2DACB; }
 .gl { display: inline-block; width: .8em; height: .8em; vertical-align: -.06em; margin: 0 .4mm; overflow: visible; }
 .gl.ok { color: var(--sapphire-2); } .gl.no { color: var(--crimson); } .gl.mid { color: var(--gold-ink); } .gl.sq { color: var(--sapphire); }
 .gl.s1 { color: var(--crimson); } .gl.s3 { color: var(--gold-ink); } .gl.s4 { color: var(--ink-3); } .gl.ne { color: var(--ink-2); }
@@ -133,21 +138,21 @@ h4 + p, h4 + ol, h4 + ul { text-indent: 0; }
 .chap-open h3 + p, .chap-open h4 + p { text-indent: 0; }
 /* the panels of the lesson: objectives, the opening question, the summary, the mastery, the trainer */
 .panel { margin: 5mm 0; padding: 3.2mm 5mm 3.6mm; break-inside: avoid; }
-.panel > h3, .panel > h4 { margin: 0 0 1.6mm; font: 600 10.6pt/1.4 "Changa"; color: var(--gold-ink); letter-spacing: .2pt; }
-.panel > h3::after { content: none; }
+.panel > h3, .panel > h4, .panel > .phk > h3 { margin: 0 0 1.6mm; font: 600 10.6pt/1.4 "Changa"; color: var(--gold-ink); letter-spacing: .2pt; }
+.panel > h3::after, .panel > .phk > h3::after { content: none; }
 .panel.obj { background: var(--paper-2); border-top: .8pt solid var(--gold); break-inside: auto; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .panel.obj ol > li, .panel.obj p { font-size: 12.2pt; line-height: 1.75; }
 .panel.oq { border-right: 1.4pt solid var(--sapphire-2); background: #F1F2F6; }
 .panel.oq p { color: var(--ink); }
 .panel.mastery { border: .6pt solid var(--gold); background: var(--paper); padding: 4mm 6mm 4.4mm; }
-.panel.mastery > h3 { font: 700 12pt/1.4 "Changa"; color: var(--sapphire); }
+.panel.mastery > h3, .panel.mastery > .phk > h3 { font: 700 12pt/1.4 "Changa"; color: var(--sapphire); }
 .panel.mastery ul { list-style: none; padding: 0; margin: 1mm 0 0; counter-reset: m; }
 .panel.mastery ul > li { counter-increment: m; display: grid; grid-template-columns: 7mm 1fr; padding: 1.8mm 0; border-top: .35pt solid #E2DACB; margin: 0; }
 .panel.mastery ul > li::before { content: counter(m, arabic-indic); position: static; width: auto; height: auto; transform: none; background: none;
   font: 700 11pt/1.6 "Amiri"; color: var(--gold-ink); }
 .trainer { margin: 7mm 0 2mm; padding: 4mm 5.5mm 4mm; background: var(--paper-2); border-right: 1.4pt solid var(--gold); }
-.trainer > h3 { margin-top: 0; font: 600 12pt/1.4 "Changa"; color: var(--gold-ink); }
-.trainer > h3::after { content: none; }
+.trainer > h3, .trainer > .phk > h3 { margin-top: 0; font: 600 12pt/1.4 "Changa"; color: var(--gold-ink); }
+.trainer > h3::after, .trainer > .phk > h3::after { content: none; }
 .trainer p, .trainer li { font-size: 11.8pt; line-height: 1.75; }
 .trainer table { margin-top: 2mm; }
 /* the example: a line in the text, its code small in the margin (Bible, part eight, §٣) */
@@ -426,7 +431,27 @@ def keep_headings(soup):
             continue
         if h.parent.name == "div" and h.find_previous_sibling() is None \
                 and any(c in (h.parent.get("class") or []) for c in ("panel", "summary", "trainer", "ex-card")):
-            continue                                        # a panel's own title stays with its panel
+            nxt = h.find_next_sibling()                     # a panel's own title stays with the panel's first block
+            if "ex-card" in (h.parent.get("class") or []) or nxt is None:
+                continue
+            items = nxt.find_all("li", recursive=False) if nxt.name in ("ul", "ol") else []
+            if nxt.name in ("p", "ul", "ol", "blockquote") and len(nxt.get_text(" ", strip=True)) < 600:
+                keep = soup.new_tag("div", attrs={"class": "keep phk"})
+                h.insert_before(keep)
+                keep.append(h.extract())
+                keep.append(nxt.extract())
+            elif len(items) > 2:                            # a long list: the title with its first two items
+                keep = soup.new_tag("div", attrs={"class": "keep phk"})
+                h.insert_before(keep)
+                keep.append(h.extract())
+                head = soup.new_tag(nxt.name, attrs={k: v for k, v in nxt.attrs.items()})
+                for li in items[:2]:
+                    head.append(li.extract())
+                keep.append(head)
+                if nxt.name == "ol":
+                    nxt["start"] = str(int(nxt.get("start", 1)) + 2)
+                nxt["class"] = (nxt.get("class") or []) + ["runon"]
+            continue
         run = [h]
         nxt = h.find_next_sibling()
         while nxt is not None and nxt.name in ("h3", "h4"):
@@ -440,6 +465,13 @@ def keep_headings(soup):
             keep.append(x.extract())
         cls = nxt.get("class") or []
         text = len(nxt.get_text(" ", strip=True))
+        first = nxt.find("div", class_="grade", recursive=False) if "grades" in cls else None
+        if first is not None and len(first.get_text(" ", strip=True)) < 900 and len(nxt.find_all("div", class_="grade", recursive=False)) > 1:
+            frame = soup.new_tag("div", attrs={"class": "grades gfirst"})
+            frame.append(first.extract())
+            keep.append(frame)
+            nxt["class"] = cls + ["gcont"]
+            continue
         if text < 360 and (nxt.name in ("p", "blockquote", "ul", "ol") or "card" in cls or "exm" in cls):
             keep.append(nxt.extract())
         elif nxt.name in ("ul", "ol") and len(nxt.find_all("li", recursive=False)) > 2:
@@ -456,6 +488,7 @@ def keep_headings(soup):
 
 def lesson_html(md, breaks=True):
     """A bab's chapter (or its opener) as the page carries it. breaks: a lesson opens its page."""
+    md = re.sub(r"<!--\s*head:.*?-->\s*", "", md)          # the short head is the running head's, never the page's
     md = loosen_lists(IDS.printed(md))
     md = re.sub(r"^---+\s*$", "", md, flags=re.M)
     md = REVIEW.sub(lambda m: f'<span class="rv">{m.group(1)}</span>', md)
@@ -468,7 +501,8 @@ def lesson_html(md, breaks=True):
     first = True
     for h in soup.find_all("h2"):
         t = h.get_text(" ", strip=True)
-        lite = t == "مدخل الفصل" or first
+        prev = h.find_previous_sibling()
+        lite = t == "مدخل الفصل" or first or (prev is not None and prev.name == "h2")   # a heading right under another keeps its page
         m = re.match(r"^((?:الدرس|اليوم) [^:]+):\s*(.+)$", t)
         k, title = (m.group(1), m.group(2)) if m else ("", t)
         h["class"] = ["sec"] + (["lite"] if lite or not breaks else ["brk"])
@@ -715,7 +749,8 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
         outline.append((title, "main" if first else tag, 0))
         if first:
             pieces[-1][2]["alias"] = tag
-        head = [("label", label), ("title", name)]
+        short = re.search(r"<!--\s*head:\s*(.+?)\s*-->", files[0].read_text(encoding="utf-8"))
+        head = [("label", label), ("title", short.group(1) if short else name)]
         ohtml = (f'<section class="chap chap-open"><div class="opener-k"><span>{title}</span><i></i></div>'
                  f'<h2 class="op-t">{"فاتحة الباب" if b else "فاتحة المرجع"}</h2><p class="op-s">{sub}</p>{lesson_html(obody)}</section>')
         oname = "فاتحة الباب" if b else "فاتحة المرجع"
@@ -753,13 +788,12 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
         md = unit_files(n, u)[0].read_text(encoding="utf-8")
         md = re.sub(r"^## ", "### ", md, flags=re.M)
         md = re.sub(r"^# ", "## ", md, count=1, flags=re.M)
-        pieces.append(("fixed", doc(css, threshold("المجلد العاشر", "خاتمة الكتاب", "من سلامة اللسان إلى حسن البيان"), fixed),
-                       {"recto": True, "anchor": "closing"}))
-        outline.append(("خاتمة الكتاب", "closing", 0))
+        # the book's close opens once, on its band: no threshold repeats its title
+        outline.append(("خاتمة الكتاب", "closing-t", 0))
         heads = ([("title", "خاتمة الكتاب")], [("title", "خاتمة الكتاب")])
         for kind, part in O.chapter_parts(md, "خاتمة الكتاب"):
             if kind == "flow":
-                pieces.append(("flow", flow(css, part), {"anchor": "closing-t", "head": heads}))
+                pieces.append(("flow", flow(css, part), {"recto": True, "anchor": "closing-t", "head": heads}))
             else:
                 pieces.append((kind, doc(css, part, fixed if kind == "fixed" else O.CONT_CSS), {"head": heads}))
         toc.append(("part", "", "خاتمة الكتاب"))

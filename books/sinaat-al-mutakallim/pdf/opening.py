@@ -217,7 +217,7 @@ p.obj + p.ans { margin-top: 0; }
 p:has(+ p.ayah), p:has(+ blockquote), p:has(+ .keep > blockquote) { break-after: avoid; }
 /* the close of a chapter (خلاصة، ما يترتّب): its own quieter panel, so the chapter ends on a different rhythm */
 .summary { background: var(--paper-2); border-top: .8pt solid var(--gold); border-bottom: .4pt solid var(--gold); padding: 1mm 5.5mm 4.2mm; margin: 7mm 0 2mm; }
-.summary > h3 { margin-top: 3.4mm; }
+.summary > h3, .summary > .phk > h3 { margin-top: 3.4mm; }
 .summary p, .summary li { font-size: 12.8pt; }
 .summary.whole { break-inside: avoid; }
 .summary table { margin-bottom: 1mm; }
