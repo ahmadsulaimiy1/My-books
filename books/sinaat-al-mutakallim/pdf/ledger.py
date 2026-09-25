@@ -32,6 +32,10 @@ FIRST = "مطابقة الإنتاج، ٢٠٢٦/٠٩/٢٤"
 # Complex's own Uthmani text, lets a row be «متحقّق»; a match on a digital copy that follows the print leaves it
 # «توثيقٌ ناقص» until the scan is seen, whatever the evidence says
 ON_PRINT = {"ع١", "ع٣", "ع٤", "ع٥", "و١", "و٢", "و٣", "و٤"}
+# quotations matched on the scans of the printed editions by pdf/scans.py (and read by eye where the machine was unsure)
+_SC = OUT / "مطابقة-المصوّرات.json"
+SCANNED = {r["id"]: r for r in (json.loads(_SC.read_text(encoding="utf-8")) if _SC.exists() else []) if r.get("on_print")}
+ON_PRINT |= set(SCANNED)
 
 # editions (Bible, ch. 43 as revised in ch. 72)
 TAWQ = "صحيح البخاري، دار طوق النجاة ١٤٢٢هـ، مصوّرة عن السلطانية، ترقيم عبد الباقي؛ والمقابلة على طبعة دار التأصيل"
@@ -250,6 +254,12 @@ def main():
             note = "؛ ".join(x for x in (basis + "؛ بقيت مطابقة اللفظ والصفحة على مصوّرة الطبعة المعتمدة؛ والحالة بعدها: "
                                          + STATE[state].split(" — ")[0], note) if x)
             state = "incomplete"
+        elif vid in SCANNED:
+            sc = SCANNED[vid]
+            compared = f"على المطبوع: {sc['edition']}، ص{sc['printed']} (المصوّرة: {sc['url']})"
+            also = sc.get("also")
+            also = f"وطوبق الموضع الثاني على {also['edition']}، ص{also['printed']}: {also['text_read']}" if also else ""
+            note = "؛ ".join(x for x in (f"طوبق على مصوّرة المطبوع: الصفحة {sc['page_read']}، والنص {sc['text_read']}", also, note) if x)
         elif vid in ON_PRINT:
             note = "؛ ".join(x for x in ("طوبق على مصوّرة المطبوع", note) if x and "طوبق على مصوّرة المطبوع" not in note) or note
         table.append([f"م١-{str(i).zfill(3).translate(AR)}", loc, kind, text, form, who, src, ed, editor, part, page, num, grade,
