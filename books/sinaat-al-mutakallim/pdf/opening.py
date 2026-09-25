@@ -83,8 +83,8 @@ blockquote.title-line { margin: 7mm 0 2mm; text-align: center; }
 blockquote.title-line p { font: 600 25pt/1.6 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--sapphire); text-align: center; text-indent: 0; }
 blockquote.title-line p strong { font-weight: 600; }
 blockquote.def p { font: 400 13.6pt/1.8 "Scheherazade New"; color: var(--sapphire); text-align: center; text-indent: 0; }
-.bayt { display: grid; grid-template-columns: 47mm 10mm 47mm; justify-content: center; font: 400 14.4pt/2.1 "Amiri"; color: var(--ink); }
-.bayt span { text-align: justify; text-align-last: justify; white-space: nowrap; }
+.bayt { display: grid; grid-template-columns: 1fr 7mm 1fr; padding: 0 3mm; font: 400 13.8pt/2.1 "Amiri"; color: var(--ink); }
+.bayt span { text-align: center; white-space: nowrap; }
 blockquote.poem { background: var(--paper-2); padding: 4.5mm 0; margin: 6mm 0; border-top: .5pt solid var(--gold); border-bottom: .5pt solid var(--gold); }
 ol, ul { margin: 1mm 0 2mm; padding: 0 6.5mm 0 0; }
 li { text-align: justify; margin: .4mm 0; }
@@ -125,7 +125,7 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .fn-note i, .fn-note em { font-style: normal; color: var(--sapphire); }
 .fn-note .lat em { font-style: italic; color: inherit; }
 .fn-note[data-footnote-call]::after { vertical-align: 42%%; font: 700 8.2pt/0 "Amiri"; font-variant-position: normal;
-  color: var(--gold-ink); margin: 0 .25mm 0 .5mm; }
+  color: var(--gold-ink); margin: 0 .3mm 0 0; }
 %(calls)s
 .lat { direction: ltr; unicode-bidi: isolate; font-family: "Source Serif 4"; font-size: .86em; }
 /* heritage and poster interludes */
@@ -237,14 +237,14 @@ def latinize(soup):
     """A Latin run inside Arabic is isolated left-to-right in Source Serif, so its word order holds."""
     for t in soup.find_all(string=re.compile(r"[A-Za-z]{3,}")):
         if t.parent.name not in ("style",) and not t.find_parent(class_="lat"):
-            t.replace_with(BeautifulSoup(re.sub(r"([A-Za-z][^؀-ۿ]*[A-Za-z.)])", r'<span class="lat">\1</span>', str(t)), "html.parser"))
+            t.replace_with(BeautifulSoup(re.sub(r"([A-Za-z][^؀-ۿ]*[A-Za-z.)\"”’'])", r'<span class="lat">\1</span>', str(t)), "html.parser"))
 
 
 def note_span(n, text):
     """A note as the page carries it: an inline element at its call, which the paginator floats to the foot
     of the page where the call falls (float: footnote). Its number is the chapter's, never the page's."""
     # a whole Latin reference (title in italics and all) is one left-to-right isolate, not a run per word group
-    text = re.sub(r"([A-Za-z][^؀-ۿ]*[A-Za-z.)])", r'<span class="lat">\1</span>', text)
+    text = re.sub(r"([A-Za-z][^؀-ۿ]*[A-Za-z.)\"”’'])", r'<span class="lat">\1</span>', text)
     body = markdown.markdown(text).removeprefix("<p>").removesuffix("</p>")
     body = re.sub(r"^(%s):" % "|".join(TAGS), r'<span class="fn-tag">\1:</span>', body)
     body = re.sub(r"(?<![*\w])\*([^*]+)\*", r"<i>\1</i>", ayat(body))
