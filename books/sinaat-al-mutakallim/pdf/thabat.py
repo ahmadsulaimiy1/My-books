@@ -38,7 +38,7 @@ EXTRA = [
 ]
 FOREIGN = [
     ("Ferguson, Charles A.", '"Diglossia."', "*Word* 15, no. 2 (1959): 325–340."),
-    ("Hymes, Dell", '"On Communicative Competence."', "In J. B. Pride and J. Holmes (eds.), *Sociolinguistics: Selected Readings*, 269–293. Harmondsworth: Penguin, 1972."),
+    ("Hymes, Dell", '"On Communicative Competence."', "In J. B. Pride and J. Holmes (eds.), *Sociolinguistics: Selected Readings*. Harmondsworth: Penguin, 1972."),
     ("Sharp, H. (ed.)", "*Selections from Educational Records, Part I: 1781–1839.*", "Calcutta: Superintendent Government Printing, 1920. (Macaulay's Minute, 2 February 1835; Lord Bentinck's Resolution, 7 March 1835.)"),
     ("Spitta-Bey, Wilhelm", "*Grammatik des arabischen Vulgärdialectes von Aegypten.*", "Leipzig: J. C. Hinrichs, 1880."),
     ("Wensinck, A. J., et al.", "*Concordance et indices de la tradition musulmane.*", "Leiden: E. J. Brill."),
@@ -54,6 +54,41 @@ def tidy(ed):
     ed = re.sub(r"،\s*٢ أجزاء", "، جزآن", ed)
     ed = re.sub(r"،\s*([٠-٩]+) أجزاء", lambda m: f"، {m.group(1)} أجزاء", ed)
     return re.sub(r"\s+", " ", ed).strip(" ،.")
+
+
+DEGREE = {"print": "طوبق على المطبوع", "digital": "على نسخةٍ رقمية", "general": "إحالةٌ عامّة"}
+FOREIGN_DEGREE = {"Sharp, H. (ed.)": "print", "Spitta-Bey, Wilhelm": "print"}
+# the Qur'an was set from the Uthmani text of two digital services; the second editions of the Sahihs and of Abu
+# Dawud were used for comparison and grading only
+OVERRIDE = {"مصحف المدينة النبوية": "digital"}
+BY_EDITION = {("صحيح البخاري", "السلطانية"): "print", ("صحيح البخاري", "التأصيل"): "digital",
+              ("صحيح مسلم", "عبد الباقي"): "print", ("صحيح مسلم", "ذهني"): "digital",
+              ("سنن أبي داود", "محيي الدين"): "print", ("سنن أبي داود", "الأرنؤوط"): "digital"}
+EDITIONS = {}
+MULTI = set()   # authors with more than one book in the list: matched by title only
+
+
+def degree(author, title, edition=""):
+    """How far the book was used: matched on the scan of the print, matched on a digital copy, or cited in general."""
+    import ledger as L
+    if title in OVERRIDE:
+        return OVERRIDE[title]
+    for (t, mark), deg in BY_EDITION.items():
+        if t == title and mark in edition:
+            return deg
+    found = "general"
+    head = " ".join(title.split(":")[0].split("(")[0].split()[:2])
+    name = author.split("،")[0].strip()
+    for row in L.ROWS:
+        who, src, ed = row[5], row[6], row[7]
+        by_name = name not in MULTI and (name in src or (name in who and len(name) > 3))
+        if not (head in src or by_name):
+            continue
+        if row[0] and row[0] in L.ON_PRINT:
+            return "print"
+        if row[10] and row[14] != "incomplete":
+            found = "digital"
+    return found
 
 
 def key(name):
@@ -77,12 +112,19 @@ def main():
     for a, t, e in EXTRA:
         rows[(a, t)] = (a, t, e)
     ar = sorted(rows.values(), key=lambda x: (key(x[0]), x[1]))
+    EDITIONS.update({(a, t): e for a, t, e in ar})
+    names = [a.split("،")[0].strip() for a, _, _ in ar]
+    MULTI.update(n for n in names if names.count(n) > 1 and n not in ("البخاري", "مسلم", "أبو داود"))
+    ar = [(a, t, e + f'. <span class="deg">{DEGREE[degree(a, t, e)]}</span>') for a, t, e in ar]
     md = ["## ثبت المصادر", "", "<!-- sub: ما أُحيل إليه في حواشي الافتتاحية، بالطبعة التي أُحيل إليها -->", "",
           "رُتّبت المصادر العربية على شهرة مؤلّفيها، من غير اعتدادٍ بـ«ال» و«ابن» و«أبي» في أولها، ثم المصادر الأجنبية على أسماء عائلات مؤلّفيها. "
-          "وحيث ذُكر للكتاب طبعتان فالأولى للإحالة والثانية للمقابلة.", "", "### المصادر العربية", ""]
-    md += [f"- **{a}**، {t}، {e}." for a, t, e in ar]
+          "وحيث ذُكر للكتاب طبعتان فالأولى للإحالة والثانية للمقابلة.",
+          "وليست المصادر كلّها على درجةٍ واحدة من الاستعمال، فبُيّنت درجة كلٍّ منها في آخره: «طوبق على المطبوع» لما رُئي النقل منه "
+          "في صفحته من مصوّرة الطبعة المذكورة؛ و«على نسخةٍ رقمية» لما طوبق على نسخةٍ رقميةٍ لتلك الطبعة ولم تُرَ صفحته المطبوعة؛ "
+          "و«إحالةٌ عامّة» لما أُحيل إليه بلا نقلٍ منصوص، أو حُكي معناه.", "", "### المصادر العربية", ""]
+    md += [f"- **{a}**، {t}، {e}" for a, t, e in ar]
     md += ["", "### المصادر الأجنبية", ""]
-    md += [f"- {a.rstrip('.')}. {t} {e}" for a, t, e in sorted(FOREIGN)]
+    md += [f"- {a.rstrip('.')}. {t} {e} <span class=\"deg\">{DEGREE[FOREIGN_DEGREE.get(a, 'general')]}</span>" for a, t, e in sorted(FOREIGN)]
     OUT.write_text("\n".join(md) + "\n", encoding="utf-8")
     print(OUT.name, len(ar), "Arabic,", len(FOREIGN), "foreign")
 

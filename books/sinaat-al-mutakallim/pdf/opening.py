@@ -36,12 +36,14 @@ ORD = ["", "الأول", "الثاني", "الثالث", "الرابع", "الخ
 
 CSS = r"""
 @page { size: 200mm 260mm; margin: 25mm 39mm 30mm 39mm;
-  @top-right { content: "صناعة المتكلّم العربي"; font: 400 7.4pt "IBM Plex Sans Arabic"; color: #7C7467; vertical-align: bottom; padding-bottom: 6mm; }
-  @top-left { content: "%(head)s"; font: 400 7.4pt "IBM Plex Sans Arabic"; color: #7C7467; vertical-align: bottom; padding-bottom: 6mm; }
+  @top-right { content: "صناعة المتكلّم العربي"; font: 300 7.9pt "Changa"; letter-spacing: .25pt; color: #2B4A8F; vertical-align: bottom; padding-bottom: 5.4mm; }
+  @top-center { content: "\00a0"; font: 300 7.9pt "Changa"; background: url("data:image/svg+xml;utf8,%%3Csvg%%20xmlns%%3D%%22http%%3A//www.w3.org/2000/svg%%22%%20width%%3D%%2226mm%%22%%20height%%3D%%223mm%%22%%20viewBox%%3D%%220%%200%%20260%%2030%%22%%3E%%3Cg%%20fill%%3D%%22none%%22%%20stroke%%3D%%22%%23C9A95C%%22%%20stroke-width%%3D%%222.4%%22%%3E%%3Cline%%20x1%%3D%%220%%22%%20y1%%3D%%2215%%22%%20x2%%3D%%22118%%22%%20y2%%3D%%2215%%22/%%3E%%3Cline%%20x1%%3D%%22142%%22%%20y1%%3D%%2215%%22%%20x2%%3D%%22260%%22%%20y2%%3D%%2215%%22/%%3E%%3C/g%%3E%%3Cpath%%20d%%3D%%22M130%%207%%20L138%%2015%%20L130%%2023%%20L122%%2015%%20Z%%22%%20fill%%3D%%22%%23C9A95C%%22/%%3E%%3C/svg%%3E") no-repeat center bottom 6.6mm / 26mm 3mm; vertical-align: bottom; }
+  @top-left { content: "%(head)s"; font: 500 7.9pt "Changa"; color: #0C2766; vertical-align: bottom; padding-bottom: 5.4mm; }
 }
 @page :first { margin-top: 104mm; @top-right { content: none; } @top-left { content: none; } }
 :root { --ink: #1C1915; --ink-2: #4A443C; --ink-3: #7C7467; --paper: #F8F6F1; --paper-2: #EFECE5;
-  --sapphire: #0C2766; --sapphire-2: #2B4A8F; --gold: #C9A95C; --gold-l: #E4CB8C; --gold-ink: #8A6A1F; --crimson: #A8172E; }
+  --sapphire: #0C2766; --sapphire-2: #2B4A8F; --gold: #C9A95C; --gold-l: #E4CB8C; --gold-ink: #8A6A1F; --crimson: #A8172E;
+  --ruby: #7B1730; --ruby-2: #9A4A58; --charcoal: #232A3A; }
 html, body { margin: 0; background: var(--paper); }
 body { direction: rtl; color: var(--ink); font: 400 13.2pt/1.85 "Scheherazade New", serif; }
 .full { position: relative; width: 200mm; height: 260mm; overflow: hidden; break-before: page; break-after: page; }
@@ -53,7 +55,7 @@ body { direction: rtl; color: var(--ink); font: 400 13.2pt/1.85 "Scheherazade Ne
 .chap-band .k i { width: 10mm; border-top: .5pt solid var(--gold); display: inline-block; }
 .chap-band h2 { position: absolute; top: 46mm; right: 39mm; left: 39mm; margin: 0; font: 700 29pt/1.25 "Changa"; color: #F4ECD9; string-set: chap content(); text-wrap: balance; }
 .chap-band .sub { position: absolute; top: 62mm; right: 39mm; left: 39mm; font: 300 12.5pt/1.5 "Changa"; color: var(--gold-l); }
-.chap-band .dot { position: absolute; bottom: -1.3mm; right: 39mm; width: 2.6mm; height: 2.6mm; border-radius: 50%%; background: var(--crimson); }
+.chap-band .dot { position: absolute; bottom: -1.3mm; right: 39mm; width: 2.4mm; height: 2.4mm; transform: rotate(45deg); background: var(--gold); }
 .chap-open { position: relative; }
 p { margin: 0; text-align: justify; }
 p + p { text-indent: 6mm; }
@@ -62,16 +64,17 @@ h3 { font: 700 15pt/1.45 "Changa"; color: var(--sapphire); margin: 7mm 0 2.4mm; 
 h3::after { content: ""; display: block; width: 12mm; border-top: .8pt solid var(--gold); margin-top: 1.6mm; }
 h3 + p { text-indent: 0; }
 strong { font-weight: 700; }
-.q { font: 400 14.6pt/1.9 "Amiri Quran", "Amiri"; color: var(--sapphire); }
-.qref { font: 400 8.2pt/1 "IBM Plex Sans Arabic"; color: var(--ink-3); margin-right: 1.4mm; white-space: nowrap; }
-p.ayah { text-align: center; text-indent: 0; margin: 6.5mm 0; break-inside: avoid; }
-p.ayah .q { font-size: 17pt; line-height: 2.05; }
-p.ayah .qref { display: block; margin: 1.2mm 0 0; font: 300 8.6pt/1.4 "Changa"; color: var(--gold-ink); }
+.q { font: 400 14.6pt/1.9 "Amiri Quran", "Amiri"; color: var(--ruby); }
+.qref { font: 400 8.2pt/1 "Changa"; color: var(--ruby-2); margin-right: 1.4mm; white-space: nowrap; }
+p.ayah { text-align: center; text-indent: 0; margin: 7mm 0 7.5mm; padding: 6.2mm 5mm 5.4mm; break-inside: avoid; text-wrap: balance;
+  background: url("data:image/svg+xml;utf8,%%3Csvg%%20xmlns%%3D%%22http%%3A//www.w3.org/2000/svg%%22%%20width%%3D%%2244mm%%22%%20height%%3D%%222.4mm%%22%%20viewBox%%3D%%220%%200%%20440%%2024.0%%22%%3E%%3Cg%%20fill%%3D%%22none%%22%%20stroke%%3D%%22%%23C9A95C%%22%%20stroke-width%%3D%%222%%22%%3E%%3Cline%%20x1%%3D%%220%%22%%20y1%%3D%%2212%%22%%20x2%%3D%%22200%%22%%20y2%%3D%%2212%%22/%%3E%%3Cline%%20x1%%3D%%22240%%22%%20y1%%3D%%2212%%22%%20x2%%3D%%22440%%22%%20y2%%3D%%2212%%22/%%3E%%3C/g%%3E%%3Cpath%%20d%%3D%%22M220%%202%%20L230%%2012%%20L220%%2022%%20L210%%2012%%20Z%%22%%20fill%%3D%%22%%237B1730%%22/%%3E%%3Cg%%20fill%%3D%%22%%23C9A95C%%22%%3E%%3Cpath%%20d%%3D%%22M200%%209%%20l3%%203%%20-3%%203%%20-3%%20-3z%%22/%%3E%%3Cpath%%20d%%3D%%22M240%%209%%20l3%%203%%20-3%%203%%20-3%%20-3z%%22/%%3E%%3C/g%%3E%%3C/svg%%3E") no-repeat center top / 44mm 2.4mm, linear-gradient(#C9A95C, #C9A95C) no-repeat center bottom / 16mm .45pt; }
+p.ayah .q { font-size: 17.4pt; line-height: 2.1; }
+p.ayah .qref { display: block; margin: 1.6mm 0 0; font: 300 8.6pt/1.4 "Changa"; letter-spacing: .3pt; color: var(--ruby-2); }
 blockquote { margin: 4mm 0; padding: 0; break-inside: avoid; }
 blockquote.quote { border-right: 1.4pt solid var(--gold); padding: 1mm 5mm 1mm 0; }
-blockquote.hadith { margin: 6mm 4mm; text-align: center; }
-blockquote.hadith::before, blockquote.hadith::after { content: ""; display: block; width: 14mm; margin: 0 auto; border-top: .6pt solid var(--gold); }
-blockquote.hadith p { font: 400 14.6pt/1.95 "Amiri"; color: #1F2F57; text-align: center; text-indent: 0; padding: 2.2mm 0; text-wrap: balance; }
+blockquote.hadith { margin: 6.5mm 5mm; text-align: center; }
+blockquote.hadith::before, blockquote.hadith::after { content: ""; display: block; height: 2mm; background: url("data:image/svg+xml;utf8,%%3Csvg%%20xmlns%%3D%%22http%%3A//www.w3.org/2000/svg%%22%%20width%%3D%%2228mm%%22%%20height%%3D%%222mm%%22%%20viewBox%%3D%%220%%200%%20280%%2020%%22%%3E%%3Cg%%20fill%%3D%%22none%%22%%20stroke%%3D%%22%%23C9A95C%%22%%20stroke-width%%3D%%222%%22%%3E%%3Cline%%20x1%%3D%%220%%22%%20y1%%3D%%2210%%22%%20x2%%3D%%22125%%22%%20y2%%3D%%2210%%22/%%3E%%3Cline%%20x1%%3D%%22155%%22%%20y1%%3D%%2210%%22%%20x2%%3D%%22280%%22%%20y2%%3D%%2210%%22/%%3E%%3Cpath%%20d%%3D%%22M140%%202%%20L148%%2010%%20L140%%2018%%20L132%%2010%%20Z%%22/%%3E%%3C/g%%3E%%3C/svg%%3E") no-repeat center / 28mm 2mm; }
+blockquote.hadith p { font: 400 14.8pt/1.95 "Amiri"; color: var(--charcoal); text-align: center; text-indent: 0; padding: 2.6mm 0; text-wrap: balance; }
 blockquote.quote p { font: 400 14pt/1.9 "Amiri"; color: var(--sapphire); text-indent: 0; }
 blockquote.lesson { background: var(--paper-2); border-top: .8pt solid var(--gold); padding: 3mm 5mm 3.4mm; margin: 5mm 0 5.5mm; }
 blockquote.lesson p { font: 400 12.4pt/1.75 "Scheherazade New"; color: var(--ink-2); text-indent: 0; text-align: justify; }
@@ -114,18 +117,18 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .pagedjs_footnote_content::before { content: ""; position: absolute; top: .8mm; right: 0; width: 22mm; border-top: .5pt solid var(--gold); }
 .pagedjs_footnote_content::after { content: ""; position: absolute; top: .1mm; right: 21.3mm; width: 1.4mm; height: 1.4mm;
   background: var(--gold); transform: rotate(45deg); }
-.fn-note[data-footnote-marker] { display: block; position: relative; padding-right: 5.2mm; margin-bottom: 1mm;
-  font: 400 9.6pt/1.55 "Scheherazade New"; color: var(--ink-2); text-align: justify; text-indent: 0; letter-spacing: 0; }
-.fn-note[data-footnote-marker]::before { content: attr(data-n); position: absolute; right: 0; top: 0;
-  font: 700 9.4pt/1.62 "Amiri"; color: var(--sapphire); }
+.fn-note[data-footnote-marker] { display: block; position: relative; padding-right: 6.4mm; margin-bottom: 1.3mm;
+  font: 400 10.6pt/1.62 "Scheherazade New"; color: var(--ink-2); text-align: justify; text-indent: 0; letter-spacing: 0; }
+.fn-note[data-footnote-marker]::before { content: attr(data-n); position: absolute; right: 0; top: .05em;
+  font: 700 11pt/1.6 "Amiri"; color: var(--sapphire); }
 .fn-tag { font: 300 8pt "Changa"; color: var(--gold-ink); margin-left: .8mm; }
 .fn-note[data-split-from]::before { content: none; }
-.fn-note .q { font-size: 10.4pt; line-height: 1.5; }
-.fn-note .qref { font-size: 7pt; }
+.fn-note .q { font-size: 11.2pt; line-height: 1.55; }
+.fn-note .qref { font-size: 7.6pt; }
 .fn-note i, .fn-note em { font-style: normal; color: var(--sapphire); }
 .fn-note .lat em { font-style: italic; color: inherit; }
-.fn-note[data-footnote-call]::after { vertical-align: 42%%; font: 700 8.2pt/0 "Amiri"; font-variant-position: normal;
-  color: var(--gold-ink); margin: 0 .3mm 0 0; }
+.fn-note[data-footnote-call]::after { vertical-align: .44em; font: 700 11pt/0 "Amiri"; font-variant-position: normal;
+  color: var(--sapphire); margin: 0 .45mm 0 .15mm; }
 %(calls)s
 .lat { direction: ltr; unicode-bidi: isolate; font-family: "Source Serif 4"; font-size: .86em; }
 /* heritage and poster interludes */
@@ -194,6 +197,8 @@ h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
 .app-91 ul:last-of-type { direction: ltr; }
 .app-91 ul:last-of-type > li { padding: 0 0 0 6mm; text-indent: -6mm; text-align: left; font: 400 10.6pt/1.6 "Source Serif 4"; }
 .app-91 ul:last-of-type .lat { font-size: 1em; }
+.app-91 .deg { font: 400 7.6pt/1 "Changa"; color: var(--gold-ink); white-space: nowrap; margin-right: 1.2mm; }
+.app-91 ul:last-of-type .deg { font-family: "Changa"; direction: rtl; unicode-bidi: isolate; }
 .toc-p { font: 400 12pt/1.9 "Scheherazade New"; }
 .toc-row { display: flex; gap: 3mm; align-items: baseline; border-bottom: .4pt dotted #CFC5B1; padding: 1.2mm 0; }
 .toc-row b { font: 600 10pt "Changa"; color: var(--gold-ink); min-width: 22mm; }
@@ -203,6 +208,13 @@ h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
 p.obj { background: var(--paper-2); border-right: 1.3pt solid var(--sapphire-2); padding: 2.6mm 4.5mm 2.8mm 3mm; margin: 5mm 0 0; text-indent: 0; }
 p.ans { border-right: 1.3pt solid var(--gold); padding: 2.4mm 4.5mm 2.6mm 3mm; margin: 0 0 5mm; text-indent: 0; }
 p.obj + p.ans { margin-top: 0; }
+/* a line that introduces a verse, a hadith or a quotation never stays behind at the foot of a page */
+p:has(+ p.ayah), p:has(+ blockquote), p:has(+ .keep > blockquote) { break-after: avoid; }
+/* the close of a chapter (خلاصة، ما يترتّب): its own quieter panel, so the chapter ends on a different rhythm */
+.summary { background: var(--paper-2); border-top: .8pt solid var(--gold); border-bottom: .4pt solid var(--gold); padding: 1mm 5.5mm 4.2mm; margin: 7mm 0 2mm; }
+.summary > h3 { margin-top: 3.4mm; }
+.summary p, .summary li { font-size: 12.8pt; }
+.summary table { margin-bottom: 1mm; }
 """
 CSS += FM.CSS
 
@@ -210,7 +222,7 @@ CSS += FM.CSS
 def ayat(html):
     """﴿…﴾ (ref) → Amiri Quran span + reference; a paragraph that is only an ayah becomes a display ayah."""
     html = re.sub(r"﴿([^﴾]+)﴾\s*\(([^)]+)\)", r'<span class="q">﴿\1﴾</span><span class="qref">(\2)</span>', html)
-    html = re.sub(r"﴿([^﴾]+)﴾", r'<span class="q">﴿\1﴾</span>', html)
+    html = re.sub(r'(?<!<span class="q">)﴿([^﴾]+)﴾', r'<span class="q">﴿\1﴾</span>', html)
     return html
 
 
@@ -321,6 +333,18 @@ def md_to_html(md):
             h.insert_before(keep)
             keep.append(h.extract())
             keep.append(nxt.extract())
+    # the close of a chapter (its summary, or what follows from it) is set in its own panel, down to the next heading
+    for h in soup.find_all("h3"):
+        if not re.search(r"خلاصة|^ما يترتّب|^ما يُستخرج|^موقع هذا الكتاب", h.get_text().lstrip("٠١٢٣٤٥٦٧٨٩. ")):
+            continue
+        start = h.parent if h.parent is not None and "keep" in (h.parent.get("class") or []) else h
+        panel = soup.new_tag("div", attrs={"class": "summary"})
+        start.insert_before(panel)
+        node = start
+        while node is not None and node.name not in ("h2",) and not (node is not start and (node.name == "h3" or (node.name == "div" and node.find("h3", recursive=False)))):
+            nxt = node.find_next_sibling()
+            panel.append(node.extract())
+            node = nxt
     # a run of short items (a list of acts, sounds, places) reads better in two columns
     for ul in soup.find_all("ul"):
         items = ul.find_all("li", recursive=False)
@@ -475,8 +499,8 @@ PAGED_CONFIG = ("<script>window.PagedConfig = { auto: true, before: async () => 
 def doc(css, body, page_css, head="", paged=False):
     # the running heads live in page-margin boxes, which do not make Chromium load a web font on their own:
     # an invisible line in the same face does, so the heads never fall back to a system font
-    preload = (f'<div aria-hidden="true" style="position:absolute;visibility:hidden;font:400 7.4pt \'IBM Plex Sans Arabic\'">'
-               f'صناعة المتكلّم العربي {head}</div>')
+    preload = (f'<div aria-hidden="true" style="position:absolute;visibility:hidden;font:300 7.9pt Changa">'
+               f'صناعة المتكلّم العربي <b style="font-weight:500">{head}</b></div>')
     # a page that carries notes is paginated by Paged.js, which alone places a note at the foot of its page
     script = f'{PAGED_CONFIG}<script src="{PAGED.as_uri()}"></script>' if paged else ""
     return (f'<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>صناعة المتكلّم العربي</title>'

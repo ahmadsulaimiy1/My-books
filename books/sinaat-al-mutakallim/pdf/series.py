@@ -63,8 +63,10 @@ def main():
         md += [f"### المجلد {ORDINAL_F[vol - 1]}: {name}", ""]
         if "الافتتاحية" in extra:
             md.append("- **الافتتاحية**: المقدمة العلمية في سبعة عشر فصلًا، وملحق التحقيق، وثبت المصادر")
-            for f in sorted((BOOK / "الافتتاحية").glob("*.md")):
-                rows.append([str(f.relative_to(BOOK)), str(vol), "الافتتاحية", ""])
+            md.append("- **المدخل**: العربية ومستوياتها")
+            for unit in ("الافتتاحية", "المدخل"):
+                for f in sorted((BOOK / unit).glob("*.md")):
+                    rows.append([str(f.relative_to(BOOK)), str(vol), unit, ""])
         for old, new in babs:
             d = bab_dir(old)
             if new is None:

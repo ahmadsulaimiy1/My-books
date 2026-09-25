@@ -66,7 +66,7 @@ CSS = r"""
 .vm-row .n { font: 300 9pt/1 "Changa"; color: var(--ink-3); }
 .vm-row .nm { font: 600 12.6pt/1.3 "Changa"; color: var(--sapphire); }
 .vm-row .d { grid-column: 2; font: 400 9.6pt/1.5 "Scheherazade New"; color: var(--ink-2); margin-top: .4mm; }
-.vm-row.here .nm::after { content: ""; display: inline-block; width: 1.8mm; height: 1.8mm; border-radius: 50%%; background: var(--crimson); margin-right: 2.5mm; vertical-align: middle; }
+.vm-row.here .nm::after { content: ""; display: inline-block; width: 1.7mm; height: 1.7mm; transform: rotate(45deg); background: var(--gold); margin-right: 2.8mm; vertical-align: middle; }
 /* 4. imprint: a typographic table */
 .im { position: absolute; top: 38mm; right: 36mm; left: 36mm; }
 .im h4 { font: 300 10pt/1 "Changa"; color: var(--gold-ink); margin: 0 0 7mm; display: flex; gap: 3mm; align-items: center; }
