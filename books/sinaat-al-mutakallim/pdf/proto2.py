@@ -193,13 +193,23 @@ def essay():
 
 # --------------------------------------------------------------------------- pages
 
-def title_page(css, volume=None):
-    """volume: the volume's block (frontmatter.title_volume); the prototype's line stands in when none is given."""
+def title_page(css, volume=None, n=None):
+    """volume: the volume's block (frontmatter.title_volume); the prototype's line stands in when none is given.
+    n: the volume, whose device (the alif in its circle, as on its cover) stands on the band's gold line."""
     logo = C2.Logotype(css, width=122.0)
     svg, bottom = logo.svg(146.0, 50.0, shadow=True)
+    if n is None:
+        mark = '<circle cx="146" cy="137.85" r="1.3" fill="#A8172E"/>'
+        dev = ""
+    else:
+        import covers
+        a = 40.0
+        mark = ""
+        dev = (f'<div style="position:absolute;left:{38.0 - a / 2 * 1.15:.2f}mm;top:{137.85 - a - 0.5:.2f}mm">'
+               f'{covers.device_svg(n, a, on_dark=True, ext=a / 2 * 1.15)}</div>')
     return page(f'''<div class="tp-band"></div>
 <svg viewBox="0 0 170 240" style="position:absolute;inset:0;width:170mm;height:240mm"><defs>{C2.K.gold_defs()}</defs>{svg}
-<rect x="0" y="137.6" width="170" height="0.5" fill="url(#foil)"/><circle cx="146" cy="137.85" r="1.3" fill="#A8172E"/></svg>
+<rect x="0" y="137.6" width="170" height="0.5" fill="url(#foil)"/>{mark}</svg>{dev}
 {volume or '<div class="tp-vol">المجلد الأول<span class="kufi" style="display:block;font-size:22pt;line-height:1.3;color:#E4CB8C;font-weight:500">التأسيس</span></div>'}
 <div class="tp-sub">من سلامة اللسان إلى حسن البيان</div>
 <div class="tp-desc">منهجٌ شامل في النطق والتعبير والخطاب وآداب التواصل والملكة الشفهية</div>

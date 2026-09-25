@@ -959,7 +959,7 @@ def main(n=1, review=False):
     appendices = [f for f in everything if f.name[:2] >= "90"]
 
     # (kind, html, meta); meta: recto (open on a recto page), spread (open on an even page), anchor, head, toc
-    title_page = P2.title_page(css, FM.title_volume(n, babs_line(n))).replace('class="pg', 'class="full').replace("</section>", "") + O.TP_MARK
+    title_page = P2.title_page(css, FM.title_volume(n, babs_line(n)), n=n).replace('class="pg', 'class="full').replace("</section>", "") + O.TP_MARK
     pieces = [("fixed", doc(css, FM.half_title(n), fixed), R),
               ("fixed", doc(css, FM.volumes_map(n), fixed), {"spread": True}),
               ("fixed", doc(css, title_page, fixed), R),

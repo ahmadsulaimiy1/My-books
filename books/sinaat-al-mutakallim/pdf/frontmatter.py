@@ -82,6 +82,9 @@ CSS = r"""
 .ht .t { font: 600 23pt/1.5 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--sapphire); }
 .ht .s { font: 400 12.5pt/1.6 "Scheherazade New"; color: var(--ink-2); margin-top: 2mm; }
 .ht .grule { margin: 9mm 0 8mm; }
+.ht .dev-w { margin: 10mm 0 9mm; }
+.co .dev-w { margin: 0 0 2mm; }
+.imark .hm { margin-bottom: .6mm; }
 .ht .a { font: 300 10.5pt/1.5 "Changa"; color: var(--ink-2); }
 .ht .v { position: absolute; top: 108mm; left: 0; right: 0; font: 300 9pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .6pt; }
 /* 2. the series map, a spread (Bible, ch. 111 §٥): the right-hand page opens it with the title and the first two
@@ -217,8 +220,17 @@ def page(inner, cls=""):
 
 
 def mark(dark=False):
-    return (f'<div class="imark{" on-dark" if dark else ""}"><span class="diamond"></span><span class="w">الإحسان</span>'
+    """The house's mark: one qalam dot on its line, «الإحسان» under it, the house's name in Latin (Bible, ch. 98);
+    the same sign as on the spines (covers.py)."""
+    import covers
+    return (f'<div class="imark{" on-dark" if dark else ""}">{covers.house_mark_svg(12.0, on_dark=dark)}<span class="w">الإحسان</span>'
             f'<span class="e">{PUBLISHER_EN}</span></div>')
+
+
+def device(n, a=16.0, dark=False):
+    """The series' device as it stands on this volume's cover: the alif in its circle on the line."""
+    import covers
+    return f'<div class="dev-w">{covers.device_svg(n, a, on_dark=dark)}</div>'
 
 
 def grule():
@@ -226,7 +238,7 @@ def grule():
 
 
 def half_title(n=1):
-    return page(f'<div class="ht"><div class="t">{TITLE}</div><div class="s">{SUBTITLE}</div>{grule()}'
+    return page(f'<div class="ht"><div class="t">{TITLE}</div><div class="s">{SUBTITLE}</div>{device(n)}'
                 f'<div class="a">{AUTHOR_SHORT}</div><div class="v">{volume_line(n)}</div></div>')
 
 
@@ -395,7 +407,7 @@ def colophon(n=1, proof=None):
     w, nm = VOLUMES[n - 1][:2]
     done = f"تمّ المجلد {w} من «{TITLE}»: {nm}{nxt}."
     note = f'<p class="f" style="margin-top:4mm;color:var(--crimson)">{proof}</p>' if proof else ""
-    return page(f'''<div class="co">{grule()}
+    return page(f'''<div class="co">{device(n, 13.0)}
 <p style="margin-top:8mm">{done}</p>
 <p class="f">صُفّ المتن بحرف شهرزاد الجديد، والنصوص التراثية بحرف أميري، والقرآن الكريم بحرف أميري قرآن، والعناوين بحرفَي تشانغا وكوفام، والتنقّل بحرف بلكس العربي، والإحالات اللاتينية بحرف سورس سيريف.</p>
 <p class="f">صدر عن {PUBLISHER_AR}، {YEAR}.</p>{note}

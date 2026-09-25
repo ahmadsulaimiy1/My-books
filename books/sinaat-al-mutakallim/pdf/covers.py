@@ -41,6 +41,7 @@ import json
 import math
 import re
 import sys
+from functools import lru_cache
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -341,8 +342,8 @@ class Alif:
     """The series' alif: the proportioned Naskh alif of the Arabic book (after the Bulaq model as cut in
     Amiri), set as a drawing, not as type. Its foot rests on the line at the given x."""
 
-    def __init__(self, faces):
-        ln = L.Line("ا", faces.amiri4.path, 100.0)
+    def __init__(self, path):
+        ln = L.Line("ا", path, 100.0)
         self.segs = parse(ln.d)
         x0, y0, x1, y1 = bbox(self.segs)
         self.h = y1 - y0
@@ -401,7 +402,7 @@ def alif_x(n, alif):
 
 def build(n, faces=None, sw=None):
     faces = faces or Faces()
-    alif = Alif(faces)
+    alif = Alif(faces.amiri4.path)
     sw = sw if sw is not None else spine_width(n)
     b = BLEED
     wrap_w, wrap_h = 2 * W + sw + 2 * b, H + 2 * b
@@ -617,6 +618,64 @@ def guides(sc, faces, fx, sx, bx, y0, sw):
     sc.add(set_left(lab, zx + 1.5, zy + zh / 2 + 0.8), {"GUIDES"}, ink=(0, 1, 0, 0))
     lab = line(f"spine {sw:.1f} mm (provisional caliper)", faces.serif, 2.2, latin=True)
     sc.add(set_left(lab, sx + 0.5, y0 + H + 2.2), {"GUIDES"}, ink=(0, 1, 0, 0))
+
+
+# ------------------------------------------------------------------------------------------------ the device inside
+@lru_cache(maxsize=1)
+def _alif():
+    return Alif(L.arabic_face(C2.fonts(), "Amiri", 400))
+
+
+def to_d(segs):
+    out = []
+    for s_ in segs:
+        if s_[0] == "Z":
+            out.append("Z")
+        else:
+            out.append(s_[0] + " ".join(f"{v:.3f}" for v in s_[1:]))
+    return "".join(out)
+
+
+def device_svg(n, A=20.0, on_dark=False, ext=None, hair=None):
+    """The series' device as it stands on the covers of volume n, drawn at circle diameter A (mm) for a page:
+    the circle a hairline, the alif (or, on the reference, the measure), the crimson nuqta, and the line under
+    them. On paper the circle is sapphire and the line and the alif gold; on sapphire both are gold."""
+    alif = _alif()
+    R = A / 2
+    ext = R * 1.9 if ext is None else ext
+    hair = max(0.16, A * 0.006) if hair is None else hair
+    gold = "#C9A95C" if not on_dark else "#E4CB8C"
+    ring_col = "#0C2766" if not on_dark else "#C9A95C"
+    parts = [f'<path d="{to_d(rect(-ext, -hair / 2, 2 * ext, hair))}" fill="{gold}"/>',
+             f'<path d="{to_d(ring(0, -R, R - hair / 2, R + hair / 2))}" fill="{ring_col}" fill-rule="evenodd"/>']
+    u = A / 7
+    if n == 11:
+        for k in range(7):
+            yk = -u / 2 - k * u
+            d = nuqta(0, yk, u * 0.86) if k == 0 else nuqta(0, yk, u * 0.86) + nuqta(0, yk, u * 0.86 - max(0.35, u * 0.07))
+            parts.append(f'<path d="{to_d(d)}" fill="{gold}" fill-rule="evenodd"/>')
+        x_n = -0.42 * u * 0.86 - 0.42 * u * 0.28 - u * 0.1
+    else:
+        x = 0.80 * R * (1 - (n - 1) / 9)
+        parts.append(f'<path d="{to_d(alif.at(x, 0, A, widen=ALIF_WIDEN))}" fill="{gold}"/>')
+        lft, _ = alif.extent(A, widen=ALIF_WIDEN)
+        x_n = x + lft - 0.42 * u * 0.28 - u * 0.09
+    s_ = u * 0.28
+    parts.append(f'<path d="{to_d(nuqta(x_n, -s_ / 2 - hair, s_))}" fill="#A8172E"/>')
+    return (f'<svg class="dev" viewBox="{-ext:.2f} {-A - 0.5:.2f} {2 * ext:.2f} {A + 1:.2f}" '
+            f'style="width:{2 * ext:.2f}mm;height:{A + 1:.2f}mm;display:block;margin:0 auto" aria-hidden="true">{"".join(parts)}</svg>')
+
+
+def house_mark_svg(width=14.0, on_dark=False):
+    """The house's sign above its name: one qalam dot on a line (Bible, ch. 98), drawn as on the spines."""
+    gold = "#C9A95C" if not on_dark else "#E4CB8C"
+    h = width * 0.16
+    half = width / 2
+    gap = h * 0.62
+    line = rect(-half, -0.09, half - gap, 0.18) + rect(gap, -0.09, half - gap, 0.18)
+    return (f'<svg class="hm" viewBox="{-half:.2f} {-h / 2 - 0.2:.2f} {width:.2f} {h + 0.4:.2f}" '
+            f'style="width:{width:.2f}mm;height:{h + 0.4:.2f}mm;display:block;margin:0 auto" aria-hidden="true">'
+            f'<path d="{to_d(line)}" fill="{gold}"/><path d="{to_d(nuqta(0, 0, h))}" fill="{gold}"/></svg>')
 
 
 # ------------------------------------------------------------------------------------------------ plates
