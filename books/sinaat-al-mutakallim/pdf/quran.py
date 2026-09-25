@@ -26,10 +26,12 @@ CACHE = HERE.parent / ".cache" / "quran"
 CACHE.mkdir(parents=True, exist_ok=True)
 OUT = BOOK / "_production" / "التحقيق"
 from paths import AUTHOR_WORD, CLOSING, INTRO, OPENING  # noqa: E402
-from volumes import unit_files  # noqa: E402
-# the opening and the author's word, then the rest of the first volume (the introduction and the first bab), and
-# the book's closing
-FILES = sorted(OPENING.glob("*.md")) + [AUTHOR_WORD] + sorted(INTRO.glob("*.md")) + unit_files(1, ("bab", 1)) + [CLOSING]
+from volumes import VOLUMES, unit_files  # noqa: E402
+# the opening and the author's word, then the rest of the first volume (the introduction and the first bab), then
+# every unit of the other volumes, the book's closing among them
+FILES = sorted(OPENING.glob("*.md")) + [AUTHOR_WORD] + sorted(INTRO.glob("*.md")) + unit_files(1, ("bab", 1))
+FILES += [f for v in VOLUMES[1:] for u in v["units"] for f in unit_files(v["n"], u)]
+assert CLOSING in FILES
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 EN = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
 CITE = re.compile(r"﴿([^﴾]+)﴾\s*\(([^:()]+):\s*([٠-٩]+)(?:\s*[–-]\s*([٠-٩]+))?\)")
@@ -44,7 +46,12 @@ def get(url: str):
 
 
 def skeleton(s: str) -> str:
-    """Letters only: no vowels, Qur'anic marks, verse marks, digits, alefs, hamzas or spaces; ya/ta forms unified."""
+    """Letters only: no vowels, Qur'anic marks, verse marks, digits, alefs, hamzas or spaces; ya/ta forms unified.
+    The mushaf's spellings of an alef are read as the alef they stand for: waw or a medial alif maqsura under the
+    dagger alef before the ta marbuta, or a medial alif maqsura under it (ٱلصَّلَوٰةَ، دَعْوَىٰهُمْ، إِحْدَىٰهُمَا), and the small ya inside a word, which is a ya (رَبَّٰنِيِّـۧنَ)."""
+    s = re.sub("[\u06E6\u06E7](?=[\u064B-\u0652]*[ء-ي])", "ي", s)     # in the word a ya; at its end (بِهِۦ) the sila
+    s = re.sub("و[\u064B-\u0652]*\u0670(?=[\u064B-\u0652]*ة)", "", s)
+    s = re.sub("ى[\u064B-\u0652]*\u0670(?=[\u064B-\u0652]*[ء-ي])", "", s)
     s = re.sub(r"[ؐ-ًؚ-ٰٟۖ-ࣰۭ-ࣿـ]", "", s)
     s = re.sub(r"[٠-٩0-9\s۝]", "", s)
     s = re.sub("[ٱأإآاءئؤ]", "", s).replace("ى", "ي").replace("ة", "ه")

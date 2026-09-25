@@ -41,7 +41,7 @@ import ids as IDS  # noqa: E402
 import opening as O  # noqa: E402
 import proto2 as P2  # noqa: E402
 from paths import AUTHOR_WORD, INTRO, OPENING  # noqa: E402
-from volumes import BOOK, VOLUMES, unit_files  # noqa: E402
+from volumes import APPENDIX, BOOK, PROGRAM, VOL_OF_BAB, VOLUMES, unit_files  # noqa: E402
 
 AR = O.AR
 ORD = O.ORD
@@ -615,9 +615,9 @@ def title_of(md):
     return title, (sub.group(1).strip() if sub else "")
 
 
-def bab_chapters(n):
-    """{chapter number: [files]} for the bab's chapter files (ف01-أ، ف01-ب …)."""
-    files = unit_files(1, ("bab", n))
+def bab_chapters(n, files=None):
+    """{chapter number: [files]} for the bab's chapter files (ف01-أ، ف01-ب …); files: another unit's (the reference)."""
+    files = files if files is not None else unit_files(VOL_OF_BAB[n], ("bab", n))
     out = {}
     for f in files:
         m = re.match(r"ف([0-9]+)", f.name)
@@ -651,7 +651,142 @@ def lesson_sections(md):
 
 
 def threshold(kick, big, line):
-    return O.poster(kick, big, line, kufam=True)
+    """A unit's threshold: a long name («الدبلوماسية والتواصل الرسمي») in the middle size, never squeezed."""
+    return O.poster(kick, big, line, kufam=True, mid=len(big) > 14)
+
+
+def opener_of(files):
+    """A bab's opener (or the reference's): its title, label and name, its subtitle, its question, and its body."""
+    omd = files[0].read_text(encoding="utf-8")
+    title = re.search(r"^#\s+(.+)$", omd, re.M).group(1).strip()
+    label, name = [x.strip() for x in title.split(":", 1)]
+    lead = re.search(r"^>\s*(السؤال الذي يجيب عنه [^:]+):.*$", omd, re.M)
+    question = re.search(r"\*\*(.+?)\*\*", lead.group(0)).group(1)
+    sub = re.search(r"^##\s+(.+)$", omd, re.M).group(1)
+    body = re.sub(r"^#\s+.+$", "", omd, count=1, flags=re.M)
+    body = re.sub(r"^##\s+.+$", "", body, count=1, flags=re.M)
+    return title, label, name, sub, f"{lead.group(1)}: {question}", body
+
+
+def babs_line(n):
+    """The title page's line of the volume's units, the babs by their numbers («البابان الثامن والتاسع»)."""
+    if n == 1:
+        return None
+    units = VOLUMES[n - 1]["units"]
+    babs = [u[1] for u in units if u[0] == "bab"]
+    names = [opener_of(unit_files(n, ("bab", b)))[2] for b in babs]
+    if len(babs) == 1:
+        line = f"الباب {O.ORD[babs[0]]}: {names[0]}"
+    elif len(babs) == 2:
+        line = f"البابان {O.ORD[babs[0]]} و{O.ORD[babs[1]]}: {names[0]}، و{names[1]}"
+    elif babs:
+        line = "الأبواب " + " و".join(O.ORD[b] for b in babs)
+    else:
+        line = "المرجع الأول: بنك الأخطاء، والملاحق الأربعة، ومسرد المصطلحات، والمصادر والمراجع"
+    if ("program",) in units:
+        line += "، وملحقه: برنامج النطق اليومي"
+    if ("closing",) in units:
+        line += "، وخاتمة الكتاب"
+    return line
+
+
+def flat(md):
+    """A file whose sections are h2 under its h1: the h1 goes to the band, the sections stay."""
+    return re.sub(r"^#\s+.+$", "", md, count=1, flags=re.M).strip()
+
+
+def numbered(md):
+    """The numbered sections (## ٧. الشكر) of an appendix, for its contents line."""
+    return [(m.group(1), m.group(2).strip()) for m in re.finditer(r"^##\s+([٠-٩]+)\.\s+(.+)$", md, re.M)]
+
+
+def unit(css, n, u, pieces, toc, outline, fixed, first=False):
+    """One unit of the volume's map (volumes.py) as pieces: a bab or the reference (threshold, opener, chapters), the
+    programme of the second bab, the book's closing, an appendix of the reference, or a closing list (the glossary,
+    the bibliography). first: the unit that opens the text, numbered from ١."""
+    if u[0] in ("bab", "reference"):
+        files = unit_files(n, u)
+        b = u[1] if u[0] == "bab" else 0
+        tag = f"b{b}" if b else "r"
+        opener, chapters = bab_chapters(b, files)
+        title, label, name, sub, lead, obody = opener_of(files)
+        pieces.append(("fixed", doc(css, threshold(label, name, lead), fixed),
+                       {"recto": True, "anchor": "main" if first else tag }))
+        outline.append((title, "main" if first else tag, 0))
+        if first:
+            pieces[-1][2]["alias"] = tag
+        head = [("label", label), ("title", name)]
+        ohtml = (f'<section class="chap chap-open"><div class="opener-k"><span>{title}</span><i></i></div>'
+                 f'<h2 class="op-t">{"فاتحة الباب" if b else "فاتحة المرجع"}</h2><p class="op-s">{sub}</p>{lesson_html(obody)}</section>')
+        oname = "فاتحة الباب" if b else "فاتحة المرجع"
+        pieces.append(("cont", doc(css, ohtml, O.CONT_CSS + OPENER_CSS), {"anchor": f"{tag}o", "head": (head, [("title", oname)]), "opens": True}))
+        toc.append(("part", "", title))
+        toc.append(("e", "", oname, f"{tag}o", []))
+        outline.append((oname, f"{tag}o", 1))
+        for c, cf in sorted(chapters.items()):
+            md = chapter_md(cf)
+            first_md = cf[0].read_text(encoding="utf-8")
+            ctitle, question = title_of(first_md)
+            key = f"{tag}c{c}"
+            toc.append(("e", f"الفصل {ORD[c]}", ctitle, key, lesson_sections(md) if b else []))
+            outline.append((f"الفصل {ORD[c]}: {ctitle}", key, 1))
+            short = re.search(r"<!--\s*head:\s*(.+?)\s*-->", first_md)
+            heads = (head, [("label", "الفصل"), ("num", str(c).translate(AR)), ("title", short.group(1) if short else ctitle)])
+            body = f'<section class="chap"><div class="chap-open">{lesson_html(md)}</div></section>'
+            band = O.band(f"{label}: {name} · الفصل {ORD[c]}", ctitle, question)
+            pieces.append(("flow", flow(css, (body, band)), {"anchor": key, "head": heads}))
+        return
+
+    if u[0] == "program":
+        files = unit_files(n, u)
+        md = "\n\n".join(flat(f.read_text(encoding="utf-8")) for f in files)
+        kick, title = [x.strip() for x in PROGRAM.split(":", 1)]
+        body = f'<section class="chap"><div class="chap-open">{lesson_html(md, breaks=False)}</div></section>'
+        pieces.append(("flow", flow(css, (body, O.band(kick, title, ""))),
+                       {"recto": True, "anchor": "prog", "head": ([("title", kick)], [("title", "برنامج النطق اليومي")])}))
+        toc.append(("part", "", kick))
+        toc.append(("e", "", title, "prog", []))
+        outline.append((PROGRAM, "prog", 0))
+        return
+
+    if u[0] == "closing":
+        md = unit_files(n, u)[0].read_text(encoding="utf-8")
+        md = re.sub(r"^## ", "### ", md, flags=re.M)
+        md = re.sub(r"^# ", "## ", md, count=1, flags=re.M)
+        pieces.append(("fixed", doc(css, threshold("المجلد العاشر", "خاتمة الكتاب", "من سلامة اللسان إلى حسن البيان"), fixed),
+                       {"recto": True, "anchor": "closing"}))
+        outline.append(("خاتمة الكتاب", "closing", 0))
+        heads = ([("title", "خاتمة الكتاب")], [("title", "خاتمة الكتاب")])
+        for kind, part in O.chapter_parts(md, "خاتمة الكتاب"):
+            if kind == "flow":
+                pieces.append(("flow", flow(css, part), {"anchor": "closing-t", "head": heads}))
+            else:
+                pieces.append((kind, doc(css, part, fixed if kind == "fixed" else O.CONT_CSS), {"head": heads}))
+        toc.append(("part", "", "خاتمة الكتاب"))
+        toc.append(("e", "", "خاتمة الكتاب", "closing-t", O.sections(md)))
+        return
+
+    if u[0] in ("app", "back"):
+        files = unit_files(n, u)
+        raw = "\n\n".join(f.read_text(encoding="utf-8") for f in files)
+        h1 = re.search(r"^#\s+(.+)$", raw, re.M).group(1).strip()
+        md = "\n\n".join(flat(f.read_text(encoding="utf-8")) if i == 0 else f.read_text(encoding="utf-8") for i, f in enumerate(files))
+        if u[0] == "app":
+            kick, title = [x.strip() for x in h1.split(":", 1)]
+            key, group = f"app-{u[1]}", "الملاحق"
+        else:
+            kick, title = "الخواتيم", h1
+            key, group = f"back-{u[1]}", "الخواتيم"
+        if not any(r[0] == "part" and r[2] == group for r in toc):
+            toc.append(("part", "", group))
+            outline.append((group, key, 0))
+        toc.append(("e", kick if u[0] == "app" else "", title, key, numbered(md)))
+        outline.append((h1, key, 1))
+        body = f'<section class="chap"><div class="chap-open">{lesson_html(md, breaks=False)}</div></section>'
+        pieces.append(("flow", flow(css, (body, O.band(kick, title, ""))),
+                       {"recto": True, "anchor": key, "head": ([("title", group)], [("title", title if len(title) < 22 else kick)])}))
+        return
+    raise SystemExit(f"no builder for the unit {u}")
 
 
 def folios(css, pages, slug=None):
@@ -668,8 +803,6 @@ def folios(css, pages, slug=None):
 # ------------------------------------------------------------------------------------------------ the volume
 
 def main(n=1, review=False):
-    if n != 1:
-        raise SystemExit("only the first volume is built now")
     from pypdf import PdfReader, PdfWriter
     css = C2.fonts()
     fixed = O.FIXED_CSS % dict(w=200, h=260)
@@ -679,14 +812,25 @@ def main(n=1, review=False):
     muq = [f for f in everything if f.name[:2] < "90"]
     appendices = [f for f in everything if f.name[:2] >= "90"]
 
-    # (kind, html, meta); meta: recto (open on a right... a recto page), spread (open on an even page), anchor, head, toc
-    title_page = P2.title_page(css, FM.title_volume(n)).replace('class="pg', 'class="full').replace("</section>", "") + O.TP_MARK
+    # (kind, html, meta); meta: recto (open on a recto page), spread (open on an even page), anchor, head, toc
+    title_page = P2.title_page(css, FM.title_volume(n, babs_line(n))).replace('class="pg', 'class="full').replace("</section>", "") + O.TP_MARK
     pieces = [("fixed", doc(css, FM.half_title(n), fixed), R),
               ("fixed", doc(css, FM.volumes_map(n), fixed), {"spread": True}),
               ("fixed", doc(css, title_page, fixed), R),
               ("fixed", doc(css, FM.imprint(n), fixed), {"anchor": "imprint"}),
-              ("fixed", doc(css, FM.rights(), fixed), R),
-              ("fixed", doc(css, FM.dedication(), fixed), {}),
+              ("fixed", doc(css, FM.rights(), fixed), R)]
+    if n > 1:
+        # the book's dedication, its author's word and its publisher's word are in the first volume; each volume
+        # has its verse, its contents and its symbols (Bible, chs. 99 and 112d §٤)
+        pieces += [("fixed", doc(css, P2.verse_page().replace('class="pg', 'class="full'), fixed), R),
+                   ("toc", None, {"recto": True, "head": O.same("المحتويات"), "opens": True}),
+                   ("cont", doc(css, FM.symbols(), O.CONT_CSS), {"recto": True, "anchor": "symbols", "head": O.same("الرموز والاصطلاحات"), "opens": True})]
+        toc = [("part", "", "المقدّمات"), ("e", "", "الرموز والاصطلاحات", "symbols", [])]
+        outline = [("المقدّمات", "toc", 0), ("المحتويات", "toc", 1), ("الرموز والاصطلاحات", "symbols", 1)]
+        for u in vol["units"]:
+            unit(css, n, u, pieces, toc, outline, fixed, first=u is vol["units"][0])
+        return assemble(css, n, review, pieces, toc, outline, fixed)
+    pieces += [("fixed", doc(css, FM.dedication(), fixed), {}),
               ("fixed", doc(css, P2.verse_page().replace('class="pg', 'class="full'), fixed), R),
               ("cont", doc(css, FM.publisher_word(), O.CONT_CSS), {"recto": True, "anchor": "publisher", "head": O.same("كلمة الناشر"), "opens": True}),
               ("flow", flow(css, O.chapter(AUTHOR_WORD.read_text(encoding="utf-8").replace("# كلمة المؤلف", "## كلمة المؤلف"), FM.volume_line(n))),
@@ -694,7 +838,7 @@ def main(n=1, review=False):
               ("toc", None, {"recto": True, "head": O.same("المحتويات"), "opens": True}),
               ("cont", doc(css, FM.symbols(), O.CONT_CSS), {"recto": True, "anchor": "symbols", "head": O.same("الرموز والاصطلاحات"), "opens": True}),
               ("fixed", doc(css, O.poster("المجلد الأول", "المقدمة", "في صناعة الكلام: البيان في خلق الإنسان وفي الكتاب والسنة وعند علماء العربية، ومنزلة العربية وعلومها، والفرق بين أن تعرف اللغة وأن تملكها، وأيّ عربيةٍ نتكلّم.", kufam=True), fixed),
-               {"recto": True, "anchor": "main", "outline": ("المقدمة: في صناعة الكلام", 0)})]
+               {"recto": True, "anchor": "main"})]
     toc = [("part", "", "المقدّمات"), ("e", "", "كلمة الناشر", "publisher", []), ("e", "", "كلمة المؤلف", "author", []),
            ("e", "", "الرموز والاصطلاحات", "symbols", []), ("part", "", "المقدمة: في صناعة الكلام"), ("e", "", "تمهيد", "01", [])]
     outline = [("المقدّمات", "publisher", 0), ("كلمة الناشر", "publisher", 1), ("كلمة المؤلف", "author", 1),
@@ -730,8 +874,9 @@ def main(n=1, review=False):
 
     # the introduction: a threshold, then its chapter, with the spectrum where the text announces it
     pieces.append(("fixed", doc(css, threshold("المجلد الأول", "المدخل", "العربية التي نتكلّمها: لغةٌ واحدة لها مستويات، ولكل مستوًى مقامه؛ وأين يقف المتكلّم منها، وإلى أين يريد أن يصل."), fixed),
-                   {"recto": True, "anchor": "intro", "outline": ("المدخل", 0)}))
+                   {"recto": True, "anchor": "intro"}))
     toc.append(("part", "", "المدخل"))
+    outline.append(("المدخل", "intro", 0))
     for k, f in enumerate(sorted(INTRO.glob("ف*.md")), 1):
         raw = f.read_text(encoding="utf-8")
         raw = re.sub(r"^## ", "### ", raw, flags=re.M)                   # its sections under its title
@@ -747,37 +892,7 @@ def main(n=1, review=False):
             else:
                 pieces.append((kind, doc(css, part, fixed if kind == "fixed" else O.CONT_CSS, paged="fn-note" in part), {"head": heads}))
 
-    # the bab: its threshold, its opener, then its chapters with their lessons
-    b = 1
-    opener, chapters = bab_chapters(b)
-    omd = opener.read_text(encoding="utf-8")
-    bab_title = re.search(r"^#\s+(.+)$", omd, re.M).group(1)            # «الباب الأول: الأسس»
-    bab_label, bab_name = [x.strip() for x in bab_title.split(":", 1)]
-    question = re.search(r"\*\*(.+?)\*\*", re.search(r"^>\s*السؤال الذي يجيب عنه.+$", omd, re.M).group(0)).group(1)
-    pieces.append(("fixed", doc(css, threshold(bab_label, bab_name, f"السؤال الذي يجيب عنه هذا الباب: {question}"), fixed),
-                   {"recto": True, "anchor": "b1", "outline": (bab_title, 0)}))
-    bab_head = [("label", bab_label), ("title", bab_name)]
-    sub = re.search(r"^##\s+(.+)$", omd, re.M).group(1)
-    obody = re.sub(r"^#\s+.+$", "", omd, count=1, flags=re.M)
-    obody = re.sub(r"^##\s+.+$", "", obody, count=1, flags=re.M)
-    ohtml = (f'<section class="chap chap-open"><div class="opener-k"><span>{bab_title}</span><i></i></div>'
-             f'<h2 class="op-t">فاتحة الباب</h2><p class="op-s">{sub}</p>{lesson_html(obody)}</section>')
-    pieces.append(("cont", doc(css, ohtml, O.CONT_CSS + OPENER_CSS), {"anchor": "b1o", "head": (bab_head, [("title", "فاتحة الباب")]), "opens": True}))
-    toc.append(("part", "", bab_title))
-    toc.append(("e", "", "فاتحة الباب", "b1o", []))
-    outline.append(("فاتحة الباب", "b1o", 1))
-    for c, files in sorted(chapters.items()):
-        md = chapter_md(files)
-        first = files[0].read_text(encoding="utf-8")
-        title, question = title_of(first)
-        key = f"b1c{c}"
-        toc.append(("e", f"الفصل {ORD[c]}", title, key, lesson_sections(md)))
-        outline.append((f"الفصل {ORD[c]}: {title}", key, 1))
-        short = re.search(r"<!--\s*head:\s*(.+?)\s*-->", first)
-        heads = (bab_head, [("label", "الفصل"), ("num", str(c).translate(AR)), ("title", short.group(1) if short else title)])
-        body = f'<section class="chap"><div class="chap-open">{lesson_html(md)}</div></section>'
-        band = O.band(f"{bab_label}: {bab_name} · الفصل {ORD[c]}", title, question)
-        pieces.append(("flow", flow(css, (body, band)), {"anchor": key, "head": heads}))
+    unit(css, n, ("bab", 1), pieces, toc, outline, fixed)
 
     # the appendices: the verification appendix and the volume's thabat
     toc.append(("part", "", "الملاحق"))
@@ -797,6 +912,12 @@ def main(n=1, review=False):
                 body, bandhtml = part
                 part = (body.replace('<section class="chap">', f'<section class="chap app-{key}">', 1), bandhtml)
                 pieces.append(("flow", flow(css, part), {"recto": True, "anchor": key, "head": ([("title", "الملاحق")], [("title", title)])}))
+    return assemble(css, n, review, pieces, toc, outline, fixed)
+
+
+def assemble(css, n, review, pieces, toc, outline, fixed):
+    """The pieces set, paged, numbered, headed, bookmarked, compacted and guarded; the colophon closes the volume."""
+    from pypdf import PdfReader, PdfWriter
     proof = f"نسخة المراجعة (<span class='lat'>Proof</span>)، أُخرجت في {PROOF_DATE} لفحصها قبل الطبع؛ وليست الطبعة المعتمدة." if review else None
     pieces.append(("fixed", doc(css, FM.colophon(n, proof=proof), fixed), {"recto": True}))
 
@@ -816,6 +937,8 @@ def main(n=1, review=False):
             out.append((PdfReader(str(paper)).pages[0], "blank", None))
         if meta.get("anchor"):
             anchors[meta["anchor"]] = len(out)
+        if meta.get("alias"):
+            anchors[meta["alias"]] = len(out)
         if kind == "toc":
             anchors["toc"] = len(out)
             r = PdfReader(str(B.render(toc_html({}), f"{tag}-toc")))

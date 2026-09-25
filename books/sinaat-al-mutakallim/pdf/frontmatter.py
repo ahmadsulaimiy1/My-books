@@ -269,10 +269,11 @@ def volumes_map(current=1):
     return page(right) + page(left)
 
 
-def title_volume(n=1):
-    """The volume on the title page: «المجلد الأول»، its name, then its stage and its babs."""
+def title_volume(n=1, babs=None):
+    """The volume on the title page: «المجلد الأول»، its name, then its stage and its babs by their numbers
+    («البابان الثامن والتاسع»: a bab's number is not its place in the volume; Bible, ch. 112d)."""
     w, nm, _, st, _ = VOLUMES[n - 1]
-    babs = {1: "المقدمة، والمدخل، والباب الأول: الأسس"}.get(n, "")
+    babs = babs if babs is not None else {1: "المقدمة، والمدخل، والباب الأول: الأسس"}.get(n, "")
     line = " · ".join(x for x in (f"{STAGES[st]}: {st}" if st else "المرجع", babs) if x)
     return f'<div class="tpv"><div class="w">المجلد {w}</div><div class="nm">{nm}</div><div class="ln">{line}</div></div>'
 
