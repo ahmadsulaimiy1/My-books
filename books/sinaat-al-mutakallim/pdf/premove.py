@@ -64,7 +64,7 @@ def scan(path, vol, text, bab_of_file):
             yield "الباب ١٣", m.group(0), "fail", "بنك الأخطاء مرجعٌ لا باب"
         elif "بنك الأخطاء" in near and not any(k in text[max(0, m.start() - 5): m.end() + 60] for k in REVIEWED):
             yield "الباب ١٣", m.group(0), "read", "بجواره «بنك»: الملكة لا بنك الأخطاء؟"
-    for m in re.finditer(r"ثمانية مجلدات|المجلدات الثمانية|\(من ثمانية\)|الأبواب الأربعة عشر|أربعة عشر بابًا|أجزاء الكتاب", text):
+    for m in re.finditer(r"ثمانية مجلدات|المجلدات الثمانية|\(من ثمانية\)|الأبواب الأربعة عشر|أربعة عشر بابًا|أجزاء الكتاب|كل جزءٍ? من (هذا )?الكتاب", text):
         yield "البنية القديمة", m.group(0), "fail", "أثرٌ للأجزاء الأربعة أو الأبواب الأربعة عشر أو الثمانية"
     # «أربعة أجزاء» is also an ordinary count (a formula in four parts): only the book's parts are the old structure
     for m in re.finditer(r"أربعة أجزاء|الأجزاء الأربعة", text):

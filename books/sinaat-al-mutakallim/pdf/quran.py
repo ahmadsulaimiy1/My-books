@@ -17,6 +17,7 @@ import json
 import re
 import subprocess
 import sys
+import unicodedata
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -24,8 +25,11 @@ BOOK = HERE.parent / "book"
 CACHE = HERE.parent / ".cache" / "quran"
 CACHE.mkdir(parents=True, exist_ok=True)
 OUT = BOOK / "_production" / "التحقيق"
-from paths import AUTHOR_WORD, CLOSING, OPENING  # noqa: E402
-FILES = sorted(OPENING.glob("*.md")) + [AUTHOR_WORD, CLOSING]
+from paths import AUTHOR_WORD, CLOSING, INTRO, OPENING  # noqa: E402
+from volumes import unit_files  # noqa: E402
+# the opening and the author's word, then the rest of the first volume (the introduction and the first bab), and
+# the book's closing
+FILES = sorted(OPENING.glob("*.md")) + [AUTHOR_WORD] + sorted(INTRO.glob("*.md")) + unit_files(1, ("bab", 1)) + [CLOSING]
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 EN = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
 CITE = re.compile(r"﴿([^﴾]+)﴾\s*\(([^:()]+):\s*([٠-٩]+)(?:\s*[–-]\s*([٠-٩]+))?\)")
@@ -128,17 +132,23 @@ def main(apply: bool):
         new = text
         for m in CITE.finditer(text):
             ours, sname, a, b = m.group(1), m.group(2).strip(), m.group(3), m.group(4)
+            words = re.sub(r"\s*\*\s*", " ", ours)          # «*» parts the verses in some chapters: a boundary, not a word
             v1 = int(a.translate(EN)); v2 = int((b or a).translate(EN))
             n = names.get(name_key(sname))
             row = {"file": f.name, "ref": f"{sname}: {a}" + (f"–{b}" if b else ""), "ours": ours}
             if not n:
                 row["result"] = "اسم السورة غير معروف"; report.append(row); continue
             vv = verses(n)
-            uth, why = rebuild(ours, n, v1, v2, vv)
+            uth, why = rebuild(words, n, v1, v2, vv)
+            if uth is not None:
+                # a citation that opens inside a verse does not open with the pause mark of the word before it
+                uth = re.sub("^[\u06D6-\u06DC\u06DE\s]+", "", uth)
+                if unicodedata.normalize("NFC", uth) == unicodedata.normalize("NFC", ours):
+                    uth = ours                      # the same text in another order of its marks: left as written
             if uth is None:
                 row["result"] = why
             else:
-                row["result"] = "مطابق" if skeleton(uth) == skeleton(ours) else "مطابق بعد المحاذاة"
+                row["result"] = "مطابق" if skeleton(uth) == skeleton(words) else "مطابق بعد المحاذاة"
                 row["uthmani"] = uth
                 new = new.replace("﴿" + ours + "﴾", "﴿" + uth + "﴾", 1)
             report.append(row)

@@ -193,13 +193,14 @@ def essay():
 
 # --------------------------------------------------------------------------- pages
 
-def title_page(css):
+def title_page(css, volume=None):
+    """volume: the volume's block (frontmatter.title_volume); the prototype's line stands in when none is given."""
     logo = C2.Logotype(css, width=122.0)
     svg, bottom = logo.svg(161.0, 58.0, shadow=True)
     return page(f'''<div class="tp-band"></div>
 <svg viewBox="0 0 200 260" style="position:absolute;inset:0;width:200mm;height:260mm"><defs>{C2.K.gold_defs()}</defs>{svg}
 <rect x="0" y="149.6" width="200" height="0.5" fill="url(#foil)"/><circle cx="161" cy="149.85" r="1.3" fill="#A8172E"/></svg>
-<div class="tp-vol">المجلد الأول<span class="kufi" style="display:block;font-size:22pt;line-height:1.3;color:#E4CB8C;font-weight:500">التأسيس</span></div>
+{volume or '<div class="tp-vol">المجلد الأول<span class="kufi" style="display:block;font-size:22pt;line-height:1.3;color:#E4CB8C;font-weight:500">التأسيس</span></div>'}
 <div class="tp-sub">من سلامة اللسان إلى حسن البيان</div>
 <div class="tp-desc">منهجٌ شامل في النطق والتعبير والخطاب وآداب التواصل والملكة الشفهية</div>
 <div class="tp-auth"><small>تأليف</small><i class="kn">أبو عبد الله جلال الدين</i><b>أحمد بن إبراهيم بن عبد السلام السليمي</b><span>غفر الله له ولوالديه ولجميع المسلمين</span></div>''')

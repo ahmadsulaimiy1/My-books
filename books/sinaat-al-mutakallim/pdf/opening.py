@@ -9,7 +9,11 @@ Qur'an in Amiri Quran, poetry in hemistichs, tables in IBM Plex Sans Arabic, not
 Type: Scheherazade New for reading; Changa Bold / Light as the principal display Kufi; Kufam
 (the book's cut) for the logotype and poster words; Amiri for heritage; Plex for navigation.
 
-    python3 opening.py          writes ../Volume-I_Opening.pdf
+The opening is no longer built alone: it is set within its volume by volume.py, which takes its page types, its
+notes and its heads from here (Bible, ch. 112ز). main() is the build of the opening as it stood before the series
+was fixed; its output is archived in book/_production/الأرشيف/البنية-القديمة/إخراج/.
+
+    python3 volume.py 1         builds the first volume, the opening within it
 """
 from __future__ import annotations
 
@@ -192,7 +196,7 @@ h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
 .sc-band span + span::before { content: ""; display: inline-block; width: 1.2mm; height: 1.2mm; background: var(--gold); transform: rotate(45deg); margin-left: 3.2mm; vertical-align: middle; }
 /* ثبت المصادر: hanging entries, no bullets */
 .app-91 ul { list-style: none; padding: 0; }
-.app-91 ul > li { padding-right: 6mm; text-indent: -6mm; margin: 0 0 1.6mm; font-size: 11.6pt; line-height: 1.7; text-align: right; }
+.app-91 ul > li { padding-right: 6mm; text-indent: -6mm; margin: 0 0 1.2mm; font-size: 11.6pt; line-height: 1.66; text-align: right; }
 .app-91 ul > li::before { content: none; }
 .app-91 ul > li strong { color: var(--sapphire); }
 .app-91 ul:last-of-type { direction: ltr; }
@@ -720,4 +724,4 @@ def extra_css():
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit("the opening is built within its volume: python3 volume.py 1")

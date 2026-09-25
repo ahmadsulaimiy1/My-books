@@ -31,19 +31,37 @@ CITY = None
 ISBN = None
 DEPOSIT = None
 
-# the series in eight volumes: four stages, then the reference (Bible, part fifteen)
-VOLUMES = [("الأول", "الأصول", "المقدمة العلمية، والأسس: الكلام والمتكلّم، والفصاحة والبيان، والمقام، والسماع", "التأسيس"),
-           ("الثاني", "اللسان", "المخارج والصفات، والأصوات الحرجة، والوقف والصوت؛ وبرنامج النطق اليومي", "التأسيس"),
-           ("الثالث", "العبارة", "الجملة العربية الطبيعية: الإعراب والصرف، والترجمة الحرفية، والحشو، واختيار الكلمة", "التأسيس"),
-           ("الرابع", "البيان", "ترتيب الكلام: الافتتاح والتعريف بالنفس والانتقال والخاتمة، والبلاغة التطبيقية", "التأسيس"),
-           ("الخامس", "المقام", "من يتكلّم، ولمن، ولماذا، وأين، ومتى، وكيف؛ ومختبر المقام", "التواصل"),
-           ("السادس", "الأدب", "أفعال الأدب: السلام والشكر، والطلب والرفض، والاعتذار، وأدب الخلاف", "التواصل"),
-           ("السابع", "الحوار", "السؤال والجواب، والاستيضاح والمداخلة، والإقناع والمناظرة", "التواصل"),
-           ("الثامن", "المجالس والمنبر", "مجلس العلم ومجالس الجامعة، والخطبة والمحاضرة والكلمة وعرض البحث", "المنصّات"),
-           ("التاسع", "المؤسسة", "المقابلة، وإدارة الاجتماع، وخطاب المدير والموظف", "المنصّات"),
-           ("العاشر", "التمكين", "الإعلام والتقديم، والخطاب الرسمي والتفاوض، والملكة: الارتجال والأداء الختامي", "التمكين"),
-           ("الحادي عشر", "مرجع المتكلّم العربي", "بنك الأخطاء والتعبيرات والنماذج، والمسرد، والمصادر، والفهارس العامة", "")]
+# the series in eleven volumes: ten in four stages and thirteen babs, then the reference (Bible, chs. 112c–112و).
+# (ordinal, name, what it holds, stage, its babs); the babs' numbers are set in Amiri (<b>)
+VOLUMES = [("الأول", "الأصول", "المقدمة والمدخل، ثم أسس الكلام: معاييره، والمتكلّم، والبيان، والمقام، والسماع", "التأسيس", "الباب <b>١</b>"),
+           ("الثاني", "اللسان", "المخارج والصفات، والأصوات الحرجة، والوقف والصوت؛ وبرنامج النطق اليومي", "التأسيس", "الباب <b>٢</b>"),
+           ("الثالث", "العبارة", "الجملة العربية الطبيعية: الإعراب، والترجمة الحرفية، والحشو، واختيار الكلمة", "التأسيس", "الباب <b>٣</b>"),
+           ("الرابع", "البيان", "ترتيب الكلام: الافتتاح والتعريف بالنفس، والانتقال والخاتمة، والبلاغة التطبيقية", "التأسيس", "الباب <b>٤</b>"),
+           ("الخامس", "المقام", "من يتكلّم، ولمن، ولماذا، وأين، ومتى، وكيف؛ ومختبر المقام", "التواصل", "الباب <b>٥</b>"),
+           ("السادس", "الأدب", "السلام والشكر، والطلب والرفض، والاعتذار والتهنئة، وأدب الخلاف", "التواصل", "الباب <b>٦</b>"),
+           ("السابع", "الحوار", "السؤال والجواب، والاستيضاح والمداخلة، والإقناع والمناظرة، والنقد والنصيحة", "التواصل", "الباب <b>٧</b>"),
+           ("الثامن", "المجالس والمنبر", "مجلس العلم ومجالس الجامعة، ثم الخطبة والمحاضرة والكلمة وعرض البحث", "المنصّات", "البابان <b>٨</b> و<b>٩</b>"),
+           ("التاسع", "المؤسسة", "المقابلة، وإدارة الاجتماع، وخطاب المدير والموظف", "المنصّات", "الباب <b>١٠</b>"),
+           ("العاشر", "التمكين", "الإعلام والتقديم، والخطاب الرسمي والتفاوض، ثم الملكة: الارتجال والأداء الختامي", "التمكين", "الأبواب <b>١١–١٣</b>"),
+           ("الحادي عشر", "مرجع المتكلّم العربي", "بنك الأخطاء، والمعجم التطبيقي للتعبيرات، ومعجم أخطاء الترجمة الحرفية، والنماذج الكاملة، "
+            "ثم المسرد والمصادر والفهارس العامة للسلسلة", "", "")]
+REFERENCE_SUB = "بنك الأخطاء والتعبيرات والنماذج"
 STAGES = {"التأسيس": "المرحلة الأولى", "التواصل": "المرحلة الثانية", "المنصّات": "المرحلة الثالثة", "التمكين": "المرحلة الرابعة"}
+# the stage's mark on the spine and on the map: as many dots as its number (Bible, ch. 111 §٦)
+STAGE_DOTS = {"التأسيس": 1, "التواصل": 2, "المنصّات": 3, "التمكين": 4}
+# what each stage adds, in the words of chapter seventeen (§١)
+STAGE_LINE = {"التأسيس": "أداة المتكلّم قبل أن يقف أمام أحد: المعيار، والصوت، والجملة، والترتيب",
+              "التواصل": "يدخل المخاطَب: المقام، ثم العلاقة، ثم الكلام المتبادل",
+              "المنصّات": "تتّسع الدائرة: الجماعة، ثم المؤسسة التي تحاسب على الكلام",
+              "التمكين": "من صوابٍ يُستحضر بالانتباه إلى صوابٍ يجري بالعادة"}
+COMPANIONS = ("بنك الاختبارات ودليل المعلّم", "سكريبتات الحلقات")
+
+
+def volume_line(n):
+    """«المجلد الأول: الأصول»."""
+    w, nm = VOLUMES[n - 1][:2]
+    return f"المجلد {w}: {nm}"
+
 
 CSS = r"""
 /* ---------------------------------------------------------------- front matter (Bible, part fourteen) */
@@ -63,16 +81,70 @@ CSS = r"""
 .ht .grule { margin: 9mm 0 8mm; }
 .ht .a { font: 300 10.5pt/1.5 "Changa"; color: var(--ink-2); }
 .ht .v { position: absolute; top: 118mm; left: 0; right: 0; font: 300 9pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .6pt; }
-/* 2. the four volumes: quiet geometry */
-.vm { position: absolute; top: 32mm; right: 38mm; left: 38mm; }
-.vm .k { font: 300 10pt/1 "Changa"; color: var(--gold-ink); margin-bottom: 6mm; display: flex; gap: 3mm; align-items: center; }
-.vm .k i { flex: 1; border-top: .4pt solid var(--gold); }
-.vm-st { font: 500 7.6pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .3pt; margin: 3.4mm 0 .4mm; }
-.vm-row { display: grid; grid-template-columns: 19mm 1fr; gap: 0 5mm; padding: 1.8mm 0; border-bottom: .3pt solid #DCD6CA; align-items: baseline; }
-.vm-row .n { font: 300 9pt/1 "Changa"; color: var(--ink-3); }
-.vm-row .nm { font: 600 12.6pt/1.3 "Changa"; color: var(--sapphire); }
-.vm-row .d { grid-column: 2; font: 400 9.6pt/1.5 "Scheherazade New"; color: var(--ink-2); margin-top: .4mm; }
-.vm-row.here .nm::after { content: ""; display: inline-block; width: 1.7mm; height: 1.7mm; transform: rotate(45deg); background: var(--gold); margin-right: 2.8mm; vertical-align: middle; }
+/* 2. the series map, a spread (Bible, ch. 111 §٥): the right-hand page opens it with the title and the first two
+   stages, the left-hand page carries the last two and, off the path, the reference. Each volume carries its spine's
+   marks: its number in Amiri within a gold rhombus, its stage in dots; the volume in hand has the rhombus filled */
+.sm { position: absolute; top: 0; bottom: 0; z-index: 0; }
+.sm.r { right: 30mm; left: 25mm; }
+.sm.l { right: 25mm; left: 30mm; }
+.sm-rule { position: absolute; top: 31.2mm; border-top: .45pt solid var(--gold); }
+.sm.r .sm-rule { right: 0; left: -25mm; }
+.sm.l .sm-rule { right: -25mm; left: 0; }
+.sm.l .sm-rule::after { content: ""; position: absolute; left: -1.1mm; top: -1.35mm; width: 2.2mm; height: 2.2mm; transform: rotate(45deg); background: var(--gold); }
+.sm-k { position: absolute; top: 29.4mm; right: 0; background: var(--paper); padding: 0 0 0 3mm; font: 300 10pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .5pt; }
+.sm-h { position: absolute; top: 39mm; right: 0; left: 0; }
+.sm-h .t { font: 600 24pt/1.3 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--sapphire); }
+.sm-h .n { font: 400 13.4pt/1.4 "Changa"; color: var(--gold-ink); margin-top: 1.2mm; }
+.sm-h .p { font: 400 11.2pt/1.7 "Scheherazade New"; color: var(--ink-2); margin-top: 2.6mm; max-width: 118mm; }
+.sm-col { position: absolute; right: 0; left: 0; }
+.sm.r .sm-col { top: 82mm; }
+.sm.l .sm-col { top: 44mm; }
+.smv, .sms { display: grid; grid-template-columns: 14mm 1fr; column-gap: 4mm; position: relative; }
+.smv::before, .sms::before { content: ""; position: absolute; right: 7mm; top: 0; bottom: 0; border-right: .5pt solid var(--gold); }
+.sm-col > .sms:first-child::before { top: 3.9mm; }
+.sm-col > .last::before { bottom: auto; height: 6.9mm; }
+.smv { padding: 1.7mm 0 2.1mm; }
+.smv .b { position: relative; }
+.smv .b i, .smv .b span { position: absolute; top: 1.6mm; right: 3.4mm; width: 7.2mm; height: 7.2mm; box-sizing: border-box; }
+.smv .b i { transform: rotate(45deg); border: .6pt solid var(--gold); background: var(--paper); }
+.smv .b span { display: flex; align-items: center; justify-content: center; font: 700 11.2pt/1 "Amiri"; color: var(--sapphire); padding-top: .5mm; }
+.smv.here::after { content: ""; position: absolute; top: .4mm; bottom: .6mm; right: -3mm; left: -3mm; background: var(--paper-2); border-right: 1.2pt solid var(--gold); z-index: -1; }
+.smv.here .b i { background: var(--gold); border-color: var(--gold); }
+.smv .l1 { display: flex; align-items: baseline; gap: 2.4mm; }
+.smv .w { font: 300 9pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .3pt; }
+.smv .nm { font: 600 14.4pt/1.35 "Changa"; color: var(--sapphire); }
+.smv .sd { display: inline-flex; gap: 1mm; align-self: center; margin-top: .6mm; }
+.smv .sd i { width: 1.2mm; height: 1.2mm; border-radius: 50%%; background: var(--gold); }
+.smv .tg { margin-right: auto; font: 400 8pt/1 "IBM Plex Sans Arabic"; color: var(--ink-3); }
+.smv .tg b { font: 700 9.4pt/1 "Amiri"; color: var(--ink-2); }
+.smv .d { font: 400 10.1pt/1.5 "Scheherazade New"; color: var(--ink-2); margin-top: .1mm; text-wrap: pretty; }
+.sms { padding: 5.2mm 0 .8mm; }
+.sm-col > .sms:first-child { padding-top: 0; }
+.sms .b { position: relative; }
+.sms .b i { position: absolute; top: 2.7mm; right: 5.8mm; width: 2.4mm; height: 2.4mm; border-radius: 50%%; background: var(--sapphire); }
+.sms .l1 { display: flex; align-items: baseline; gap: 2.4mm; }
+.sms .o { font: 300 9pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .4pt; }
+.sms b { font: 700 13pt/1.35 "Changa"; color: var(--sapphire); }
+.sms .f { font: 400 10pt/1.45 "Scheherazade New"; color: var(--ink-3); }
+.smr { margin-top: 11mm; border-top: .6pt solid var(--gold); padding-top: .9mm; }
+.smr::before { content: ""; display: block; border-top: .3pt solid var(--gold); margin-bottom: 5mm; }
+.smr .k { font: 300 9pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .4pt; margin-bottom: 1mm; }
+.smr .smv::before { content: none; }
+.smr .smv .b i { outline: .3pt solid var(--gold); outline-offset: .8mm; }
+.smr .sub { font: 300 11.6pt/1.4 "Changa"; color: var(--ink-2); }
+.smr .x { font: 400 8.6pt/1.6 "IBM Plex Sans Arabic"; color: var(--gold-ink); margin-top: 1.6mm; display: flex; gap: 2.2mm; align-items: center; }
+.smr .x i { width: 1.9mm; height: 1.9mm; border: .5pt solid var(--gold-ink); transform: rotate(45deg); box-sizing: border-box; flex: none; }
+.smc { margin-top: 8mm; font: 400 10.4pt/1.7 "Scheherazade New"; color: var(--ink-2); }
+.sml { position: absolute; bottom: 30mm; right: 0; left: 0; display: flex; flex-wrap: wrap; gap: 1.6mm 6mm; font: 400 7.8pt/1.4 "IBM Plex Sans Arabic"; color: var(--ink-3); border-top: .3pt solid #DCD6CA; padding-top: 2.6mm; }
+.sml span { display: inline-flex; align-items: center; gap: 1.8mm; }
+.sml .f, .sml .e { width: 2.1mm; height: 2.1mm; transform: rotate(45deg); box-sizing: border-box; }
+.sml .f { background: var(--gold); } .sml .e { border: .5pt solid var(--gold-ink); }
+.sml .dt { display: inline-flex; gap: .8mm; } .sml .dt i { width: 1.1mm; height: 1.1mm; border-radius: 50%%; background: var(--gold); }
+/* 3. the title page's volume: number, name, and the line of its stage and babs (Bible, ch. 111 §٥) */
+.tpv { position: absolute; top: 108mm; right: 39mm; left: 39mm; }
+.tpv .w { font: 400 11pt/1.3 "Changa"; color: var(--gold-l); letter-spacing: .4pt; }
+.tpv .nm { font: 700 25pt/1.3 "Changa"; color: #F4ECD9; margin-top: .6mm; }
+.tpv .ln { font: 400 8.6pt/1.5 "IBM Plex Sans Arabic"; color: #C9C2B2; margin-top: 1.6mm; }
 /* 4. imprint: a typographic table */
 .im { position: absolute; top: 38mm; right: 36mm; left: 36mm; }
 .im h4 { font: 300 10pt/1 "Changa"; color: var(--gold-ink); margin: 0 0 7mm; display: flex; gap: 3mm; align-items: center; }
@@ -149,23 +221,61 @@ def grule():
     return '<div class="grule"><i></i><span class="diamond"></span><i></i></div>'
 
 
-def half_title():
+def half_title(n=1):
     return page(f'<div class="ht"><div class="t">{TITLE}</div><div class="s">{SUBTITLE}</div>{grule()}'
-                f'<div class="a">{AUTHOR_SHORT}</div><div class="v">المجلد الأول</div></div>')
+                f'<div class="a">{AUTHOR_SHORT}</div><div class="v">{volume_line(n)}</div></div>')
+
+
+def _map_volume(i, current, sub="", after=""):
+    w, nm, d, st, tag = VOLUMES[i - 1]
+    dots = '<span class="sd">' + "<i></i>" * STAGE_DOTS[st] + "</span>" if st else ""
+    tg = f'<span class="tg">{tag}</span>' if tag else ""
+    return (f'<div class="smv{" here" if i == current else ""}"><div class="b"><i></i><span>{str(i).translate(AR)}</span></div>'
+            f'<div class="tx"><div class="l1"><span class="w">المجلد {w}</span><span class="nm">{nm}</span>{dots}{tg}</div>'
+            f'{sub}<div class="d">{d}</div>{after}</div></div>')
+
+
+def _map_stage(st):
+    return (f'<div class="sms"><div class="b"><i></i></div><div class="tx"><div class="l1"><span class="o">{STAGES[st]}</span>'
+            f'<b>{st}</b></div><div class="f">{STAGE_LINE[st]}</div></div></div>')
+
+
+def _map_column(stages, current):
+    out = []
+    for st in stages:
+        out.append(_map_stage(st))
+        out += [_map_volume(i, current) for i, v in enumerate(VOLUMES, 1) if v[3] == st]
+    out[-1] = out[-1].replace('class="smv', 'class="smv last', 1)
+    return f'<div class="sm-col">{"".join(out)}</div>'
 
 
 def volumes_map(current=1):
-    rows, stage = [], None
-    for i, (w, nm, d, st) in enumerate(VOLUMES, 1):
-        if st != stage:
-            rows.append(f'<div class="vm-st">{STAGES[st] + ": " + st if st else "المرجع: خارج ترقيم الأبواب والمستويات"}</div>')
-            stage = st
-        rows.append(f'<div class="vm-row{" here" if i == current else ""}"><div class="n">المجلد {w}</div><div class="nm">{nm}</div>'
-                    f'<div class="d">{d}</div></div>')
-    return page(f'<div class="vm"><div class="k"><span>{TITLE} في أحد عشر مجلدًا</span><i></i></div>{"".join(rows)}</div>')
+    """The series map, a spread of two pages: the right-hand page (even) and the left-hand page (odd) after it."""
+    right = (f'<div class="sm r"><div class="sm-rule"></div><div class="sm-k">خريطة السلسلة</div>'
+             f'<div class="sm-h"><div class="t">{TITLE}</div><div class="n">في أحد عشر مجلدًا</div>'
+             f'<div class="p">عشرةٌ للمنهج في أربع مراحل وثلاثة عشر بابًا، يأخذ كلٌّ منها ما أحكمه الذي قبله ويزيد عليه؛ '
+             f'ثم مرجعٌ يُفتح مع كل مجلد.</div></div>{_map_column(["التأسيس", "التواصل"], current)}</div>')
+    ref = _map_volume(11, current, sub=f'<div class="sub">{REFERENCE_SUB}</div>',
+                      after='<div class="x"><i></i>خارج ترقيم الأبواب والمستويات؛ يُفتح مع أيّ مجلد، ولا يُقرأ بعدها وحدها</div>')
+    legend = ('<div class="sml"><span><i class="f"></i>المجلد الذي بين يديك</span>'
+              '<span><span class="dt"><i></i><i></i></span>النقاط: رقم المرحلة، كما على الكعب</span>'
+              '<span><i class="e"></i>المرجع: لا مرحلة له ولا باب</span></div>')
+    left = (f'<div class="sm l"><div class="sm-rule"></div>{_map_column(["المنصّات", "التمكين"], current)[:-6]}'
+            f'<div class="smr"><div class="k">ثم المرجع</div>{ref}</div>'
+            f'<div class="smc">ويرافق السلسلة كتابان خارج مجلداتها: «{COMPANIONS[0]}»، و«{COMPANIONS[1]}».</div></div>{legend}</div>')
+    return page(right) + page(left)
 
 
-def imprint(volume="الأول (من أحد عشر): الأصول"):
+def title_volume(n=1):
+    """The volume on the title page: «المجلد الأول»، its name, then its stage and its babs."""
+    w, nm, _, st, _ = VOLUMES[n - 1]
+    babs = {1: "المقدمة، والمدخل، والباب الأول: الأسس"}.get(n, "")
+    line = " · ".join(x for x in (f"{STAGES[st]}: {st}" if st else "المرجع", babs) if x)
+    return f'<div class="tpv"><div class="w">المجلد {w}</div><div class="nm">{nm}</div><div class="ln">{line}</div></div>'
+
+
+def imprint(n=1):
+    volume = f"{VOLUMES[n - 1][0]} (من أحد عشر): {VOLUMES[n - 1][1]}"
     rows = [("العنوان", f"{TITLE}<br>{SUBTITLE}"),
             ("المؤلف", f"{AUTHOR_KUNYA} {AUTHOR_LONG}"),
             ("المجلد", volume),
@@ -248,9 +358,9 @@ def symbols():
             f'<h3><span>في الجهاز العلمي</span><i></i></h3>{_rows(SYMBOLS)}</section>')
 
 
-def contents(entries):
+def contents(entries, n=1):
     """entries: (level, kicker, title, page, sections) — level "part" rows are dividers."""
-    out = ['<section class="chap toc2"><h2 class="tt">المحتويات</h2><div class="tsub">المجلد الأول: الأصول — الافتتاحية</div>']
+    out = [f'<section class="chap toc2"><h2 class="tt">المحتويات</h2><div class="tsub">{volume_line(n)}</div>']
     for e in entries:
         if e[0] == "part":
             out.append(f'<div class="part"><span>{e[2]}</span><i></i></div>')
@@ -264,11 +374,21 @@ def contents(entries):
     return "".join(out) + "</section>"
 
 
-def colophon(done=f"تمّت افتتاحية المجلد الأول من «{TITLE}»، ويليها المدخل: العربية ومستوياتها، ثم الباب الأول: الأسس."):
+def colophon(n=1, proof=None):
+    """The volume's close: it names what is done and hands the reader to the next volume (Bible, ch. 39)."""
+    if n < 10:
+        nxt = f"، ويليه {volume_line(n + 1)}"
+    elif n == 10:
+        nxt = f"، وبه تمّ منهج الكتاب، ويرافقه {volume_line(11)}"
+    else:
+        nxt = ""
+    w, nm = VOLUMES[n - 1][:2]
+    done = f"تمّ المجلد {w} من «{TITLE}»: {nm}{nxt}."
+    note = f'<p class="f" style="margin-top:4mm;color:var(--crimson)">{proof}</p>' if proof else ""
     return page(f'''<div class="co">{grule()}
 <p style="margin-top:8mm">{done}</p>
 <p class="f">صُفّ المتن بحرف شهرزاد الجديد، والنصوص التراثية بحرف أميري، والقرآن الكريم بحرف أميري قرآن، والعناوين بحرفَي تشانغا وكوفام، والتنقّل بحرف بلكس العربي، والإحالات اللاتينية بحرف سورس سيريف.</p>
-<p class="f">صدر عن {PUBLISHER_AR}، {YEAR}.</p>
+<p class="f">صدر عن {PUBLISHER_AR}، {YEAR}.</p>{note}
 {mark()}</div>''')
 
 
