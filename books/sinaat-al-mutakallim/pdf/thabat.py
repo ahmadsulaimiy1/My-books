@@ -1,26 +1,39 @@
 #!/usr/bin/env python3
-"""ثبت المصادر of the opening: every source its notes cite, with the edition the book uses (Bible, chs. 45 and 74).
+"""ثبت المصادر of a volume: every source its notes cite, with the edition the book uses (Bible, chs. 45, 74, 112و).
 
-Drawn from the Master Bibliography (the titles it marks as used in the opening), completed by the sources added
-since, whose editions were read on their Shamela cards or on the scans of the printed books. Arabic sources are
-ordered by the name the author is known by, the article set aside; foreign sources follow, by surname.
+The sources are the titles the Master Bibliography marks as cited in the volume (its field «المجلدات», set when the
+volume's notes are set), completed by the few the base does not hold (OUTSIDE). The edition is the base's catalogue
+record, or, where that record is open or is not the edition cited, the edition read on the book's card or on the scan
+of the print (EDITION). No thabat holds a book its notes do not cite, and no cited book is left out: a title the
+volume cites whose edition is still open stops the build. Arabic sources are ordered by the name the author is known
+by, the article set aside; foreign sources follow, by surname.
 
-    python3 thabat.py      writes book/الافتتاحية/91-ثبت-المصادر.md
+    python3 thabat.py [N]     writes the thabat of volume N (the first by default) where that volume keeps it
 """
 import csv
 import re
+import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 BASE = HERE.parent / "book" / "_production" / "المصادر" / "قاعدة-المصادر.tsv"
-import sys  # noqa: E402
 sys.path.insert(0, str(HERE))
 from paths import OPENING  # noqa: E402
-OUT = OPENING / "91-ثبت-المصادر.md"
+from volumes import ORD, vol_folder  # noqa: E402
 
-# sources cited in the opening that the Master Bibliography does not (yet) mark as used there, or whose edition
-# it leaves open; each edition as read on its card or its scan
-EXTRA = [
+
+def volume_name(n):
+    return "المجلد " + ORD[n - 1]
+
+
+def out_of(n):
+    """Where a volume keeps its thabat: the first beside the opening's appendix, the others among their closings."""
+    return OPENING / "91-ثبت-المصادر.md" if n == 1 else vol_folder(n) / "الخواتيم" / "ثبت-المصادر.md"
+
+
+# where the base's catalogue record is open, or is not the edition the notes cite: the edition as read on its card
+# or on its scan
+EDITION = [
     ("مجمع الملك فهد لطباعة المصحف الشريف", "مصحف المدينة النبوية", "برواية حفص عن عاصم، المدينة المنورة"),
     ("الجاحظ", "البيان والتبيين", "تحقيق عبد السلام محمد هارون، مكتبة الخانجي، القاهرة"),
     ("الشافعي", "الرسالة", "تحقيق وشرح أحمد محمد شاكر، مصطفى البابي الحلبي وأولاده، مصر، الأولى، ١٣٥٨هـ / ١٩٤٠م"),
@@ -37,16 +50,23 @@ EXTRA = [
     ("أبو هلال العسكري", "كتاب الصناعتين: الكتابة والشعر", "تحقيق علي محمد البجاوي ومحمد أبو الفضل إبراهيم، دار إحياء الكتب العربية (عيسى البابي الحلبي وشركاه)، القاهرة، الأولى، ١٣٧١هـ / ١٩٥٢م"),
     ("ابن تيمية", "اقتضاء الصراط المستقيم", "تحقيق ناصر عبد الكريم العقل، مكتبة الرشد، الرياض، مجلّدان"),
     ("ابن خلكان", "وفيات الأعيان", "تحقيق إحسان عباس، دار صادر، بيروت، ٧ أجزاء"),
-    ("العقاد، عباس محمود", "«الحروف اللاتينية»", "مجلة الرسالة، القاهرة، السنة الثانية عشرة، العدد ٥٨٥، ١٨ سبتمبر ١٩٤٤م، ص٧٦١ وما بعدها"),
 ]
-FOREIGN = [
-    ("Ferguson, Charles A.", '"Diglossia."', "*Word* 15, no. 2 (1959): 325–340."),
-    ("Hymes, Dell", '"On Communicative Competence."', "In J. B. Pride and J. Holmes (eds.), *Sociolinguistics: Selected Readings*. Harmondsworth: Penguin, 1972."),
-    ("Sharp, H. (ed.)", "*Selections from Educational Records, Part I: 1781–1839.*", "Calcutta: Superintendent Government Printing, 1920. (Macaulay's Minute, 2 February 1835; Lord Bentinck's Resolution, 7 March 1835.)"),
-    ("Spitta-Bey, Wilhelm", "*Grammatik des arabischen Vulgärdialectes von Aegypten.*", "Leipzig: J. C. Hinrichs, 1880."),
-    ("Wensinck, A. J., et al.", "*Concordance et indices de la tradition musulmane.*", "Leiden: E. J. Brill."),
+# sources the notes cite that the base does not hold (an article, a collection of records): (volumes, author, title,
+# edition); to be entered in the base when it is next revised
+OUTSIDE = [
+    (("الأول",), "العقاد، عباس محمود", "«الحروف اللاتينية»", "مجلة الرسالة، القاهرة، السنة الثانية عشرة، العدد ٥٨٥، ١٨ سبتمبر ١٩٤٤م، ص٧٦١ وما بعدها"),
 ]
-SKIP_TITLES = ("Diglossia", "On Communicative Competence")     # set among the foreign sources
+# the foreign sources as the thabat sets them: those the base holds, by the base's title; then those it does not
+FOREIGN = {
+    "Diglossia": ("Ferguson, Charles A.", '"Diglossia."', "*Word* 15, no. 2 (1959): 325–340."),
+    "On Communicative Competence": ("Hymes, Dell", '"On Communicative Competence."', "In J. B. Pride and J. Holmes (eds.), *Sociolinguistics: Selected Readings*. Harmondsworth: Penguin, 1972."),
+    "What Is Educated Spoken Arabic?": ("Mitchell, T. F.", '"What Is Educated Spoken Arabic?"', "*International Journal of the Sociology of Language* 61 (1986): 7–32."),
+}
+FOREIGN_OUTSIDE = [
+    (("الأول",), "Sharp, H. (ed.)", "*Selections from Educational Records, Part I: 1781–1839.*", "Calcutta: Superintendent Government Printing, 1920. (Macaulay's Minute, 2 February 1835; Lord Bentinck's Resolution, 7 March 1835.)"),
+    (("الأول",), "Spitta-Bey, Wilhelm", "*Grammatik des arabischen Vulgärdialectes von Aegypten.*", "Leipzig: J. C. Hinrichs, 1880."),
+    (("الأول",), "Wensinck, A. J., et al.", "*Concordance et indices de la tradition musulmane.*", "Leiden: E. J. Brill."),
+]
 
 
 def tidy(ed):
@@ -99,27 +119,62 @@ def key(name):
     return re.sub(r"^ال", "", n)
 
 
-def main():
-    rows = {}
+def short(title):
+    return re.sub(r"^كتاب ", "", title.split(":")[0].split("(")[0].strip())
+
+
+def edition_for(author, title):
+    """The EDITION entry for a base title: the same book (short title) by the same author."""
+    for a, t, e in EDITION:
+        same_book = short(t) == short(title) or short(title).startswith(short(t)) or short(t).startswith(short(title))
+        if same_book and (a.split("،")[0] in author or author in a):
+            return a, t, e
+    return None
+
+
+def cited(n):
+    """The base's titles the notes of volume n cite."""
+    name = volume_name(n)
     with open(BASE, encoding="utf-8") as fh:
-        for r in csv.DictReader(fh, delimiter="\t"):
-            if "مستعمَل في الافتتاحية" not in r["حالة الاستعمال"] or r["العنوان"].startswith(SKIP_TITLES):
+        return [r for r in csv.DictReader(fh, delimiter="\t") if name in [v.strip() for v in r["المجلدات"].split("،")]]
+
+
+def main():
+    n = int(sys.argv[1]) if len(sys.argv) > 1 else 1
+    ord_ = ORD[n - 1]
+    rows, foreign, open_ = {}, [], []
+    for r in cited(n):
+        author, title = r["المؤلف"], r["العنوان"]
+        if author.isascii():
+            if title not in FOREIGN:
+                open_.append(f"{author}, {title}: no form in FOREIGN")
                 continue
-            ed = re.sub(r"\s*\[ت [^\]]*\]", "", r["الطبعة (من سجلّ فهرسة)"]).replace("&lt;i&gt;", "").replace("&lt;/i&gt;", "")
-            if "تُحدَّد" in ed:
-                continue
-            title = re.sub(r"\s*\((طوق النجاة|دار التأصيل|ترقيم عبد الباقي|الطبعة التركية|ت\. [^)]*|تاريخ ابن خلدون، ج١|الجواب الكافي|رواية حفص)[^)]*\)", "", r["العنوان"])
-            rows[(r["المؤلف"], r["العنوان"])] = (r["المؤلف"], title.strip(), tidy(ed))
-    extra_titles = {t.split(":")[0] for _, t, _ in EXTRA}
-    rows = {k: v for k, v in rows.items() if v[1].split(":")[0] not in extra_titles or v[0] in ("البخاري", "مسلم", "أبو داود")}
-    for a, t, e in EXTRA:
-        rows[(a, t)] = (a, t, e)
+            foreign.append(FOREIGN[title])
+            continue
+        e = edition_for(author, title)
+        if e:
+            rows[(e[0], e[1])] = e
+            continue
+        ed = re.sub(r"\s*\[ت [^\]]*\]", "", r["الطبعة (من سجلّ فهرسة)"]).replace("&lt;i&gt;", "").replace("&lt;/i&gt;", "")
+        if "تُحدَّد" in ed:
+            open_.append(f"{r['الرقم']} {author}، {title}: the edition is still open")
+            continue
+        title = re.sub(r"\s*\((طوق النجاة|دار التأصيل|ترقيم عبد الباقي|الطبعة التركية|ت\. [^)]*|تاريخ ابن خلدون، ج١|الجواب الكافي|رواية حفص)[^)]*\)", "", title)
+        rows[(author, r["العنوان"])] = (author, title.strip(), tidy(ed))
+    if open_:
+        raise SystemExit("the thabat of " + volume_name(n) + " cannot be set:\n  " + "\n  ".join(open_))
+    for vols, a, t, e in OUTSIDE:
+        if ord_ in vols:
+            rows[(a, t)] = (a, t, e)
+    foreign += [(a, t, e) for vols, a, t, e in FOREIGN_OUTSIDE if ord_ in vols]
+    if not rows and not foreign:
+        raise SystemExit(volume_name(n) + ": the base marks no title as cited in its notes")
     ar = sorted(rows.values(), key=lambda x: (key(x[0]), x[1]))
     EDITIONS.update({(a, t): e for a, t, e in ar})
     names = [a.split("،")[0].strip() for a, _, _ in ar]
-    MULTI.update(n for n in names if names.count(n) > 1 and n not in ("البخاري", "مسلم", "أبو داود"))
+    MULTI.update(x for x in names if names.count(x) > 1 and x not in ("البخاري", "مسلم", "أبو داود"))
     ar = [(a, t, e + f'. <span class="deg">{DEGREE[degree(a, t, e)]}</span>') for a, t, e in ar]
-    md = ["## ثبت المصادر", "", "<!-- sub: ما أُحيل إليه في حواشي الافتتاحية، بالطبعة التي أُحيل إليها -->", "",
+    md = ["## ثبت المصادر", "", "<!-- sub: ما أُحيل إليه في حواشي هذا المجلد، بالطبعة التي أُحيل إليها -->", "",
           "رُتّبت المصادر العربية على شهرة مؤلّفيها، من غير اعتدادٍ بـ«ال» و«ابن» و«أبي» في أولها، ثم المصادر الأجنبية على أسماء عائلات مؤلّفيها. "
           "وحيث ذُكر للكتاب طبعتان فالأولى للإحالة والثانية للمقابلة.",
           "وليست المصادر كلّها على درجةٍ واحدة من الاستعمال، فبُيّنت درجة كلٍّ منها في آخره: «طوبق على المطبوع» لما رُئي النقل منه "
@@ -127,9 +182,11 @@ def main():
           "و«إحالةٌ عامّة» لما أُحيل إليه بلا نقلٍ منصوص، أو حُكي معناه.", "", "### المصادر العربية", ""]
     md += [f"- **{a}**، {t}، {e}" for a, t, e in ar]
     md += ["", "### المصادر الأجنبية", ""]
-    md += [f"- {a.rstrip('.')}. {t} {e} <span class=\"deg\">{DEGREE[FOREIGN_DEGREE.get(a, 'general')]}</span>" for a, t, e in sorted(FOREIGN)]
-    OUT.write_text("\n".join(md) + "\n", encoding="utf-8")
-    print(OUT.name, len(ar), "Arabic,", len(FOREIGN), "foreign")
+    md += [f"- {a.rstrip('.')}. {t} {e} <span class=\"deg\">{DEGREE[FOREIGN_DEGREE.get(a, 'general')]}</span>" for a, t, e in sorted(foreign)]
+    out = out_of(n)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("\n".join(md) + "\n", encoding="utf-8")
+    print(volume_name(n) + ":", out.relative_to(HERE.parent), len(ar), "Arabic,", len(foreign), "foreign")
 
 
 if __name__ == "__main__":

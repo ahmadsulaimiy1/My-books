@@ -8,7 +8,12 @@ edition in al-Maktaba al-Shamila (the edition named by the hint where one is giv
 catalogue record, and is marked «تُطابق على صفحة العنوان» until the title page itself is seen; the editions already
 decided for the opening (ch. 72) are marked «معتمدة».
 
-    python3 bibliography.py     writes book/_production/المصادر/قاعدة-المصادر.tsv, .md and the statistics
+The volumes a title serves are the volumes whose notes cite it (Bible, ch. 112و): the field «المجلدات» is filled
+when a volume's notes and thabat are set (pdf/thabat.py), and a title cited in a volume is «مستعمَل». The field the
+earlier edition kept, which named its four parts, stays as history in «الأجزاء في الطبعة السابقة».
+
+    python3 bibliography.py            reads the catalogues and writes book/_production/المصادر/قاعدة-المصادر.tsv and .md
+    python3 bibliography.py --offline  rewrites the table and its page from the base as it stands, reading no catalogue
 """
 from __future__ import annotations
 
@@ -34,10 +39,10 @@ GROUPS = {
     8: "التفسير والفقه والآداب", 9: "التربية والتعليم وآداب العلم", 10: "اللسانيات الحديثة",
 }
 # the «vols» codes were assigned under the four parts of the earlier edition (Bible, ch. 112d): they name those parts,
-# not the eleven volumes, and are reassigned when each volume's thabat is built
+# not the eleven volumes, and are kept as history; the volumes are those whose notes cite the title («المجلدات»)
 V = {"ف": "الافتتاحية", "1": "الجزء الأول (التأسيس) في الطبعة السابقة", "2": "الجزء الثاني (التواصل) في الطبعة السابقة",
      "3": "الجزء الثالث (المنصّات) في الطبعة السابقة", "4": "الجزء الرابع (التمكين) في الطبعة السابقة"}
-USE = {"u": "مستعمَل في الافتتاحية", "c": "مرشّح", "r": "للبحث"}
+USE = {"u": "مستعمَل", "c": "مرشّح", "r": "للبحث"}   # «u» marked the titles of the opening, now in «المجلدات»
 
 # decided editions (ch. 72): the Shamela book whose card is the adopted edition
 DECIDED = {"1681", "1284", "1727", "711", "1726", "117359", "7798", "23018", "9986", "12055", "7380", "10551", "26349",
@@ -605,27 +610,41 @@ def edition_of(entry) -> tuple[str, str, str]:
     return ed, basis, status
 
 
-def main():
-    from concurrent.futures import ThreadPoolExecutor
+FIELDS = ["الرقم", "المجموعة", "الطبقة", "المؤلف", "الوفاة أو السنة", "العنوان", "الطبعة (من سجلّ فهرسة)",
+          "مصدر بيانات الطبعة", "الوظيفة في المشروع", "المجلدات", "حالة الاستعمال", "حالة بيانات الطبعة",
+          "الأجزاء في الطبعة السابقة"]
+NONE = "—"
+
+
+def base_rows() -> list[dict]:
+    """The base as it stands, one dict a title."""
+    import csv
+    f = OUT / "قاعدة-المصادر.tsv"
+    if not f.exists():
+        return []
+    with open(f, encoding="utf-8") as fh:
+        return list(csv.DictReader(fh, delimiter="\t"))
+
+
+def use_of(volumes: str, code_label: str) -> str:
+    """A title cited in a volume is used; otherwise its standing in the plan (candidate, or for research)."""
+    return USE["u"] if volumes != NONE else (code_label if code_label != USE["u"] else USE["c"])
+
+
+def write(rows: list[dict]):
     OUT.mkdir(parents=True, exist_ok=True)
-    with ThreadPoolExecutor(max_workers=6) as pool:  # the catalogues answer slowly; each worker still spaces its requests
-        editions = list(pool.map(edition_of, B))
-    rows = []
-    for i, ((g, tier, author, died, title, look, fn, vols, use), (ed, basis, status)) in enumerate(zip(B, editions), 1):
-        rows.append([f"مص-{str(i).zfill(3).translate(AR)}", GROUPS[g], tier, author, died, title, ed, basis, fn,
-                     "، ".join(V[c] for c in vols), USE[use], status])
-    fields = ["الرقم", "المجموعة", "الطبقة", "المؤلف", "الوفاة أو السنة", "العنوان", "الطبعة (من سجلّ فهرسة)", "مصدر بيانات الطبعة",
-              "الوظيفة في المشروع", "الأجزاء في الطبعة السابقة", "حالة الاستعمال", "حالة بيانات الطبعة"]
     with open(OUT / "قاعدة-المصادر.tsv", "w", encoding="utf-8") as fh:
-        fh.write("\t".join(fields) + "\n")
+        fh.write("\t".join(FIELDS) + "\n")
         for r in rows:
-            fh.write("\t".join(c.replace("\t", " ") for c in r) + "\n")
-    by_group, by_tier, by_use, by_status = {}, {}, {}, {}
+            fh.write("\t".join(r[k].replace("\t", " ") for k in FIELDS) + "\n")
+    count = lambda k: {v: sum(r[k] == v for r in rows) for v in dict.fromkeys(r[k] for r in rows)}  # noqa: E731
+    by_group, by_tier = count("المجموعة"), count("الطبقة")
+    by_use, by_status = count("حالة الاستعمال"), count("حالة بيانات الطبعة")
+    by_volume = {}
     for r in rows:
-        by_group[r[1]] = by_group.get(r[1], 0) + 1
-        by_tier[r[2]] = by_tier.get(r[2], 0) + 1
-        by_use[r[10]] = by_use.get(r[10], 0) + 1
-        by_status[r[11]] = by_status.get(r[11], 0) + 1
+        for v in (x.strip() for x in r["المجلدات"].split("،")):
+            if v != NONE:
+                by_volume[v] = by_volume.get(v, 0) + 1
     n = lambda x: str(x).translate(AR)  # noqa: E731
     md = ["# قاعدة المصادر الكبرى لمشروع «صناعة المتكلّم العربي»", "",
           f"**{n(len(rows))} عنوانًا** في عشر مجموعات (الدليل، الباب ٧٤). تولّدها أداة `pdf/bibliography.py`. "
@@ -633,21 +652,46 @@ def main():
           "وما لم يؤكّده سجلٌّ بقي «تُحدَّد». وسجلّ الفهرسة غير صفحة العنوان: فكلّ طبعةٍ لم تُعتمد بعدُ تُطابق على صفحة عنوانها "
           "قبل أن تدخل ثبت مجلد. والطبقة طبقة العنوان مصدرًا: أصليٌّ في بابه (أ)، أو ثانويٌّ معتمد (ب)، أو عامٌّ أو تجاريّ (ج)؛ "
           "ولا تُعتمد لعنوانٍ من الطبقة (أ) إلا طبعةٌ محقّقة تليق بها (الباب ٧٤، §٤).", "",
+          "و«المجلدات» هي المجلدات التي أحالت حواشيها إلى العنوان، فهو فيها «مستعمَل» وفي ثبتها؛ وتُملأ حين تُضبط حواشي كل مجلد "
+          "وثبته (`pdf/thabat.py`)، و«—» لما لم يُحَل إليه بعدُ في مجلدٍ مبنيّ. وأما ما عُيّن على أجزاء الطبعة السابقة الأربعة فمحفوظٌ "
+          "سجلًّا في عمود «الأجزاء في الطبعة السابقة» من الجدول، لا يُبنى عليه ثبت (الباب ١١٢و).", "",
           "## الإحصاء", "", "| المجموعة | العدد |", "|---|---|"]
     md += [f"| {g} | {n(by_group.get(g, 0))} |" for g in GROUPS.values()]
     md += ["", "| الطبقة | العدد |", "|---|---|"] + [f"| {k} | {n(v)} |" for k, v in sorted(by_tier.items())]
     md += ["", "| حالة الاستعمال | العدد |", "|---|---|"] + [f"| {k} | {n(v)} |" for k, v in by_use.items()]
+    md += ["", "| المجلد | عناوينه في الثبت |", "|---|---|"] + [f"| {k} | {n(v)} |" for k, v in by_volume.items()]
     md += ["", "| حالة بيانات الطبعة | العدد |", "|---|---|"] + [f"| {k} | {n(v)} |" for k, v in by_status.items()]
     for g in GROUPS.values():
-        md += ["", f"## {g}", "", "| الرقم | الطبقة | المؤلف | العنوان | الطبعة (من سجلّ فهرسة) | الوظيفة | الحالة |", "|---|---|---|---|---|---|---|"]
+        md += ["", f"## {g}", "", "| الرقم | الطبقة | المؤلف | العنوان | الطبعة (من سجلّ فهرسة) | الوظيفة | المجلدات | الحالة |",
+               "|---|---|---|---|---|---|---|---|"]
         for r in rows:
-            if r[1] == g:
-                who = r[3] + (f" (ت {r[4]}هـ)" if r[4] and r[4][0] in "٠١٢٣٤٥٦٧٨٩" else (f" ({r[4]})" if r[4] else ""))
-                md.append(f"| {r[0]} | {r[2]} | {who} | {r[5]} | {r[6].replace('|', '／')} | {r[8]} | {r[10]}؛ {r[11]} |")
+            if r["المجموعة"] == g:
+                d = r["الوفاة أو السنة"]
+                who = r["المؤلف"] + (f" (ت {d}هـ)" if d and d[0] in "٠١٢٣٤٥٦٧٨٩" else (f" ({d})" if d else ""))
+                md.append(f"| {r['الرقم']} | {r['الطبقة']} | {who} | {r['العنوان']} | "
+                          f"{r['الطبعة (من سجلّ فهرسة)'].replace('|', '／')} | {r['الوظيفة في المشروع']} | {r['المجلدات']} | "
+                          f"{r['حالة الاستعمال']}؛ {r['حالة بيانات الطبعة']} |")
     (OUT / "قاعدة-المصادر.md").write_text("\n".join(md) + "\n", encoding="utf-8")
-    print(len(rows), "titles;", by_tier, by_use, by_status)
-    for g, c in by_group.items():
-        print(" ", c, g)
+    print(len(rows), "titles;", by_tier, by_use, by_volume, by_status)
+
+
+def main():
+    import sys
+    if "--offline" in sys.argv:
+        write(base_rows())
+        return
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=6) as pool:  # the catalogues answer slowly; each worker still spaces its requests
+        editions = list(pool.map(edition_of, B))
+    # the volumes that cite a title are the base's own record, set with each volume's thabat: kept as they stand
+    cited = {(r["المؤلف"], r["العنوان"]): r.get("المجلدات") or NONE for r in base_rows()}
+    rows = []
+    for i, ((g, tier, author, died, title, look, fn, vols, use), (ed, basis, status)) in enumerate(zip(B, editions), 1):
+        volumes = cited.get((author, title), NONE)
+        rows.append(dict(zip(FIELDS, [f"مص-{str(i).zfill(3).translate(AR)}", GROUPS[g], tier, author, died, title, ed,
+                                      basis, fn, volumes, use_of(volumes, USE[use]), status,
+                                      "، ".join(V[c] for c in vols)])))
+    write(rows)
 
 
 if __name__ == "__main__":
