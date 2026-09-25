@@ -78,30 +78,30 @@ CSS = r"""
 .imark .e { font: 400 6.4pt/1 "Source Serif 4"; letter-spacing: 1.6pt; text-transform: uppercase; color: var(--ink-3); direction: ltr; }
 .imark.on-dark .w { color: var(--gold-l); } .imark.on-dark .e { color: #C9C2B2; }
 /* 1. half-title: quiet */
-.ht { position: absolute; top: 62mm; left: 0; right: 0; text-align: center; }
+.ht { position: absolute; top: 56mm; left: 0; right: 0; text-align: center; }
 .ht .t { font: 600 23pt/1.5 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--sapphire); }
 .ht .s { font: 400 12.5pt/1.6 "Scheherazade New"; color: var(--ink-2); margin-top: 2mm; }
 .ht .grule { margin: 9mm 0 8mm; }
 .ht .a { font: 300 10.5pt/1.5 "Changa"; color: var(--ink-2); }
-.ht .v { position: absolute; top: 118mm; left: 0; right: 0; font: 300 9pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .6pt; }
+.ht .v { position: absolute; top: 108mm; left: 0; right: 0; font: 300 9pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .6pt; }
 /* 2. the series map, a spread (Bible, ch. 111 §٥): the right-hand page opens it with the title and the first two
    stages, the left-hand page carries the last two and, off the path, the reference. Each volume carries its spine's
    marks: its number in Amiri within a gold rhombus, its stage in dots; the volume in hand has the rhombus filled */
 .sm { position: absolute; top: 0; bottom: 0; z-index: 0; }
-.sm.r { right: 30mm; left: 25mm; }
-.sm.l { right: 25mm; left: 30mm; }
-.sm-rule { position: absolute; top: 31.2mm; border-top: .45pt solid var(--gold); }
-.sm.r .sm-rule { right: 0; left: -25mm; }
-.sm.l .sm-rule { right: -25mm; left: 0; }
+.sm.r { right: 22mm; left: 16mm; }
+.sm.l { right: 16mm; left: 22mm; }
+.sm-rule { position: absolute; top: 25.2mm; border-top: .45pt solid var(--gold); }
+.sm.r .sm-rule { right: 0; left: -16mm; }
+.sm.l .sm-rule { right: -16mm; left: 0; }
 .sm.l .sm-rule::after { content: ""; position: absolute; left: -1.1mm; top: -1.35mm; width: 2.2mm; height: 2.2mm; transform: rotate(45deg); background: var(--gold); }
-.sm-k { position: absolute; top: 29.4mm; right: 0; background: var(--paper); padding: 0 0 0 3mm; font: 300 10pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .5pt; }
-.sm-h { position: absolute; top: 39mm; right: 0; left: 0; }
+.sm-k { position: absolute; top: 23.4mm; right: 0; background: var(--paper); padding: 0 0 0 3mm; font: 300 10pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .5pt; }
+.sm-h { position: absolute; top: 32mm; right: 0; left: 0; }
 .sm-h .t { font: 600 24pt/1.3 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--sapphire); }
 .sm-h .n { font: 400 13.4pt/1.4 "Changa"; color: var(--gold-ink); margin-top: 1.2mm; }
 .sm-h .p { font: 400 11.2pt/1.7 "Scheherazade New"; color: var(--ink-2); margin-top: 2.6mm; max-width: 118mm; }
 .sm-col { position: absolute; right: 0; left: 0; }
-.sm.r .sm-col { top: 82mm; }
-.sm.l .sm-col { top: 44mm; }
+.sm.r .sm-col { top: 74mm; }
+.sm.l .sm-col { top: 36mm; }
 .smv, .sms { display: grid; grid-template-columns: 14mm 1fr; column-gap: 4mm; position: relative; }
 .smv::before, .sms::before { content: ""; position: absolute; right: 7mm; top: 0; bottom: 0; border-right: .5pt solid var(--gold); }
 .sm-col > .sms:first-child::before { top: 3.9mm; }
@@ -138,18 +138,18 @@ CSS = r"""
 .smr .x { font: 400 8.6pt/1.6 "IBM Plex Sans Arabic"; color: var(--gold-ink); margin-top: 1.6mm; display: flex; gap: 2.2mm; align-items: center; }
 .smr .x i { width: 1.9mm; height: 1.9mm; border: .5pt solid var(--gold-ink); transform: rotate(45deg); box-sizing: border-box; flex: none; }
 .smc { margin-top: 8mm; font: 400 10.4pt/1.7 "Scheherazade New"; color: var(--ink-2); }
-.sml { position: absolute; bottom: 30mm; right: 0; left: 0; display: flex; flex-wrap: wrap; gap: 1.6mm 6mm; font: 400 8pt/1.4 "IBM Plex Sans Arabic"; color: var(--ink-3); border-top: .3pt solid #DCD6CA; padding-top: 2.6mm; }
+.sml { position: absolute; bottom: 22mm; right: 0; left: 0; display: flex; flex-wrap: wrap; gap: 1.6mm 6mm; font: 400 8pt/1.4 "IBM Plex Sans Arabic"; color: var(--ink-3); border-top: .3pt solid #DCD6CA; padding-top: 2.6mm; }
 .sml span { display: inline-flex; align-items: center; gap: 1.8mm; }
 .sml .f, .sml .e { width: 2.1mm; height: 2.1mm; transform: rotate(45deg); box-sizing: border-box; }
 .sml .f { background: var(--gold); } .sml .e { border: .5pt solid var(--gold-ink); }
 .sml .dt { display: inline-flex; gap: .8mm; } .sml .dt i { width: 1.1mm; height: 1.1mm; border-radius: 50%%; background: var(--gold); }
 /* 3. the title page's volume: number, name, and the line of its stage and babs (Bible, ch. 111 §٥) */
-.tpv { position: absolute; top: 108mm; right: 39mm; left: 39mm; }
+.tpv { position: absolute; top: 96mm; right: 24mm; left: 24mm; }
 .tpv .w { font: 400 11pt/1.3 "Changa"; color: var(--gold-l); letter-spacing: .4pt; }
 .tpv .nm { font: 700 25pt/1.3 "Changa"; color: #F4ECD9; margin-top: .6mm; }
 .tpv .ln { font: 400 8.6pt/1.5 "IBM Plex Sans Arabic"; color: #C9C2B2; margin-top: 1.6mm; }
 /* 4. imprint: a typographic table */
-.im { position: absolute; top: 38mm; right: 36mm; left: 36mm; }
+.im { position: absolute; top: 30mm; right: 24mm; left: 24mm; }
 .im h4 { font: 300 10pt/1 "Changa"; color: var(--gold-ink); margin: 0 0 7mm; display: flex; gap: 3mm; align-items: center; }
 .im h4 i { flex: 1; border-top: .4pt solid var(--gold); }
 .im-row { display: grid; grid-template-columns: 30mm 1fr; gap: 4mm; padding: 2.6mm 0; border-bottom: .3pt solid #E0DBD0; }
@@ -160,7 +160,7 @@ CSS = r"""
 .im-pub .c { font: 400 8.4pt/1.9 "IBM Plex Sans Arabic"; color: var(--ink-2); border-right: .4pt solid var(--gold); padding-right: 6mm; }
 .im-pub .c .ltr { direction: ltr; unicode-bidi: isolate; font-family: "Source Serif 4"; font-size: 8.6pt; letter-spacing: .2pt; }
 /* 5. rights and editions: sober */
-.rt { position: absolute; bottom: 34mm; right: 36mm; left: 36mm; }
+.rt { position: absolute; bottom: 28mm; right: 24mm; left: 24mm; }
 .rt .c { font: 600 9.8pt/1.8 "Changa"; color: var(--sapphire); margin-bottom: 4mm; }
 .rt p { font: 400 9.4pt/1.85 "Scheherazade New"; color: var(--ink-2); text-align: justify; margin: 0 0 2.6mm; text-indent: 0; }
 .rt .h2 { font: 400 9.6pt/1.8 "Scheherazade New"; color: var(--ink); margin: -2mm 0 4mm; }
@@ -195,7 +195,7 @@ CSS = r"""
 .sy-scale .t { font: 600 10pt/1.5 "Changa"; color: var(--ink); }
 .sy-scale .d { font: 400 10.6pt/1.6 "Scheherazade New"; color: var(--ink-2); }
 /* dedication: quiet, set high on the page */
-.dd { position: absolute; top: 70mm; right: 44mm; left: 44mm; text-align: center; }
+.dd { position: absolute; top: 62mm; right: 30mm; left: 30mm; text-align: center; }
 .dd p { font: 400 13pt/2.1 "Scheherazade New"; color: var(--ink-2); margin: 0; text-indent: 0; text-align: center; }
 .dd p:last-of-type { color: var(--sapphire); margin-top: 3mm; }
 .dd-m { margin-top: 10mm; }
@@ -204,7 +204,7 @@ CSS = r"""
 .pw p { font: 400 12.4pt/1.85 "Scheherazade New"; color: var(--ink-2); text-align: justify; margin: 0 0 3mm; text-indent: 0; }
 .pw-s { margin-top: 12mm; display: flex; justify-content: flex-start; }
 /* colophon */
-.co { position: absolute; bottom: 40mm; right: 45mm; left: 45mm; text-align: center; }
+.co { position: absolute; bottom: 34mm; right: 30mm; left: 30mm; text-align: center; }
 .co p { font: 400 9.6pt/1.9 "Scheherazade New"; color: var(--ink-2); margin: 0 0 3mm; text-indent: 0; text-align: center; }
 .co .f { font: 400 8.2pt/1.8 "IBM Plex Sans Arabic"; color: var(--ink-3); }
 .co .imark { margin-top: 9mm; }

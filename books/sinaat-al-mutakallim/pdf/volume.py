@@ -37,6 +37,7 @@ sys.path.insert(0, str(HERE))
 import build as B  # noqa: E402
 import cover2 as C2  # noqa: E402
 import frontmatter as FM  # noqa: E402
+import geometry as G  # noqa: E402
 import heads as H  # noqa: E402
 import ids as IDS  # noqa: E402
 import opening as O  # noqa: E402
@@ -97,6 +98,8 @@ def glyphs(html):
 LESSON_CSS = r"""
 /* a heading never ends a page: it travels with the first grade of the models (the frame runs on unbroken after it),
    and a panel's title with the panel's first block (keep_headings) */
+/* a short table is never broken, so its head never stays alone at the foot of a page; a long one breaks with its head repeated */
+div.tblk { break-inside: avoid; }
 .grades.gfirst { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 .grades.gcont { margin-top: 0; padding-top: 0; border-top: .35pt solid #E2DACB; }
 .gl { display: inline-block; width: .8em; height: .8em; vertical-align: -.06em; margin: 0 .4mm; overflow: visible; }
@@ -472,7 +475,8 @@ def keep_headings(soup):
             keep.append(frame)
             nxt["class"] = cls + ["gcont"]
             continue
-        if text < 360 and (nxt.name in ("p", "blockquote", "ul", "ol") or "card" in cls or "exm" in cls):
+        if text < 360 and (nxt.name in ("p", "blockquote", "ul", "ol") or "card" in cls or "exm" in cls) \
+                or "ex-card" in cls and text < 900:
             keep.append(nxt.extract())
         elif nxt.name in ("ul", "ol") and len(nxt.find_all("li", recursive=False)) > 2:
             head = soup.new_tag(nxt.name, attrs={k: v for k, v in nxt.attrs.items()})
@@ -489,6 +493,12 @@ def keep_headings(soup):
 def lesson_html(md, breaks=True):
     """A bab's chapter (or its opener) as the page carries it. breaks: a lesson opens its page."""
     md = re.sub(r"<!--\s*head:.*?-->\s*", "", md)          # the short head is the running head's, never the page's
+    # the notes, as the Muqaddima sets them: the call hugs what it documents, the punctuation follows, and each note
+    # floats to the foot of the page of its call (Paged.js)
+    notes = dict(re.findall(r"^\[\^(\d+)\]:\s*(.+)$", md, re.M))
+    md = re.sub(r"^\[\^\d+\]:.*$", "", md, flags=re.M)
+    md = re.sub(r"\[\^(\d+)\]", lambda m: f"⟦{m.group(1)}⟧", md)
+    md = re.sub(r"([.،؛:])((?:⟦\d+⟧)+)", r"\2\1", md)
     md = loosen_lists(IDS.printed(md))
     md = re.sub(r"^---+\s*$", "", md, flags=re.M)
     md = REVIEW.sub(lambda m: f'<span class="rv">{m.group(1)}</span>', md)
@@ -568,6 +578,10 @@ def lesson_html(md, breaks=True):
             bq["class"] = ["note"]
     # tables: the card, the dialogue, and the rest in the lesson's quieter style
     for table in soup.find_all("table"):
+        if len(table.find_all("tr")) <= 9 and not (table.parent is not None and "tblk" in (table.parent.get("class") or [])):
+            box = soup.new_tag("div", attrs={"class": "tblk"})       # Paged.js keeps a block whole, not a table
+            table.insert_before(box)
+            box.append(table.extract())
         head = [th.get_text(" ", strip=True) for th in table.find_all("th")]
         prev = table.find_previous_sibling()
         if head[:2] == ["البند", "البيان"]:
@@ -625,7 +639,11 @@ def lesson_html(md, breaks=True):
         t = p.get_text().strip()
         if t.startswith("﴿") and len(p.find_all(class_="q")) == 1 and t.endswith(")"):
             p["class"] = ["ayah"]
-    return f'<div class="lesson-t">{soup}</div>'
+    html = re.sub(r"⟦(\d+)⟧", lambda m: O.note_span(m.group(1), notes[m.group(1)]), str(soup))
+    missing = set(notes) - set(re.findall(r'class="fn-note fn-n(\d+) ', html))
+    if missing:
+        raise SystemExit(f"notes defined but never called: {sorted(missing, key=int)}")
+    return f'<div class="lesson-t">{html}</div>'
 
 
 # ------------------------------------------------------------------------------------------------ pieces
@@ -637,7 +655,7 @@ def doc(css, body, page_css, paged=False):
 def flow(css, piece):
     body, bandhtml = piece
     return (doc(css, body, "html, body { background: transparent !important; }", paged="fn-note" in body),
-            doc(css, bandhtml, O.FIXED_CSS % dict(w=200, h=260)))
+            doc(css, bandhtml, O.FIXED_CSS % dict(w=G.W, h=G.H)))
 
 
 def title_of(md):
@@ -661,13 +679,19 @@ def bab_chapters(n, files=None):
 
 
 def chapter_md(files):
-    """The chapter's files joined: the first gives the title and question; the others continue it."""
-    parts = []
+    """The chapter's files joined: the first gives the title and question; the others continue it. A chapter's notes
+    are numbered through all its files, from ١ (Bible, ch. 34 §٣), in the order of their calls."""
+    parts, n = [], 0
     for i, f in enumerate(files):
         md = f.read_text(encoding="utf-8")
         md = re.sub(r"^#\s+.+$", "", md, count=1, flags=re.M)
         if i == 0:
             md = re.sub(r"^##\s+.+$", "", md, count=1, flags=re.M)
+        body = re.sub(r"^\[\^\d+\]:.*$", "", md, flags=re.M)
+        order = list(dict.fromkeys(re.findall(r"\[\^(\d+)\]", body)))
+        new = {k: str(n + j + 1) for j, k in enumerate(order)}
+        n += len(order)
+        md = re.sub(r"\[\^(\d+)\](:?)", lambda m: f"[^{new[m.group(1)]}]{m.group(2)}" if m.group(1) in new else m.group(0), md)
         parts.append(md.strip())
     return "\n\n".join(parts)
 
@@ -829,7 +853,7 @@ def folios(css, pages, slug=None):
     body = H.overlay(pages, measure)
     if slug:
         body = body.replace('<section class="hd-page">', f'<section class="hd-page"><div class="slug">{slug}</div>')
-    return doc(css, body, O.FIXED_CSS % dict(w=200, h=260) + " html, body { background: transparent !important; }" + H.CSS
+    return doc(css, body, O.FIXED_CSS % dict(w=G.W, h=G.H) + " html, body { background: transparent !important; }" + H.CSS
                + '.slug { position: absolute; bottom: 5.2mm; left: 0; right: 0; text-align: center; font: 400 6.2pt/1 "IBM Plex Sans Arabic"; '
                  'color: #A39A8A; letter-spacing: .4pt; }')
 
@@ -839,7 +863,7 @@ def folios(css, pages, slug=None):
 def main(n=1, review=False):
     from pypdf import PdfReader, PdfWriter
     css = C2.fonts()
-    fixed = O.FIXED_CSS % dict(w=200, h=260)
+    fixed = O.FIXED_CSS % dict(w=G.W, h=G.H)
     R = {"recto": True}
     vol = VOLUMES[n - 1]
     everything = sorted(OPENING.glob("*.md"))
@@ -960,7 +984,7 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
         return doc(css, FM.contents(rows, n), O.CONT_CSS, paged=True)
 
     tag = f"vol{n:02d}"
-    paper = B.render(doc(css, '<div style="width:200mm;height:260mm;background:var(--paper)"></div>', fixed), f"{tag}-paper")
+    paper = B.render(doc(css, '<div style="width:170mm;height:240mm;background:var(--paper)"></div>', fixed), f"{tag}-paper")
     out, anchors, toc_slot = [], {"toc": None}, None       # out: [(page, kind, heads)]; page 1 is out[0]
     for i, (kind, html, meta) in enumerate(pieces):
         hd = meta.get("head")

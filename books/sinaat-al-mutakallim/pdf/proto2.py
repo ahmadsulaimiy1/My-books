@@ -26,7 +26,7 @@ from paths import AUTHOR_WORD  # noqa: E402
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 
 CSS = r"""
-@page { size: 200mm 260mm; margin: 0; }
+@page { size: 170mm 240mm; margin: 0; }
 @page wrap { size: %(wrapw)smm %(wraph)smm; margin: 0; }
 :root {
   --ink: #1C1915; --ink-2: #4A443C; --ink-3: #7C7467; --paper: #FBF8F1; --paper-2: #F2ECDF; --paper-3: #EAE1CE;
@@ -35,7 +35,7 @@ CSS = r"""
   --kufi: "Kufam SMA", "Kufam", sans-serif; --sans: "IBM Plex Sans Arabic", sans-serif; --latin: "Source Serif 4", serif;
 }
 html, body { margin: 0; } body { background: #888; }
-.pg { position: relative; width: 200mm; height: 260mm; background: var(--paper); overflow: hidden; break-after: page; color: var(--ink); direction: rtl; }
+.pg { position: relative; width: 170mm; height: 240mm; background: var(--paper); overflow: hidden; break-after: page; color: var(--ink); direction: rtl; }
 .wrap-pg { page: wrap; break-after: page; }
 .dark { background: var(--sapphire); color: #EFE7D6; }
 .gold-foil { background: linear-gradient(118deg, #A7884B 0%%, #D8BF88 14%%, #F3E6C0 28%%, #D2B67D 40%%, #9E7F44 52%%, #CDB078 70%%, #EEDDB0 84%%, #B39359 100%%); -webkit-background-clip: text; color: transparent; }
@@ -145,11 +145,11 @@ table.cmp td:first-child { font-weight: 600; color: var(--ink); white-space: now
 .card p { font-size: 12pt; line-height: 1.8; text-indent: 0; }
 .mastery h3 { font: 600 9.4pt/1.4 var(--sans); color: var(--sapphire); margin: 4mm 0 1.6mm; }
 /* --- title page */
-.tp-band { position: absolute; top: 0; left: 0; right: 0; height: 150mm; background: var(--sapphire); }
-.tp-sub { position: absolute; top: 162mm; right: 39mm; left: 39mm; font: 400 19pt/1.4 var(--read); color: var(--ink); }
-.tp-desc { position: absolute; top: 176mm; right: 39mm; left: 60mm; font: 400 10pt/1.7 var(--sans); color: var(--ink-2); }
-.tp-vol { position: absolute; top: 118mm; right: 39mm; color: var(--gold-l); font: 500 8.6pt/1.6 var(--sans); }
-.tp-auth { position: absolute; bottom: 30mm; right: 39mm; }
+.tp-band { position: absolute; top: 0; left: 0; right: 0; height: 138mm; background: var(--sapphire); }
+.tp-sub { position: absolute; top: 150mm; right: 24mm; left: 24mm; font: 400 19pt/1.4 var(--read); color: var(--ink); }
+.tp-desc { position: absolute; top: 164mm; right: 24mm; left: 44mm; font: 400 10pt/1.7 var(--sans); color: var(--ink-2); }
+.tp-vol { position: absolute; top: 106mm; right: 24mm; color: var(--gold-l); font: 500 8.6pt/1.6 var(--sans); }
+.tp-auth { position: absolute; bottom: 26mm; right: 24mm; }
 .tp-auth small { font: 400 8pt/1.5 var(--sans); color: var(--ink-3); display: block; }
 .tp-auth b { font: 600 17pt/1.5 var(--read); color: var(--sapphire); display: block; }
 .tp-auth .kn { font: 400 11.5pt/1.5 var(--read); font-style: normal; color: var(--gold-ink, #8A6A1F); display: block; margin-top: 1mm; }
@@ -196,10 +196,10 @@ def essay():
 def title_page(css, volume=None):
     """volume: the volume's block (frontmatter.title_volume); the prototype's line stands in when none is given."""
     logo = C2.Logotype(css, width=122.0)
-    svg, bottom = logo.svg(161.0, 58.0, shadow=True)
+    svg, bottom = logo.svg(146.0, 50.0, shadow=True)
     return page(f'''<div class="tp-band"></div>
-<svg viewBox="0 0 200 260" style="position:absolute;inset:0;width:200mm;height:260mm"><defs>{C2.K.gold_defs()}</defs>{svg}
-<rect x="0" y="149.6" width="200" height="0.5" fill="url(#foil)"/><circle cx="161" cy="149.85" r="1.3" fill="#A8172E"/></svg>
+<svg viewBox="0 0 170 240" style="position:absolute;inset:0;width:170mm;height:240mm"><defs>{C2.K.gold_defs()}</defs>{svg}
+<rect x="0" y="137.6" width="170" height="0.5" fill="url(#foil)"/><circle cx="146" cy="137.85" r="1.3" fill="#A8172E"/></svg>
 {volume or '<div class="tp-vol">المجلد الأول<span class="kufi" style="display:block;font-size:22pt;line-height:1.3;color:#E4CB8C;font-weight:500">التأسيس</span></div>'}
 <div class="tp-sub">من سلامة اللسان إلى حسن البيان</div>
 <div class="tp-desc">منهجٌ شامل في النطق والتعبير والخطاب وآداب التواصل والملكة الشفهية</div>

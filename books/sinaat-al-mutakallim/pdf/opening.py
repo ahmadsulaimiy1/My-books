@@ -27,6 +27,7 @@ from bs4 import BeautifulSoup
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import build as B  # noqa: E402
+import geometry as G  # noqa: E402
 import cover2 as C2  # noqa: E402
 import proto2 as P2  # noqa: E402
 import frontmatter as FM  # noqa: E402
@@ -44,23 +45,23 @@ ORD = ["", "الأول", "الثاني", "الثالث", "الرابع", "الخ
 CSS = r"""
 /* the running heads and folios are not drawn here: heads.py lays them over the assembled pages, where each page
    knows whether it is a left-hand or a right-hand page (Bible, ch. 117b) */
-@page { size: 200mm 260mm; margin: 25mm 39mm 30mm 39mm; }
-@page :first { margin-top: 104mm; }
+@page { size: 170mm 240mm; margin: 22mm 24mm 28mm 24mm; }
+@page :first { margin-top: 92mm; }
 :root { --ink: #1C1915; --ink-2: #4A443C; --ink-3: #7C7467; --paper: #F8F6F1; --paper-2: #EFECE5;
   --sapphire: #0C2766; --sapphire-2: #2B4A8F; --gold: #C9A95C; --gold-l: #E4CB8C; --gold-ink: #8A6A1F; --crimson: #A8172E;
   --ruby: #7B1730; --ruby-2: #9A4A58; --charcoal: #232A3A; }
 html, body { margin: 0; background: var(--paper); }
 body { direction: rtl; color: var(--ink); font: 400 13.2pt/1.85 "Scheherazade New", serif; }
-.full { position: relative; width: 200mm; height: 260mm; overflow: hidden; break-before: page; break-after: page; }
+.full { position: relative; width: 170mm; height: 240mm; overflow: hidden; break-before: page; break-after: page; }
 .wrap-pg { page: wrap; break-after: page; }
 .dark { background: var(--sapphire); color: #EFE7D6; }
 .chap { break-before: page; }
-.chap-band { position: absolute; top: 0; left: 0; right: 0; height: 92mm; background: var(--sapphire); color: #EFE7D6; }
-.chap-band .k { position: absolute; top: 36mm; right: 39mm; font: 300 11pt/1 "Changa"; color: var(--gold-l); display: flex; gap: 3mm; align-items: center; }
+.chap-band { position: absolute; top: 0; left: 0; right: 0; height: 80mm; background: var(--sapphire); color: #EFE7D6; }
+.chap-band .k { position: absolute; top: 30mm; right: 24mm; font: 300 11pt/1 "Changa"; color: var(--gold-l); display: flex; gap: 3mm; align-items: center; }
 .chap-band .k i { width: 10mm; border-top: .5pt solid var(--gold); display: inline-block; }
-.chap-band h2 { position: absolute; top: 46mm; right: 39mm; left: 39mm; margin: 0; font: 700 29pt/1.25 "Changa"; color: #F4ECD9; string-set: chap content(); text-wrap: balance; }
-.chap-band .sub { position: absolute; top: 62mm; right: 39mm; left: 39mm; font: 300 12.5pt/1.5 "Changa"; color: var(--gold-l); }
-.chap-band .dot { position: absolute; bottom: -1.3mm; right: 39mm; width: 2.4mm; height: 2.4mm; transform: rotate(45deg); background: var(--gold); }
+.chap-band h2 { position: absolute; top: 40mm; right: 24mm; left: 24mm; margin: 0; font: 700 29pt/1.25 "Changa"; color: #F4ECD9; string-set: chap content(); text-wrap: balance; }
+.chap-band .sub { position: absolute; top: 56mm; right: 24mm; left: 24mm; font: 300 12.5pt/1.5 "Changa"; color: var(--gold-l); }
+.chap-band .dot { position: absolute; bottom: -1.3mm; right: 24mm; width: 2.4mm; height: 2.4mm; transform: rotate(45deg); background: var(--gold); }
 .chap-open { position: relative; }
 p { margin: 0; text-align: justify; }
 p + p { text-indent: 6mm; }
@@ -137,12 +138,12 @@ td:first-child { font-weight: 600; color: var(--ink); }
 %(calls)s
 .lat { direction: ltr; unicode-bidi: isolate; font-family: "Source Serif 4"; font-size: max(.86em, 7.8pt); }
 /* heritage and poster interludes */
-.her { position: absolute; top: 40mm; bottom: 40mm; right: 24mm; left: 24mm; border: .6pt solid var(--gold); padding: 3mm; }
+.her { position: absolute; top: 36mm; bottom: 36mm; right: 18mm; left: 18mm; border: .6pt solid var(--gold); padding: 3mm; }
 .her-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; padding: 16mm 12mm; display: flex; flex-direction: column; justify-content: center; background: var(--paper-2); text-align: center; }
 .her .who { font: 300 12pt/1.4 "Changa"; color: var(--gold-ink); margin-bottom: 7mm; }
 .her .qt { font: 400 18pt/2 "Amiri"; color: var(--sapphire); }
 .her .src { font: 400 8.4pt/1.5 "IBM Plex Sans Arabic"; color: var(--ink-3); margin-top: 6mm; }
-.poster { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 30mm; }
+.poster { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 22mm; }
 .poster .kick { font: 300 12pt/1 "Changa"; color: var(--gold-l); margin-bottom: 9mm; display: flex; gap: 3mm; align-items: center; }
 .poster .kick i { width: 12mm; border-top: .5pt solid var(--gold); }
 .poster .big { font: 700 60pt/1.2 "Changa"; color: var(--gold-l); text-wrap: balance; }
@@ -150,7 +151,7 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .poster .big.kufam { font-family: "Kufam SMA"; font-feature-settings: "liga" 0; font-weight: 600; }
 .poster .line { font: 400 16pt/1.8 "Scheherazade New"; color: #E7DFCE; max-width: 120mm; margin-top: 9mm; }
 /* the measure page: four questions turned, on pearl within a double gold rule */
-.mz { position: absolute; top: 24mm; bottom: 24mm; right: 22mm; left: 22mm; border: .6pt solid var(--gold); padding: 3mm; }
+.mz { position: absolute; top: 20mm; bottom: 20mm; right: 16mm; left: 16mm; border: .6pt solid var(--gold); padding: 3mm; }
 .mz-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; background: var(--paper-2); display: flex; flex-direction: column; justify-content: center; padding: 12mm 13mm; text-align: center; }
 .mz .kick { font: 300 12pt/1 "Changa"; color: var(--gold-ink); margin-bottom: 11mm; display: flex; gap: 3mm; align-items: center; justify-content: center; }
 .mz .kick i { width: 10mm; border-top: .5pt solid var(--gold); }
@@ -160,12 +161,12 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .mz .yes { font: 700 17.5pt/1.5 "Changa"; color: var(--sapphire); margin-top: 1.4mm; text-wrap: balance; }
 .mz .coda { font: 600 16pt/1.7 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--gold-ink); margin-top: 11mm; text-wrap: balance; }
 /* the map of formation: a chain of growing rings on pearl, within the double gold rule of the measure page */
-.mp { position: absolute; top: 18mm; bottom: 18mm; right: 16mm; left: 16mm; border: .6pt solid var(--gold); padding: 3mm; }
+.mp { position: absolute; top: 14mm; bottom: 14mm; right: 12mm; left: 12mm; border: .6pt solid var(--gold); padding: 3mm; }
 .mp-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; background: var(--paper-2); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 8mm 0; }
 .mp .kick { font: 600 13pt/1 "Changa"; color: var(--sapphire); margin-bottom: 6mm; display: flex; gap: 3mm; align-items: center; }
 .mp .kick i { width: 10mm; border-top: .5pt solid var(--gold); }
-.mp-draw { position: relative; width: 160mm; }
-.mp-svg { position: absolute; top: 0; left: 0; width: 160mm; }
+.mp-draw { position: relative; width: 138mm; }
+.mp-svg { position: absolute; top: 0; left: 0; width: 138mm; }
 .mp-n { position: absolute; transform: translate(-50%%, -52%%); font: 600 10.5pt/1 "Changa"; color: var(--gold-ink); }
 .mp-l { position: absolute; transform: translateY(-50%%); font: 500 12.4pt/1.2 "Changa"; color: var(--sapphire); white-space: nowrap; }
 .mp-right { text-align: right; } .mp-left { text-align: left; }
@@ -179,7 +180,7 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .vp-r { font: 300 11pt/1.4 "Changa"; color: #E7DFCE; margin-top: 7mm; }
 .arw { display: inline-block; width: 1.05em; height: .66em; vertical-align: .05em; margin: 0 1.4mm; color: var(--gold-ink); }
 h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
-.sc-draw { position: relative; width: 160mm; }
+.sc-draw { position: relative; width: 138mm; }
 .sc-core { position: absolute; transform: translate(-50%%, -50%%); width: 27mm; text-align: center; }
 .sc-core b { display: block; font: 600 12.2pt/1.25 "Changa"; color: var(--sapphire); }
 .sc-core span { display: block; font: 400 8.3pt/1.4 "Scheherazade New"; color: var(--ink-2); margin-top: .8mm; }
@@ -191,7 +192,7 @@ h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
 .sc-leg i.c { width: 3.4mm; height: 3.4mm; border-radius: 50%%; background: rgba(201,169,92,.25); border: .35pt solid #0C2766; }
 .sc-leg i.s { width: 1.4mm; height: 1.4mm; background: var(--gold); transform: rotate(45deg); }
 .sc-arrow { font: 300 9.6pt/1 "Changa"; color: var(--gold-ink); margin-top: 7mm; }
-.sc-band { margin-top: 3mm; background: var(--sapphire); padding: 3.4mm 4mm; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.4mm 3.2mm; max-width: 146mm; box-sizing: border-box; }
+.sc-band { margin-top: 3mm; background: var(--sapphire); padding: 3.4mm 4mm; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.4mm 3.2mm; max-width: 128mm; box-sizing: border-box; }
 .sc-band span { font: 500 9.8pt/1.3 "Changa"; color: #F1EADB; white-space: nowrap; }
 .sc-band span + span::before { content: ""; display: inline-block; width: 1.2mm; height: 1.2mm; background: var(--gold); transform: rotate(45deg); margin-left: 3.2mm; vertical-align: middle; }
 /* ثبت المصادر: hanging entries, no bullets */
@@ -427,7 +428,7 @@ def sciences_page():
     Five core sciences as petals round «علوم العربية», each with what falls under it in small type; the supporting
     sciences on an outer ring; the Sharia sciences, which Arabic serves, on a band beneath."""
     import math
-    cx, cy, R, r, ring = 80.0, 66.0, 33.5, 15.5, 60.0
+    cx, cy, R, r, ring = 69.0, 57.0, 29.0, 13.5, 52.0
     svg, html = [], []
     svg.append(f'<circle cx="{cx}" cy="{cy}" r="{ring}" fill="none" stroke="#C9A95C" stroke-width=".35" stroke-dasharray="1 1.6"/>')
     for k, (name, sub) in enumerate(CORE):
@@ -442,7 +443,7 @@ def sciences_page():
         x, y = cx + ring * math.cos(ang), cy + ring * math.sin(ang)
         html.append(f'<div class="sc-sup" style="left:{x:.2f}mm;top:{y:.2f}mm"><i></i>{name}</div>')
     h = cy + ring + 8
-    draw = (f'<div class="sc-draw" style="height:{h:.1f}mm"><svg viewBox="0 0 160 {h:.1f}" style="position:absolute;inset:0;width:160mm;height:{h:.1f}mm">'
+    draw = (f'<div class="sc-draw" style="height:{h:.1f}mm"><svg viewBox="0 0 138 {h:.1f}" style="position:absolute;inset:0;width:138mm;height:{h:.1f}mm">'
             f'{"".join(svg)}</svg>{"".join(html)}</div>')
     legend = ('<div class="sc-leg"><span><i class="c"></i>العلوم الأساسية</span><span><i class="s"></i>العلوم المساندة والتخصّصية</span></div>')
     band = "".join(f'<span>{x}</span>' for x in SHARIA)
@@ -452,7 +453,7 @@ def sciences_page():
 
 
 FIXED_PAGES = {"ميزان الملكة": measure_page, "خريطة العلوم": sciences_page}
-CONT_CSS = 'html, body { background: transparent !important; } @page :first { margin-top: 25mm; }'
+CONT_CSS = 'html, body { background: transparent !important; } @page :first { margin-top: 22mm; }'
 
 
 def chapter_parts(md, kicker):
@@ -523,7 +524,7 @@ def flow(css, piece):
     # the text flows on a transparent page laid over a full-bleed paper (or band) underlay,
     # so the paper colour reaches the trim instead of stopping at the text block
     return (doc(css, body, "html, body { background: transparent !important; }", paged="fn-note" in body),
-            doc(css, bandhtml, FIXED_CSS % dict(w=200, h=260)))
+            doc(css, bandhtml, FIXED_CSS % dict(w=G.W, h=G.H)))
 
 
 ABJAD = "أ ب ج د هـ و ز ح ط ي ك ل م ن س ع ف ص ق ر ش ت ث خ ذ ض ظ غ".split()
@@ -533,7 +534,7 @@ def folios(css, pages):
     """The overlay of heads and folios (heads.py): one page per page of the book after the case wrap."""
     measure = H.Measure(css)
     return doc(css, H.overlay(pages, measure),
-               FIXED_CSS % dict(w=200, h=260) + " html, body { background: transparent !important; }" + H.CSS)
+               FIXED_CSS % dict(w=G.W, h=G.H) + " html, body { background: transparent !important; }" + H.CSS)
 
 
 def head_of(md, n):
@@ -557,7 +558,7 @@ def main():
     everything = sorted(OPENING.glob("*.md"))
     files = [f for f in everything if f.name[:2] < "90"]          # the Muqaddima
     appendices = [f for f in everything if f.name[:2] >= "90"]    # ملحق التحقيق، ثبت المصادر
-    fixed = FIXED_CSS % dict(w=200, h=260)
+    fixed = FIXED_CSS % dict(w=G.W, h=G.H)
     R = {"recto": True}
     # (kind, html, meta): meta may ask the piece to open on a recto, and name it as a target of the contents
     pieces = [("wrap", doc(css, wrap, FIXED_CSS % dict(w=wmm, h=hmm)), {}),
@@ -626,7 +627,7 @@ def main():
                 rows.append(("e", r[1], r[2], numbers.get(r[3], "٠٠٠"), r[4]))
         return doc(css, FM.contents(rows), CONT_CSS, paged=True)
 
-    paper = B.render(doc(css, '<div style="width:200mm;height:260mm;background:var(--paper)"></div>', fixed), "opening-paper")
+    paper = B.render(doc(css, '<div style="width:170mm;height:240mm;background:var(--paper)"></div>', fixed), "opening-paper")
     blank = PdfReader(str(paper)).pages[0]
     out, anchors, toc_slot = [], {}, None   # out: [(page, kind, heads)]; the first entry is the case wrap
     for i, (kind, html, meta) in enumerate(pieces):

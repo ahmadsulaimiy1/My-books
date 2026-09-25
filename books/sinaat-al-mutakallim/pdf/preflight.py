@@ -25,6 +25,7 @@ import pymupdf
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import frontmatter as FM  # noqa: E402
+import geometry as G  # noqa: E402
 import volume as V  # noqa: E402
 from paths import INTRO, OPENING  # noqa: E402
 from volumes import BOOK, VOLUMES, unit_files  # noqa: E402
@@ -206,11 +207,9 @@ def main(v=1, proof=False):
 
     # ------------------------------------------------------------------ 5. the art direction and the pages
     sizes = {(round(p.rect.width / MM), round(p.rect.height / MM)) for p in doc}
-    add("التقنية", "مقاس الصفحات واحد ٢٠٠×٢٦٠ مم", "يجتاز" if sizes == {(200, 260)} else "لا يجتاز", str(sizes))
-    if v == 11:
-        add("التقنية", "المرجع على مقاس السلسلة ٢٠×٢٦ سم (الباب ١١٢ي: مقاسٌ واحد للأحد عشر)",
-            "يجتاز" if sizes == {(200, 260)} else "لا يجتاز", "يتميّز المرجع ببنيته المرجعية لا بمقاسه")
-    top, bottom = 25 * MM, 232 * MM
+    add("التقنية", "مقاس الصفحات واحد ١٧×٢٤ سم للمجلدات الأحد عشر، والمرجع منها (الباب ١١٢ك)",
+        "يجتاز" if sizes == {(round(G.W), round(G.H))} else "لا يجتاز", str(sizes))
+    top, bottom = G.TOP * MM, (G.H - G.BOTTOM) * MM
     blanks = [i for i, k in enumerate(kinds) if k == "blank"]
     add("الإخراج الفني", "الصفحات البيضاء المقصودة (قبل ما يُفتتح على صفحةٍ فردية)", "للعلم",
         f"{n(len(blanks))} صفحة: " + "، ".join(labels[i] for i in blanks))
@@ -262,7 +261,7 @@ def main(v=1, proof=False):
     missing_head = []
     for p in doc:
         if kinds[p.number] == "flow":
-            hw = words(p, pymupdf.Rect(0, 0, p.rect.width, 22 * MM))
+            hw = words(p, pymupdf.Rect(0, 0, p.rect.width, G.TOP * MM))
             if not {norm("صناعة"), norm("المتكلّم"), norm("العربي")} & hw:
                 missing_head.append(labels[p.number])
     add("التقنية", "الرأس الجاري على كل صفحة جارية", "يجتاز" if not missing_head else "لا يجتاز", "، ".join(missing_head))

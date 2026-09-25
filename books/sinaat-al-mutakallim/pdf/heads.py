@@ -25,10 +25,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import lettering as L  # noqa: E402
 
 PT = 0.3528                       # mm in a point
-PAGE_W, PAGE_H = 200.0, 260.0
-MARGIN = 39.0                     # the text block: 122 mm, centred
+import geometry as G  # noqa: E402
+PAGE_W, PAGE_H = G.W, G.H          # the series' page, 17 × 24 cm
+MARGIN = G.SIDE                   # the text block: 122 mm, centred
 TEXT_W = PAGE_W - 2 * MARGIN
-RULE_Y = 18.2                     # the rule's centre line, 6.8 mm above the text block
+RULE_Y = G.TOP - 6.8               # the rule's centre line, 6.8 mm above the text block
 MARK_R = 1.8                      # half the rhombus' diagonal: three dots of 1.2 mm
 GAP = 0.8                         # between the rhombus and the rule
 HEAVY, LIGHT = 0.8, 0.35          # the rule's two weights, in points
@@ -42,7 +43,7 @@ SAPPHIRE, SAPPHIRE_2, QUIET, INK = "#0C2766", "#2B4A8F", "#6B7390", "#1C1915"
 
 CSS = f"""
 .hd-page {{ position: relative; width: {PAGE_W}mm; height: {PAGE_H}mm; break-after: page; }}
-.hd {{ position: absolute; top: 12.15mm; left: {MARGIN}mm; right: {MARGIN}mm; direction: rtl; display: flex;
+.hd {{ position: absolute; top: {RULE_Y - 6.05:.2f}mm; left: {MARGIN}mm; right: {MARGIN}mm; direction: rtl; display: flex;
   justify-content: space-between; align-items: baseline; white-space: nowrap; }}
 .hd-o {{ font: 500 8.3pt/1 "Changa"; color: {SAPPHIRE}; }}
 .hd-o .l {{ font-weight: 300; color: {SAPPHIRE_2}; }}
