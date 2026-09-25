@@ -23,7 +23,7 @@ PUBLISHER_EN = "Al-Ihsān Design & Publishing House"
 PHONES = ["+234 903 395 5872", "+234 903 344 6273"]
 EMAIL = "al-ihsan.design@gmail.com"
 # decided by the author or the publisher; None means "not yet decided": the line is not printed
-RIGHTS_HOLDER = None
+RIGHTS_HOLDER = "حقوق التأليف للمؤلف، وحقوق الطبع والنشر لدار الإحسان للتصميم والنشر"
 CITY = None
 ISBN = None
 DEPOSIT = None
@@ -75,6 +75,7 @@ CSS = r"""
 .rt { position: absolute; bottom: 34mm; right: 36mm; left: 36mm; }
 .rt .c { font: 600 9.8pt/1.8 "Changa"; color: var(--sapphire); margin-bottom: 4mm; }
 .rt p { font: 400 9.4pt/1.85 "Scheherazade New"; color: var(--ink-2); text-align: justify; margin: 0 0 2.6mm; text-indent: 0; }
+.rt .h2 { font: 400 9.6pt/1.8 "Scheherazade New"; color: var(--ink); margin: -2mm 0 4mm; }
 .rt .ed { margin-top: 8mm; border-top: .4pt solid var(--gold); padding-top: 3.4mm; }
 .rt .ed .h { font: 300 8.6pt/1 "Changa"; color: var(--gold-ink); margin-bottom: 2.4mm; }
 .rt .ed-row { display: grid; grid-template-columns: 30mm 1fr; gap: 4mm; font: 400 9pt/1.7 "IBM Plex Sans Arabic"; color: var(--ink-2); }
@@ -99,6 +100,15 @@ CSS = r"""
 .sy-row .m { font: 400 13pt/1.5 "Amiri"; color: var(--sapphire); text-align: center; }
 .sy-row .m.s { font: 600 10pt/1.5 "Changa"; }
 .sy-row .d { font: 400 11pt/1.7 "Scheherazade New"; color: var(--ink-2); }
+/* dedication: quiet, set high on the page */
+.dd { position: absolute; top: 70mm; right: 44mm; left: 44mm; text-align: center; }
+.dd p { font: 400 13pt/2.1 "Scheherazade New"; color: var(--ink-2); margin: 0; text-indent: 0; text-align: center; }
+.dd p:last-of-type { color: var(--sapphire); margin-top: 3mm; }
+.dd-m { margin-top: 10mm; }
+/* publisher's word */
+.pw h2.tt { font: 700 20pt/1.3 "Changa"; color: var(--sapphire); margin: 0 0 8mm; }
+.pw p { font: 400 12.4pt/1.85 "Scheherazade New"; color: var(--ink-2); text-align: justify; margin: 0 0 3mm; text-indent: 0; }
+.pw-s { margin-top: 12mm; display: flex; justify-content: flex-start; }
 /* colophon */
 .co { position: absolute; bottom: 40mm; right: 45mm; left: 45mm; text-align: center; }
 .co p { font: 400 9.6pt/1.9 "Scheherazade New"; color: var(--ink-2); margin: 0 0 3mm; text-indent: 0; text-align: center; }
@@ -150,9 +160,9 @@ def imprint(volume="الأول: التأسيس"):
 
 
 def rights():
-    holder = f" {RIGHTS_HOLDER}" if RIGHTS_HOLDER else ""
+    holder = f'<div class="h2">{RIGHTS_HOLDER}</div>' if RIGHTS_HOLDER else ""
     return page(f'''<div class="rt">
-<div class="c">جميع الحقوق محفوظة{holder}<br>{YEAR}</div>
+<div class="c">جميع الحقوق محفوظة<br>{YEAR}</div>{holder}
 <p>لا يجوز نشر هذا الكتاب أو أيّ جزءٍ منه، ولا نسخه أو اختزانه في نظامٍ لاسترجاع المعلومات، ولا نقله بأيّ وسيلةٍ إلكترونيةٍ أو آليةٍ أو تصويريةٍ أو تسجيلية أو غير ذلك، إلا بإذنٍ كتابيٍّ مسبق من الناشر.</p>
 <p>ويُستثنى من ذلك الاقتباس اليسير لأغراض البحث العلمي والتعليم والنقد والمراجعة، على أن يُنسب إلى الكتاب ومؤلّفه نسبةً تامّة، وأن يُنقل بلفظه.</p>
 <p>والآيات القرآنية مثبتةٌ بالرسم العثماني على رواية حفص عن عاصم، مطابقةً لمصحف المدينة النبوية. والنقول موثّقةٌ في حواشيها بطبعاتها، وبيانات الطبعات كاملةً في ثبت المصادر.</p>
@@ -203,3 +213,25 @@ def colophon():
 <p class="f">صُفّ المتن بحرف شهرزاد الجديد، والنصوص التراثية بحرف أميري، والقرآن الكريم بحرف أميري قرآن، والعناوين بحرفَي تشانغا وكوفام، والتنقّل بحرف بلكس العربي، والإحالات اللاتينية بحرف سورس سيريف.</p>
 <p class="f">صدر عن {PUBLISHER_AR}، {YEAR}.</p>
 {mark()}</div>''')
+
+
+DEDICATION = ["إلى طالب العلم الذي عرف العربية،", "ولم يُتَح له بعدُ أن يتكلّم بها كما يعرفها؛",
+              "وإلى معلّمه الذي يريد أن يرى العلم على لسانه كما رآه في صدره؛", "أُهدي هذا الكتاب."]
+
+
+def dedication():
+    lines = "".join(f"<p>{x}</p>" for x in DEDICATION)
+    return page(f'<div class="dd">{lines}<div class="dd-m"><span class="diamond"></span></div></div>')
+
+
+PUBLISHER_WORD = [
+    "تصدر دار الإحسان للتصميم والنشر هذا الكتاب في أربعة مجلدات، أولها هذا.",
+    "وقد أُخرج على ما يليق بكتابٍ عربيٍّ علمي: الآيات بالرسم العثماني على رواية حفص عن عاصم، مطابقةً لمصحف المدينة النبوية؛ والأحاديث مخرّجةٌ بأرقامها وكتبها وأبوابها في طبعاتٍ معيّنة؛ والنقول معزوّةٌ إلى مواضعها بالجزء والصفحة، والحاشية في أسفل الصفحة التي تحتاج إليها، لا في آخر الكتاب.",
+    "واختيرت حروف الكتاب لوظائفها: حرفٌ للمتن يُقرأ طويلًا بلا تعب، وحرفٌ للنصوص التراثية، وحرف المصحف للقرآن الكريم، وحرفان كوفيّان للعناوين. وصُمّمت صفحاته على تنوّعٍ منضبط: صفحةٌ علمية كثيفة الحواشي، ثم صفحة آيةٍ أو اقتباسٍ أو انتقال، ليجد القارئ في الكتاب إيقاعًا يعينه على طول القراءة.",
+    "والدار ترحّب بكل ملاحظةٍ علمية أو لغوية أو فنية على هذه الطبعة، لتُستدرك في الطبعات التالية.",
+]
+
+
+def publisher_word():
+    body = "".join(f"<p>{x}</p>" for x in PUBLISHER_WORD)
+    return f'<section class="chap pw"><h2 class="tt">كلمة الناشر</h2>{body}<div class="pw-s">{mark()}</div></section>'

@@ -186,6 +186,14 @@ h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
 .sc-band { margin-top: 3mm; background: var(--sapphire); padding: 3.4mm 4mm; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.4mm 3.2mm; max-width: 146mm; box-sizing: border-box; }
 .sc-band span { font: 500 9.8pt/1.3 "Changa"; color: #F1EADB; white-space: nowrap; }
 .sc-band span + span::before { content: ""; display: inline-block; width: 1.2mm; height: 1.2mm; background: var(--gold); transform: rotate(45deg); margin-left: 3.2mm; vertical-align: middle; }
+/* ثبت المصادر: hanging entries, no bullets */
+.app-91 ul { list-style: none; padding: 0; }
+.app-91 ul > li { padding-right: 6mm; text-indent: -6mm; margin: 0 0 1.6mm; font-size: 11.6pt; line-height: 1.7; text-align: right; }
+.app-91 ul > li::before { content: none; }
+.app-91 ul > li strong { color: var(--sapphire); }
+.app-91 ul:last-of-type { direction: ltr; }
+.app-91 ul:last-of-type > li { padding: 0 0 0 6mm; text-indent: -6mm; text-align: left; font: 400 10.6pt/1.6 "Source Serif 4"; }
+.app-91 ul:last-of-type .lat { font-size: 1em; }
 .toc-p { font: 400 12pt/1.9 "Scheherazade New"; }
 .toc-row { display: flex; gap: 3mm; align-items: baseline; border-bottom: .4pt dotted #CFC5B1; padding: 1.2mm 0; }
 .toc-row b { font: 600 10pt "Changa"; color: var(--gold-ink); min-width: 22mm; }
@@ -517,7 +525,9 @@ def main():
     from pypdf import PdfReader
     css = C2.fonts()
     wrap, wmm, hmm = C2.wrap(css, 1, 48.2, dpi=300)
-    files = sorted((BOOK / "الافتتاحية").glob("*.md"))
+    everything = sorted((BOOK / "الافتتاحية").glob("*.md"))
+    files = [f for f in everything if f.name[:2] < "90"]          # the Muqaddima
+    appendices = [f for f in everything if f.name[:2] >= "90"]    # ملحق التحقيق، ثبت المصادر
     fixed = FIXED_CSS % dict(w=200, h=260)
     R = {"recto": True}
     # (kind, html, meta): meta may ask the piece to open on a recto, and name it as a target of the contents
@@ -527,14 +537,16 @@ def main():
               ("fixed", doc(css, P2.title_page(css).replace('class="pg', 'class="full').replace("</section>", "") + TP_MARK, fixed), R),
               ("fixed", doc(css, FM.imprint(), fixed), {}),
               ("fixed", doc(css, FM.rights(), fixed), R),
+              ("fixed", doc(css, FM.dedication(), fixed), {}),
               ("fixed", doc(css, P2.verse_page().replace('class="pg', 'class="full'), fixed), R),
+              ("cont", doc(css, FM.publisher_word(), CONT_CSS % "كلمة الناشر", "كلمة الناشر"), {"recto": True, "anchor": "publisher"}),
               ("flow", flow(css, author_word(), "كلمة المؤلف"), {"recto": True, "anchor": "author"}),
               ("toc", None, {"recto": True}),
               ("cont", doc(css, FM.symbols(), CONT_CSS % "الرموز والاصطلاحات", "الرموز والاصطلاحات"), {"recto": True, "anchor": "symbols"}),
               ("fixed", doc(css, poster("الافتتاحية", "المقدمة", "في صناعة الكلام: البيان في خلق الإنسان وفي الكتاب والسنة وعند علماء العربية، ومنزلة العربية وعلومها، والفرق بين أن تعرف اللغة وأن تملكها، وأيّ عربيةٍ نتكلّم.", kufam=True), fixed), {"recto": True, "anchor": "main"})]
     tamhid = files[0].read_text(encoding="utf-8").replace("# المقدمة: في صناعة الكلام\n", "")
     pieces.append(("flow", flow(css, chapter(tamhid, "المقدمة"), "تمهيد"), {"anchor": "01"}))
-    toc_rows = [("part", "", "المقدّمات"), ("e", "", "كلمة المؤلف", "author", []), ("e", "", "الرموز والاصطلاحات", "symbols", []),
+    toc_rows = [("part", "", "المقدّمات"), ("e", "", "كلمة الناشر", "publisher", []), ("e", "", "كلمة المؤلف", "author", []), ("e", "", "الرموز والاصطلاحات", "symbols", []),
                 ("part", "", "المقدمة: في صناعة الكلام"), ("e", "", "تمهيد", "01", [])]
     for n, f in enumerate(files[1:], 1):
         md = f.read_text(encoding="utf-8")
@@ -562,6 +574,17 @@ def main():
                 pieces.append(("fixed", doc(css, part, fixed), {}))
             else:
                 pieces.append(("cont", doc(css, part, CONT_CSS % title, title, paged="fn-note" in part), {}))
+    toc_rows.append(("part", "", "الملاحق"))
+    for f in appendices:
+        md = f.read_text(encoding="utf-8")
+        title = re.search(r"^##\s+(.+)$", md, re.M).group(1).strip()
+        key = f.name[:2]
+        toc_rows.append(("e", "", title, key, sections(md)))
+        for kind, part in chapter_parts(md, "الملاحق"):
+            if kind == "flow":
+                body, bandhtml = part
+                part = (body.replace('<section class="chap">', f'<section class="chap app-{key}">', 1), bandhtml)
+                pieces.append(("flow", flow(css, part, title), {"recto": True, "anchor": key}))
     pieces.append(("fixed", doc(css, FM.colophon(), fixed), {"recto": True}))
 
     def toc_html(numbers):
