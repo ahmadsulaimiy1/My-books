@@ -26,6 +26,7 @@ import build as B  # noqa: E402
 import cover2 as C2  # noqa: E402
 import proto2 as P2  # noqa: E402
 import frontmatter as FM  # noqa: E402
+import heads as H  # noqa: E402
 
 BOOK = HERE.parent / "book"
 OUT = HERE.parent / "Volume-I_Opening.pdf"
@@ -35,12 +36,10 @@ ORD = ["", "الأول", "الثاني", "الثالث", "الرابع", "الخ
        "الثامن عشر", "التاسع عشر", "العشرون"]
 
 CSS = r"""
-@page { size: 200mm 260mm; margin: 25mm 39mm 30mm 39mm;
-  @top-right { content: "صناعة المتكلّم العربي"; font: 300 7.9pt "Changa"; letter-spacing: .25pt; color: #2B4A8F; vertical-align: bottom; padding-bottom: 5.4mm; }
-  @top-center { content: "\00a0"; font: 300 7.9pt "Changa"; background: url("data:image/svg+xml;utf8,%%3Csvg%%20xmlns%%3D%%22http%%3A//www.w3.org/2000/svg%%22%%20width%%3D%%2226mm%%22%%20height%%3D%%223mm%%22%%20viewBox%%3D%%220%%200%%20260%%2030%%22%%3E%%3Cg%%20fill%%3D%%22none%%22%%20stroke%%3D%%22%%23C9A95C%%22%%20stroke-width%%3D%%222.4%%22%%3E%%3Cline%%20x1%%3D%%220%%22%%20y1%%3D%%2215%%22%%20x2%%3D%%22118%%22%%20y2%%3D%%2215%%22/%%3E%%3Cline%%20x1%%3D%%22142%%22%%20y1%%3D%%2215%%22%%20x2%%3D%%22260%%22%%20y2%%3D%%2215%%22/%%3E%%3C/g%%3E%%3Cpath%%20d%%3D%%22M130%%207%%20L138%%2015%%20L130%%2023%%20L122%%2015%%20Z%%22%%20fill%%3D%%22%%23C9A95C%%22/%%3E%%3C/svg%%3E") no-repeat center bottom 6.6mm / 26mm 3mm; vertical-align: bottom; }
-  @top-left { content: "%(head)s"; font: 500 7.9pt "Changa"; color: #0C2766; vertical-align: bottom; padding-bottom: 5.4mm; }
-}
-@page :first { margin-top: 104mm; @top-right { content: none; } @top-left { content: none; } }
+/* the running heads and folios are not drawn here: heads.py lays them over the assembled pages, where each page
+   knows whether it is a left-hand or a right-hand page (Bible, ch. 117b) */
+@page { size: 200mm 260mm; margin: 25mm 39mm 30mm 39mm; }
+@page :first { margin-top: 104mm; }
 :root { --ink: #1C1915; --ink-2: #4A443C; --ink-3: #7C7467; --paper: #F8F6F1; --paper-2: #EFECE5;
   --sapphire: #0C2766; --sapphire-2: #2B4A8F; --gold: #C9A95C; --gold-l: #E4CB8C; --gold-ink: #8A6A1F; --crimson: #A8172E;
   --ruby: #7B1730; --ruby-2: #9A4A58; --charcoal: #232A3A; }
@@ -443,8 +442,7 @@ def sciences_page():
 
 
 FIXED_PAGES = {"ميزان الملكة": measure_page, "خريطة العلوم": sciences_page}
-CONT_CSS = ('html, body { background: transparent !important; } '
-            '@page :first { margin-top: 25mm; @top-right { content: "صناعة المتكلّم العربي"; } @top-left { content: "%s"; } }')
+CONT_CSS = 'html, body { background: transparent !important; } @page :first { margin-top: 25mm; }'
 
 
 def chapter_parts(md, kicker):
@@ -485,6 +483,12 @@ def contents(files):
 
 
 FIXED_CSS = "@page { size: %(w)smm %(h)smm; margin: 0; } html, body { margin: 0; }"
+# the heads: the larger unit on a right-hand page, the chapter on a left-hand page (heads.py)
+MUQ = [("label", "المقدمة"), ("title", "في صناعة الكلام")]
+
+
+def same(title):
+    return ([("title", title)], [("title", title)])
 TP_MARK = '<div style="position:absolute;bottom:13mm;left:0;right:0">' + FM.mark() + '</div></section>'
 
 
@@ -496,48 +500,39 @@ PAGED_CONFIG = ("<script>window.PagedConfig = { auto: true, before: async () => 
                 "after: () => { window.__pagedDone = true; } };</script>")
 
 
-def doc(css, body, page_css, head="", paged=False):
-    # the running heads live in page-margin boxes, which do not make Chromium load a web font on their own:
-    # an invisible line in the same face does, so the heads never fall back to a system font
-    preload = (f'<div aria-hidden="true" style="position:absolute;visibility:hidden;font:300 7.9pt Changa">'
-               f'صناعة المتكلّم العربي <b style="font-weight:500">{head}</b></div>')
+def doc(css, body, page_css, paged=False):
     # a page that carries notes is paginated by Paged.js, which alone places a note at the foot of its page
     script = f'{PAGED_CONFIG}<script src="{PAGED.as_uri()}"></script>' if paged else ""
     return (f'<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>صناعة المتكلّم العربي</title>'
-            f'<style>{css}</style><style>{CSS % dict(wrapw=0, wraph=0, head=head, calls=CALLS)}{C2.TEXT_CSS}{extra_css()}</style>'
-            f'<style>{page_css}</style>{script}</head><body>{"" if paged else preload}{body}</body></html>')
+            f'<style>{css}</style><style>{CSS % dict(wrapw=0, wraph=0, calls=CALLS)}{C2.TEXT_CSS}{extra_css()}</style>'
+            f'<style>{page_css}</style>{script}</head><body>{body}</body></html>')
 
 
-def flow(css, piece, head):
+def flow(css, piece):
     body, bandhtml = piece
     # the text flows on a transparent page laid over a full-bleed paper (or band) underlay,
     # so the paper colour reaches the trim instead of stopping at the text block
-    return (doc(css, body, "html, body { background: transparent !important; }", head, paged="fn-note" in body),
+    return (doc(css, body, "html, body { background: transparent !important; }", paged="fn-note" in body),
             doc(css, bandhtml, FIXED_CSS % dict(w=200, h=260)))
 
 
 ABJAD = "أ ب ج د هـ و ز ح ط ي ك ل م ن س ع ف ص ق ر ش ت ث خ ذ ض ظ غ".split()
 
 
-def folios(css, marks):
-    """marks: one (text, style) per page after the wrap; style is "run" (an ordinary page: the number between two gold
-    hairlines), "open" (a chapter opening: smaller, gold, under a diamond) or "" (counted, not shown). The numerals are
-    Amiri's, chosen by eye against the other faces of the book (Bible, ch. 104)."""
-    out = []
-    for text, style in marks:
-        f = ""
-        if style == "run":
-            f = f'<div class="fo-run"><i></i><span>{text}</span><i></i></div>'
-        elif style == "open":
-            f = f'<div class="fo-open"><b></b><span>{text}</span></div>'
-        out.append(f'<section style="position:relative;width:200mm;height:260mm;break-after:page">{f}</section>')
-    fcss = ('.fo-run{position:absolute;bottom:14.5mm;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:2.6mm}'
-            '.fo-run i{width:5.5mm;border-top:.4pt solid #C9A95C}'
-            '.fo-run span{font:400 10.5pt/1 Amiri;color:#1C1915;min-width:6mm;text-align:center}'
-            '.fo-open{position:absolute;bottom:14mm;left:0;right:0;text-align:center}'
-            '.fo-open b{display:block;width:1.3mm;height:1.3mm;margin:0 auto 2mm;background:#C9A95C;transform:rotate(45deg)}'
-            '.fo-open span{font:400 9pt/1 Amiri;color:#7F5F12}')
-    return doc(css, "".join(out), FIXED_CSS % dict(w=200, h=260) + " html, body { background: transparent !important; }" + fcss)
+def folios(css, pages):
+    """The overlay of heads and folios (heads.py): one page per page of the book after the case wrap."""
+    measure = H.Measure(css)
+    return doc(css, H.overlay(pages, measure),
+               FIXED_CSS % dict(w=200, h=260) + " html, body { background: transparent !important; }" + H.CSS)
+
+
+def head_of(md, n):
+    """The chapter's head on a left-hand page: its number and its title, or the short form the chapter gives beside
+    its title (<!-- head: … -->) when the title would reach the mark."""
+    t = re.search(r"^##\s+(.+)$", md, re.M).group(1)
+    short = re.search(r"<!--\s*head:\s*(.+?)\s*-->", md)
+    title = short.group(1) if short else re.sub(r"^الفصل [^:]+:\s*", "", t)
+    return [("label", "الفصل"), ("num", str(n).translate(AR)), ("title", title)]
 
 
 def sections(md):
@@ -563,13 +558,13 @@ def main():
               ("fixed", doc(css, FM.rights(), fixed), R),
               ("fixed", doc(css, FM.dedication(), fixed), {}),
               ("fixed", doc(css, P2.verse_page().replace('class="pg', 'class="full'), fixed), R),
-              ("cont", doc(css, FM.publisher_word(), CONT_CSS % "كلمة الناشر", "كلمة الناشر"), {"recto": True, "anchor": "publisher"}),
-              ("flow", flow(css, author_word(), "كلمة المؤلف"), {"recto": True, "anchor": "author"}),
-              ("toc", None, {"recto": True}),
-              ("cont", doc(css, FM.symbols(), CONT_CSS % "الرموز والاصطلاحات", "الرموز والاصطلاحات"), {"recto": True, "anchor": "symbols"}),
+              ("cont", doc(css, FM.publisher_word(), CONT_CSS), {"recto": True, "anchor": "publisher", "head": same("كلمة الناشر"), "opens": True}),
+              ("flow", flow(css, author_word()), {"recto": True, "anchor": "author", "head": same("كلمة المؤلف")}),
+              ("toc", None, {"recto": True, "head": same("المحتويات"), "opens": True}),
+              ("cont", doc(css, FM.symbols(), CONT_CSS), {"recto": True, "anchor": "symbols", "head": same("الرموز والاصطلاحات"), "opens": True}),
               ("fixed", doc(css, poster("الافتتاحية", "المقدمة", "في صناعة الكلام: البيان في خلق الإنسان وفي الكتاب والسنة وعند علماء العربية، ومنزلة العربية وعلومها، والفرق بين أن تعرف اللغة وأن تملكها، وأيّ عربيةٍ نتكلّم.", kufam=True), fixed), {"recto": True, "anchor": "main"})]
     tamhid = files[0].read_text(encoding="utf-8").replace("# المقدمة: في صناعة الكلام\n", "")
-    pieces.append(("flow", flow(css, chapter(tamhid, "المقدمة"), "تمهيد"), {"anchor": "01"}))
+    pieces.append(("flow", flow(css, chapter(tamhid, "المقدمة")), {"anchor": "01", "head": (MUQ, [("title", "تمهيد")])}))
     toc_rows = [("part", "", "المقدّمات"), ("e", "", "كلمة الناشر", "publisher", []), ("e", "", "كلمة المؤلف", "author", []), ("e", "", "الرموز والاصطلاحات", "symbols", []),
                 ("part", "", "المقدمة: في صناعة الكلام"), ("e", "", "تمهيد", "01", [])]
     for n, f in enumerate(files[1:], 1):
@@ -591,13 +586,14 @@ def main():
         title = re.sub(r"^الفصل [^:]+:\s*", "", re.search(r"^##\s+(.+)$", md, re.M).group(1))
         key = f.name[:2]
         toc_rows.append(("e", f"الفصل {ORD[n]}", title, key, sections(md)))
+        heads = (MUQ, head_of(md, n))
         for kind, part in chapter_parts(md, f"الفصل {ORD[n]}"):
             if kind == "flow":
-                pieces.append(("flow", flow(css, part, title), {"anchor": key}))
+                pieces.append(("flow", flow(css, part), {"anchor": key, "head": heads}))
             elif kind == "fixed":
                 pieces.append(("fixed", doc(css, part, fixed), {}))
             else:
-                pieces.append(("cont", doc(css, part, CONT_CSS % title, title, paged="fn-note" in part), {}))
+                pieces.append(("cont", doc(css, part, CONT_CSS, paged="fn-note" in part), {"head": heads}))
     toc_rows.append(("part", "", "الملاحق"))
     for f in appendices:
         md = f.read_text(encoding="utf-8")
@@ -608,7 +604,7 @@ def main():
             if kind == "flow":
                 body, bandhtml = part
                 part = (body.replace('<section class="chap">', f'<section class="chap app-{key}">', 1), bandhtml)
-                pieces.append(("flow", flow(css, part, title), {"recto": True, "anchor": key}))
+                pieces.append(("flow", flow(css, part), {"recto": True, "anchor": key, "head": ([("title", "الملاحق")], [("title", title)])}))
     pieces.append(("fixed", doc(css, FM.colophon(), fixed), {"recto": True}))
 
     def toc_html(numbers):
@@ -618,21 +614,22 @@ def main():
                 rows.append(r)
             else:
                 rows.append(("e", r[1], r[2], numbers.get(r[3], "٠٠٠"), r[4]))
-        return doc(css, FM.contents(rows), CONT_CSS % "المحتويات", "المحتويات", paged=True)
+        return doc(css, FM.contents(rows), CONT_CSS, paged=True)
 
     paper = B.render(doc(css, '<div style="width:200mm;height:260mm;background:var(--paper)"></div>', fixed), "opening-paper")
     blank = PdfReader(str(paper)).pages[0]
-    out, anchors, toc_slot = [], {}, None   # out: [(page, kind)]; the first entry is the case wrap
+    out, anchors, toc_slot = [], {}, None   # out: [(page, kind, heads)]; the first entry is the case wrap
     for i, (kind, html, meta) in enumerate(pieces):
+        hd = meta.get("head")
         if meta.get("recto") and len(out) >= 1 and len(out) % 2 == 0:
-            out.append((PdfReader(str(paper)).pages[0], "blank"))   # the next page would be a verso: leave it white
+            out.append((PdfReader(str(paper)).pages[0], "blank", None))   # the next page would be a verso: leave it white
         if meta.get("anchor"):
             anchors[meta["anchor"]] = len(out)
         if kind == "toc":
             r = PdfReader(str(B.render(toc_html({}), "opening-toc")))
             toc_slot = (len(out), len(r.pages[:body_pages(r)]))
             for pg in r.pages[:toc_slot[1]]:
-                out.append((pg, "toc"))
+                out.append((pg, "toc", hd))
             continue
         if kind == "flow":
             body, bandhtml = html
@@ -641,15 +638,16 @@ def main():
             for j, pg in enumerate(r.pages[:body_pages(r)]):
                 under = PdfReader(str(band if j == 0 else paper)).pages[0]
                 under.merge_page(pg)
-                out.append((under, "open" if j == 0 else "flow"))
+                out.append((under, "open" if j == 0 else "flow", hd))
             continue
         r = PdfReader(str(B.render(html, f"opening-{i:02d}")))
-        for pg in (r.pages[:body_pages(r)] if kind == "cont" else r.pages):
+        for j, pg in enumerate(r.pages[:body_pages(r)] if kind == "cont" else r.pages):
             if kind == "cont":
                 under = PdfReader(str(paper)).pages[0]
                 under.merge_page(pg)
                 pg = under
-            out.append((pg, "flow" if kind == "cont" else kind))
+            # a piece that opens under its own title (كلمة الناشر، الرموز) has no head on that page, as a chapter has none
+            out.append((pg, ("open" if meta.get("opens") and j == 0 else "flow") if kind == "cont" else kind, hd))
     # the preliminaries are counted in abjad letters from the half-title; the text is counted from ١ at the Muqaddima
     main_at = anchors["main"]
     label = [""] + [ABJAD[i - 1] if i < main_at else str(i - main_at + 1).translate(AR) for i in range(1, len(out))]
@@ -660,13 +658,24 @@ def main():
     for k in range(toc_slot[1]):
         under = PdfReader(str(paper)).pages[0]
         under.merge_page(r.pages[k])
-        out[toc_slot[0] + k] = (under, "flow")
+        out[toc_slot[0] + k] = (under, "open" if k == 0 else "flow", out[toc_slot[0] + k][2])
+    # the heads and folios, drawn last: page i (after the wrap) is a left-hand page when i is odd
     style = {"flow": "run", "open": "open"}
-    marks = [(label[i], style.get(out[i][1], "")) for i in range(1, len(out))]
+    measure = H.Measure(css)
+    marks = []
+    for i in range(1, len(out)):
+        st, hd = style.get(out[i][1], ""), out[i][2]
+        parts = None
+        if st == "run" and hd:
+            parts = hd[1] if i % 2 else hd[0]
+            if not measure.fits(parts):
+                raise SystemExit(f"the head reaches the mark ({measure.head(parts):.1f} mm of {H.REACH:.1f}): {parts}"
+                                 " — give the chapter a short head: <!-- head: … -->")
+        marks.append((label[i], st, parts, "odd" if i % 2 else "even"))
     fr = PdfReader(str(B.render(folios(css, marks), "opening-folios")))
     from pypdf import PdfWriter
     w = PdfWriter()
-    for i, (pg, _) in enumerate(out):
+    for i, (pg, _, _) in enumerate(out):
         if i and marks[i - 1][1]:
             pg.merge_page(fr.pages[i - 1])
         w.add_page(pg)
