@@ -727,7 +727,7 @@ def lesson_html(md, breaks=True):
         t = p.get_text().strip()
         if t.startswith("﴿") and len(p.find_all(class_="q")) == 1 and t.endswith(")"):
             p["class"] = ["ayah"]
-    html = re.sub(r"⟦(\d+)⟧", lambda m: O.note_span(m.group(1), notes[m.group(1)]), str(soup))
+    html = O.calls(str(soup), notes)
     missing = set(notes) - set(re.findall(r'class="fn-note fn-n(\d+) ', html))
     if missing:
         raise SystemExit(f"notes defined but never called: {sorted(missing, key=int)}")

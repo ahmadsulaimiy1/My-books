@@ -114,6 +114,8 @@ td:first-child { font-weight: 600; color: var(--ink); }
 /* notes at the foot of the page where they are called (Bible, chs. 45 and 82): a short gold rule from the
    right, then the notes in a smaller Scheherazade, each hanging on its chapter number */
 .fn-note { float: footnote; footnote-policy: line; }
+.fn-hug { white-space: nowrap; }
+.fn-hug > .fn-note { white-space: normal; }
 .pagedjs_page_content, .pagedjs_footnote_inner_content { direction: ltr; }
 /* Paged.js builds the margin boxes as a grid that follows the writing direction: kept LTR, so @top-right stays right */
 .pagedjs_margin-top, .pagedjs_margin-bottom { direction: ltr; }
@@ -279,6 +281,15 @@ def note_span(n, text):
     return f'<span class="fn-note fn-n{n} fn-{note_kind(text)}" data-n="{num}">{body}</span>'
 
 
+def calls(html, notes):
+    """The notes at their calls. A call and the stop, comma or colon after it are one unbreakable unit: the paginator
+    may otherwise end a page on the call and open the next on the full stop (Volume 1, p. 358 in the first proof)."""
+    def one(m):
+        spans = "".join(note_span(k, notes[k]) for k in re.findall(r"⟦(\d+)⟧", m.group(1)))
+        return f'<span class="fn-hug">{spans}{m.group(2)}</span>' if m.group(2) else spans
+    return re.sub(r"((?:⟦\d+⟧)+)([.،؛:!؟]*)", one, html)
+
+
 def md_to_html(md):
     md = IDS.printed(md)          # production IDs never reach the page (Bible, ch. 112d §٥)
     notes = dict(re.findall(r"^\[\^(\d+)\]:\s*(.+)$", md, re.M))
@@ -363,7 +374,7 @@ def md_to_html(md):
     latinize(soup)
     # «←» is in none of the book's faces: it is drawn, so no system font enters the page
     html = str(soup).replace("←", ARROW)
-    html = re.sub(r"⟦(\d+)⟧", lambda m: note_span(m.group(1), notes[m.group(1)]), html)
+    html = calls(html, notes)
     missing = set(notes) - set(re.findall(r'class="fn-note fn-n(\d+) ', html))
     if missing:
         raise SystemExit(f"notes defined but never called: {sorted(missing, key=int)}")

@@ -134,6 +134,8 @@ def main(v=1, proof=False):
     inline_refs = []
     for f in lesson_files(v):
         for i, line in enumerate(texts[f].splitlines(), 1):
+            if re.match(r"\[\^[^\]]+\]:", line):
+                continue                                    # a footnote: where the reference belongs
             if re.search(r"\([^()]*[A-Z][a-z]+[^()]*\b(1[89][0-9]{2}|20[0-2][0-9])\.?\)", line):
                 inline_refs.append(f"{f.name}:{n(i)}")
     add("العلمية", "إحالاتٌ إلى مصادر في متن الدروس لا في حاشية (الدليل ٠٨ §٣: «من علم التواصل» يُحال إليه في حاشية)",
@@ -347,7 +349,8 @@ def main(v=1, proof=False):
         bab_bad = []
         for fs in chapters.values():
             for f in fs:
-                for m in re.finditer(r"الفصل (" + "|".join(sorted(ORD[len(chapters):17], key=len, reverse=True)) + r")\b", texts[f]):
+                for m in re.finditer(r"الفصل (" + "|".join(sorted(ORD[len(chapters):17], key=len, reverse=True)) + r")\b"
+                                     r"(?!\s+(?:عشر|و(?:ال)?(?:عشرين|ثلاثين|أربعين|خمسين|ستين|سبعين|ثمانين|تسعين)))", texts[f]):
                     if re.search(rf"الباب (?!{ORD[b - 1]})|المجلد|المرجع|المقدمة|المدخل", texts[f][max(0, m.start() - 70): m.start()]):
                         continue                            # a chapter of another bab, named with its bab and volume
                     bab_bad.append(f"{f.name}: {m.group(0)}")
