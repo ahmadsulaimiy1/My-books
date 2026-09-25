@@ -561,6 +561,18 @@ def crossref(title: str, author: str, year: str = "") -> tuple[str, str]:
             f"Crossref {it.get('DOI', '')}")
 
 
+# editions matched page by page on scans of the printed books (pdf/scans.py, التحقيق/مطابقة-المصوّرات.json); where the
+# printing on the card had no scan, the matched printing of the same editor is the one cited (Bible, ch. 73)
+ON_SCAN = {
+    "الخصائص": "تحقيق محمد علي النجار، دار الكتب المصرية، القسم الأدبي؛ المكتبة العلمية، ٣ أجزاء",
+    "دلائل الإعجاز": "تحقيق محمود محمد شاكر أبو فهر، مكتبة الخانجي، القاهرة، رقم الإيداع ١١٨٨٩/٢٠٠٠",
+    "الإيضاح في علوم البلاغة": "تحقيق محمد عبد المنعم خفاجي، المكتبة الأزهرية للتراث، القاهرة، الثالثة، ١٤١٣هـ / ١٩٩٣م",
+    "كتاب الصناعتين: الكتابة والشعر": "تحقيق علي محمد البجاوي ومحمد أبو الفضل إبراهيم، دار إحياء الكتب العربية (عيسى البابي الحلبي وشركاه)، القاهرة، الأولى، ١٣٧١هـ / ١٩٥٢م",
+    "الرسالة": "تحقيق وشرح أحمد محمد شاكر، مصطفى البابي الحلبي وأولاده، مصر، الأولى، ١٣٥٨هـ / ١٩٤٠م",
+    "سير أعلام النبلاء": "أشرف على تحقيقه شعيب الأرنؤوط، مؤسسة الرسالة، بيروت، الثانية، ١٤٠٢هـ / ١٩٨٢م، ٢٥ جزءًا",
+}
+
+
 def edition_of(entry) -> tuple[str, str, str]:
     """(edition, where the data comes from, status) for one title."""
     g, tier, author, died, title, look, fn, vols, use = entry
@@ -584,6 +596,8 @@ def edition_of(entry) -> tuple[str, str, str]:
         ed = ed or "تُحدَّد"
     if not ed.strip("، "):
         ed, status = "تُحدَّد", "تُحدَّد"
+    if title in ON_SCAN and author in ("ابن جني", "عبد القاهر الجرجاني", "الخطيب القزويني", "أبو هلال العسكري", "الشافعي", "الذهبي"):
+        ed, basis, status = ON_SCAN[title], "مصوّرة المطبوع", "طوبقت على مصوّرة المطبوع"
     return ed, basis, status
 
 
