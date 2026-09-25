@@ -204,9 +204,19 @@ SCANS = {
 }
 
 
+def manuscript_file(prefix: str) -> Path:
+    """«05»: a file of the Muqaddima; «ب١/ف01-أ»: a file of the first bab; «المجلد-الثالث/الباب-الثالث/ف08-أ»: a file of
+    any volume, by its path under book/ and the start of its name."""
+    if prefix.startswith("ب١/"):
+        return next(BAB1.glob(prefix.split("/", 1)[1] + "-*.md"))
+    if "/" in prefix:
+        folder, stem = prefix.rsplit("/", 1)
+        return next((BOOK / folder).glob(stem + "-*.md"))
+    return next(OPEN.glob(prefix + "-*.md"))
+
+
 def quote_from_manuscript(prefix: str, key: str) -> str:
-    # «05»: a file of the Muqaddima; «ب١/ف01-أ»: a file of the first bab
-    f = next(BAB1.glob(prefix.split("/", 1)[1] + "-*.md")) if prefix.startswith("ب١/") else next(OPEN.glob(prefix + "-*.md"))
+    f = manuscript_file(prefix)
     for line in f.read_text(encoding="utf-8").splitlines():
         if key in line:
             line = re.sub(r"\[\^\d+\]", "", line.lstrip("> ").strip())

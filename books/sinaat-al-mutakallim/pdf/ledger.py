@@ -298,8 +298,13 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     spans = {r["id"]: r for r in json.loads((OUT / "مطابقة-النقول.json").read_text(encoding="utf-8"))}
     table = []
-    for i, row in enumerate(quran_rows() + ROWS, 1):
+    serial = {}                       # a row's number is counted within its volume: م١-٠٠١…، م٣-٠٠١…
+    for row in quran_rows() + ROWS:
         vid, loc, kind, text, form, who, src, ed, editor, part, page, num, grade, variants, state, stage, note = row[:17]
+        vol = re.match(r"(م[٠-٩]+)\s", loc)
+        vol = vol.group(1) if vol else "م١"
+        serial[vol] = serial.get(vol, 0) + 1
+        i = serial[vol]
         compared = ""
         if kind == "قرآن":
             compared, variants = variants, ""  # for the Qur'an the compared text is the Uthmani text itself
@@ -323,7 +328,7 @@ def main():
             note = "؛ ".join(x for x in (f"طوبق على مصوّرة المطبوع: الصفحة {sc['page_read']}، والنص {sc['text_read']}", also, note) if x)
         elif vid in ON_PRINT:
             note = "؛ ".join(x for x in ("طوبق على مصوّرة المطبوع", note) if x and "طوبق على مصوّرة المطبوع" not in note) or note
-        table.append([f"م١-{str(i).zfill(3).translate(AR)}", loc, kind, text, form, who, src, ed, editor, part, page, num, grade,
+        table.append([f"{vol}-{str(i).zfill(3).translate(AR)}", loc, kind, text, form, who, src, ed, editor, part, page, num, grade,
                       compared, variants, STATE[state], stage, FIRST if stage != "العثور" else "", "", note])
     with open(OUT / "سجل-النقول.tsv", "w", encoding="utf-8") as fh:
         fh.write("\t".join(FIELDS) + "\n")
