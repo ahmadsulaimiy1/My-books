@@ -28,10 +28,16 @@ CITY = None
 ISBN = None
 DEPOSIT = None
 
-VOLUMES = [("الأول", "التأسيس", "العربية التي نتكلّمها، والأسس، واللسان، والعبارة"),
-           ("الثاني", "التواصل", "البيان وترتيب الكلام، وآداب المخاطبة، ومراعاة المقام"),
-           ("الثالث", "المنصّات", "المجلس والمحاضرة، والخطبة، والمقابلة، والحوار الإعلامي"),
-           ("الرابع", "التمكين", "الاختلاف والتفاوض، وبنك الأخطاء، والارتجال، والأداء الختامي")]
+# the series in eight volumes: four stages, then the reference (Bible, part fifteen)
+VOLUMES = [("الأول", "الأصول", "الافتتاحية، والأسس: الكلام وأركانه، والمتكلّم، والفصاحة والبيان، والمقام، والسماع", "التأسيس"),
+           ("الثاني", "اللسان", "المخارج والصفات، والأصوات الحرجة، والوقف والتنفّس، والصوت الإنساني", "التأسيس"),
+           ("الثالث", "العبارة والبيان", "الجملة العربية الطبيعية وأخطاؤها، ثم ترتيب الكلام وفنون الافتتاح والخاتمة والبلاغة التطبيقية", "التأسيس"),
+           ("الرابع", "المقام", "من يتكلّم، ولمن، ولماذا، وأين، ومتى، وكيف؛ ومختبر المقام", "التواصل"),
+           ("الخامس", "الأدب والحوار", "آداب المخاطبة والاختلاف، ثم السؤال والجواب والمناقشة والمناظرة", "التواصل"),
+           ("السادس", "المنصّات", "المجالس، والمنبر والمحاضرة، والمؤسسة: المقابلة والاجتماع", "المنصّات"),
+           ("السابع", "التمكين", "الإعلام والتقديم، والخطاب الرسمي والتفاوض، والملكة: الارتجال والمحاكاة", "التمكين"),
+           ("الثامن", "المرجع", "بنك الأخطاء، والملاحق، والمسرد، والمصادر، والفهارس العامة", "")]
+STAGES = {"التأسيس": "المرحلة الأولى", "التواصل": "المرحلة الثانية", "المنصّات": "المرحلة الثالثة", "التمكين": "المرحلة الرابعة"}
 
 CSS = r"""
 /* ---------------------------------------------------------------- front matter (Bible, part fourteen) */
@@ -52,13 +58,14 @@ CSS = r"""
 .ht .a { font: 300 10.5pt/1.5 "Changa"; color: var(--ink-2); }
 .ht .v { position: absolute; top: 118mm; left: 0; right: 0; font: 300 9pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .6pt; }
 /* 2. the four volumes: quiet geometry */
-.vm { position: absolute; top: 58mm; right: 40mm; left: 40mm; }
-.vm .k { font: 300 10pt/1 "Changa"; color: var(--gold-ink); margin-bottom: 10mm; display: flex; gap: 3mm; align-items: center; }
+.vm { position: absolute; top: 40mm; right: 38mm; left: 38mm; }
+.vm .k { font: 300 10pt/1 "Changa"; color: var(--gold-ink); margin-bottom: 6mm; display: flex; gap: 3mm; align-items: center; }
 .vm .k i { flex: 1; border-top: .4pt solid var(--gold); }
-.vm-row { display: grid; grid-template-columns: 17mm 1fr; gap: 0 5mm; padding: 5.2mm 0; border-bottom: .3pt solid #DCD6CA; align-items: baseline; }
+.vm-st { font: 500 7.6pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .3pt; margin: 4.2mm 0 .6mm; }
+.vm-row { display: grid; grid-template-columns: 17mm 1fr; gap: 0 5mm; padding: 2.4mm 0; border-bottom: .3pt solid #DCD6CA; align-items: baseline; }
 .vm-row .n { font: 300 9pt/1 "Changa"; color: var(--ink-3); }
-.vm-row .nm { font: 600 15pt/1.3 "Changa"; color: var(--sapphire); }
-.vm-row .d { grid-column: 2; font: 400 10.4pt/1.6 "Scheherazade New"; color: var(--ink-2); margin-top: 1mm; }
+.vm-row .nm { font: 600 12.6pt/1.3 "Changa"; color: var(--sapphire); }
+.vm-row .d { grid-column: 2; font: 400 9.6pt/1.5 "Scheherazade New"; color: var(--ink-2); margin-top: .4mm; }
 .vm-row.here .nm::after { content: ""; display: inline-block; width: 1.8mm; height: 1.8mm; border-radius: 50%%; background: var(--crimson); margin-right: 2.5mm; vertical-align: middle; }
 /* 4. imprint: a typographic table */
 .im { position: absolute; top: 38mm; right: 36mm; left: 36mm; }
@@ -136,12 +143,17 @@ def half_title():
 
 
 def volumes_map(current=1):
-    rows = "".join(f'<div class="vm-row{" here" if i == current else ""}"><div class="n">المجلد {w}</div><div class="nm">{nm}</div>'
-                   f'<div class="d">{d}</div></div>' for i, (w, nm, d) in enumerate(VOLUMES, 1))
-    return page(f'<div class="vm"><div class="k"><span>{TITLE} في أربعة مجلدات</span><i></i></div>{rows}</div>')
+    rows, stage = [], None
+    for i, (w, nm, d, st) in enumerate(VOLUMES, 1):
+        if st != stage:
+            rows.append(f'<div class="vm-st">{STAGES[st] + ": " + st if st else "المرجع"}</div>')
+            stage = st
+        rows.append(f'<div class="vm-row{" here" if i == current else ""}"><div class="n">المجلد {w}</div><div class="nm">{nm}</div>'
+                    f'<div class="d">{d}</div></div>')
+    return page(f'<div class="vm"><div class="k"><span>{TITLE} في ثمانية مجلدات</span><i></i></div>{"".join(rows)}</div>')
 
 
-def imprint(volume="الأول: التأسيس"):
+def imprint(volume="الأول (من ثمانية): الأصول"):
     rows = [("العنوان", f"{TITLE}<br>{SUBTITLE}"),
             ("المؤلف", f"{AUTHOR_KUNYA} {AUTHOR_LONG}"),
             ("المجلد", volume),
