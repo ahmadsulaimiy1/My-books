@@ -1,0 +1,134 @@
+{
+ "1": {
+  "pages": 569,
+  "caliper_mm_per_leaf": 0.12,
+  "cover_allowance_mm": 1.0,
+  "spine_mm": 35.1,
+  "wrap_mm": [
+   381.1,
+   246.0
+  ],
+  "bleed_mm": 3.0,
+  "status": "provisional: the printer confirms the caliper of the chosen paper"
+ },
+ "2": {
+  "pages": 595,
+  "caliper_mm_per_leaf": 0.12,
+  "cover_allowance_mm": 1.0,
+  "spine_mm": 36.7,
+  "wrap_mm": [
+   382.7,
+   246.0
+  ],
+  "bleed_mm": 3.0,
+  "status": "provisional: the printer confirms the caliper of the chosen paper"
+ },
+ "3": {
+  "pages": 471,
+  "caliper_mm_per_leaf": 0.12,
+  "cover_allowance_mm": 1.0,
+  "spine_mm": 29.3,
+  "wrap_mm": [
+   375.3,
+   246.0
+  ],
+  "bleed_mm": 3.0,
+  "status": "provisional: the printer confirms the caliper of the chosen paper"
+ },
+ "4": {
+  "pages": 507,
+  "caliper_mm_per_leaf": 0.12,
+  "cover_allowance_mm": 1.0,
+  "spine_mm": 31.4,
+  "wrap_mm": [
+   377.4,
+   246.0
+  ],
+  "bleed_mm": 3.0,
+  "status": "provisional: the printer confirms the caliper of the chosen paper"
+ },
+ "5": {
+  "pages": 441,
+  "caliper_mm_per_leaf": 0.12,
+  "cover_allowance_mm": 1.0,
+  "spine_mm": 27.5,
+  "wrap_mm": [
+   373.5,
+   246.0
+  ],
+  "bleed_mm": 3.0,
+  "status": "provisional: the printer confirms the caliper of the chosen paper"
+ },
+ "6": {
+  "pages": 469,
+  "caliper_mm_per_leaf": 0.12,
+  "cover_allowance_mm": 1.0,
+  "spine_mm": 29.1,
+  "wrap_mm": [
+   375.1,
+   246.0
+  ],
+  "bleed_mm": 3.0,
+  "status": "provisional: the printer confirms the caliper of the chosen paper"
+ },
+ "7": {
+  "pages": 373,
+  "caliper_mm_per_leaf": 0.12,
+  "cover_allowance_mm": 1.0,
+  "spine_mm": 23.4,
+  "wrap_mm": [
+   369.4,
+   246.0
+  ],
+  "bleed_mm": 3.0,
+  "status": "provisional: the printer confirms the caliper of the chosen paper"
+ },
+ "8": {
+  "pages": 535,
+  "caliper_mm_per_leaf": 0.12,
+  "cover_allowance_mm": 1.0,
+  "spine_mm": 33.1,
+  "wrap_mm": [
+   379.1,
+   246.0
+  ],
+  "bleed_mm": 3.0,
+  "status": "provisional: the printer confirms the caliper of the chosen paper"
+ },
+ "9": {
+  "pages": 327,
+  "caliper_mm_per_leaf": 0.12,
+  "cover_allowance_mm": 1.0,
+  "spine_mm": 20.6,
+  "wrap_mm": [
+   366.6,
+   246.0
+  ],
+  "bleed_mm": 3.0,
+  "status": "provisional: the printer confirms the caliper of the chosen paper"
+ },
+ "10": {
+  "pages": 559,
+  "caliper_mm_per_leaf": 0.12,
+  "cover_allowance_mm": 1.0,
+  "spine_mm": 34.5,
+  "wrap_mm": [
+   380.5,
+   246.0
+  ],
+  "bleed_mm": 3.0,
+  "status": "provisional: the printer confirms the caliper of the chosen paper"
+ },
+ "11": {
+  "pages": 379,
+  "caliper_mm_per_leaf": 0.12,
+  "cover_allowance_mm": 1.0,
+  "spine_mm": 23.7,
+  "wrap_mm": [
+   369.7,
+   246.0
+  ],
+  "bleed_mm": 3.0,
+  "status": "provisional: the printer confirms the caliper of the chosen paper"
+ }
+}

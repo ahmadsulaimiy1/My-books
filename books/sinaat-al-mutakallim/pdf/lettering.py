@@ -62,7 +62,7 @@ def arabic_face(font_css: str, family: str, weight: int) -> str:
 class Line:
     """A shaped line: SVG path data in mm with the origin at the left end of the baseline."""
 
-    def __init__(self, text, path, size_mm, wght=None, features=None, tracking_mm=0.0):
+    def __init__(self, text, path, size_mm, wght=None, features=None, tracking_mm=0.0, direction="rtl"):
         data, font = load(path, wght)
         face = hb.Face(data)
         hbfont = hb.Font(face)
@@ -70,7 +70,10 @@ class Line:
         buf = hb.Buffer()
         buf.add_str(text)
         buf.guess_segment_properties()
-        buf.direction, buf.script, buf.language = "rtl", "Arab", "ar"
+        if direction == "rtl":
+            buf.direction, buf.script, buf.language = "rtl", "Arab", "ar"
+        else:                                   # Latin, and runs of digits that read left to right
+            buf.direction = "ltr"
         hb.shape(hbfont, buf, features or {"kern": True, "liga": True, "calt": True})
         gs = font.getGlyphSet()
         order = font.getGlyphOrder()

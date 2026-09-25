@@ -178,7 +178,7 @@ def main(v=1, proof=False):
 
     # ------------------------------------------------------------------ 3. the pedagogical gate
     need = {"أهداف الفصل": r"^###\s+أهداف الفصل", "الخلاصة": r"^###\s+الخلاصة", "معيار الإتقان": r"^###\s+معيار الإتقان",
-            "تدريبات الفصل": r"^###\s+تدريبات", "قائمة الفحص الذاتي": r"قائمة الفحص الذاتي", "للمدرّب": r"^###\s+للمدر"}
+            "تدريبات الفصل": r"^###\s+تدريبات", "قائمة الفحص الذاتي": r"قائمة الفحص الذاتي", "للمدرّب": r"^#{2,3}\s+(?:للمدر|بروتوكول مختبر المدر)"}   # the lab chapter (V5 ch9) names its trainer section a protocol
     table = []
     for b, chapters in babs(v):
         for c, fs in sorted(chapters.items()):
@@ -249,9 +249,16 @@ def main(v=1, proof=False):
     if v == 1:
         planned = re.findall(r"^\|\s*(المدخل، ف[٠-٩]+|الباب ١، ف[٠-٩]+)\s*\|\s*(.+?)\s*\|$",
                              (HERE.parent / "bible" / "08-مواصفة-مراجعة-المجلد-الأول.md").read_text(encoding="utf-8"), re.M)
-        built = ["المدخل، ف١"]
-        add("الإخراج الفني", "الرسوم المقرّرة للمجلد الأول (الدليل ٠٨ §٤)", "لا يجتاز" if len(built) < len(planned) else "يجتاز",
-            f"رُسم {n(len(built))} من {n(len(planned))}: " + "؛ ".join(f"{w} ({'مرسوم' if w in built else 'لم يُرسم'}): {d}" for w, d in planned))
+        built = ["المدخل، ف١", "الباب ١، ف١", "الباب ١، ف٣", "الباب ١، ف٤"]
+        # a planned figure that would not improve its page is left out, with its reason (the author's rule: no figure for
+        # the sake of the plan); a figure neither drawn nor so decided fails
+        omitted = {"المدخل، ف٢": "لا فصل له: المدخل فصلٌ واحد (قرار المؤلف)", "المدخل، ف٣": "لا فصل له",
+                   "المدخل، ف٤": "لا فصل له",
+                   "الباب ١، ف٢": "لا ينصّ الفصل على ما يتغيّر بين كل درجتين، فيكون الرسم اختراعًا",
+                   "الباب ١، ف٦": "الخطوات الست مرسومةٌ في الفصل سطرًا وجدولًا، فيكرّرها الرسم"}
+        pending = [w for w, _ in planned if w not in built and w not in omitted]
+        add("الإخراج الفني", "الرسوم المقرّرة للمجلد الأول (الدليل ٠٨ §٤): مرسومةٌ أو متروكةٌ بعلّة", "لا يجتاز" if pending else "يجتاز",
+            f"رُسم {n(len(built))} من {n(len(planned))}؛ " + "؛ ".join(f"{w}: {'مرسوم' if w in built else 'متروك: ' + omitted[w] if w in omitted else 'لم يُحسم'}" for w, _ in planned))
     else:
         add("الإخراج الفني", "الرسوم المقرّرة", "للعلم", "لا رسوم مقرّرة لهذا المجلد؛ مواصفة الرسوم (الدليل ٠٨ §٤) للمجلد الأول")
     full = sum(1 for k in kinds if k == "fixed")

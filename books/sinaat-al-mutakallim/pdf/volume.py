@@ -298,7 +298,95 @@ def spectrum():
             f'وميدان هذا الكتاب الفصحى المنطوقة.</div></div>')
 
 
-FIGURES = {"طيف المستويات": spectrum}
+FIG_CSS = ('<style>.fg { position: relative; width: 122mm; margin: 0 auto; }'
+           '.fg .n { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-sizing: border-box; }'
+           '.fg .q { font: 600 9.4pt/1.25 "Changa"; color: var(--sapphire); }'
+           '.fg .r { font: 400 8pt/1.3 "IBM Plex Sans Arabic"; color: var(--ink-3); margin-top: .6mm; }'
+           '.fg .o .q { color: #F4ECD9; font-size: 11pt; } .fg .o .r { color: #D9CFB8; font-size: 8.2pt; }'
+           '.fg .k { position: absolute; font: 300 8pt/1 "Changa"; color: var(--gold-ink); background: var(--paper); padding: 0 1.6mm; }'
+           '.fg .t { position: absolute; font: 600 9.6pt/1.3 "Changa"; color: var(--sapphire); text-align: center; }'
+           '.fg .d { position: absolute; font: 400 8pt/1.45 "IBM Plex Sans Arabic"; color: var(--ink-2); text-align: center; }'
+           '.fg .d.on { color: #E7DFCE; } .fg .t.on { color: #F4ECD9; }</style>')
+
+
+def sextet():
+    """الرسم ٢ (الباب ١، ف١): the six questions; the first five are inputs and «كيف» is derived from them (the chapter's
+    rule, word for word). Five nodes above, one output below; the gold lines converge on it."""
+    inputs = [("مَن يتكلم؟", "المتكلم"), ("لمن؟", "المخاطَب"), ("ماذا؟", "الموضوع"), ("لماذا؟", "الغرض والأثر"), ("أين ومتى؟", "المقام")]
+    w, nw, top, nh = 122.0, 21.0, 8.0, 14.0
+    gap = (w - 5 * nw) / 4
+    svg, html = [], []
+    ox, oy, ow, oh = w / 2 - 34, 40.0, 68.0, 17.0
+    for k, (q, r) in enumerate(inputs):
+        x = w - nw - k * (nw + gap)             # right to left
+        cx = x + nw / 2
+        svg.append(f'<rect x="{x:.2f}" y="{top}" width="{nw}" height="{nh}" fill="#F8F6F1" stroke="#C9A95C" stroke-width=".4"/>')
+        svg.append(f'<path d="M{cx:.2f} {top + nh:.2f} C{cx:.2f} {top + nh + 9:.2f} {w / 2:.2f} {oy - 9:.2f} {w / 2:.2f} {oy:.2f}" fill="none" stroke="#C9A95C" stroke-width=".35"/>')
+        html.append(f'<div class="n" style="right:{w - x - nw:.2f}mm;top:{top}mm;width:{nw}mm;height:{nh}mm"><span class="q">{q}</span><span class="r">{r}</span></div>')
+    svg.append(f'<rect x="{ox:.2f}" y="{oy}" width="{ow}" height="{oh}" fill="#0C2766"/>')
+    svg.append(f'<polygon points="{w / 2 - 1.4:.2f},{oy - .2:.2f} {w / 2:.2f},{oy - 1.6:.2f} {w / 2 + 1.4:.2f},{oy - .2:.2f} {w / 2:.2f},{oy + 1.2:.2f}" fill="#C9A95C"/>')
+    html.append(f'<div class="n o" style="right:{w - ox - ow:.2f}mm;top:{oy}mm;width:{ow}mm;height:{oh}mm"><span class="q">كيف؟</span>'
+                f'<span class="r">الصياغة، والأداء، والبنية، والتفاعل</span></div>')
+    html.append(f'<div class="k" style="right:0;top:0">مدخلات</div><div class="k" style="right:0;top:{oy + 5}mm">مُخرَج</div>')
+    h = oy + oh + 2
+    return (f'<div class="fig">{FIG_CSS}<div class="ft">النموذج السداسي</div>'
+            f'<div class="fg" style="height:{h:.1f}mm"><svg viewBox="0 0 {w} {h:.1f}" style="position:absolute;inset:0;width:{w}mm;height:{h:.1f}mm">{"".join(svg)}</svg>{"".join(html)}</div>'
+            f'<div class="fc"><b>الرسم ٢</b>الأسئلة الخمسة الأولى مدخلات، و«كيف» مُخرَجٌ يُشتق منها؛ والناجح يبدأ من «لمن» و«لماذا»، '
+            f'ثم يختار «كيف».</div></div>')
+
+
+def three_terms():
+    """الرسم ٣ (الباب ١، ف٣): الفصاحة within البلاغة within البيان, as the chapter's rules state them: «الفصاحة شرط، والبلاغة
+    مطابقة، والبيان غاية»، «كل بليغ فصيح، وليس كل فصيح بليغًا»، والبيان «أوسع الثلاثة»."""
+    w, h = 122.0, 66.0
+    svg = (f'<rect x=".3" y=".3" width="{w - .6}" height="{h - .6}" fill="#EFECE5" stroke="#C9A95C" stroke-width=".4"/>'
+           f'<rect x="10" y="17" width="{w - 20}" height="{h - 21}" fill="#F8F6F1" stroke="#2B4A8F" stroke-width=".45"/>'
+           f'<rect x="22" y="36" width="{w - 44}" height="{h - 42}" fill="#0C2766"/>')
+    html = (f'<div class="t" style="right:4mm;top:3mm">البيان · غاية</div>'
+            f'<div class="d" style="left:4mm;top:3.4mm;text-align:left">كل ما بلغ به الإفهام، بلفظٍ وغير لفظ</div>'
+            f'<div class="t" style="right:14mm;top:20mm">البلاغة · مطابقة</div>'
+            f'<div class="d" style="left:14mm;top:20.6mm;text-align:left">مطابقة الكلام لمقتضى الحال مع فصاحته</div>'
+            f'<div class="t on" style="right:26mm;left:26mm;top:40mm">الفصاحة · شرط</div>'
+            f'<div class="d on" style="right:26mm;left:26mm;top:47mm">خلوصٌ من العيوب: في المفرد، والكلام، والمتكلّم</div>')
+    return (f'<div class="fig">{FIG_CSS}<div class="ft">الفصاحة والبلاغة والبيان</div>'
+            f'<div class="fg" style="height:{h}mm"><svg viewBox="0 0 {w} {h}" style="position:absolute;inset:0;width:{w}mm;height:{h}mm">{svg}</svg>{html}</div>'
+            f'<div class="fc"><b>الرسم ٣</b>كل بليغٍ فصيح، وليس كل فصيحٍ بليغًا؛ والبيان أوسع الثلاثة.</div></div>')
+
+
+def situation():
+    """الرسم ٤ (الباب ١، ف٤): what the situation changes and what it never changes (the chapter's rule, word for word):
+    a fixed core within a ring that varies; the elements of مقتضى الحال from its definition beside it."""
+    import math
+    w, h, cx, cy, R, r = 122.0, 74.0, 40.0, 37.0, 34.0, 17.0
+    svg = [f'<circle cx="{cx}" cy="{cy}" r="{R}" fill="#F8F6F1" stroke="#C9A95C" stroke-width=".45"/>',
+           f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="#0C2766"/>']
+    ring = ["اللفظ", "الطول", "النبرة", "درجة التفصيل", "المقدمات", "ترتيب الأولويات"]
+    html = []
+    for k, name in enumerate(ring):
+        a = math.radians(-90 + k * 60)
+        x, y = cx + (r + R) / 2 * math.cos(a), cy + (r + R) / 2 * math.sin(a)
+        html.append(f'<div class="d" style="left:{x - 12:.2f}mm;width:24mm;top:{y - 2.2:.2f}mm">{name}</div>')
+    html.append(f'<div class="d on" style="left:{cx - 15:.2f}mm;width:30mm;top:{cy - 8:.2f}mm;line-height:1.5">الصدق · الصحة<br>الأدب<br>وضوح المعنى الجوهري</div>')
+    facts = ["هوية المخاطَب ومنزلته وعلمه وعدده وحاله", "المكان والزمان والمناسبة", "درجة الرسمية", "العلاقة السابقة", "الغرض من الكلام"]
+    top = 12.0
+    html.append(f'<div class="t" style="right:0;width:40mm;top:{top - 8:.1f}mm;text-align:right">مقتضى الحال</div>')
+    for k, f in enumerate(facts):
+        y = top + 1.5 + k * 10.5
+        svg.append(f'<line x1="{w - 41:.1f}" y1="{y + 2.5:.1f}" x2="{w - 43.5:.1f}" y2="{y + 2.5:.1f}" stroke="#C9A95C" stroke-width=".4"/>')
+        html.append(f'<div class="d" style="right:0;width:40mm;top:{y:.1f}mm;text-align:right">{f}</div>')
+    svg.append(f'<path d="M{w - 44:.1f} {top + 4:.1f} V{top + 4 + 42:.1f}" fill="none" stroke="#C9A95C" stroke-width=".4"/>')
+    svg.append(f'<path d="M{w - 44:.1f} {cy:.1f} H{cx + R + 1.5:.1f}" fill="none" stroke="#C9A95C" stroke-width=".4"/>'
+               f'<path d="M{cx + R + 3.8:.1f} {cy - 1.6:.1f} L{cx + R + 1.5:.1f} {cy:.1f} L{cx + R + 3.8:.1f} {cy + 1.6:.1f}" fill="none" stroke="#C9A95C" stroke-width=".4"/>')
+    html.append(f'<div class="k" style="left:{cx - 16:.1f}mm;top:0">يتغيّر بتغيّر الحال</div>')
+    html.append(f'<div class="k" style="left:{cx - 15:.1f}mm;top:{h - 3.5:.1f}mm">ولا يتغيّر أبدًا: القلب</div>')
+    return (f'<div class="fig">{FIG_CSS}<div class="ft">ما يتغيّر بالمقام وما لا يتغيّر</div>'
+            f'<div class="fg" style="height:{h}mm"><svg viewBox="0 0 {w} {h}" style="position:absolute;inset:0;width:{w}mm;height:{h}mm">{"".join(svg)}</svg>{"".join(html)}</div>'
+            f'<div class="fc"><b>الرسم ٤</b>الأسلوب يخدم الحال: يتغيّر اللفظ والطول والنبرة بتغيّر المقام، ويثبت الصدق والصحة والأدب ووضوح المعنى؛ '
+            f'فمن تغيّر فيها فهو متلوّنٌ لا مطابِق.</div></div>')
+
+
+FIGURES = {"طيف المستويات": spectrum, "النموذج السداسي": sextet, "الفصاحة والبلاغة والبيان": three_terms,
+           "ما يتغير بالمقام": situation}
 
 
 def with_figures(md):
@@ -499,7 +587,7 @@ def lesson_html(md, breaks=True):
     md = re.sub(r"^\[\^\d+\]:.*$", "", md, flags=re.M)
     md = re.sub(r"\[\^(\d+)\]", lambda m: f"⟦{m.group(1)}⟧", md)
     md = re.sub(r"([.،؛:])((?:⟦\d+⟧)+)", r"\2\1", md)
-    md = loosen_lists(IDS.printed(md))
+    md = loosen_lists(IDS.printed(with_figures(md)))
     md = re.sub(r"^---+\s*$", "", md, flags=re.M)
     md = REVIEW.sub(lambda m: f'<span class="rv">{m.group(1)}</span>', md)
     md = re.sub(r"^\*\((الباب [^)]*)\)\*\s*$", r'<p class="scope">\1</p>', md, flags=re.M)
