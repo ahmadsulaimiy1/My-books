@@ -21,6 +21,7 @@ import lettering as L  # noqa: E402
 
 OUT = HERE.parent / "Volume-I_Revision-Prototypes.pdf"
 BOOK = HERE.parent / "book"
+from paths import AUTHOR_WORD, INTRO  # noqa: E402
 
 CSS = r"""
 @page { size: 200mm 260mm; margin: 0; }
@@ -151,7 +152,7 @@ def title_page(css):
 
 
 def foreword_page():
-    md = (BOOK / "00-كلمة-المؤلف.md").read_text(encoding="utf-8")
+    md = AUTHOR_WORD.read_text(encoding="utf-8")
     paras = [p.strip() for p in md.split("\n\n") if p.strip() and not p.startswith("#")]
     body = "".join(f"<p>{x}</p>" for x in paras[:4])
     return page(f'''{rh("", "")}<div class="blk"><h1 class="fw-h">كلمة المؤلف</h1>{body}</div>{fo("٩", "l")}''')
@@ -194,7 +195,7 @@ def flow(blocks):
 
 
 def chapter_text():
-    md = (BOOK / "المدخل" / "ف01-العربية-ومستوياتها.md").read_text(encoding="utf-8")
+    md = (INTRO / "ف01-العربية-ومستوياتها.md").read_text(encoding="utf-8")
     body = md.split("\n", 1)[1]
     notes = dict(re.findall(r"^\[\^(\d)\]:\s*(.+)$", body, re.M))
     body = re.sub(r"^\[\^\d\]:.*$", "", body, flags=re.M)

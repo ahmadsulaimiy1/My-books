@@ -33,7 +33,10 @@ GROUPS = {
     4: "النحو والصرف", 5: "البلاغة", 6: "الأدب والنقد والتراجم", 7: "أصول الفقه ودلالات الخطاب",
     8: "التفسير والفقه والآداب", 9: "التربية والتعليم وآداب العلم", 10: "اللسانيات الحديثة",
 }
-V = {"ف": "الافتتاحية", "1": "م١ التأسيس", "2": "م٢ التواصل", "3": "م٣ المنصّات", "4": "م٤ التمكين"}
+# the «vols» codes were assigned under the four parts of the earlier edition (Bible, ch. 112d): they name those parts,
+# not the eleven volumes, and are reassigned when each volume's thabat is built
+V = {"ف": "الافتتاحية", "1": "الجزء الأول (التأسيس) في الطبعة السابقة", "2": "الجزء الثاني (التواصل) في الطبعة السابقة",
+     "3": "الجزء الثالث (المنصّات) في الطبعة السابقة", "4": "الجزء الرابع (التمكين) في الطبعة السابقة"}
 USE = {"u": "مستعمَل في الافتتاحية", "c": "مرشّح", "r": "للبحث"}
 
 # decided editions (ch. 72): the Shamela book whose card is the adopted edition
@@ -612,7 +615,7 @@ def main():
         rows.append([f"مص-{str(i).zfill(3).translate(AR)}", GROUPS[g], tier, author, died, title, ed, basis, fn,
                      "، ".join(V[c] for c in vols), USE[use], status])
     fields = ["الرقم", "المجموعة", "الطبقة", "المؤلف", "الوفاة أو السنة", "العنوان", "الطبعة (من سجلّ فهرسة)", "مصدر بيانات الطبعة",
-              "الوظيفة في المشروع", "المجلدات", "حالة الاستعمال", "حالة بيانات الطبعة"]
+              "الوظيفة في المشروع", "الأجزاء في الطبعة السابقة", "حالة الاستعمال", "حالة بيانات الطبعة"]
     with open(OUT / "قاعدة-المصادر.tsv", "w", encoding="utf-8") as fh:
         fh.write("\t".join(fields) + "\n")
         for r in rows:

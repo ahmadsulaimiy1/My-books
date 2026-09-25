@@ -24,7 +24,8 @@ BOOK = HERE.parent / "book"
 CACHE = HERE.parent / ".cache" / "quran"
 CACHE.mkdir(parents=True, exist_ok=True)
 OUT = BOOK / "_production" / "التحقيق"
-FILES = sorted((BOOK / "الافتتاحية").glob("*.md")) + [BOOK / "00-كلمة-المؤلف.md", BOOK / "الخواتيم" / "00-خاتمة-الكتاب.md"]
+from paths import AUTHOR_WORD, CLOSING, OPENING  # noqa: E402
+FILES = sorted(OPENING.glob("*.md")) + [AUTHOR_WORD, CLOSING]
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 EN = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
 CITE = re.compile(r"﴿([^﴾]+)﴾\s*\(([^:()]+):\s*([٠-٩]+)(?:\s*[–-]\s*([٠-٩]+))?\)")

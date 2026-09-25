@@ -11,6 +11,7 @@ from pathlib import Path
 
 BOOK = Path(__file__).resolve().parent.parent / "book"
 OUT = BOOK / "_production" / "التحقيق"
+from paths import GLOSSARY  # noqa: E402
 FIELDS = ["المصطلح", "التعريف", "أول ورود", "الرسم المعتمد", "المقابل الإنجليزي", "البدائل الممنوعة", "العلاقة المفهومية", "الحالة"]
 # settled decisions (Bible: ch. 31 and the terminology of the governing document)
 SETTLED = {
@@ -38,7 +39,7 @@ EXTRA = [  # terms named by the author that the glossary does not yet define
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
-    g = (BOOK / "الخواتيم" / "المسرد.md").read_text(encoding="utf-8")
+    g = GLOSSARY.read_text(encoding="utf-8")
     rows = []
     for dt, en, dd in re.findall(r'<dt>([^<]+)<span class="en">([^<]*)</span></dt><dd>(.*?)</dd>', g):
         bad, rel = SETTLED.get(dt.strip(), ("", ""))

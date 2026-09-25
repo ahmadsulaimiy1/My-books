@@ -22,6 +22,7 @@ import proto as P1  # noqa: E402
 
 OUT = HERE.parent / "Volume-I_Revision-Prototypes.pdf"
 BOOK = HERE.parent / "book"
+from paths import AUTHOR_WORD  # noqa: E402
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 
 CSS = r"""
@@ -211,7 +212,7 @@ def verse_page():
 
 
 def author_page():
-    md = (BOOK / "00-كلمة-المؤلف.md").read_text(encoding="utf-8")
+    md = AUTHOR_WORD.read_text(encoding="utf-8")
     paras = [p.strip() for p in md.split("\n\n") if p.strip() and not p.startswith("#")]
     body = "".join(f'<p class="{"flush" if i == 0 else ""}">{md_inline(x)}</p>' for i, x in enumerate(paras[:3]))
     return page(f'''<div class="band" style="height:70mm"><div class="k"><span>الافتتاحية</span><i></i></div>

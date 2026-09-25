@@ -29,6 +29,8 @@ import frontmatter as FM  # noqa: E402
 import heads as H  # noqa: E402
 
 BOOK = HERE.parent / "book"
+from paths import AUTHOR_WORD, OPENING  # noqa: E402
+import ids as IDS  # noqa: E402
 OUT = HERE.parent / "Volume-I_Opening.pdf"
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 ORD = ["", "الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس", "السابع", "الثامن", "التاسع", "العاشر",
@@ -272,6 +274,7 @@ def note_span(n, text):
 
 
 def md_to_html(md):
+    md = IDS.printed(md)          # production IDs never reach the page (Bible, ch. 112d §٥)
     notes = dict(re.findall(r"^\[\^(\d+)\]:\s*(.+)$", md, re.M))
     md = re.sub(r"^\[\^\d+\]:.*$", "", md, flags=re.M)
     md = re.sub(r"\[\^(\d+)\]", lambda m: f"⟦{m.group(1)}⟧", md)
@@ -467,7 +470,7 @@ def chapter_parts(md, kicker):
 
 
 def author_word():
-    md = (BOOK / "00-كلمة-المؤلف.md").read_text(encoding="utf-8").replace("# كلمة المؤلف", "## كلمة المؤلف")
+    md = AUTHOR_WORD.read_text(encoding="utf-8").replace("# كلمة المؤلف", "## كلمة المؤلف")
     return chapter(md, "الافتتاحية")
 
 
@@ -505,7 +508,7 @@ def doc(css, body, page_css, paged=False):
     script = f'{PAGED_CONFIG}<script src="{PAGED.as_uri()}"></script>' if paged else ""
     return (f'<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>صناعة المتكلّم العربي</title>'
             f'<style>{css}</style><style>{CSS % dict(wrapw=0, wraph=0, calls=CALLS)}{C2.TEXT_CSS}{extra_css()}</style>'
-            f'<style>{page_css}</style>{script}</head><body>{body}</body></html>')
+            f'<style>{page_css}</style>{script}</head><body>{IDS.check(body)}</body></html>')
 
 
 def flow(css, piece):
@@ -544,7 +547,7 @@ def main():
     from pypdf import PdfReader
     css = C2.fonts()
     wrap, wmm, hmm = C2.wrap(css, 1, 48.2, dpi=300)
-    everything = sorted((BOOK / "الافتتاحية").glob("*.md"))
+    everything = sorted(OPENING.glob("*.md"))
     files = [f for f in everything if f.name[:2] < "90"]          # the Muqaddima
     appendices = [f for f in everything if f.name[:2] >= "90"]    # ملحق التحقيق، ثبت المصادر
     fixed = FIXED_CSS % dict(w=200, h=260)

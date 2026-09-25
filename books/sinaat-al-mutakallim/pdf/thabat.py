@@ -13,7 +13,10 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 BASE = HERE.parent / "book" / "_production" / "المصادر" / "قاعدة-المصادر.tsv"
-OUT = HERE.parent / "book" / "الافتتاحية" / "91-ثبت-المصادر.md"
+import sys  # noqa: E402
+sys.path.insert(0, str(HERE))
+from paths import OPENING  # noqa: E402
+OUT = OPENING / "91-ثبت-المصادر.md"
 
 # sources cited in the opening that the Master Bibliography does not (yet) mark as used there, or whose edition
 # it leaves open; each edition as read on its card or its scan

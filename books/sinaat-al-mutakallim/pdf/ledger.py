@@ -13,6 +13,7 @@ import re
 from pathlib import Path
 
 BOOK = Path(__file__).resolve().parent.parent / "book"
+from paths import AUTHOR_WORD, OPENING  # noqa: E402
 OUT = BOOK / "_production" / "التحقيق"
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 CH = {f"{k:02d}": "ف" + str(k - 1).translate(AR) for k in range(2, 30)}   # file NN is chapter NN−1
@@ -218,7 +219,7 @@ ROWS = [
 def quran_rows():
     rows = []
     report = {(r["file"], r["ref"]): r for r in json.loads((OUT / "مطابقة-القرآن.json").read_text(encoding="utf-8"))}
-    for f in sorted((BOOK / "الافتتاحية").glob("*.md")) + [BOOK / "00-كلمة-المؤلف.md"]:
+    for f in sorted(OPENING.glob("*.md")) + [AUTHOR_WORD]:
         loc = CH.get(f.name[:2], "كلمة المؤلف" if f.name.startswith("00-ك") else "التمهيد")
         for m in re.finditer(r"﴿([^﴾]+)﴾\s*(?:\(([^)]+)\))?", f.read_text(encoding="utf-8")):
             words = m.group(1).split()

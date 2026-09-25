@@ -1,2 +1,3 @@
 # request caches of the verification tools (Shamela, Qur'an services); rebuilt on demand
 .cache/
+__pycache__/

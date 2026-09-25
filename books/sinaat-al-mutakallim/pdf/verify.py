@@ -19,7 +19,7 @@ from pathlib import Path
 import shamela as S
 
 BOOK = Path(__file__).resolve().parent.parent / "book"
-OPEN = BOOK / "الافتتاحية"
+from paths import OPENING as OPEN  # noqa: E402
 OUT = BOOK / "_production" / "التحقيق"
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 EN = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")

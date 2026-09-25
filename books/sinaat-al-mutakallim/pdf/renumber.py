@@ -5,7 +5,7 @@ A note may be written with any label ([^new], [^x2]) where it is born in the tex
 chapter number by the order of its call, rewrites the definitions in that order, and stops if a call has no
 definition or a definition no call.
 
-    python3 renumber.py ../book/الافتتاحية/05-….md
+    python3 renumber.py ../book/المجلد-الأول/الافتتاحية/05-….md
 """
 import re
 import sys

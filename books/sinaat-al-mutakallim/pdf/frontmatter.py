@@ -23,20 +23,26 @@ PUBLISHER_EN = "Al-Ihsān Design & Publishing House"
 PHONES = ["+234 903 395 5872", "+234 903 344 6273"]
 EMAIL = "al-ihsan.design@gmail.com"
 # decided by the author or the publisher; None means "not yet decided": the line is not printed
+# the warning on the names in the examples, printed on the rights page of every volume (Bible, ch. 112d §٤)
+FICTIONAL_NAMES = ("الأسماء الواردة في أمثلة هذا الكتاب وحواراته أسماءٌ افتراضية، وُضعت لتمثيل المواقف التعليمية، "
+                   "ولا يُقصد بها أشخاصٌ بأعيانهم؛ وما ذُكر فيها من مدنٍ فهو إطارٌ للموقف لا غير.")
 RIGHTS_HOLDER = "حقوق التأليف للمؤلف، وحقوق الطبع والنشر لدار الإحسان للتصميم والنشر"
 CITY = None
 ISBN = None
 DEPOSIT = None
 
 # the series in eight volumes: four stages, then the reference (Bible, part fifteen)
-VOLUMES = [("الأول", "الأصول", "الافتتاحية، والأسس: الكلام وأركانه، والمتكلّم، والفصاحة والبيان، والمقام، والسماع", "التأسيس"),
-           ("الثاني", "اللسان", "المخارج والصفات، والأصوات الحرجة، والوقف والتنفّس، والصوت الإنساني", "التأسيس"),
-           ("الثالث", "العبارة والبيان", "الجملة العربية الطبيعية وأخطاؤها، ثم ترتيب الكلام وفنون الافتتاح والخاتمة والبلاغة التطبيقية", "التأسيس"),
-           ("الرابع", "المقام", "من يتكلّم، ولمن، ولماذا، وأين، ومتى، وكيف؛ ومختبر المقام", "التواصل"),
-           ("الخامس", "الأدب والحوار", "آداب المخاطبة والاختلاف، ثم السؤال والجواب والمناقشة والمناظرة", "التواصل"),
-           ("السادس", "المنصّات", "المجالس، والمنبر والمحاضرة، والمؤسسة: المقابلة والاجتماع", "المنصّات"),
-           ("السابع", "التمكين", "الإعلام والتقديم، والخطاب الرسمي والتفاوض، والملكة: الارتجال والمحاكاة", "التمكين"),
-           ("الثامن", "المرجع", "بنك الأخطاء، والملاحق، والمسرد، والمصادر، والفهارس العامة", "")]
+VOLUMES = [("الأول", "الأصول", "المقدمة العلمية، والأسس: الكلام والمتكلّم، والفصاحة والبيان، والمقام، والسماع", "التأسيس"),
+           ("الثاني", "اللسان", "المخارج والصفات، والأصوات الحرجة، والوقف والصوت؛ وبرنامج النطق اليومي", "التأسيس"),
+           ("الثالث", "العبارة", "الجملة العربية الطبيعية: الإعراب والصرف، والترجمة الحرفية، والحشو، واختيار الكلمة", "التأسيس"),
+           ("الرابع", "البيان", "ترتيب الكلام: الافتتاح والتعريف بالنفس والانتقال والخاتمة، والبلاغة التطبيقية", "التأسيس"),
+           ("الخامس", "المقام", "من يتكلّم، ولمن، ولماذا، وأين، ومتى، وكيف؛ ومختبر المقام", "التواصل"),
+           ("السادس", "الأدب", "أفعال الأدب: السلام والشكر، والطلب والرفض، والاعتذار، وأدب الخلاف", "التواصل"),
+           ("السابع", "الحوار", "السؤال والجواب، والاستيضاح والمداخلة، والإقناع والمناظرة", "التواصل"),
+           ("الثامن", "المجالس والمنبر", "مجلس العلم ومجالس الجامعة، والخطبة والمحاضرة والكلمة وعرض البحث", "المنصّات"),
+           ("التاسع", "المؤسسة", "المقابلة، وإدارة الاجتماع، وخطاب المدير والموظف", "المنصّات"),
+           ("العاشر", "التمكين", "الإعلام والتقديم، والخطاب الرسمي والتفاوض، والملكة: الارتجال والأداء الختامي", "التمكين"),
+           ("الحادي عشر", "مرجع المتكلّم العربي", "بنك الأخطاء والتعبيرات والنماذج، والمسرد، والمصادر، والفهارس العامة", "")]
 STAGES = {"التأسيس": "المرحلة الأولى", "التواصل": "المرحلة الثانية", "المنصّات": "المرحلة الثالثة", "التمكين": "المرحلة الرابعة"}
 
 CSS = r"""
@@ -58,11 +64,11 @@ CSS = r"""
 .ht .a { font: 300 10.5pt/1.5 "Changa"; color: var(--ink-2); }
 .ht .v { position: absolute; top: 118mm; left: 0; right: 0; font: 300 9pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .6pt; }
 /* 2. the four volumes: quiet geometry */
-.vm { position: absolute; top: 40mm; right: 38mm; left: 38mm; }
+.vm { position: absolute; top: 32mm; right: 38mm; left: 38mm; }
 .vm .k { font: 300 10pt/1 "Changa"; color: var(--gold-ink); margin-bottom: 6mm; display: flex; gap: 3mm; align-items: center; }
 .vm .k i { flex: 1; border-top: .4pt solid var(--gold); }
-.vm-st { font: 500 7.6pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .3pt; margin: 4.2mm 0 .6mm; }
-.vm-row { display: grid; grid-template-columns: 17mm 1fr; gap: 0 5mm; padding: 2.4mm 0; border-bottom: .3pt solid #DCD6CA; align-items: baseline; }
+.vm-st { font: 500 7.6pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .3pt; margin: 3.4mm 0 .4mm; }
+.vm-row { display: grid; grid-template-columns: 19mm 1fr; gap: 0 5mm; padding: 1.8mm 0; border-bottom: .3pt solid #DCD6CA; align-items: baseline; }
 .vm-row .n { font: 300 9pt/1 "Changa"; color: var(--ink-3); }
 .vm-row .nm { font: 600 12.6pt/1.3 "Changa"; color: var(--sapphire); }
 .vm-row .d { grid-column: 2; font: 400 9.6pt/1.5 "Scheherazade New"; color: var(--ink-2); margin-top: .4mm; }
@@ -107,6 +113,12 @@ CSS = r"""
 .sy-row .m { font: 400 13pt/1.5 "Amiri"; color: var(--sapphire); text-align: center; }
 .sy-row .m.s { font: 600 10pt/1.5 "Changa"; }
 .sy-row .d { font: 400 11pt/1.7 "Scheherazade New"; color: var(--ink-2); }
+.sy h3 { font: 600 11.6pt/1.3 "Changa"; color: var(--gold-ink); margin: 9mm 0 2mm; display: flex; gap: 3mm; align-items: center; }
+.sy h3 i { flex: 1; border-top: .4pt solid var(--gold); }
+.sy-scale { display: grid; grid-template-columns: 10mm 26mm 1fr; gap: 0 4mm; padding: 1.8mm 0; border-bottom: .3pt solid #E0DBD0; align-items: baseline; }
+.sy-scale .n { font: 700 12pt/1.4 "Amiri"; color: var(--sapphire); text-align: center; }
+.sy-scale .t { font: 600 10pt/1.5 "Changa"; color: var(--ink); }
+.sy-scale .d { font: 400 10.6pt/1.6 "Scheherazade New"; color: var(--ink-2); }
 /* dedication: quiet, set high on the page */
 .dd { position: absolute; top: 70mm; right: 44mm; left: 44mm; text-align: center; }
 .dd p { font: 400 13pt/2.1 "Scheherazade New"; color: var(--ink-2); margin: 0; text-indent: 0; text-align: center; }
@@ -146,14 +158,14 @@ def volumes_map(current=1):
     rows, stage = [], None
     for i, (w, nm, d, st) in enumerate(VOLUMES, 1):
         if st != stage:
-            rows.append(f'<div class="vm-st">{STAGES[st] + ": " + st if st else "المرجع"}</div>')
+            rows.append(f'<div class="vm-st">{STAGES[st] + ": " + st if st else "المرجع: خارج ترقيم الأبواب والمستويات"}</div>')
             stage = st
         rows.append(f'<div class="vm-row{" here" if i == current else ""}"><div class="n">المجلد {w}</div><div class="nm">{nm}</div>'
                     f'<div class="d">{d}</div></div>')
-    return page(f'<div class="vm"><div class="k"><span>{TITLE} في ثمانية مجلدات</span><i></i></div>{"".join(rows)}</div>')
+    return page(f'<div class="vm"><div class="k"><span>{TITLE} في أحد عشر مجلدًا</span><i></i></div>{"".join(rows)}</div>')
 
 
-def imprint(volume="الأول (من ثمانية): الأصول"):
+def imprint(volume="الأول (من أحد عشر): الأصول"):
     rows = [("العنوان", f"{TITLE}<br>{SUBTITLE}"),
             ("المؤلف", f"{AUTHOR_KUNYA} {AUTHOR_LONG}"),
             ("المجلد", volume),
@@ -177,6 +189,7 @@ def rights():
 <div class="c">جميع الحقوق محفوظة<br>{YEAR}</div>{holder}
 <p>لا يجوز نشر هذا الكتاب أو أيّ جزءٍ منه، ولا نسخه أو اختزانه في نظامٍ لاسترجاع المعلومات، ولا نقله بأيّ وسيلةٍ إلكترونيةٍ أو آليةٍ أو تصويريةٍ أو تسجيلية أو غير ذلك، إلا بإذنٍ كتابيٍّ مسبق من الناشر.</p>
 <p>ويُستثنى من ذلك الاقتباس اليسير لأغراض البحث العلمي والتعليم والنقد والمراجعة، على أن يُنسب إلى الكتاب ومؤلّفه نسبةً تامّة، وأن يُنقل بلفظه.</p>
+<p>{FICTIONAL_NAMES}</p>
 <p>والآيات القرآنية مثبتةٌ بالرسم العثماني على رواية حفص عن عاصم، مطابقةً لمصحف المدينة النبوية. والنقول موثّقةٌ في حواشيها بطبعاتها، وبيانات الطبعات كاملةً في ثبت المصادر.</p>
 <div class="ed"><div class="h">الطبعات</div><div class="ed-row"><span>{EDITION}</span><span>{YEAR}</span></div></div>
 </div>''')
@@ -198,9 +211,41 @@ SYMBOLS = [("﴿ ﴾", "نصّ القرآن الكريم، بالرسم العث
            ("ﷺ", "صلّى الله عليه وسلّم.", "")]
 
 
+# the symbols of the lessons, which every volume uses and every volume explains (Bible, ch. 112d §٤)
+TEACHING = [("▣", "بطاقة المقام: المتكلّم، والمخاطَب، والعلاقة، والمكان، والغرض، والأثر المطلوب، ودرجة الرسمية، والزمن.", ""),
+            ("① ② ③ ④", "درجات المقارنة: المتكلّم غير الناجح، والمقبول، والناجح، والرفيع.", ""),
+            ("✔", "عبارةٌ صحيحةٌ مناسبة.", ""),
+            ("✘", "عبارةٌ خاطئة أو غير مناسبة.", ""),
+            ("◐", "عبارةٌ مقبولة تحتمل التحسين.", ""),
+            ("(س٧)", "السطر السابع من الحوار.", "s"),
+            ("[ب٦-ف٤-مث١]", "رمز المثال: الباب السادس، الفصل الرابع، المثال الأول. وفي المرجع: [ر١-ف٤-مث١]، أي بنك الأخطاء، الفصل الرابع، البطاقة الأولى.", "s"),
+            ("/ و //", "سكتةٌ قصيرة، وسكتةٌ طويلة، في نصوص التدريب الصوتي.", ""),
+            ("↑ و ↓", "ارفع الصوت، واخفضه.", ""),
+            ("(ت)", "موضع التنفّس.", "s")]
+FORMALITY = [("٥", "شديد الرسمية", "لقاء وزير، حفلٌ رسمي، وفدٌ دبلوماسي"),
+             ("٤", "رسمي", "مقابلةٌ وظيفية، محاضرة، خطبة، اجتماع مجلس"),
+             ("٣", "شبه رسمي", "حديثٌ مع أستاذ بعد الدرس، اجتماع قسم"),
+             ("٢", "وُدّي", "الزملاء والأصدقاء"),
+             ("١", "أُسَري", "الوالدان والإخوة والأبناء")]
+NUMBERS = [("المجلد", "الكتاب المادّي، من الأول إلى الحادي عشر؛ ويُذكر في الإحالة إلى موضعٍ في مجلدٍ آخر.", "s"),
+           ("الباب", "الوحدة العلمية، متصلةٌ عبر السلسلة كلها من الأول إلى الثالث عشر.", "s"),
+           ("المستوى", "درجة البرنامج التدريبي، ورقمه رقم بابه دائمًا.", "s"),
+           ("الفصل", "الفصل داخل الباب، والدرس داخل الفصل.", "s"),
+           ("المرجع", "المجلد الحادي عشر، «مرجع المتكلّم العربي»: خارج ترقيم الأبواب والمستويات.", "s")]
+
+
+def _rows(items):
+    return "".join(f'<div class="sy-row"><div class="m {c}">{m}</div><div class="d">{d}</div></div>' for m, d, c in items)
+
+
 def symbols():
-    rows = "".join(f'<div class="sy-row"><div class="m {c}">{m}</div><div class="d">{d}</div></div>' for m, d, c in SYMBOLS)
-    return f'<section class="chap sy"><h2 class="tt">الرموز والاصطلاحات</h2>{rows}</section>'
+    scale = "".join(f'<div class="sy-scale"><div class="n">{n}</div><div class="t">{k}</div><div class="d">{d}</div></div>'
+                    for n, k, d in FORMALITY)
+    return (f'<section class="chap sy"><h2 class="tt">الرموز والاصطلاحات</h2>'
+            f'<h3><span>في الدروس</span><i></i></h3>{_rows(TEACHING)}'
+            f'<h3><span>سلّم الرسمية</span><i></i></h3>{scale}'
+            f'<h3><span>الأرقام الأربعة</span><i></i></h3>{_rows(NUMBERS)}'
+            f'<h3><span>في الجهاز العلمي</span><i></i></h3>{_rows(SYMBOLS)}</section>')
 
 
 def contents(entries):
