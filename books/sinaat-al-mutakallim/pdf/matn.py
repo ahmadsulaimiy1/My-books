@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import math
 import re
+import unicodedata
 from functools import lru_cache
 
 import numpy as np
@@ -34,7 +35,9 @@ import typeset as T
 from marks import bevel, device, margins
 
 W, H = 170.0, 240.0
-HARAKAT = re.compile(r"[ً-ْٰ]")
+NUMERAL = re.compile(r"[0-9٠-٩]+")
+NUMERAL_SCALE = 1.15
+INDENT = 1.5                                  # a paragraph's first line opens after its gold dot
 GLOSS_SIZE, GLOSS_LEAD = 2.9, 4.25
 MATN = (42.0, 42.0, W - 36.0, 166.0)          # the front's text block: toward the spine, the wide margin outside
 FIELD_INSET = 9.5 + 3.6
@@ -96,38 +99,35 @@ class Words:
     def back(self):
         self.w -= 1
 
+    def peek(self):
+        return self.cur[self.w] if self.w < len(self.cur) else None
+
 
 def shaped(text, size, x_right, base):
-    """A line in its three layers: the rasm, the dots (centre and count of each group), the vowels; and its width."""
-    F = faces()
-    path = F.amiri4.files[0]
-    plain = HARAKAT.sub("", text)
-    runs, w = T.glyph_runs(plain, path, size, features=T.KF)
-    body = [T.segs_to_geom(s) for (c, s) in runs]
-    body = [g for g in body if not g.is_empty]
-    if not body:
-        return None, [], None, w
-    allp = affinity.translate(AW.valid(unary_union(body)), x_right - w, base)
-    rasm, dots = [], []
-    for p in AW.poly_list(allp):
-        bx0, by0, bx1, by1 = p.bounds
-        if (by1 - by0) < 0.17 * size and (bx1 - bx0) < 0.30 * size and p.area < 0.028 * size * size:
-            k = len(AW.poly_list(p.buffer(-0.035 * size)))
-            dots.append(((bx0 + bx1) / 2, (by0 + by1) / 2, max(1, min(3, k))))
-        else:
-            rasm.append(p)
-    har = None
-    if HARAKAT.search(text):
-        runs2, w2 = T.glyph_runs(text, path, size, features=T.KF)
-        g2 = [T.segs_to_geom(s) for (c, s) in runs2]
-        full = affinity.translate(AW.valid(unary_union([g for g in g2 if not g.is_empty])), x_right - w2, base)
-        keep = []
-        for p in AW.poly_list(AW.valid(full.difference(allp.buffer(0.06)))):
-            bx0, by0, bx1, by1 = p.bounds
-            if 0.003 * size * size < p.area < 0.03 * size * size and (bx1 - bx0) < 0.45 * size and (by1 - by0) < 0.4 * size:
-                keep.append(p)
-        har = AW.valid(unary_union(keep)) if keep else None
-    return (AW.valid(unary_union(rasm)) if rasm else None), dots, har, w
+    """A line in its three layers, from one shaping of it: the rasm; the dots of its letters (the centre and count of
+    each group), told from the letters' bodies by their size; and the vowels, the glyphs the font itself classes as
+    marks. Returns them with the line's width. (One shaping: a vowel can widen its word, «صوتًا», and two shapings,
+    with the vowels and without, would part the vowels from their letters to the left of it.)"""
+    runs, w = T.glyph_runs(text, faces().amiri4.files[0], size, features=T.KF)
+    dx, dy = x_right - w, base
+    body, dots, vowels = [], [], []
+    for (c, segs, mark) in runs:
+        g = T.segs_to_geom(segs)
+        if g.is_empty:
+            continue
+        if mark:
+            vowels.append(g)
+            continue
+        letter = unicodedata.category(text[c]).startswith("L")      # the dots of «؟» and «؛» are not i'jam
+        for q in AW.poly_list(g):
+            bx0, by0, bx1, by1 = q.bounds
+            if letter and (by1 - by0) < 0.17 * size and (bx1 - bx0) < 0.30 * size and q.area < 0.028 * size * size:
+                k = len(AW.poly_list(q.buffer(-0.035 * size)))
+                dots.append(((bx0 + bx1) / 2 + dx, (by0 + by1) / 2 + dy, max(1, min(3, k))))
+            else:
+                body.append(q)
+    place = lambda gs: affinity.translate(AW.valid(unary_union(gs)), dx, dy) if gs else None
+    return place(body), dots, place(vowels), w
 
 
 def dot_group(dx, dy, k, size):
@@ -144,24 +144,81 @@ def dot_group(dx, dy, k, size):
 
 @lru_cache(maxsize=None)
 def word_width(word, size):
-    return T.line(HARAKAT.sub("", word), faces().amiri4, size).width
+    """A word's width as the line sets it: shaped with its vowels and the same features (mm)."""
+    return T.advance(word, faces().amiri4.files[0], size, features=T.KF)
 
 
 @lru_cache(maxsize=None)
 def space_width(size):
-    return T.line("ب ب", faces().amiri4, size).width - 2 * T.line("ب", faces().amiri4, size).width
+    return word_width("ب ب", size) - 2 * word_width("ب", size)
 
 
-def plain_width(text, size):
-    """The width of a line of glosses, from its words measured once each (the fitting asks it word by word)."""
-    ws = text.split()
-    return sum(word_width(w, size) for w in ws) + space_width(size) * max(0, len(ws) - 1)
+@lru_cache(maxsize=None)
+def numeral_width(numeral, size):
+    """The width of a number that opens an entry of the reference, set in gold (Amiri bold, a size larger)."""
+    return T.line(numeral, faces().amiri7, size * NUMERAL_SCALE, digits=True).width
+
+
+def line_width(lw, size, numeral=False):
+    """The width of a line of glosses from its words, each measured once (the fitting asks it word by word);
+    numeral: the first word is an entry's number, set in gold."""
+    ws = [numeral_width(w, size) if (numeral and i == 0) else word_width(w, size) for i, w in enumerate(lw)]
+    return sum(ws) + space_width(size) * max(0, len(lw) - 1)
 
 
 # ------------------------------------------------------------------------------------------------ the glosses
 class Acc:
     def __init__(self):
         self.rules, self.rasm, self.dots, self.vowels, self.marks, self.digits = [], [], [], [], [], []
+
+
+def fit_line(words, measure, size, numerals=False):
+    """The words that fill one line of the measure (mm), and whether the line opens a paragraph."""
+    head = words.opening
+    number = opens_with_number(head, words.peek(), numerals)
+    avail = measure - (INDENT if head and not number else 0.0)
+    lw = []
+    while True:
+        w_ = words.take()
+        if w_ is None:
+            break
+        if line_width(lw + [w_], size, numeral=number) > avail:
+            words.back()
+            break
+        lw.append(w_)
+        words.opening = False
+    return lw, head
+
+
+def opens_with_number(head, first, numerals):
+    """On the reference an entry opens with its volume's number, in gold, in place of the paragraph's dot (a dot
+    after a number would be read as its zero: «٢ ◆», «٢٠»)."""
+    return bool(numerals and head and first and NUMERAL.fullmatch(first))
+
+
+def set_line(acc, lw, head, size, right, y, rot=None, numerals=False):
+    """One line of glosses on its ruling, ending at right (mm) on the baseline y, into its layers: the rasm, the dots,
+    the vowels. A paragraph's first line opens with a gold dot; on the reference, an entry opens with its number in
+    gold instead."""
+    rot = rot or (lambda q: q)
+    number = opens_with_number(head, lw[0] if lw else None, numerals)
+    x = right - (INDENT if head and not number else 0.0)
+    if head and lw and not number:
+        acc.marks.append(rot(AW.nuqta(right - 0.55, y - 0.28 * size, 0.95, 70)))
+    if number:
+        g, wn = T.text(lw[0], faces().amiri7, size * NUMERAL_SCALE, x_right=x, base=y, digits=True)
+        acc.digits.append(rot(g))
+        x -= wn + space_width(size)
+        lw = lw[1:]
+    if not lw:
+        return
+    ras, dots, har, _ = shaped(" ".join(lw), size, x, y)
+    if ras is not None:
+        acc.rasm.append(rot(ras))
+    for (dx, dy, k) in dots:
+        acc.dots += [rot(q) for q in dot_group(dx, dy, k, size)]
+    if har is not None:
+        acc.vowels.append(rot(har))
 
 
 def gloss(region, angle, words, acc, size=GLOSS_SIZE, lead=GLOSS_LEAD, numerals=False):
@@ -184,32 +241,8 @@ def gloss(region, angle, words, acc, size=GLOSS_SIZE, lead=GLOSS_LEAD, numerals=
             y += lead
             continue
         acc.rules.append(rot(box(a, y + off - 0.05, b, y + off + 0.05)))
-        head = words.opening
-        indent = 1.5 if head else 0.0
-        lw = []
-        while True:
-            w_ = words.take()
-            if w_ is None:
-                break
-            words.opening = False
-            if plain_width(" ".join(lw + [w_]), size) > (b - a - indent):
-                words.back()
-                break
-            lw.append(w_)
-        if lw:
-            if head:
-                acc.marks.append(rot(AW.nuqta(b - 0.55, y - 0.28 * size, 0.95, 70)))
-            ras, dots, har, _ = shaped(" ".join(lw), size, b - indent, y)
-            if ras is not None:
-                acc.rasm.append(rot(ras))
-            for (dx, dy, k) in dots:
-                acc.dots += [rot(q) for q in dot_group(dx, dy, k, size)]
-            if har is not None:
-                acc.vowels.append(rot(har))
-            if numerals:
-                for m in re.finditer(r"^[0-9٠-٩]+", " ".join(lw)):
-                    g, _ = T.text(m.group(0), faces().amiri7, size * 1.15, x_right=b - indent, base=y, digits=True)
-                    acc.digits.append(rot(g))
+        lw, head = fit_line(words, b - a, size, numerals)
+        set_line(acc, lw, head, size, b, y, rot, numerals)
         y += lead
 
 
@@ -391,23 +424,8 @@ def spine(n, sw):
     x0, x1 = comp.bounds[0], comp.bounds[2]
     for yy in SHELF_RULES:
         acc.rules.append(box(-0.2, yy + 0.55 - 0.05, sw + 0.2, yy + 0.55 + 0.05))
-        lw = []
-        while True:
-            w_ = words.take()
-            if w_ is None:
-                break
-            if plain_width(" ".join(lw + [w_]), GLOSS_SIZE) > (x1 - x0):
-                words.back()
-                break
-            lw.append(w_)
-        if lw:
-            ras, dots, har, _ = shaped(" ".join(lw), GLOSS_SIZE, x1, yy)
-            if ras is not None:
-                acc.rasm.append(ras)
-            for (dx, dy, k) in dots:
-                acc.dots += dot_group(dx, dy, k, GLOSS_SIZE)
-            if har is not None:
-                acc.vowels.append(har)
+        lw, head = fit_line(words, x1 - x0, GLOSS_SIZE, n == 11)
+        set_line(acc, lw, head, GLOSS_SIZE, x1, yy, numerals=(n == 11))
     # the voice on the spine: the share of its lines lit grows with the volume
     share = min(n, 10) / 10.0
     lit_to = SPINE_COMPS[3][1] - (SPINE_COMPS[3][1] - SPINE_COMPS[3][0]) * share

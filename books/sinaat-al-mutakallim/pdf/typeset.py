@@ -139,6 +139,7 @@ class Faces:
 
 
 KF = {"kern": True, "calt": True, "liga": False}
+FIG = {"kern": True, "liga": True, "calt": True, "pnum": True}   # numerals for display: the font's proportional figures
 
 
 _DIGITS = re.compile(r"[0-9٠-٩](?:[0-9٠-٩–/.]*[0-9٠-٩])?")
@@ -156,6 +157,7 @@ class Composite:
 def line(text, face, size, features=None, digits=False, latin=False, tracking=0.0):
     if digits:
         text = text.translate(AR)
+        features = features or FIG           # «١١» set as figures, not as a table's columns
     elif not latin:
         # the line is shaped right to left: a run of digits is laid in reverse first, so that it reads left
         # to right as the bidi algorithm would set it
@@ -359,8 +361,10 @@ def check(tolerance=0.005, px_per_mm=24.0):
 
 
 def glyph_runs(t, path, size, features=None, tracking=0.0):
-    """A line shaped right to left, returned glyph by glyph: [(cluster, segs)], cluster being the index in t of
-    the character the glyph sets. The line's left end is at x = 0 on the baseline y = 0 (mm, y downward)."""
+    """A line shaped right to left, returned glyph by glyph: [(cluster, segs, mark)], cluster being the index in t
+    of the character the glyph sets, and mark whether the font classes the glyph as a mark (GDEF class 3: the
+    vowels, the shadda, the sukun, the tanween). The line's left end is at x = 0 on the baseline y = 0 (mm, y
+    downward)."""
     import uharfbuzz as hb
     from fontTools.pens.recordingPen import DecomposingRecordingPen, RecordingPen
     from fontTools.pens.transformPen import TransformPen
@@ -374,6 +378,7 @@ def glyph_runs(t, path, size, features=None, tracking=0.0):
     hb.shape(hbfont, buf, features or {"kern": True, "liga": False, "calt": True})
     gs = font.getGlyphSet()
     order = font.getGlyphOrder()
+    classes = font["GDEF"].table.GlyphClassDef.classDefs if "GDEF" in font else {}
     k = size / face.upem
     x = 0.0
     out = []
@@ -405,6 +410,19 @@ def glyph_runs(t, path, size, features=None, tracking=0.0):
                     cur = nxt
             elif op in ("closePath", "endPath"):
                 segs.append(("Z",))
-        out.append((info.cluster, segs))
+        out.append((info.cluster, segs, classes.get(order[info.codepoint]) == 3))
         x += pos.x_advance * k + tracking
     return out, x - tracking
+
+
+def advance(t, path, size, features=None):
+    """The width of a line as glyph_runs sets it, shaped but not drawn (mm)."""
+    import uharfbuzz as hb
+    data, _ = L.load(path)
+    face = hb.Face(data)
+    buf = hb.Buffer()
+    buf.add_str(t)
+    buf.guess_segment_properties()
+    buf.direction, buf.script, buf.language = "rtl", "Arab", "ar"
+    hb.shape(hb.Font(face), buf, features or {"kern": True, "liga": False, "calt": True})
+    return sum(p.x_advance for p in buf.glyph_positions) * size / face.upem
