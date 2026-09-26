@@ -276,6 +276,30 @@ ROWS = [
 ]
 
 
+# volumes 2–11: the verifications of their tagged passages, each matched on a scan of the printed edition, with the
+# evidence crops beside the records (مصوّرات/المجلدات-٢-١١)
+_SERIES = OUT / "نقول-المجلدات-٢-١١.json"
+SERIES_STATE = {"quote-verified": ("ok", ""), "meaning-verified": ("ok", "طوبق المعنى، والمتن يحكيه بتصرّف"),
+                "quote-corrected": ("ok", "صُحّح لفظ المتن على المطبوع"), "claim-wrong": ("ok", "صُحّح قول المتن على المطبوع"),
+                "not-established": ("attr", "لم تثبت النسبة؛ صيغ المتن على ذلك"), "digital-only": ("incomplete", "")}
+
+
+def series_rows():
+    rows = []
+    for r in json.loads(_SERIES.read_text(encoding="utf-8")) if _SERIES.exists() else []:
+        state, why = SERIES_STATE.get(r["outcome"], ("incomplete", ""))
+        vol = "م" + str(r["volume"]).translate(AR)
+        where = r["file"].split("/")[-1].split("-")[0].translate(AR) if r.get("file") else ""
+        if state != "incomplete":
+            ON_PRINT.add(r["id"])
+        src = "، ".join(x for x in (r["author"], r["title"]) if x)
+        ev = "؛ ".join(r["evidence"][:3])
+        rows.append((r["id"], f"{vol} {where}", r["kind"], r["text"][:120], "نص", r["author"], src, r["edition"], "",
+                     r["part"], r["page"], r["number"], r["grade"], "", state, "التوثيق",
+                     "؛ ".join(x for x in (why, "المصوّرة: " + r["url"] if r["url"] else "", "الشاهد: " + ev if ev else "") if x)))
+    return rows
+
+
 def quran_rows():
     rows = []
     report = {(r["file"], r["ref"]): r for r in json.loads((OUT / "مطابقة-القرآن.json").read_text(encoding="utf-8"))}
@@ -299,7 +323,7 @@ def main():
     spans = {r["id"]: r for r in json.loads((OUT / "مطابقة-النقول.json").read_text(encoding="utf-8"))}
     table = []
     serial = {}                       # a row's number is counted within its volume: م١-٠٠١…، م٣-٠٠١…
-    for row in quran_rows() + ROWS:
+    for row in quran_rows() + ROWS + series_rows():
         vid, loc, kind, text, form, who, src, ed, editor, part, page, num, grade, variants, state, stage, note = row[:17]
         vol = re.match(r"(م[٠-٩]+)\s", loc)
         vol = vol.group(1) if vol else "م١"
