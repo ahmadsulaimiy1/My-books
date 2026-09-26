@@ -92,7 +92,7 @@ OUTSIDE = [
 ]
 # the foreign sources as the thabat sets them: those the base holds, by the base's title; then those it does not
 FOREIGN = {
-    "The Significance of Learners' Errors": ("Corder, S. P.", '"The Significance of Learner\'s Errors."', "*IRAL: International Review of Applied Linguistics in Language Teaching* 5, no. 4 (1967): 161–170."),
+    "The Significance of Learner's Errors": ("Corder, S. P.", '"The Significance of Learner\'s Errors."', "*IRAL: International Review of Applied Linguistics in Language Teaching* 5, no. 4 (1967): 161–170."),
     "Interaction Ritual: Essays on Face-to-Face Behavior": ("Goffman, Erving", '"On Face-Work: An Analysis of Ritual Elements in Social Interaction."', "*Psychiatry* 18, no. 3 (1955): 213–231. Reprinted in *Interaction Ritual: Essays on Face-to-Face Behaviour*, 5–45. Harmondsworth: Penguin University Books, 1972."),
     "A Simplest Systematics for the Organization of Turn-Taking for Conversation": ("Sacks, Harvey, Emanuel A. Schegloff, and Gail Jefferson", '"A Simplest Systematics for the Organization of Turn-Taking for Conversation."', "*Language* 50, no. 4 (1974): 696–735. Variant version in J. Schenkein (ed.), *Studies in the Organization of Conversational Interaction*, 7–55. New York: Academic Press, 1978."),
     "The Role of Deliberate Practice in the Acquisition of Expert Performance": ("Ericsson, K. Anders, Ralf Th. Krampe, and Clemens Tesch-Römer", '"The Role of Deliberate Practice in the Acquisition of Expert Performance."', "*Psychological Review* 100, no. 3 (1993): 363–406."),

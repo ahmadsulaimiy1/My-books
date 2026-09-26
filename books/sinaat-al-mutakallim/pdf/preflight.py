@@ -85,8 +85,10 @@ def words(page, clip=None):
 
 def keywords(text, k=4):
     ws = [w.strip("،.:؛«»()[]!؟\"'*") for w in re.sub(r"<[^>]+>|\[\^\d+\]", " ", text).split()]
-    ws = [norm(w) for w in ws if len(norm(w)) > 2 and re.fullmatch("[ء-يً-ْٰ]+", w)]
-    return ws[:k]
+    ar = [norm(w) for w in ws if len(norm(w)) > 2 and re.fullmatch("[ء-يً-ْٰ]+", w)]
+    # a note set wholly in Latin (a modern reference) is found by its Latin words
+    lat = [norm(w) for w in ws if re.fullmatch("[A-Za-z]{4,}", w)]
+    return lat[:k] if lat and (not ar or re.match(r"\s*[A-Za-z]", text)) else ar[:k]
 
 
 def isbn_ok(x):
@@ -119,6 +121,9 @@ def main(v=1, proof=False):
             for m in re.finditer(r"\*\[([^\]]+)\]\*", line):
                 kind = next((k for key, k in TAG_KINDS if key in m.group(1)), "أخرى")
                 tags.append((f, i, kind, m.group(1)))
+            # a tag nested at the end of an italic aside: «*(…) [يحتاج إلى تحقق…]*»
+            for m in re.finditer(r"(?<!\*)\[((?:يحتاج إلى تحقق|يُعرض على|تحليل حديث|استنباط تربوي)[^\]]*)\]", line):
+                tags.append((f, i, next((k for key, k in TAG_KINDS if key in m.group(1)), "أخرى"), m.group(1)))
     by_kind = {}
     for _, _, k, _ in tags:
         by_kind[k] = by_kind.get(k, 0) + 1
