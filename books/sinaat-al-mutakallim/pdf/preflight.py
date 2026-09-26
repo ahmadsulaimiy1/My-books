@@ -258,10 +258,23 @@ def main(v=1, proof=False):
     # column that lost its width (a grid box continued without its mark)
     narrow = []
     for i, page in enumerate(doc):
-        lines = ["".join(s["text"] for s in l["spans"]).strip() for b in page.get_text("dict")["blocks"] for l in b.get("lines", [])]
-        lines = [t for t in lines if t]
-        single = [t for t in lines if len(t.split()) == 1]
-        if len(single) >= 12 and len(single) > .6 * len(lines):
+        # one-word lines on one right edge, each at a line's distance from the last: a run of ten is a column, not
+        # the cells of a table (whose rows stand further apart)
+        single, total = [], 0
+        for b in page.get_text("dict")["blocks"]:
+            for l in b.get("lines", []):
+                t = "".join(s["text"] for s in l["spans"]).strip()
+                total += bool(t)
+                if t and len(t.split()) == 1:
+                    single.append((round(l["bbox"][2] / 3), l["bbox"][1], l["bbox"][3] - l["bbox"][1]))
+        best = 0
+        for edge in {e for e, _, _ in single}:
+            ys = sorted((y, h) for e, y, h in single if e == edge)
+            run = 1
+            for (y0, h0), (y1, _) in zip(ys, ys[1:]):
+                run = run + 1 if y1 - y0 < 1.9 * h0 else 1
+                best = max(best, run)
+        if best >= 10 and len(single) >= .75 * total:   # a table page mixes one-word cells with longer ones
             narrow.append(i)
     add("الإخراج الفني", "لا عمود انهار إلى كلمةٍ في السطر", "يجتاز" if not narrow else "لا يجتاز", "، ".join(labels[i] for i in narrow))
     add("الإخراج الفني", "لا صفحة قصيرة في وسط فصل إلا قبل درسٍ يفتتح صفحته", "يجتاز" if not short else "للمراجعة", "، ".join(labels[i] for i in short))
