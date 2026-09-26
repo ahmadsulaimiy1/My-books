@@ -281,12 +281,20 @@ ROWS = [
 _SERIES = OUT / "نقول-المجلدات-٢-١١.json"
 SERIES_STATE = {"quote-verified": ("ok", ""), "meaning-verified": ("ok", "طوبق المعنى، والمتن يحكيه بتصرّف"),
                 "quote-corrected": ("ok", "صُحّح لفظ المتن على المطبوع"), "claim-wrong": ("ok", "صُحّح قول المتن على المطبوع"),
-                "not-established": ("attr", "لم تثبت النسبة؛ صيغ المتن على ذلك"), "digital-only": ("incomplete", "")}
+                "not-established": ("attr", "لم تثبت النسبة؛ صيغ المتن على ذلك"), "digital-only": ("incomplete", ""),
+                "ref-verified": ("ok", "رُئي الموضع في المرجع الحديث"),
+                "ref-bibliographic": ("incomplete", "بيانات الفهرسة وحدها، والمضمون من الملخّص؛ بلا صفحة محدّدة"),
+                "settled-specialist": ("ok", "حُسمت المسألة من كتب المختصين"),
+                "named-disagreement": ("variant", "خلافٌ مسمًّى أطرافه في المتن")}
+# outcomes that leave no citation in the text (the statement became the author's, or the tag sat on no claim)
+SERIES_SKIP = {"recast-author-voice", "no-claim", "delete"}
 
 
 def series_rows():
     rows = []
     for r in json.loads(_SERIES.read_text(encoding="utf-8")) if _SERIES.exists() else []:
+        if r["outcome"] in SERIES_SKIP:
+            continue
         state, why = SERIES_STATE.get(r["outcome"], ("incomplete", ""))
         vol = "م" + str(r["volume"]).translate(AR)
         where = r["file"].split("/")[-1].split("-")[0].translate(AR) if r.get("file") else ""

@@ -1,0 +1,36 @@
+1. J Dev Behav Pediatr. 2019 Jun;40(5):383-386. doi:
+10.1097/DBP.0000000000000657.
+
+When Children Are Not Read to at Home: The Million Word Gap.
+
+Logan JAR(1), Justice LM(1), Yumuş M(2), Chaparro-Moreno LJ(1).
+
+Author information:
+(1)College of Education and Human Ecology, Department of Educational Studies, 
+Crane Center for Early Childhood Research and Policy, The Ohio State University, 
+Columbus, OH.
+(2)Başkent University, Ankara, Turkey.
+
+OBJECTIVE: In the United States, there are numerous ongoing efforts to remedy 
+the Word Gap: massive differences in heard vocabulary for poor versus advantaged 
+children during the first 5 years of life. One potentially important resource 
+for vocabulary exposure is children's book reading sessions, which are more 
+lexically diverse than standard caregiver-child conversations and have 
+demonstrated significant correlational and causal influences on children's 
+vocabulary development. Yet, nationally representative data suggest that around 
+25% of caregivers never read with their children.
+METHOD: This study uses data from 60 commonly read children's books to estimate 
+the number of words that children are exposed to during book reading sessions. 
+We estimated the total cumulative word exposure for children who are read to at 
+varying frequencies corresponding to nationally representative benchmarks across 
+the first 5 years of life.
+RESULTS: Parents who read 1 picture book with their children every day provide 
+their children with exposure to an estimated 78,000 words each a year. 
+Cumulatively, over the 5 years before kindergarten entry, we estimate that 
+children from literacy-rich homes hear a cumulative 1.4 million more words 
+during storybook reading than children who are never read to.
+CONCLUSION: Home-based shared book reading represents an important resource for 
+closing the Word Gap.
+
+DOI: 10.1097/DBP.0000000000000657
+PMID: 30908424 [Indexed for MEDLINE]

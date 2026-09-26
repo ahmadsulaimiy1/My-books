@@ -1,0 +1,9 @@
+10.1037/h0045106 | The serial position effect of free recall. | Journal of Experimental Psychology | 64 ( 5 ) 482-488 | [[1962, 11]] | Bennet B. Murdock
+10.1037/0033-295x.100.3.363 | The role of deliberate practice in the acquisition of expert performance. | Psychological Review | 100 ( 3 ) 363-406 | [[1993, 7]] | K. Anders Ericsson; Ralf T. Krampe; Clemens Tesch-Römer
+10.1037/0022-3514.58.2.342 | The Duchenne smile: Emotional expression and brain physiology: II. | Journal of Personality and Social Psychology | 58 ( 2 ) 342-353 | [[1990]] | Paul Ekman; Richard J. Davidson; Wallace V. Friesen
+10.1037/h0024532 | Decoding of inconsistent communications. | Journal of Personality and Social Psychology | 6 ( 1 ) 109-114 | [[1967]] | Albert Mehrabian; Morton Wiener
+10.1037/h0024648 | Inference of attitudes from nonverbal communication in two channels. | Journal of Consulting Psychology | 31 ( 3 ) 248-252 | [[1967]] | Albert Mehrabian; Susan R. Ferris
+10.1037/a0017844 | Can Duchenne smiles be feigned? New evidence on felt and false smiles. | Emotion | 9 ( 6 ) 807-820 | [[2009]] | Eva G. Krumhuber; Antony S. R. Manstead
+10.1037/0012-1649.35.3.835 | Person versus process praise and criticism: Implications for contingent self-worth and coping. | Developmental Psychology | 35 ( 3 ) 835-847 | [[1999, 5]] | Melissa L. Kamins; Carol S. Dweck
+10.1080/09658211.2010.535658 | Inter- and intra-individual variation in immediate free recall: An examination of serial position functions and recall initiation strategies | Memory | 19 ( 1 ) 67-82 | [[2011, 1]] | Nash Unsworth; Gene A. Brewer; Gregory J. Spillers
+10.1037/0021-9010.67.5.577 | Initial comparisons of patterned behavior description interviews versus unstructured interviews. | Journal of Applied Psychology | 67 ( 5 ) 577-580 | [[1982, 10]] | Tom Janz
