@@ -390,6 +390,8 @@ def main(v=1, proof=False):
                 uncited.append(f"{author}{'، ' + title if title else ''}")
         add("العلمية", "الثبت: لا يدخله كتابٌ لم يُحَل إليه في حواشي المجلد (الدليل ٣٤ §٤)", "يجتاز" if not uncited else "للمراجعة",
             f"{n(len(entries))} مدخلًا" + (f"؛ لم يُعثر على الإحالة إلى: {'؛ '.join(uncited)}" if uncited else ""))
+    elif tf.exists():
+        add("العلمية", "الثبت (الدليل ٣٤ §٤)", "يجتاز", f"يُختم المجلد بثبته ({tf.name})، مولَّدًا من قاعدة المصادر")
     else:
         add("العلمية", "الثبت (الدليل ٣٤ §٤)", "للعلم" if not total_notes else "لا يجتاز",
             "لا حواشي في هذا المجلد، فلا ثبت له؛ ولا يدخل ثبتًا كتابٌ لم يُحَل إليه" if not total_notes else "للمجلد حواشٍ ولا ثبت له")
