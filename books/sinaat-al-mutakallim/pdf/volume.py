@@ -235,6 +235,8 @@ blockquote.note { border-right: .6pt solid #CFC5B1; padding: 0 4.5mm 0 0; }
 .ex-card { border: .45pt solid #D9CBA6; background: var(--paper); margin: 3.2mm 0; padding: 2.6mm 5mm 3mm; break-inside: auto; }
 .ex-card h4 { break-after: avoid; }
 .ex-head { break-inside: avoid; }
+.keep { break-inside: avoid; }
+.reserve { height: 17mm; margin-bottom: -17mm; }
 .ex-card h4 { margin: 0 0 1.4mm; display: flex; gap: 2.6mm; align-items: baseline; color: var(--sapphire); font-size: 11.8pt; }
 .ex-card h4 .no { font: 700 13pt/1 "Amiri"; color: var(--gold-ink); }
 .ex-card ol > li, .ex-card p, .ex-card ul > li { font-size: 12.2pt; line-height: 1.75; }
@@ -581,6 +583,11 @@ def keep_headings(soup):
             nxt["class"] = (nxt.get("class") or []) + ["runon"]
         elif nxt.name == "p" and text < 900:
             keep.append(nxt.extract())
+        else:
+            # a long paragraph, a table, a long short list: the heading keeps room for three lines of what follows,
+            # a spacer that takes no place once it fits (its height given back by the margin); if the room is not
+            # there, the heading goes to the next page with its text (no heading alone at a page's foot)
+            keep.append(soup.new_tag("div", attrs={"class": "reserve"}))
 
 
 def lesson_html(md, breaks=True):

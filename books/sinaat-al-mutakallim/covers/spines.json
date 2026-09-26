@@ -1,12 +1,12 @@
 {
  "1": {
-  "pages": 573,
+  "pages": 577,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 35.0,
-  "spine_mm": 41.0,
+  "block_mm": 35.2,
+  "spine_mm": 41.2,
   "wrap_mm": [
-   423.0,
+   423.2,
    276.0
   ],
   "front": [
@@ -18,13 +18,13 @@
   "spine": [
    191.0,
    15.0,
-   232.0,
+   232.2,
    261.0
   ],
   "back": [
-   239.0,
+   239.2,
    15.0,
-   408.0,
+   408.2,
    261.0
   ],
   "margin_mm": 15.0,
@@ -68,13 +68,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "3": {
-  "pages": 489,
+  "pages": 493,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 29.9,
-  "spine_mm": 35.9,
+  "block_mm": 30.2,
+  "spine_mm": 36.2,
   "wrap_mm": [
-   417.9,
+   418.2,
    276.0
   ],
   "front": [
@@ -86,13 +86,13 @@
   "spine": [
    191.0,
    15.0,
-   226.9,
+   227.2,
    261.0
   ],
   "back": [
-   233.9,
+   234.2,
    15.0,
-   402.9,
+   403.2,
    261.0
   ],
   "margin_mm": 15.0,
@@ -102,13 +102,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "4": {
-  "pages": 531,
+  "pages": 533,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 32.5,
-  "spine_mm": 38.5,
+  "block_mm": 32.6,
+  "spine_mm": 38.6,
   "wrap_mm": [
-   420.5,
+   420.6,
    276.0
   ],
   "front": [
@@ -120,13 +120,13 @@
   "spine": [
    191.0,
    15.0,
-   229.5,
+   229.6,
    261.0
   ],
   "back": [
-   236.5,
+   236.6,
    15.0,
-   405.5,
+   405.6,
    261.0
   ],
   "margin_mm": 15.0,
@@ -272,13 +272,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "9": {
-  "pages": 337,
+  "pages": 339,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 20.8,
-  "spine_mm": 26.8,
+  "block_mm": 20.9,
+  "spine_mm": 26.9,
   "wrap_mm": [
-   408.8,
+   408.9,
    276.0
   ],
   "front": [
@@ -290,13 +290,13 @@
   "spine": [
    191.0,
    15.0,
-   217.8,
+   217.9,
    261.0
   ],
   "back": [
-   224.8,
+   224.9,
    15.0,
-   393.8,
+   393.9,
    261.0
   ],
   "margin_mm": 15.0,
