@@ -102,7 +102,7 @@ def layers_svg(L, width, on_dark, bounds=None):
     x0, y0, x1, y1 = bounds or unary_union([g for g in L.gold + L.pearl] + [b[0] for b in L.body]).bounds
     k = width / (x1 - x0)
     gold = "#C9A95C" if not on_dark else "#E4CB8C"
-    pearl = "#0C2766" if not on_dark else "#F1ECE0"
+    pearl = "#0C2766" if not on_dark else "#F2F4F8"      # the white page's on-dark pearl, neutral (Bible ch. 22 §7)
     panel = "#0C2766"
     parts = []
     for (g, spec) in L.body:
@@ -113,7 +113,7 @@ def layers_svg(L, width, on_dark, bounds=None):
     for g in L.gold:
         parts.append(svg_paths(g, gold, k, x0, y0))
     for g in L.pearl:
-        parts.append(svg_paths(g, pearl if on_dark else "#F1ECE0", k, x0, y0))
+        parts.append(svg_paths(g, pearl if on_dark else "#F2F4F8", k, x0, y0))
     for g in L.ruby:
         parts.append(svg_paths(g, "#A8172E", k, x0, y0))
     hgt = (y1 - y0) * k
