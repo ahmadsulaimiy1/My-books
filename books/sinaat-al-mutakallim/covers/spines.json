@@ -1,12 +1,12 @@
 {
  "1": {
-  "pages": 585,
+  "pages": 587,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 35.7,
-  "spine_mm": 41.7,
+  "block_mm": 35.8,
+  "spine_mm": 41.8,
   "wrap_mm": [
-   423.7,
+   423.8,
    276.0
   ],
   "front": [
@@ -18,13 +18,13 @@
   "spine": [
    191.0,
    15.0,
-   232.7,
+   232.8,
    261.0
   ],
   "back": [
-   239.7,
+   239.8,
    15.0,
-   408.7,
+   408.8,
    261.0
   ],
   "margin_mm": 15.0,
@@ -50,13 +50,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "2": {
-  "pages": 635,
+  "pages": 637,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 38.7,
-  "spine_mm": 44.7,
+  "block_mm": 38.8,
+  "spine_mm": 44.8,
   "wrap_mm": [
-   426.7,
+   426.8,
    276.0
   ],
   "front": [
@@ -68,18 +68,18 @@
   "spine": [
    191.0,
    15.0,
-   235.7,
+   235.8,
    261.0
   ],
   "back": [
-   242.7,
+   242.8,
    15.0,
-   411.7,
+   411.8,
    261.0
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 41.7,
+  "shelf_x0": 41.8,
   "isbn": "978-978-000002-8",
   "isbn_printed": false,
   "plates": [
@@ -100,156 +100,6 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "3": {
-  "pages": 505,
-  "binding": "case",
-  "caliper_mm_per_leaf": 0.12,
-  "block_mm": 30.9,
-  "spine_mm": 36.9,
-  "wrap_mm": [
-   418.9,
-   276.0
-  ],
-  "front": [
-   15.0,
-   15.0,
-   184.0,
-   261.0
-  ],
-  "spine": [
-   191.0,
-   15.0,
-   227.9,
-   261.0
-  ],
-  "back": [
-   234.9,
-   15.0,
-   403.9,
-   261.0
-  ],
-  "margin_mm": 15.0,
-  "joint_mm": 7.0,
-  "shelf_x0": 86.4,
-  "isbn": "978-978-000003-5",
-  "isbn_printed": false,
-  "plates": [
-   "PRINT",
-   "SPOT-SAPPHIRE",
-   "COLD-FOIL",
-   "FOIL-GOLD",
-   "FOIL-CHAMPAGNE",
-   "FOIL-PEARL",
-   "FOIL-RUBY",
-   "EMBOSS",
-   "DEBOSS",
-   "SPOT-UV",
-   "PRINT-FLAT",
-   "GUIDES"
-  ],
-  "spot": "PANTONE 2728 C",
-  "status": "provisional: from covers/printer-spec.json until the printer confirms it"
- },
- "4": {
-  "pages": 555,
-  "binding": "case",
-  "caliper_mm_per_leaf": 0.12,
-  "block_mm": 33.9,
-  "spine_mm": 39.9,
-  "wrap_mm": [
-   421.9,
-   276.0
-  ],
-  "front": [
-   15.0,
-   15.0,
-   184.0,
-   261.0
-  ],
-  "spine": [
-   191.0,
-   15.0,
-   230.9,
-   261.0
-  ],
-  "back": [
-   237.9,
-   15.0,
-   406.9,
-   261.0
-  ],
-  "margin_mm": 15.0,
-  "joint_mm": 7.0,
-  "shelf_x0": 123.3,
-  "isbn": "978-978-000004-2",
-  "isbn_printed": false,
-  "plates": [
-   "PRINT",
-   "SPOT-SAPPHIRE",
-   "COLD-FOIL",
-   "FOIL-GOLD",
-   "FOIL-CHAMPAGNE",
-   "FOIL-PEARL",
-   "FOIL-RUBY",
-   "EMBOSS",
-   "DEBOSS",
-   "SPOT-UV",
-   "PRINT-FLAT",
-   "GUIDES"
-  ],
-  "spot": "PANTONE 2728 C",
-  "status": "provisional: from covers/printer-spec.json until the printer confirms it"
- },
- "5": {
-  "pages": 467,
-  "binding": "case",
-  "caliper_mm_per_leaf": 0.12,
-  "block_mm": 28.6,
-  "spine_mm": 34.6,
-  "wrap_mm": [
-   416.6,
-   276.0
-  ],
-  "front": [
-   15.0,
-   15.0,
-   184.0,
-   261.0
-  ],
-  "spine": [
-   191.0,
-   15.0,
-   225.6,
-   261.0
-  ],
-  "back": [
-   232.6,
-   15.0,
-   401.6,
-   261.0
-  ],
-  "margin_mm": 15.0,
-  "joint_mm": 7.0,
-  "shelf_x0": 163.2,
-  "isbn": "978-978-000005-9",
-  "isbn_printed": false,
-  "plates": [
-   "PRINT",
-   "SPOT-SAPPHIRE",
-   "COLD-FOIL",
-   "FOIL-GOLD",
-   "FOIL-CHAMPAGNE",
-   "FOIL-PEARL",
-   "FOIL-RUBY",
-   "EMBOSS",
-   "DEBOSS",
-   "SPOT-UV",
-   "PRINT-FLAT",
-   "GUIDES"
-  ],
-  "spot": "PANTONE 2728 C",
-  "status": "provisional: from covers/printer-spec.json until the printer confirms it"
- },
- "6": {
   "pages": 509,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
@@ -279,7 +129,157 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 197.8,
+  "shelf_x0": 86.6,
+  "isbn": "978-978-000003-5",
+  "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-CHAMPAGNE",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
+  "status": "provisional: from covers/printer-spec.json until the printer confirms it"
+ },
+ "4": {
+  "pages": 557,
+  "binding": "case",
+  "caliper_mm_per_leaf": 0.12,
+  "block_mm": 34.0,
+  "spine_mm": 40.0,
+  "wrap_mm": [
+   422.0,
+   276.0
+  ],
+  "front": [
+   15.0,
+   15.0,
+   184.0,
+   261.0
+  ],
+  "spine": [
+   191.0,
+   15.0,
+   231.0,
+   261.0
+  ],
+  "back": [
+   238.0,
+   15.0,
+   407.0,
+   261.0
+  ],
+  "margin_mm": 15.0,
+  "joint_mm": 7.0,
+  "shelf_x0": 123.7,
+  "isbn": "978-978-000004-2",
+  "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-CHAMPAGNE",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
+  "status": "provisional: from covers/printer-spec.json until the printer confirms it"
+ },
+ "5": {
+  "pages": 469,
+  "binding": "case",
+  "caliper_mm_per_leaf": 0.12,
+  "block_mm": 28.7,
+  "spine_mm": 34.7,
+  "wrap_mm": [
+   416.7,
+   276.0
+  ],
+  "front": [
+   15.0,
+   15.0,
+   184.0,
+   261.0
+  ],
+  "spine": [
+   191.0,
+   15.0,
+   225.7,
+   261.0
+  ],
+  "back": [
+   232.7,
+   15.0,
+   401.7,
+   261.0
+  ],
+  "margin_mm": 15.0,
+  "joint_mm": 7.0,
+  "shelf_x0": 163.7,
+  "isbn": "978-978-000005-9",
+  "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-CHAMPAGNE",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
+  "status": "provisional: from covers/printer-spec.json until the printer confirms it"
+ },
+ "6": {
+  "pages": 511,
+  "binding": "case",
+  "caliper_mm_per_leaf": 0.12,
+  "block_mm": 31.3,
+  "spine_mm": 37.3,
+  "wrap_mm": [
+   419.3,
+   276.0
+  ],
+  "front": [
+   15.0,
+   15.0,
+   184.0,
+   261.0
+  ],
+  "spine": [
+   191.0,
+   15.0,
+   228.3,
+   261.0
+  ],
+  "back": [
+   235.3,
+   15.0,
+   404.3,
+   261.0
+  ],
+  "margin_mm": 15.0,
+  "joint_mm": 7.0,
+  "shelf_x0": 198.4,
   "isbn": "978-978-000006-6",
   "isbn_printed": false,
   "plates": [
@@ -300,13 +300,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "7": {
-  "pages": 401,
+  "pages": 403,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 24.7,
-  "spine_mm": 30.7,
+  "block_mm": 24.8,
+  "spine_mm": 30.8,
   "wrap_mm": [
-   412.7,
+   412.8,
    276.0
   ],
   "front": [
@@ -318,18 +318,18 @@
   "spine": [
    191.0,
    15.0,
-   221.7,
+   221.8,
    261.0
   ],
   "back": [
-   228.7,
+   228.8,
    15.0,
-   397.7,
+   397.8,
    261.0
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 234.9,
+  "shelf_x0": 235.7,
   "isbn": "978-978-000007-3",
   "isbn_printed": false,
   "plates": [
@@ -350,13 +350,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "8": {
-  "pages": 573,
+  "pages": 575,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 35.0,
-  "spine_mm": 41.0,
+  "block_mm": 35.1,
+  "spine_mm": 41.1,
   "wrap_mm": [
-   423.0,
+   423.1,
    276.0
   ],
   "front": [
@@ -368,18 +368,18 @@
   "spine": [
    191.0,
    15.0,
-   232.0,
+   232.1,
    261.0
   ],
   "back": [
-   239.0,
+   239.1,
    15.0,
-   408.0,
+   408.1,
    261.0
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 265.6,
+  "shelf_x0": 266.5,
   "isbn": "978-978-000008-0",
   "isbn_printed": false,
   "plates": [
@@ -400,13 +400,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "9": {
-  "pages": 345,
+  "pages": 347,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 21.3,
-  "spine_mm": 27.3,
+  "block_mm": 21.4,
+  "spine_mm": 27.4,
   "wrap_mm": [
-   409.3,
+   409.4,
    276.0
   ],
   "front": [
@@ -418,18 +418,18 @@
   "spine": [
    191.0,
    15.0,
-   218.3,
+   218.4,
    261.0
   ],
   "back": [
-   225.3,
+   225.4,
    15.0,
-   394.3,
+   394.4,
    261.0
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 306.6,
+  "shelf_x0": 307.6,
   "isbn": "978-978-000009-7",
   "isbn_printed": false,
   "plates": [
@@ -450,13 +450,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "10": {
-  "pages": 595,
+  "pages": 603,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 36.3,
-  "spine_mm": 42.3,
+  "block_mm": 36.8,
+  "spine_mm": 42.8,
   "wrap_mm": [
-   424.3,
+   424.8,
    276.0
   ],
   "front": [
@@ -468,18 +468,18 @@
   "spine": [
    191.0,
    15.0,
-   233.3,
+   233.8,
    261.0
   ],
   "back": [
-   240.3,
+   240.8,
    15.0,
-   409.3,
+   409.8,
    261.0
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 333.9,
+  "shelf_x0": 335.0,
   "isbn": "978-978-000010-4",
   "isbn_printed": false,
   "plates": [
@@ -529,7 +529,7 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 376.2,
+  "shelf_x0": 377.8,
   "isbn": "978-978-000011-1",
   "isbn_printed": false,
   "plates": [
