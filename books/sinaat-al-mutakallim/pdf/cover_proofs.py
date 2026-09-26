@@ -105,6 +105,10 @@ def render(n, dpi=150, clip=None, light=None, spine_round=None):
     base = AW.inks_to_linear(inks)
     cold = plate(n, "COLD-FOIL", dpi, clip)
     gold = plate(n, "FOIL-GOLD", dpi, clip)
+    try:
+        champ = plate(n, "FOIL-CHAMPAGNE", dpi, clip)
+    except Exception:                      # plates made before the second gold
+        champ = np.zeros_like(gold)
     pearl = plate(n, "FOIL-PEARL", dpi, clip)
     ruby = plate(n, "FOIL-RUBY", dpi, clip)
     emb = plate(n, "EMBOSS", dpi, clip)
@@ -112,11 +116,19 @@ def render(n, dpi=150, clip=None, light=None, spine_round=None):
     uv = plate(n, "SPOT-UV", dpi, clip)
     Hh, Ww = base.shape[:2]
     # the surface: emboss raised, deboss pressed, hot foil pressed a little into what it lands on
-    hot = np.clip(gold + pearl + ruby, 0, 1)
+    hot = np.clip(gold + champ + pearl + ruby, 0, 1)
+    # hot foil is stamped: pressed a little into the sheet, its edge rolled, so the edge catches the light
     height = (0.34 * ndimage.gaussian_filter(emb, 0.22 * k) - 0.20 * ndimage.gaussian_filter(deb, 0.20 * k)
-              - 0.025 * ndimage.gaussian_filter(hot, 0.05 * k))
+              - 0.07 * ndimage.gaussian_filter(hot, 0.06 * k))
     gy, gx = np.gradient(height, 1.0 / k)
     nrm = np.dstack([-gx * 1.6, -gy * 1.6, np.ones_like(height)])
+    # the foil's own grain: a faint, fine unevenness of the metal film, which is what makes foil glitter and
+    # vary where ink would be one flat colour
+    rng = np.random.default_rng(7)
+    grain = [ndimage.gaussian_filter(rng.standard_normal(height.shape), 0.09 * k) for _ in range(2)]
+    gs_ = max(1e-6, float(np.std(grain[0])))
+    nrm[..., 0] += 0.07 * grain[0] / gs_ * hot
+    nrm[..., 1] += 0.07 * grain[1] / gs_ * hot
     if spine_round is not None:
         # a rounded spine: the surface turns away toward both edges of the spine's band of columns
         x0, x1 = spine_round
@@ -146,13 +158,24 @@ def render(n, dpi=150, clip=None, light=None, spine_round=None):
     # cold foil, satin under the laminate
     satin = np.array([0.72, 0.53, 0.24]) * (0.30 + 0.62 * light.env(R, 0.55))
     img = img * (1 - cold[..., None]) + satin * cold[..., None]
-    # hot foils, polished
+    # hot foils, polished: a metal, so its colour is the studio it mirrors, from antique shadow through gold to a
+    # near-white glint where it faces the softbox; the second gold rougher and deeper
+    def metal(e, shadow, mid, high):
+        e = e[..., :1] if e.ndim == 3 else e[..., None]
+        lo = np.clip(e / 0.55, 0, 1)
+        hi = np.clip((e - 0.55) / 0.75, 0, 1)
+        col = shadow + (np.array(mid) - shadow) * lo
+        col = col + (np.array(high) - col) * hi ** 1.4
+        return col + np.clip(e - 1.25, 0, None) * np.array([1.0, 0.96, 0.86]) * 0.6
+    e_gold = light.env(R, 0.08).mean(axis=-1, keepdims=True)
+    goldc = metal(e_gold * 1.15, np.array([0.16, 0.10, 0.035]), (0.93, 0.66, 0.26), (1.0, 0.90, 0.64))
+    e_ch = light.env(R, 0.26).mean(axis=-1, keepdims=True)
+    champc = metal(e_ch, np.array([0.12, 0.08, 0.035]), (0.62, 0.45, 0.21), (0.84, 0.70, 0.46))
     env_sharp = light.env(R, 0.10)
-    goldc = np.array([1.00, 0.74, 0.30]) * (0.06 + 1.05 * env_sharp)
     rubyc = np.array([0.50, 0.03, 0.07]) * (0.16 + 1.20 * env_sharp)
     hue = 0.035 * np.dstack([np.sin(6 * R[..., 0]), np.sin(6 * R[..., 0] + 2.1), np.sin(6 * R[..., 0] + 4.2)])
     pearlc = np.array([0.86, 0.84, 0.79]) * (0.62 + 0.55 * light.env(R, 0.30)) + hue
-    for m, col in ((gold, goldc), (pearl, pearlc), (ruby, rubyc)):
+    for m, col in ((champ, champc), (gold, goldc), (pearl, pearlc), (ruby, rubyc)):
         img = img * (1 - m[..., None]) + col * m[..., None]
     return np.clip(img, 0, None)
 

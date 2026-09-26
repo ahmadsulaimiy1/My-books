@@ -32,7 +32,8 @@
   "hot_foil": {
    "gold": "bright gold: the lit dots of the glosses, the seams and their jewels, the gold rules of the frame and the matn, the paragraph marks, the reference's numerals, the seal",
    "pearl": "pearl: the title, the volume's numeral, the names, the pearl rules",
-   "ruby": "ruby metallic: the vowels (harakat) of the lit glosses and the nūn's dot of «صناعة»; nothing else (the ruby is meaning, not ornament)"
+   "ruby": "ruby metallic: the vowels (harakat) of the lit glosses and the nūn's dot of «صناعة»; nothing else (the ruby is meaning, not ornament)",
+   "champagne": "antique gold (satin hot foil, deeper than the bright gold): the secondary ornament, so that the gold has a hierarchy (plate FOIL-CHAMPAGNE; one more foil pass)"
   },
   "emboss": "sculpted, depth as grey (EMBOSS plate): the matn raised, the title registered under its pearl foil, the seams, the jewels, the lit dots",
   "deboss": "blind: the matn's own rulings under its lines (DEBOSS plate)",
@@ -53,13 +54,15 @@
    "folder": "1-Heritage",
    "name": "Heritage: the illuminated binding (shamsa)",
    "cold_foil": "the rays of the medallion, the frame's roundels, the engraving of the back's row",
-   "hot_foil_gold": "the tooled frame and its chain, the cornerpieces (quarter rosettes), the inscription field's angles and rules, the medallion's rim, chain and strapwork rosette, the author's rule and khatam, the back's central khatam, the seal",
+   "hot_foil_gold": "the brightest: the medallion's strapwork rosette (over emboss), the author's rule and khatam (over emboss), the title's dots, the inscription field's angles and rules, the medallion's rim, the frame's outer rules, the seal",
    "hot_foil_pearl": "the title, the volume's name, the numerals, the author's full name, fine rules",
    "hot_foil_ruby": "the nun's dot of the title; the nib's dot over each medallion's number; on the spines, the band's jewel of the first and the tenth, and the great stroke's first touch on the first",
-   "spot_uv": "the medallion, the great stroke (on the board only), and on the back the echo of the medallion's rosette",
+   "spot_uv": "the medallion; on the back the echo of the medallion's rosette",
    "deboss": "the tooled frame",
    "emboss": "the medallion, the title, the volume's name, the author's name; on the back the rosette's echo, blind",
-   "back": "silent: the frame, the corners, the blind rosette with one gold khatam, the seal and the house's name; the ISBN zone clear"
+   "back": "silent: the frame, the corners, the blind rosette with one gold khatam, the seal and the house's name; the ISBN zone clear",
+   "hot_foil_champagne": "the antique gold: the cornerpieces, the frame's inner band rules, jewels and roundels, the medallion's chain and inner rings",
+   "print": "the sapphire; the bibliographic box's field in deep ruby ink (C30 M100 Y70 K55), under its gold foil border and type"
   },
   "matn": {
    "folder": "2-Matn",

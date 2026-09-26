@@ -23,6 +23,7 @@ import frontmatter as FM
 import illumination as IL
 import typeset as T
 from artwork import Knot as K
+from marks import bevel  # noqa: E402
 from coverart import AR, ISBN_ZONE, LEAD, Page, SERIES, TAU, faces, floriate, seal, set_title, title_parts, translate  # noqa: F401
 
 
@@ -36,8 +37,8 @@ def frame(P, x0=0.0, y0=0.0, w=W, h=H, corners=((1, 1), (1, 1)), quiet=False):
     P.gold(IL.band(fr, 0, -1.0))
     P.pearl(IL.band(fr, -1.75, -1.95))
     mid = IL.rounded_rect(x0 + 13.25, y0 + 13.25, x0 + w - 13.25, y0 + h - 13.25, 2.2)
-    P.gold(IL.band(mid, 2.35, 2.05))
-    P.gold(IL.band(mid, -2.05, -2.35))
+    P.champagne(IL.band(mid, 2.35, 2.05))       # the band's rules: the second gold
+    P.champagne(IL.band(mid, -2.05, -2.35))
     waves = IL.wave_strip(LineString(mid.exterior.coords), 1.25, 5.2, 4, w=0.11)
     P.cold(waves.intersection(IL.band(mid, 1.8, -1.8)), 0.75)
     ext = LineString(mid.exterior.coords)
@@ -47,7 +48,7 @@ def frame(P, x0=0.0, y0=0.0, w=W, h=H, corners=((1, 1), (1, 1)), quiet=False):
         if min(abs(q.x - x0 - 13.25), abs(q.x - x0 - w + 13.25)) < 9 and min(abs(q.y - y0 - 13.25), abs(q.y - y0 - h + 13.25)) < 9:
             continue
         P.panel(Point(q.x, q.y).buffer(1.9), 0.02)
-        P.gold(AW.nuqta(q.x, q.y, 3.0, 70))
+        P.champagne(AW.nuqta(q.x, q.y, 3.0, 70))
     inner = IL.rounded_rect(x0 + 18.0, y0 + 18.0, x0 + w - 18.0, y0 + h - 18.0, 1.2)
     P.pearl(IL.band(inner, 1.55, 1.35))
     P.gold(IL.band(inner, 0.6, 0))
@@ -55,9 +56,9 @@ def frame(P, x0=0.0, y0=0.0, w=W, h=H, corners=((1, 1), (1, 1)), quiet=False):
     for (cx, cy) in ((x0 + 13.25, y0 + 13.25), (x0 + w - 13.25, y0 + 13.25), (x0 + 13.25, y0 + h - 13.25), (x0 + w - 13.25, y0 + h - 13.25)):
         d = Point(cx, cy).buffer(4.6, resolution=48)
         P.panel(d, 0.02)
-        P.gold(IL.band(d, 0.55, 0))
+        P.champagne(IL.band(d, 0.55, 0))
         P.cold(girih(cx, cy, 1.5, 3.9, 8, strap=0.42)[0], 0.9)
-        P.gold(AW.nuqta(cx, cy, 1.6, 70))
+        P.champagne(AW.nuqta(cx, cy, 1.6, 70))
         P.arch.append(d.buffer(0.6))
     return inner
 
@@ -73,10 +74,10 @@ def cornerpieces(P, which, x0=0.0, y0=0.0, w=W, h=H, r=25.0):
         pieces.append(q)
         # a quarter of the rosette, the medallion's own geometry, as the corners of a tooled binding echo it
         straps, tips = girih(cx, cy, 9.5, r + 4.0, 10, rot=math.atan2(sy, sx), strap=1.0)
-        P.gold(straps.intersection(q.buffer(-1.5)).difference(Point(cx, cy).buffer(5.6)))
+        P.champagne(straps.intersection(q.buffer(-1.5)).difference(Point(cx, cy).buffer(5.6)))
         for (tx, ty) in tips:
             if q.buffer(-2.2).contains(Point(tx, ty)):
-                P.gold(AW.nuqta(tx, ty, 1.5, 90))
+                P.champagne(AW.nuqta(tx, ty, 1.5, 90))
         P.gold(IL.band(Point(cx, cy).buffer(4.8).intersection(q), 0, -0.45))
         P.gold(AW.nuqta(cx + 2.4 * sx, cy + 2.4 * sy, 1.9, 45 if sx * sy > 0 else 135))
     if pieces:
@@ -177,22 +178,21 @@ def shamsa(P, n, cx=MCX, cy=MCY, scale=1.0, field=None, detail=1.0, numeral=True
     rim = LineString(med.buffer(2.6 * scale ** 0.5).exterior.coords)
     nb = int(rim.length / (2.1 * scale ** 0.5))
     beads = [Point(rim.interpolate(rim.length * i / nb).coords[0]).buffer(0.55 * scale ** 0.5, resolution=12) for i in range(nb)]
-    P.gold(unary_union(beads))
+    # (the ring of beads round the rim is gone: the rim, the lattice and the number are enough)
     P.pearl(IL.band(med, 0.3 * scale ** 0.5, 0.1 * scale ** 0.5))
     inner = med
     if g.get("wave"):
-        (P.cold if engrave else (lambda *a, **k: None))(IL.wave_ring(cx, cy, rx - 2.5 * scale, ry - 2.5 * scale, 1.25 * scale, max(24, lobes * 3), 4, w=0.09).intersection(med), 0.8)
         inner = med.buffer(-5.0 * scale)
-        P.gold(IL.band(inner, 0.4 * scale ** 0.5, 0))
+        P.champagne(IL.band(inner, 0.4 * scale ** 0.5, 0))
         P.pearl(IL.band(inner, -0.8 * scale, -0.95 * scale))
     if g.get("nested"):
         for k in range(1, g["nested"] + 1):
-            P.gold(IL.band(med.buffer(-5.0 * scale - k * 4.2 * scale), 0.22, 0))
+            P.champagne(IL.band(med.buffer(-5.0 * scale - k * 4.2 * scale), 0.22, 0))
     if g.get("chain"):
         smooth = Point(cx, cy).buffer(1.0, resolution=96)
         smooth = affinity.scale(smooth, (rx - 7.2 * scale), (ry - 7.2 * scale), origin=(cx, cy))
         chain, holes = IL.jewel_chain(smooth, 0.0, -2.8 * scale, max(24, lobes * 3))
-        P.gold(chain)
+        P.champagne(chain)
         pass
         inner = smooth.buffer(-2.8 * scale)
     core_r = 14.5 * s
@@ -203,21 +203,19 @@ def shamsa(P, n, cx=MCX, cy=MCY, scale=1.0, field=None, detail=1.0, numeral=True
     straps = straps.intersection(inner.buffer(-1.0 * scale)).difference(Point(cx, cy).buffer(core_r + 0.6 * scale))
     if engrave:                                          # the straps gilded, as the tooled bindings gild them
         P.gold(straps)
+        P.emboss(straps, 0.75)                 # the lattice raised: foil over emboss, the brightest gold
     for (tx, ty) in tips:
         if inner.buffer(-1.5 * scale).contains(Point(tx, ty)):
             P.gold(AW.nuqta(tx, ty, 1.6 * scale ** 0.5, 90))
     if g.get("rings2"):
         for sgn in (-1, 1):
             c = Point(cx + sgn * rx * 0.28, cy).buffer(rx * 0.5, resolution=96)
-            P.gold(IL.band(c, 0.35 * scale ** 0.5, -0.35 * scale ** 0.5).intersection(inner.buffer(-0.5)))
+            P.champagne(IL.band(c, 0.35 * scale ** 0.5, -0.35 * scale ** 0.5).intersection(inner.buffer(-0.5)))
     # the core: the volume's number, and above it the nib's first dot in ruby
     core = Point(cx, cy).buffer(core_r, resolution=64)
     P.panel(core, 0.06)
     P.gold(IL.band(core, 0.9 * scale ** 0.5, 0.2 * scale ** 0.5))
     P.pearl(IL.band(core, -0.55 * scale, -0.72 * scale))
-    ring = LineString(Point(cx, cy).buffer(core_r * 0.84, resolution=64).exterior.coords)
-    nb_ = max(12, int(ring.length / (1.5 * max(0.6, scale))))
-    (P.cold if engrave else (lambda *a, **k: None))(unary_union([Point(ring.interpolate(ring.length * i / nb_).coords[0]).buffer(0.32 * max(0.6, scale), resolution=8) for i in range(nb_)]), 0.95)
     if numeral:
         F = faces()
         num, _ = T.text(str(n), F.amiri7, 12.5 * s * (0.86 if n >= 10 else 1.0), cx=cx, base=cy + 4.0 * s, digits=True)
@@ -227,8 +225,7 @@ def shamsa(P, n, cx=MCX, cy=MCY, scale=1.0, field=None, detail=1.0, numeral=True
     if g.get("crown"):
         # the tenth: a second, outer rim of lobes, the medallion at its fullest
         outer = IL.lobed(cx, cy, rx + 2.5 * scale, ry + 2.5 * scale, lobes * 2, 0.05, point=0.12)
-        P.gold(IL.band(outer, 0.35, 0).difference(med.buffer(0.8)))
-        (P.cold if engrave else (lambda *a, **k: None))(IL.wave_ring(cx, cy, rx + 1.4 * scale, ry + 1.4 * scale, 0.5 * scale, lobes * 4, 3, w=0.10).difference(med.buffer(0.4)).intersection(outer), 0.9)
+        P.champagne(IL.band(outer, 0.35, 0).difference(med.buffer(0.8)))
         med = outer
     P.arch.append(med.buffer(1.8 * scale))
     P.emboss(med, 0.55)
@@ -296,11 +293,12 @@ def index_medallion(P, cx=MCX, cy=MCY, scale=1.0, field=None, engrave=True):
     return frame_
 
 
-def inscription(P, x0, y0, x1, y1, bracket=9.0, star=True, fill=None):
+def inscription(P, x0, y0, x1, y1, bracket=9.0, star=True, fill=None, foot=None):
     """The inscription field (كتيبة) of the architecture: not a box but its corners and its two long rules. Gold
     angles at the four corners; a fine gold rule along head and foot, stopping short of the angles; a small
     eight-point khatam, the medallion's own geometry, set into each rule at its middle. The field itself stays
-    the sapphire (fill: a panel tint where words must be read on it). Returns the field's area."""
+    the sapphire (fill: a panel tint where words must be read on it). foot: a line of type set into the foot rule
+    itself, the rule breaking for it, in place of the foot's khatam. Returns the field's area."""
     t, gap = 0.6, 2.2
     for (cx, cy, sx, sy) in ((x0, y0, 1, 1), (x1, y0, -1, 1), (x0, y1, 1, -1), (x1, y1, -1, -1)):
         P.gold(box(min(cx, cx + sx * bracket), min(cy, cy + sy * t), max(cx, cx + sx * bracket), max(cy, cy + sy * t)))
@@ -311,6 +309,14 @@ def inscription(P, x0, y0, x1, y1, bracket=9.0, star=True, fill=None):
         P.cold(box(min(ix, ix + sx * 0.14), min(iy, iy + sy * bracket * 0.55), max(ix, ix + sx * 0.14), max(iy, iy + sy * bracket * 0.55)), 0.85)
     xm = (x0 + x1) / 2
     for yy in (y0, y1):
+        if yy == y1 and foot is not None:
+            fx0, _, fx1, _ = foot.bounds
+            for (a, b) in ((x0 + bracket + gap, fx0 - 3.2), (fx1 + 3.2, x1 - bracket - gap)):
+                if b > a:
+                    P.gold(box(a, yy - 0.15, b, yy + 0.15))
+            for xe in (fx0 - 3.2, fx1 + 3.2):     # the rule ends on a small point where it meets the name
+                P.gold(AW.nuqta(xe, yy, 1.1, 90))
+            continue
         cut = 4.6 if star else 0.0
         for (a, b) in ((x0 + bracket + gap, xm - cut), (xm + cut, x1 - bracket - gap)):
             if b > a:
@@ -326,32 +332,71 @@ def inscription(P, x0, y0, x1, y1, bracket=9.0, star=True, fill=None):
     return area
 
 
-MED_CY, MED_SCALE = 145.0, 0.9       # the front's medallion: where it stands and at what size
-AUTHOR_TOP = 196.0
+MED_CY, MED_SCALE = 142.0, 0.84      # the front's medallion: where it stands and at what size
+AUTHOR_TOP = 190.0
+SUBSTRATE_BASE = 0.215                # a deeper sapphire than the other editions, so that the light pools in it
 BY = "تأليف الفقير إلى ربه"             # the author's own wording, never shortened on this edition
 AUTHOR_NAME = "أبي عبد الله جلال الدين أحمد بن إبراهيم السليمي"
+AUTHOR_LINES = ("أبي عبد الله جلال الدين", "أحمد بن إبراهيم السليمي")   # the same words, broken as a colophon breaks them
 PRAYER = "غفر الله له ولوالديه وللمسلمين"
 
 
 def author(P, F):
-    """The authorship as the scholarly book states it: a fine gold rule with the khatam at its middle; the
-    humble line; the full name, the one line of weight; the prayer, quieter still."""
+    """The colophon of the front, as the scholarly book states its author: a fine gold rule with the khatam at
+    its middle; the humble line; the kunya and laqab; the name, the one line of weight; the prayer, quieter.
+    The words are the author's own and are never shortened on this edition."""
     y = AUTHOR_TOP
-    for (a, b) in ((MCX - 30, MCX - 5.0), (MCX + 5.0, MCX + 30)):
-        P.gold(box(a, y - 0.14, b, y + 0.14))
-    g, _ = girih(MCX, y, 1.3, 2.9, 8, strap=0.45)
+    for (a, b) in ((MCX - 32, MCX - 5.0), (MCX + 5.0, MCX + 32)):
+        P.gold(box(a, y - 0.15, b, y + 0.15))
+    g, _ = girih(MCX, y, 1.3, 2.9, 8, strap=0.5)
     P.gold(g)
-    by, _ = T.text(BY, F.amiri4, 3.7, cx=MCX, base=y + 6.9)
+    P.emboss(g, 0.8)
+    by, _ = T.text(BY, F.amiri4, 3.6, cx=MCX, base=y + 7.0)
     P.ink(by, AW.CHAMPAGNE_INK)
-    size = 5.0                               # Amiri, the face of the heritage texts (Bible, ch. 104)
-    ln = T.line(AUTHOR_NAME, F.amiri7, size)
-    size *= min(1.0, 94.0 / ln.width)       # between the bottom cornerpieces
-    nm, _ = T.text(AUTHOR_NAME, F.amiri7, size, cx=MCX, base=y + 14.3)
+    k1, _ = T.text(AUTHOR_LINES[0], F.amiri7, 4.3, cx=MCX, base=y + 14.2)
+    P.pearl(k1)
+    nm, _ = T.text(AUTHOR_LINES[1], F.amiri7, 5.9, cx=MCX, base=y + 22.4)
     P.pearl(nm)
-    P.emboss(nm, 0.7)
-    pr, _ = T.text(PRAYER, F.amiri4, 3.3, cx=MCX, base=y + 20.6)
+    bevel(P, AW.valid(unary_union([k1, nm])), top=0.8, base=0.35, depth=0.35, steps=3)
+    pr, _ = T.text(PRAYER, F.amiri4, 3.3, cx=MCX, base=y + 28.9)
     P.ink(pr, AW.PEARL_SOFT)
-    P.arch.append(box(MCX - 49, y - 3.5, MCX + 49, y + 22.0))
+    P.arch.append(box(MCX - 49, y - 3.5, MCX + 49, y + 31.0))
+
+
+BOX_RUBY = True  # the bibliographic box's field: deep ruby ink (True) or the sapphire itself
+BOX_RUBY_INK = (0.30, 1.00, 0.70, 0.55, 0.00)   # a deep oxblood ruby: a cut stone, not a printed red
+
+
+def volume_box(P, n, cx, cy, w=22.0, h=27.0, ruby=None):
+    """The book's bibliographic seal, low on the fore-edge side (Bible, ch. 25 §14 ل): the volume, the edition and
+    its year in a small box square to the frame, its corners cut; a fine gold border and a finer rule within, a
+    tiny khatam on its head and foot. Its field is deep ruby, printed (not foil), or the sapphire itself."""
+    F = faces()
+    ruby = BOX_RUBY if ruby is None else ruby
+    c = 2.0
+    x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
+    shape = Polygon([(x0 + c, y0), (x1 - c, y0), (x1, y0 + c), (x1, y1 - c), (x1 - c, y1), (x0 + c, y1), (x0, y1 - c), (x0, y0 + c)])
+    if ruby:
+        P.ink(shape.buffer(-0.2, join_style=2), BOX_RUBY_INK)
+    P.gold(IL.band(shape, 0.0, -0.4, join=2))
+    P.gold(IL.band(shape, -1.15, -1.3, join=2)) if ruby else P.cold(IL.band(shape, -1.1, -1.24, join=2), 0.85)
+    for yy in (y0, y1):
+        if not ruby:
+            P.panel(Point(cx, yy).buffer(2.4), 0.0)
+        g, _ = girih(cx, yy, 0.9, 2.0, 8, strap=0.38)
+        P.gold(g)
+    ordinal = FM.VOLUMES[n - 1][0]
+    vol = f"المجلد {ordinal}"
+    size = 3.4
+    ln = T.line(vol, F.kufi6, size, features=T.KF)
+    size *= min(1.0, (w - 5.0) / ln.width)
+    v, _ = T.text(vol, F.kufi6, size, cx=cx, base=cy - 3.2, features=T.KF)
+    P.pearl(v)
+    ed, _ = T.text(FM.EDITION, F.changa4, 2.5, cx=cx, base=cy + 3.1)
+    (P.gold if ruby else (lambda g_: P.ink(g_, AW.CHAMPAGNE_INK)))(ed)
+    yr, _ = T.text(FM.YEAR, F.amiri4, 2.6, cx=cx, base=cy + 8.3)
+    (P.gold if ruby else (lambda g_: P.ink(g_, AW.CHAMPAGNE_INK)))(yr)
+    P.arch.append(shape.buffer(3.5, join_style=2))
 
 
 def front(n):
@@ -362,20 +407,22 @@ def front(n):
     # the title engraved into the architecture: an inscription field, its title pressed in pearl on the sapphire
     # the front declares (Bible, ch. 25 §14 ي): the title, its subtitle and the volume in the inscription field;
     # the medallion free in the sapphire; and the author, as the scholarly book names him
-    TITLE_FIELD = (40.0, 21.0, 130.0, 93.0)
-    inscription(P, *TITLE_FIELD)
-    set_title(P, MCX, [("صناعة", 21.0, 43.5), ("المتكـلّم العربي", 12.4, 62.0)])
-    sub, _ = T.text(FM.SUBTITLE, F.sch4, 4.2, cx=MCX, base=72.8)
-    P.ink(sub, AW.PEARL_SOFT)
+    TITLE_FIELD = (40.0, 21.0, 130.0, 92.0)
     ordinal, name = FM.VOLUMES[n - 1][:2]
     label = name if n < 11 else "مرجع المتكلّم العربي"
-    kg, kw = T.text(f"المجلد {ordinal}", F.changa4, 2.6, cx=MCX, base=80.4)
-    P.ink(kg, AW.CHAMPAGNE_INK)
-    ng, nw = T.text(label, F.kufi6, 5.0 if len(label) < 10 else 4.3, cx=MCX, base=88.0, features=T.KF)
+    size = 5.6 if len(label) < 10 else 4.6
+    ng, nw = T.text(label, F.kufi6, size, cx=MCX, base=TITLE_FIELD[3] + size * 0.36, features=T.KF)
+    inscription(P, *TITLE_FIELD, foot=ng)
+    letters = set_title(P, MCX, [("صناعة", 21.0, 44.5), ("المتكـلّم العربي", 12.4, 63.5)])
+    bevel(P, letters, top=1.0, base=0.45, depth=0.55, steps=4)      # carved, not laid on: the title chiselled
+    sub, _ = T.text(FM.SUBTITLE, F.sch4, 4.3, cx=MCX, base=77.6)
+    P.ink(sub, AW.PEARL_SOFT)
     P.pearl(ng)
     P.emboss(ng, 0.8)
+    P.arch.append(ng.buffer(3.0))              # the medallion's rays stop short of the name
     P.L.glow.append((MCX, 55.0, 42.0, 0.35))
     author(P, F)                             # first, so that the medallion's rays keep clear of it
+    volume_box(P, n, 33.5, 170.5)            # low on the fore-edge side, beside the medallion's foot
     # the medallion
     field = AW.valid(inner.difference(unary_union(P.arch)))
     first = len(P.L.gold)                    # what the medallion draws, and nothing of the frame round it
@@ -384,7 +431,7 @@ def front(n):
     else:
         med = shamsa(P, n, cy=MED_CY, scale=MED_SCALE, field=field)
     reach = unary_union([med] + P.L.gold[first:])
-    if reach.bounds[1] < TITLE_FIELD[3] + 5.0 or reach.bounds[3] > AUTHOR_TOP - 4.0:
+    if reach.bounds[1] < TITLE_FIELD[3] + 4.5 or reach.bounds[3] > AUTHOR_TOP - 3.5:
         raise SystemExit(f"volume {n}: the medallion ({reach.bounds[1]:.1f}–{reach.bounds[3]:.1f} mm) crowds the "
                          f"title field ({TITLE_FIELD[3]:.0f}) or the author ({AUTHOR_TOP:.0f})")
     # the field: the nib's hatching, tone on tone; and the great stroke, pressed in gloss alone
@@ -576,14 +623,8 @@ def wrap(n, sw, lay, widths):
     """The wrap of volume n in the wrap's coordinates (covers.py lays it on the binding)."""
     set_shelf(widths)
     L = AW.Layers()
-    P, _ = front(n)
-    gloss = front_stroke(n)                  # the great stroke in gloss behind the architecture
-    gloss.cut(AW.valid(unary_union(P.arch)))
-    gloss.cut(box(-50, -50, W + 50, H + 50).difference(box(0, 0, W, H)))   # on the board, not the turn-in
-    Lf = AW.Layers()
-    Lf.extend(gloss)
-    Lf.extend(P.L)
-    L.extend(translate(Lf, *lay["front_art"]))
+    P, _ = front(n)                          # (the great stroke stays on the spines only: on the front it read as a smudge)
+    L.extend(translate(P.L, *lay["front_art"]))
     B, _ = back(n)
     L.extend(translate(B.L, *lay["back_art"]))
     x0 = SHELF["x0"][n]

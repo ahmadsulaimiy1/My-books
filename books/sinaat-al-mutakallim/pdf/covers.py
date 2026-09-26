@@ -14,6 +14,7 @@ plate agrees with every other:
                                       satin rule within each frame
   Cover-NN_<Latin>_FOIL-GOLD.pdf      hot foil, bright gold: the lit dots of the glosses, the seams and their
                                       jewels, the rules of the frame and the matn, the seal
+  Cover-NN_<Latin>_FOIL-CHAMPAGNE.pdf hot foil, antique gold (satin): the secondary ornament, so that gold has a hierarchy
   Cover-NN_<Latin>_FOIL-PEARL.pdf     hot foil, pearl: the title, the numerals, the names, fine rules
   Cover-NN_<Latin>_FOIL-RUBY.pdf      hot foil, ruby: the lit vowels of the glosses and the nūn's dot, nothing else
   Cover-NN_<Latin>_EMBOSS.pdf         sculpted emboss, depth as grey (black the highest): the matn, the title,
@@ -86,7 +87,7 @@ def dest(ed):
     return d
 
 
-PLATES = ("PRINT", "SPOT-SAPPHIRE", "COLD-FOIL", "FOIL-GOLD", "FOIL-PEARL", "FOIL-RUBY", "EMBOSS", "DEBOSS", "SPOT-UV",
+PLATES = ("PRINT", "SPOT-SAPPHIRE", "COLD-FOIL", "FOIL-GOLD", "FOIL-CHAMPAGNE", "FOIL-PEARL", "FOIL-RUBY", "EMBOSS", "DEBOSS", "SPOT-UV",
           "PRINT-FLAT", "GUIDES")
 SPOT_NAME = "PANTONE 2728 C"
 SPOT_CMYK = (0.96, 0.69, 0.00, 0.00)    # its process build, for PRINT-FLAT only
@@ -148,7 +149,8 @@ def substrate(wrap):
     lay = wrap["lay"]
     L = wrap["layers"]
     sp = lay["spine"]
-    inks, t = AW.substrate(lay["w"], lay["h"], DPI, list(L.glow), base=0.26, fields=[(sp[0], sp[2], 0.03)])
+    base = getattr(edition(wrap["ed"]), "SUBSTRATE_BASE", 0.26)
+    inks, t = AW.substrate(lay["w"], lay["h"], DPI, list(L.glow), base=base, fields=[(sp[0], sp[2], 0.03)])
     return inks, t
 
 
@@ -203,8 +205,8 @@ def ops(wrap, at):
         out.append((g, {"PRINT": WHITE, "SPOT-SAPPHIRE": 0.0, "COLD-FOIL": 1.0, "PRINT-FLAT": FLAT_COLD}))
     for (g, inks) in L.ink:
         out.append((g, {"PRINT": inks[:4], "SPOT-SAPPHIRE": inks[4], "PRINT-FLAT": flat(inks)}))
-    for g in L.champagne:
-        out.append((g, {"FOIL-GOLD": 1.0, "PRINT-FLAT": FLAT_GOLD}))
+    for g in L.champagne:                    # the second gold: antique, satin, for what is secondary
+        out.append((g, {"FOIL-CHAMPAGNE": 1.0, "PRINT-FLAT": FLAT_COLD}))
     for g in L.gold:
         out.append((g, {"FOIL-GOLD": 1.0, "PRINT-FLAT": FLAT_GOLD}))
     for g in L.pearl:
