@@ -2,8 +2,11 @@
 """Build the series, rebuilding only what changed, then check everything.
 
 Each volume has a fingerprint: the hash of its source files, the series-wide sources it prints (front matter,
-the sources base, the registers the indexes read) and every tool under pdf/. A volume is rebuilt only when its
-fingerprint differs from the one recorded at its last good build (book/_production/الإخراج/بصمات-البناء.json).
+the sources base, the registers the indexes read) and the tools its build runs: volume.py, preflight.py and
+fixbreaks.py with every module they import from pdf/ (found by modulefinder, so a tool the build does not load,
+such as the covers' own compositions and proofs, does not rebuild the books), the style sheets and scripts the
+pages are laid out with, and Paged.js. A volume is rebuilt only when its fingerprint differs from the one recorded
+at its last good build (book/_production/الإخراج/بصمات-البناء.json).
 Nothing is skipped on the checking side: the covers are regenerated from the final page counts, and preflight
 runs on all eleven volumes every time.
 
@@ -30,11 +33,30 @@ SHARED = [BOOK / "_production" / "المصادر" / "قاعدة-المصادر.t
           BOOK / "_production" / "التحقيق" / "سجل-المصطلحات.tsv", BOOK / "_production" / "الإخراج" / "فواصل-الصفحات.json"]
 
 
+_TOOLS = []
+
+
+def tools():
+    """What a volume's build runs besides its text: the entry scripts and every module they import from pdf/, the
+    style sheets and scripts of the page, and the vendored Paged.js."""
+    if not _TOOLS:
+        from modulefinder import ModuleFinder
+        found = set()
+        for entry in ("volume.py", "preflight.py", "fixbreaks.py"):
+            mf = ModuleFinder(path=[str(HERE)])
+            mf.run_script(str(HERE / entry))
+            found.add(HERE / entry)
+            found |= {Path(m.__file__) for m in mf.modules.values() if m.__file__ and Path(m.__file__).parent == HERE}
+        found |= set(HERE.glob("*.css")) | set(HERE.glob("*.js")) | {p for p in (HERE / "vendor").rglob("*") if p.is_file()}
+        _TOOLS.extend(sorted(found))
+    return _TOOLS
+
+
 def fingerprint(n):
     h = hashlib.sha256()
     files = [f for u in VOLUMES[n - 1]["units"] for f in unit_files(n, u)]
     files += sorted((BOOK / f"المجلد-{'الأول'}").rglob("*.md")) if n == 1 else []
-    files += sorted(HERE.glob("*.py")) + [f for f in SHARED if f.exists()]
+    files += tools() + [f for f in SHARED if f.exists()]
     for f in sorted(set(files)):
         if f.exists():
             h.update(str(f.relative_to(ROOT)).encode())

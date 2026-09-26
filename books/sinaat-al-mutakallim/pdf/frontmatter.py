@@ -230,15 +230,16 @@ def page(inner, cls=""):
 def mark(dark=False):
     """The house's device: the seal (the covers' own outlines), with the house's name in Latin under it
     (Bible, ch. 98)."""
-    import covers
-    return (f'<div class="imark{" on-dark" if dark else ""}">{covers.seal_svg(15.0, on_dark=dark)}'
+    import marks
+    return (f'<div class="imark{" on-dark" if dark else ""}">{marks.seal_svg(15.0, on_dark=dark)}'
             f'<span class="e">{PUBLISHER_EN}</span></div>')
 
 
 def device(n, a=16.0, dark=False):
-    """The series' device as it stands on this volume's cover: the alif in its circle on the line."""
-    import covers
-    return f'<div class="dev-w">{covers.device_svg(n, a, on_dark=dark)}</div>'
+    """The volume's device as it stands on its cover's spine and back: the page in small, the volume's numeral in
+    its matn (Bible, ch. 25 §13)."""
+    import marks
+    return f'<div class="dev-w">{marks.device_svg(n, a, on_dark=dark)}</div>'
 
 
 def grule():
@@ -321,10 +322,10 @@ def imprint(n=1):
 def house_block():
     """The house as a colophon (not a contact sheet): the seal, the name in Kufi, the Latin name spaced, a gold
     rule with its dot, and the ways to reach the house in one quiet line."""
-    import covers
+    import marks
     sep = '<i class="hb-d"></i>'
     contact = sep.join(f'<span class="ltr">{x}</span>' for x in PHONES + [EMAIL])
-    return (f'<div class="hb">{covers.seal_svg(21.0)}<div class="hb-ar">{PUBLISHER_AR}</div>'
+    return (f'<div class="hb">{marks.seal_svg(21.0)}<div class="hb-ar">{PUBLISHER_AR}</div>'
             f'<div class="hb-en">{PUBLISHER_EN}</div>{grule()}<div class="hb-c">{contact}</div></div>')
 
 

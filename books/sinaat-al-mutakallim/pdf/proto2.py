@@ -202,11 +202,11 @@ def title_page(css, volume=None, n=None):
         mark = '<circle cx="146" cy="137.85" r="1.3" fill="#A8172E"/>'
         dev = ""
     else:
-        import covers
+        import marks
         a = 40.0
         mark = ""
         dev = (f'<div style="position:absolute;left:{38.0 - a / 2 * 1.15:.2f}mm;top:{137.85 - a - 0.5:.2f}mm">'
-               f'{covers.device_svg(n, a, on_dark=True, ext=a / 2 * 1.15)}</div>')
+               f'{marks.device_svg(n, a, on_dark=True, ext=a / 2 * 1.15)}</div>')
     return page(f'''<div class="tp-band"></div>
 <svg viewBox="0 0 170 240" style="position:absolute;inset:0;width:170mm;height:240mm"><defs>{C2.K.gold_defs()}</defs>{svg}
 <rect x="0" y="137.6" width="170" height="0.5" fill="url(#foil)"/>{mark}</svg>{dev}

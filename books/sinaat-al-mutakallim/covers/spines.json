@@ -29,8 +29,23 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
+  "shelf_x0": 0,
   "isbn": "978-978-000001-1",
   "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "2": {
@@ -63,8 +78,23 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
+  "shelf_x0": 41.7,
   "isbn": "978-978-000002-8",
   "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "3": {
@@ -97,8 +127,23 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
+  "shelf_x0": 86.4,
   "isbn": "978-978-000003-5",
   "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "4": {
@@ -131,8 +176,23 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
+  "shelf_x0": 123.3,
   "isbn": "978-978-000004-2",
   "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "5": {
@@ -165,8 +225,23 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
+  "shelf_x0": 163.2,
   "isbn": "978-978-000005-9",
   "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "6": {
@@ -199,8 +274,23 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
+  "shelf_x0": 197.8,
   "isbn": "978-978-000006-6",
   "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "7": {
@@ -233,8 +323,23 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
+  "shelf_x0": 234.9,
   "isbn": "978-978-000007-3",
   "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "8": {
@@ -267,8 +372,23 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
+  "shelf_x0": 265.6,
   "isbn": "978-978-000008-0",
   "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "9": {
@@ -301,8 +421,23 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
+  "shelf_x0": 306.6,
   "isbn": "978-978-000009-7",
   "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "10": {
@@ -335,8 +470,23 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
+  "shelf_x0": 333.9,
   "isbn": "978-978-000010-4",
   "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "11": {
@@ -369,8 +519,23 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
+  "shelf_x0": 376.2,
   "isbn": "978-978-000011-1",
   "isbn_printed": false,
+  "plates": [
+   "PRINT",
+   "SPOT-SAPPHIRE",
+   "COLD-FOIL",
+   "FOIL-GOLD",
+   "FOIL-PEARL",
+   "FOIL-RUBY",
+   "EMBOSS",
+   "DEBOSS",
+   "SPOT-UV",
+   "PRINT-FLAT",
+   "GUIDES"
+  ],
+  "spot": "PANTONE 2728 C",
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  }
 }

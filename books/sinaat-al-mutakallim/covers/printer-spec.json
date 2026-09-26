@@ -2,8 +2,14 @@
  "status": "provisional: every figure below is replaced by the printer's own before the plates are made; the artwork follows them without being redrawn",
  "edition": "الطبعة الرائدة (Bible, ch. 25 §5): case binding",
  "binding": "case",
- "text_paper": {"name": "ivory uncoated, 100 g/m²", "caliper_mm_per_leaf": 0.12},
- "endpapers": {"thickness_mm": 0.6, "spec": "sapphire endpapers with a tonal pattern of the same colour (Bible, ch. 25 §5)"},
+ "text_paper": {
+  "name": "ivory uncoated, 100 g/m²",
+  "caliper_mm_per_leaf": 0.12
+ },
+ "endpapers": {
+  "thickness_mm": 0.6,
+  "spec": "sapphire endpapers: the page's rulings and the series' words pressed into the colour in its own tone (Bible, ch. 25 §13)"
+ },
  "case": {
   "board_mm": 2.5,
   "square_mm": 3.0,
@@ -14,12 +20,31 @@
   "spine_shape": "square back",
   "covering": "litho-printed cover sheet (150 g/m² coated), soft-touch matte laminate"
  },
- "paperback": {"cover_allowance_mm": 1.0, "bleed_mm": 3.0, "note": "the study edition (Bible, ch. 25 §5); set \"binding\": \"paperback\" to write its wraps"},
- "finishes": {
-  "foil": "champagne gold hot foil, slightly matte (not yellow)",
-  "blind_emboss": "the seven dots of the measure",
-  "blind_deboss": "the circle's band; the drafted construction of the circle",
-  "spot_uv": "the seven ruling lines and the seven dots only, on the soft-touch laminate"
+ "paperback": {
+  "cover_allowance_mm": 1.0,
+  "bleed_mm": 3.0,
+  "note": "the study edition (Bible, ch. 25 §5); set \"binding\": \"paperback\" to write its wraps"
  },
- "extras": {"ribbons": ["gold", "crimson"], "headbands": "sapphire and gold"}
+ "finishes": {
+  "print": "CMYK + PANTONE 2728 C (spot sapphire); the substrate a 240 dpi raster, everything else vector",
+  "cold_foil": "gold cold foil laid inline on the press, before the inks: the glosses' rulings, the device's rulings, the satin rules of the frames; no line under 0.10 mm; knocked out of every ink",
+  "laminate": "soft-touch matte, after print and cold foil",
+  "hot_foil": {
+   "gold": "bright gold: the lit dots of the glosses, the seams and their jewels, the gold rules of the frame and the matn, the paragraph marks, the reference's numerals, the seal",
+   "pearl": "pearl: the title, the volume's numeral, the names, the pearl rules",
+   "ruby": "ruby metallic: the vowels (harakat) of the lit glosses and the nūn's dot of «صناعة»; nothing else (the ruby is meaning, not ornament)"
+  },
+  "emboss": "sculpted, depth as grey (EMBOSS plate): the matn raised, the title registered under its pearl foil, the seams, the jewels, the lit dots",
+  "deboss": "blind: the matn's own rulings under its lines (DEBOSS plate)",
+  "spot_uv": "the glosses' letters (the latent rasm) and their unlit dots: a whisper seen only when the book is tilted; never over foil (SPOT-UV plate)",
+  "order": "cold foil and inks on the press → soft-touch laminate → hot foils and emboss/deboss (combination dies) → spot UV"
+ },
+ "extras": {
+  "ribbons": [
+   "gold",
+   "crimson"
+  ],
+  "headbands": "sapphire and gold",
+  "top_edge": "gilt (gold): the head of the page block (flagship edition)"
+ }
 }
