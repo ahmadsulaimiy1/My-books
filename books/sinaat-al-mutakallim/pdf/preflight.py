@@ -218,6 +218,21 @@ def main(v=1, proof=False):
     sizes = {(round(p.rect.width / MM), round(p.rect.height / MM)) for p in doc}
     add("التقنية", "مقاس الصفحات واحد ١٧×٢٤ سم للمجلدات الأحد عشر، والمرجع منها (الباب ١١٢ك)",
         "يجتاز" if sizes == {(round(G.W), round(G.H))} else "لا يجتاز", str(sizes))
+    # no remnant of the superseded formats, and no temporary label, in the sources or on the pages
+    alltext = "\n".join(p.get_text() for p in doc)
+    remnant = [k for k in ("20×26", "٢٠×٢٦", "20 × 26", "15×21", "١٥×٢١", "15 × 21", "200×260", "150×210")
+               if k in alltext or any(k in t for t in texts.values())]
+    add("التقنية", "لا أثر للمقاسين الملغيين (٢٠×٢٦ و١٥×٢١)", "يجتاز" if not remnant else "لا يجتاز", "، ".join(remnant))
+    temp = sorted({m.group(0) for m in re.finditer(r"\b(?:TODO|FIXME|XXX|TBD|lorem ipsum|placeholder)\b|نصٌّ? مؤقت|يُستكمل لاحقًا|\?\?\?|؟؟",
+                                                   alltext, re.I)})
+    add("التقنية", "لا وسم مؤقت على الصفحات (TODO، placeholder، «نص مؤقت»…)", "يجتاز" if not temp else "لا يجتاز", "، ".join(temp))
+    # the cover was drawn for this book: its spine was computed from this page count (covers.py)
+    sp_path = BOOK.parent / "covers" / "spines.json"
+    sp = json.loads(sp_path.read_text()) if sp_path.exists() else {}
+    cov_pages = sp.get(str(v), {}).get("pages")
+    add("النشر", "الغلاف مبنيٌّ على عدد صفحات هذه النسخة (عرض الكعب)",
+        "يجتاز" if cov_pages == len(doc) else ("للمراجعة" if proof else "لا يجتاز"),
+        f"الغلاف لـ{n(cov_pages or 0)} صفحة، والنسخة {n(len(doc))}؛ أعد covers.py" if cov_pages != len(doc) else f"{n(len(doc))} صفحة")
     top, bottom = G.TOP * MM, (G.H - G.BOTTOM) * MM
     blanks = [i for i, k in enumerate(kinds) if k == "blank"]
     add("الإخراج الفني", "الصفحات البيضاء المقصودة (قبل ما يُفتتح على صفحةٍ فردية)", "للعلم",
@@ -571,6 +586,12 @@ def main(v=1, proof=False):
     for g, s in summary:
         print(f"  {g}: {s}")
     print(f"  {len(review)} pages to look at; {len(tags)} review tags")
+    failed = [(g, c) for g, c, vv, _ in rows if vv == "لا يجتاز"]
+    if failed and not proof:
+        # the final is not printable while any check fails: the build stops here
+        for g, c in failed:
+            print(f"  FAILED: {g}: {c}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

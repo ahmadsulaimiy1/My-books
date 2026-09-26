@@ -155,13 +155,21 @@ CSS = r"""
 .im { position: absolute; top: 30mm; right: 24mm; left: 24mm; }
 .im h4 { font: 300 10pt/1 "Changa"; color: var(--gold-ink); margin: 0 0 7mm; display: flex; gap: 3mm; align-items: center; }
 .im h4 i { flex: 1; border-top: .4pt solid var(--gold); }
-.im-row { display: grid; grid-template-columns: 30mm 1fr; gap: 4mm; padding: 2.6mm 0; border-bottom: .3pt solid #E0DBD0; }
+.im-row { display: grid; grid-template-columns: 20mm 1fr; gap: 4mm; padding: 2.6mm 0; border-bottom: .3pt solid #E0DBD0; }
 .im-row .l { font: 400 8.4pt/1.7 "IBM Plex Sans Arabic"; color: var(--ink-3); }
 .im-row .v { font: 400 11.2pt/1.65 "Scheherazade New"; color: var(--ink); }
 .im-row .v small { display: block; font: 400 8.2pt/1.5 "Source Serif 4"; color: var(--ink-3); direction: ltr; text-align: right; }
 .im-pub { margin-top: 13mm; display: grid; grid-template-columns: auto 1fr; gap: 8mm; align-items: center; }
 .im-pub .c { font: 400 8.4pt/1.9 "IBM Plex Sans Arabic"; color: var(--ink-2); border-right: .4pt solid var(--gold); padding-right: 6mm; }
 .im-pub .c .ltr { direction: ltr; unicode-bidi: isolate; font-family: "Source Serif 4"; font-size: 8.6pt; letter-spacing: .2pt; }
+.hb { position: absolute; bottom: 24mm; right: 24mm; left: 24mm; text-align: center; }
+.hb .seal { margin-bottom: 4.2mm; }
+.hb-ar { font: 500 12.6pt/1.4 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--sapphire); }
+.hb-en { font: 400 7.6pt/1.6 "Source Serif 4"; color: var(--gold-ink); letter-spacing: 2.2pt; text-transform: uppercase; margin-top: 1.2mm; }
+.hb .grule { margin: 4.6mm auto 3.8mm; width: 46mm; }
+.hb-c { display: flex; justify-content: center; align-items: center; gap: 3.2mm; direction: ltr; font: 400 8.2pt/1.6 "Source Serif 4"; color: var(--ink-2); letter-spacing: .25pt; }
+.hb-c .ltr { unicode-bidi: isolate; }
+.hb-d { width: 1.3mm; height: 1.3mm; transform: rotate(45deg); background: var(--gold); display: inline-block; }
 /* 5. rights and editions: sober */
 .rt { position: absolute; bottom: 28mm; right: 24mm; left: 24mm; }
 .rt .c { font: 600 9.8pt/1.8 "Changa"; color: var(--sapphire); margin-bottom: 4mm; }
@@ -220,10 +228,10 @@ def page(inner, cls=""):
 
 
 def mark(dark=False):
-    """The house's mark: one qalam dot on its line, «الإحسان» under it, the house's name in Latin (Bible, ch. 98);
-    the same sign as on the spines (covers.py)."""
+    """The house's device: the seal (the covers' own outlines), with the house's name in Latin under it
+    (Bible, ch. 98)."""
     import covers
-    return (f'<div class="imark{" on-dark" if dark else ""}">{covers.house_mark_svg(12.0, on_dark=dark)}<span class="w">الإحسان</span>'
+    return (f'<div class="imark{" on-dark" if dark else ""}">{covers.seal_svg(15.0, on_dark=dark)}'
             f'<span class="e">{PUBLISHER_EN}</span></div>')
 
 
@@ -307,9 +315,17 @@ def imprint(n=1):
     if DEPOSIT.get(n):
         rows.append(("رقم الإيداع", DEPOSIT[n]))
     body = "".join(f'<div class="im-row"><div class="l">{a}</div><div class="v">{b}</div></div>' for a, b in rows)
-    contact = "".join(f'<div class="ltr">{x}</div>' for x in PHONES + [EMAIL])
-    return page(f'<div class="im"><h4><span>بيانات النشر</span><i></i></h4>{body}'
-                f'<div class="im-pub">{mark()}<div class="c">{PUBLISHER_AR}{contact}</div></div></div>')
+    return page(f'<div class="im"><h4><span>بيانات النشر</span><i></i></h4>{body}</div>{house_block()}')
+
+
+def house_block():
+    """The house as a colophon (not a contact sheet): the seal, the name in Kufi, the Latin name spaced, a gold
+    rule with its dot, and the ways to reach the house in one quiet line."""
+    import covers
+    sep = '<i class="hb-d"></i>'
+    contact = sep.join(f'<span class="ltr">{x}</span>' for x in PHONES + [EMAIL])
+    return (f'<div class="hb">{covers.seal_svg(21.0)}<div class="hb-ar">{PUBLISHER_AR}</div>'
+            f'<div class="hb-en">{PUBLISHER_EN}</div>{grule()}<div class="hb-c">{contact}</div></div>')
 
 
 def rights():

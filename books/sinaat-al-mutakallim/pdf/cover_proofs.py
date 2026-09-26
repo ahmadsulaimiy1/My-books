@@ -117,7 +117,10 @@ def save(arr, path, quality=90, dpi=150):
 
 
 def wrap_proof(n, dpi=150):
-    arr = render(n, dpi)
+    """The case (or the wrap) as it stands when made: the boards and the spine, without the turn-in."""
+    sp = spines()[str(n)]
+    fr, bk = sp["front"], sp["back"]
+    arr = render(n, dpi, clip=(fr[0], fr[1], bk[2], bk[3]))
     return save(arr, OUT / f"Cover-{n:02d}_{CV.LATIN[n]}_Proof.jpg", dpi=dpi)
 
 
@@ -126,14 +129,12 @@ def spines():
 
 
 def front_clip(n):
-    b = CV.BLEED
-    return (b, b, b + CV.W, b + CV.H)
+    """The front as the reader sees it: the board (or the trimmed page), from the layout covers.py wrote."""
+    return tuple(spines()[str(n)]["front"])
 
 
 def spine_clip(n):
-    sw = spines()[str(n)]["spine_mm"]
-    b = CV.BLEED
-    return (b + CV.W, b, b + CV.W + sw, b + CV.H)
+    return tuple(spines()[str(n)]["spine"])
 
 
 # ------------------------------------------------------------------------------------------------ the set

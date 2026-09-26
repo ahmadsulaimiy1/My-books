@@ -1,0 +1,8 @@
+{
+ "status": "provisional",
+ "note": "numbers supplied by the project for layout; official status only once issued by the national ISBN agency to the publisher. Nothing is printed in the zone while status is provisional (Bible, ch. 25 §10و).",
+ "volumes": {"1": "978-978-000001-1", "2": "978-978-000002-8", "3": "978-978-000003-5", "4": "978-978-000004-2",
+             "5": "978-978-000005-9", "6": "978-978-000006-6", "7": "978-978-000007-3", "8": "978-978-000008-0",
+             "9": "978-978-000009-7", "10": "978-978-000010-4", "11": "978-978-000011-1"},
+ "set": "978-978-000012-8"
+}

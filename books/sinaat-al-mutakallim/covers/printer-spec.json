@@ -1,0 +1,25 @@
+{
+ "status": "provisional: every figure below is replaced by the printer's own before the plates are made; the artwork follows them without being redrawn",
+ "edition": "الطبعة الرائدة (Bible, ch. 25 §5): case binding",
+ "binding": "case",
+ "text_paper": {"name": "ivory uncoated, 100 g/m²", "caliper_mm_per_leaf": 0.12},
+ "endpapers": {"thickness_mm": 0.6, "spec": "sapphire endpapers with a tonal pattern of the same colour (Bible, ch. 25 §5)"},
+ "case": {
+  "board_mm": 2.5,
+  "square_mm": 3.0,
+  "turn_in_mm": 15.0,
+  "joint_mm": 7.0,
+  "board_set_back_mm": 4.0,
+  "spine_allowance_mm": 1.0,
+  "spine_shape": "square back",
+  "covering": "litho-printed cover sheet (150 g/m² coated), soft-touch matte laminate"
+ },
+ "paperback": {"cover_allowance_mm": 1.0, "bleed_mm": 3.0, "note": "the study edition (Bible, ch. 25 §5); set \"binding\": \"paperback\" to write its wraps"},
+ "finishes": {
+  "foil": "champagne gold hot foil, slightly matte (not yellow)",
+  "blind_emboss": "the seven dots of the measure",
+  "blind_deboss": "the circle's band; the drafted construction of the circle",
+  "spot_uv": "the seven ruling lines and the seven dots only, on the soft-touch laminate"
+ },
+ "extras": {"ribbons": ["gold", "crimson"], "headbands": "sapphire and gold"}
+}

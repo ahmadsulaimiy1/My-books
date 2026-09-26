@@ -53,9 +53,13 @@ import lettering as L  # noqa: E402
 
 OUT = HERE.parent / "covers"
 W, H = G.W, G.H                        # 170 × 240 mm
-BLEED = 3.0
-CALIPER = 0.12                         # mm a leaf: 100 g/m² ivory book paper (Bible, ch. 25 §5); provisional
-COVER_ALLOW = 1.0                      # mm for the cover stock over the book block; provisional
+# the physical figures come from the printer: covers/printer-spec.json (provisional until the printer fills it);
+# the artwork is drawn on the page (170 × 240) and placed on the wrap the binding makes, so a new board,
+# square, joint or caliper moves the panels without redrawing anything
+SPEC = json.loads((OUT / "printer-spec.json").read_text(encoding="utf-8"))
+CALIPER = SPEC["text_paper"]["caliper_mm_per_leaf"]
+BLEED = SPEC["paperback"]["bleed_mm"]
+COVER_ALLOW = SPEC["paperback"]["cover_allowance_mm"]
 SAFE = 8.0                             # nothing that matters within this of a trim or a fold
 
 LATIN = {1: "Al-Usul", 2: "Al-Lisan", 3: "Al-Ibara", 4: "Al-Bayan", 5: "Al-Maqam", 6: "Al-Adab", 7: "Al-Hiwar",
@@ -67,11 +71,13 @@ AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 SAPPHIRE = (1.00, 0.88, 0.26, 0.38)    # the field
 SAPPHIRE_DEEP = (1.00, 0.89, 0.28, 0.44)   # the measure's tone on PRINT-FLAT: barely off the field
 SAPPHIRE_GHOST = (0.78, 0.58, 0.10, 0.22)  # the other volumes on the back's map
+SAPPHIRE_LINE = (0.92, 0.74, 0.18, 0.30)   # the drafted construction: a hairline a shade off the field
 PEARL = (0.04, 0.05, 0.12, 0.00)
 PEARL_SOFT = (0.10, 0.10, 0.18, 0.04)
 CHAMPAGNE = (0.14, 0.24, 0.55, 0.03)   # printed gold: small type, and every foil element on PRINT-FLAT
 CRIMSON = (0.15, 1.00, 0.75, 0.15)
 K100 = (0, 0, 0, 1)
+WHITE = (0, 0, 0, 0)
 
 PLATES = ("PRINT", "PRINT-FLAT", "FOIL", "EMBOSS", "DEBOSS", "SPOT-UV", "GUIDES")
 
@@ -384,8 +390,34 @@ def pages(n):
     return len(pymupdf.open(str(p)))
 
 
+def block_mm(n):
+    return pages(n) / 2 * CALIPER + (SPEC["endpapers"]["thickness_mm"] if SPEC["binding"] == "case" else 0.0)
+
+
 def spine_width(n):
-    return round(pages(n) / 2 * CALIPER + COVER_ALLOW, 1)
+    if SPEC["binding"] == "case":
+        c = SPEC["case"]
+        return round(block_mm(n) + 2 * c["board_mm"] + c["spine_allowance_mm"], 1)
+    return round(block_mm(n) + COVER_ALLOW, 1)
+
+
+def layout(sw):
+    """The wrap the binding makes, in mm from its top-left: the margin round it (bleed, or the case's turn-in),
+    the boards, the joints, the spine; and where the page-sized artwork of front and back lies on it.
+    front | spine | back, as the Arabic book opens."""
+    if SPEC["binding"] == "case":
+        c = SPEC["case"]
+        m, sq, j, sb = c["turn_in_mm"], c["square_mm"], c["joint_mm"], c["board_set_back_mm"]
+        bw, bh = W + sq - sb, H + 2 * sq
+        fb = (m, m, m + bw, m + bh)                           # front board
+        sp = (fb[2] + j, m, fb[2] + j + sw, m + bh)          # spine
+        bb = (sp[2] + j, m, sp[2] + j + bw, m + bh)          # back board
+        return dict(w=bb[2] + m, h=bh + 2 * m, margin=m, front=fb, spine=sp, back=bb, joint=j,
+                    front_art=(m + sq, m + sq), back_art=(bb[0] - sb, m + sq), art_top=m + sq)
+    b = BLEED
+    fb, sp, bb = (b, b, b + W, b + H), (b + W, b, b + W + sw, b + H), (b + W + sw, b, b + 2 * W + sw, b + H)
+    return dict(w=2 * W + sw + 2 * b, h=H + 2 * b, margin=b, front=fb, spine=sp, back=bb, joint=0.0,
+                front_art=(b, b), back_art=(bb[0], b), art_top=b)
 
 
 def stage_of(n):
@@ -404,10 +436,14 @@ def build(n, faces=None, sw=None):
     faces = faces or Faces()
     alif = Alif(faces.amiri4.path)
     sw = sw if sw is not None else spine_width(n)
-    b = BLEED
-    wrap_w, wrap_h = 2 * W + sw + 2 * b, H + 2 * b
+    lay = layout(sw)
+    wrap_w, wrap_h = lay["w"], lay["h"]
     sc = Scene(wrap_w, wrap_h)
-    fx, sx, bx, y0 = b, b + W, b + W + sw, b            # panel origins: front | spine | back (Arabic book)
+    sc.layout = lay
+    sc.volume = n
+    fx, y0 = lay["front_art"]                            # the page-sized artwork of the front, and of the back
+    bx = lay["back_art"][0]
+    sx = lay["spine"][0]
     ordinal, name = FM.VOLUMES[n - 1][:2]
 
     # the field, over the whole bleed
@@ -430,6 +466,16 @@ def front(sc, n, faces, alif, x0, y0, ordinal, name):
     for k in range(1, 8):
         yk = BASE - k * U
         sc.add(P(rect(-BLEED, yk - 0.15, W + BLEED, 0.3)), {"SPOT-UV"})
+    # the drafted construction (§10د, the second layer: a structure seen only up close): the square that
+    # governs the circle, drawn as a draughtsman draws it, its lines run a little past their meeting, with the
+    # rhombic dot where each touches the circle; a hairline a shade off the field, pressed blind as well
+    ext, hw = 9.0, 0.09
+    for x in (CX - R, CX + R):
+        sc.add(P(rect(x - hw, CY - R - ext, 2 * hw, 2 * R + ext)), {"PRINT", "PRINT-FLAT", "DEBOSS-FINE"}, ink=SAPPHIRE_LINE)
+    # only the square's own sides: no line through the centre (a crosshair reads as a gauge, §11ب)
+    sc.add(P(rect(CX - R - ext, CY - R - hw, 2 * R + 2 * ext, 2 * hw)), {"PRINT", "PRINT-FLAT", "DEBOSS-FINE"}, ink=SAPPHIRE_LINE)
+    for (tx, ty) in ((CX, CY - R), (CX - R, CY), (CX + R, CY)):
+        sc.add(P(rhombus(tx, ty, 0.9)), {"PRINT", "PRINT-FLAT"}, ink=SAPPHIRE_LINE)
     # the circle: a band at the rim pressed blind, one gold hairline in it
     sc.add(P(ring(CX, CY, R - 1.5, R + 1.5)), {"DEBOSS", "UV-KO"}, evenodd=True)
     sc.add(P(ring(CX, CY, R - 0.18, R + 0.18)), {"FOIL"}, evenodd=True)
@@ -474,6 +520,10 @@ def front(sc, n, faces, alif, x0, y0, ordinal, name):
 def spine(sc, n, faces, alif, x0, y0, sw, ordinal, name):
     P = lambda segs: move(segs, x0, y0)     # noqa: E731
     cx, m = sw / 2, sw - 2 * 2.4
+    # the bands of a bound spine: a gold double rule at the head and at the tail, at one height on every
+    # volume, so that the eleven on a shelf carry three gold lines across them (head, the سطر, tail)
+    for yb in (6.6, 8.0, H - 8.0, H - 6.6):
+        sc.add(P(rect(-0.01, yb - 0.14, sw + 0.02, 0.28)), {"FOIL"})
     y = 17.5
     for word in ("صناعة", "المتكلّم", "العربي"):
         sc.add(P(set_centre(fit(word, faces.kufi6, 3.5, m, features=KF), cx, y)), {"FOIL"})
@@ -516,15 +566,51 @@ def spine(sc, n, faces, alif, x0, y0, sw, ordinal, name):
     publisher_mark(sc, faces, P, cx, 228.0, small=True)
 
 
-def publisher_mark(sc, faces, P, cx, base, small=False):
-    """The house's mark (Bible, ch. 98): «الإحسان» in Kufam under a small gold rhombus on a thin line."""
-    size = 2.9 if small else 4.2
+def seal_segs(faces, cx, base, small=False):
+    """The house's device (Bible, ch. 98), as outlines: a colophon seal. «الإحسان» in Kufam inside a frame of two
+    hairlines, the qalam's rhombic dot breaking the top rule at its centre; «base» is the word's baseline."""
+    size = 2.7 if small else 3.9
     w = line("الإحسان", faces.kufi6, size, features=KF)
-    sc.add(P(set_centre(w, cx, base)), {"FOIL"})
-    top = base - size * 0.95 - 2.2
-    sc.add(P(rhombus(cx, top, 0.9 if small else 1.2)), {"FOIL"})
-    half = (w.width / 2) * 0.62
-    sc.add(P(rect(cx - half, top - 0.1, half - 1.6, 0.2) + rect(cx + 1.6, top - 0.1, half - 1.6, 0.2)), {"FOIL"})
+    out = [set_centre(w, cx, base)]
+    pad_x, pad_top, pad_bot = size * 0.9, size * 1.0, size * 0.8
+    x0, x1 = cx - w.width / 2 - pad_x, cx + w.width / 2 + pad_x
+    y0, y1 = base - size * 0.95 - pad_top, base + pad_bot
+    t_out, t_in, gap = (0.22, 0.12, 0.7) if small else (0.28, 0.14, 0.9)
+    dot = size * 0.34
+    for (t, d) in ((t_out, 0.0), (t_in, gap)):
+        a0, a1, b0, b1 = x0 + d, x1 - d, y0 + d, y1 - d
+        hole = dot * 0.9 + 0.5 + d * 0.6
+        out.append(rect(a0, b1 - t, a1 - a0, t) + rect(a0, b0, t, b1 - b0) + rect(a1 - t, b0, t, b1 - b0)
+                   + rect(a0, b0, cx - hole - a0, t) + rect(cx + hole, b0, a1 - cx - hole, t))
+    out.append(rhombus(cx, y0 + t_out / 2, dot))
+    return out
+
+
+def publisher_mark(sc, faces, P, cx, base, small=False):
+    for segs in seal_segs(faces, cx, base, small):
+        sc.add(P(segs), {"FOIL"})
+
+
+@lru_cache(maxsize=1)
+def _faces():
+    return Faces()
+
+
+def seal_svg(width=16.0, on_dark=False):
+    """The seal for a page of the book, drawn from the covers' own outlines, at the given width (mm)."""
+    segs = seal_segs(_faces(), 0.0, 0.0)
+    allp = [p for s_ in segs for p in s_]
+    x0, y0, x1, y1 = bbox(allp)
+    k = width / (x1 - x0)
+    gold = "#C9A95C" if not on_dark else "#E4CB8C"
+    word = "#0C2766" if not on_dark else "#E4CB8C"          # on paper the name reads in sapphire, the frame in gold
+    body = "".join(f'<path d="{to_d(xf(s_, a=k, d=k, e=-x0 * k, f=-y0 * k))}" fill="{word if i == 0 else gold}"/>'
+                   for i, s_ in enumerate(segs))
+    h = (y1 - y0) * k
+    return (f'<svg class="seal" viewBox="0 0 {width:.2f} {h:.2f}" style="width:{width:.2f}mm;height:{h:.2f}mm;'
+            f'display:block;margin:0 auto" aria-hidden="true">{body}</svg>')
+
+
 
 
 # the book's own words (chapter sixteen, §١), then the series and this volume
@@ -540,30 +626,34 @@ SERIES = ("كتابٌ في أحد عشر مجلدًا في صناعة الكلا
 def back(sc, n, faces, alif, x0, y0, ordinal, name):
     P = lambda segs: move(segs, x0, y0)     # noqa: E731
     right, measure = 154.0, 118.0
-    y = 33.0
-    for ln in (line(t, faces.sch6, 5.4) for t in LEAD):
+    # the column the words stand in, drawn as the front's construction is drawn: two hairlines a shade off the
+    # field, run past the text a little (the back continues the front's architecture, not a text panel)
+    for x in (right - measure - 6.0, right + 6.0):
+        sc.add(P(rect(x - 0.09, 20.0, 0.18, BASE - 26.0)), {"PRINT", "PRINT-FLAT"}, ink=SAPPHIRE_LINE)
+    y = 38.0
+    for ln in (line(t, faces.sch6, 4.7) for t in LEAD):
         sc.add(P(set_right(ln, right, y)), {"PRINT", "PRINT-FLAT"}, ink=PEARL)
-        y += 9.4
+        y += 8.2
     # a short gold rule, then the series
     y += 2.0
     sc.add(P(rect(right - 14, y - 0.15, 14, 0.3)), {"FOIL"})
     y += 10.0
-    for ln in paragraph(SERIES, faces.sch4, 3.8, measure):
+    for ln in paragraph(SERIES, faces.sch4, 3.5, measure):
         sc.add(P(set_right(ln, right, y)), {"PRINT", "PRINT-FLAT"}, ink=PEARL_SOFT)
-        y += 6.9
+        y += 6.3
     # this volume
     y += 7.0
     sc.add(P(set_right(line("في هذا المجلد", faces.changa4, 2.6), right, y)), {"PRINT", "PRINT-FLAT"}, ink=CHAMPAGNE)
     y += 8.2
     head = "مرجع المتكلّم العربي" if n == 11 else f"المجلد {ordinal}: {name}"
-    sc.add(P(set_right(line(head, faces.changa5, 5.0), right, y)), {"PRINT", "PRINT-FLAT"}, ink=PEARL)
-    y += 8.4
+    sc.add(P(set_right(line(head, faces.changa5, 4.4), right, y)), {"PRINT", "PRINT-FLAT"}, ink=PEARL)
+    y += 7.6
     what = FM.VOLUMES[n - 1][2]
     if n == 11:
         what = f"{FM.REFERENCE_SUB}: {what}"
-    for ln in paragraph(what + ".", faces.sch4, 3.8, measure):
+    for ln in paragraph(what + ".", faces.sch4, 3.5, measure):
         sc.add(P(set_right(ln, right, y)), {"PRINT", "PRINT-FLAT"}, ink=PEARL_SOFT)
-        y += 6.9
+        y += 6.3
     stage = FM.VOLUMES[n - 1][3]
     if stage:
         y += 2.2
@@ -580,6 +670,61 @@ def back(sc, n, faces, alif, x0, y0, ordinal, name):
     sc.add(P(set_right(line(FM.PUBLISHER_AR, faces.sch4, 3.0), right, 226.5)), {"PRINT", "PRINT-FLAT"}, ink=PEARL_SOFT)
     ed = f"{FM.EDITION}، {FM.YEAR}"
     sc.add(P(set_right(line(ed, faces.sch4, 2.8), right - 34.0, 218.0)), {"PRINT", "PRINT-FLAT"}, ink=PEARL_SOFT)
+    isbn_zone(sc, n, faces, P)
+
+
+# ------------------------------------------------------------------------------------------------ the ISBN zone
+ISBN_ZONE = (16.0, 206.0, 46.0, 26.0)   # on the back, from its spine side and its head (mm): Bible, ch. 25 §11و
+ISBN = json.loads((OUT / "isbn.json").read_text(encoding="utf-8"))
+
+
+def isbn_valid(num):
+    d = [int(c) for c in num if c.isdigit()]
+    return len(d) == 13 and (10 - sum(x * (1 if i % 2 == 0 else 3) for i, x in enumerate(d[:12])) % 10) % 10 == d[12]
+
+
+def isbn_of(n):
+    """(number, printable): printed only once issued (status «official») and with a valid check digit."""
+    num = ISBN["volumes"].get(str(n), "")
+    return num, bool(num) and ISBN.get("status") == "official" and isbn_valid(num)
+
+
+_EAN_L = ["0001101", "0011001", "0010011", "0111101", "0100011", "0110001", "0101111", "0111011", "0110111", "0001011"]
+_EAN_G = ["0100111", "0110011", "0011011", "0100001", "0011101", "0111001", "0000101", "0010001", "0001001", "0010111"]
+_EAN_R = ["1110010", "1100110", "1101100", "1000010", "1011100", "1001110", "1010000", "1000100", "1001000", "1110100"]
+_EAN_P = ["LLLLLL", "LLGLGG", "LLGGLG", "LLGGGL", "LGLLGG", "LGGLLG", "LGGGLL", "LGLGLG", "LGLGGL", "LGGLGL"]
+
+
+def ean13(num, x, y, module=0.33 * 0.9, height=22.85 * 0.9):
+    """The EAN-13 symbol of an ISBN as bars (mm), left quiet zone at x, bars' top at y; guard bars run 5
+    modules longer. Returns (bars, width)."""
+    d = [int(c) for c in num if c.isdigit()]
+    bits = "101" + "".join((_EAN_L if p == "L" else _EAN_G)[v] for p, v in zip(_EAN_P[d[0]], d[1:7])) + "01010" + \
+        "".join(_EAN_R[v] for v in d[7:]) + "101"
+    guard = set(range(3)) | set(range(45, 50)) | set(range(92, 95))
+    bars, i, x0 = [], 0, x + 11 * module
+    while i < len(bits):
+        if bits[i] == "1":
+            j = i
+            while j < len(bits) and bits[j] == "1" and ((j in guard) == (i in guard)):
+                j += 1
+            bars += rect(x0 + i * module, y, (j - i) * module, height + (5 * module if i in guard else 0))
+            i = j
+        else:
+            i += 1
+    return bars, (95 + 18) * module
+
+
+def isbn_zone(sc, n, faces, P):
+    zx, zy, zw, zh = ISBN_ZONE
+    num, printable = isbn_of(n)
+    if not printable:
+        return                      # the zone stays clear (the guides show it, and the number's status)
+    # a white field (the scanner needs contrast the sapphire and the pearl do not give), the number over the bars
+    sc.add(P(rect(zx, zy, zw, zh)), {"PRINT", "PRINT-FLAT"}, ink=WHITE)
+    sc.add(P(set_left(line(f"ISBN {num}", faces.serif, 2.3, latin=True), zx + 3.0, zy + 3.4)), {"PRINT", "PRINT-FLAT"}, ink=K100)
+    bars, bw = ean13(num, zx + (zw - (95 + 18) * 0.297) / 2, zy + 4.6)
+    sc.add(P(bars), {"PRINT", "PRINT-FLAT"}, ink=K100)
 
 
 def series_map(sc, n, faces, alif, P, right):
@@ -601,23 +746,34 @@ def series_map(sc, n, faces, alif, P, right):
 
 
 def guides(sc, faces, fx, sx, bx, y0, sw):
-    """Not for printing: trim, spine folds, safe area, and the ISBN zone kept clear on the back."""
+    """Not for printing: the boards (or the trim), the joints, the spine folds, the turn-in, the safe area, and
+    the ISBN zone kept clear on the back with the state of its number."""
     t = 0.12
-    for x in (fx, sx, bx, bx + W):
+    lay = sc.layout
+    xs = sorted({lay["front"][0], lay["front"][2], lay["spine"][0], lay["spine"][2], lay["back"][0], lay["back"][2]})
+    for x in xs:
         sc.add(rect(x - t / 2, 0, t, sc.h), {"GUIDES"}, ink=(0, 1, 0, 0))
-    for y in (y0, y0 + H):
+    for y in (lay["front"][1], lay["front"][3]):
         sc.add(rect(0, y - t / 2, sc.w, t), {"GUIDES"}, ink=(0, 1, 0, 0))
+    lab = line(f"{SPEC['binding']} binding · spine {sw:.1f} mm · joint {lay['joint']:.1f} mm · margin (turn-in or bleed) "
+               f"{lay['margin']:.1f} mm · all provisional: covers/printer-spec.json", faces.serif, 2.2, latin=True)
+    sc.add(set_left(lab, lay["front"][0] + 2.0, lay["front"][3] + 3.2), {"GUIDES"}, ink=(0, 1, 0, 0))
     for (x, w) in ((fx, W), (bx, W)):
         for seg in (rect(x + SAFE, y0 + SAFE, W - 2 * SAFE, t), rect(x + SAFE, y0 + H - SAFE, W - 2 * SAFE, t),
                     rect(x + SAFE, y0 + SAFE, t, H - 2 * SAFE), rect(x + W - SAFE, y0 + SAFE, t, H - 2 * SAFE)):
             sc.add(seg, {"GUIDES"}, ink=(1, 0, 0, 0))
-    zx, zy, zw, zh = bx + 16.0, y0 + 206.0, 46.0, 26.0
+    zx, zy, zw, zh = bx + ISBN_ZONE[0], y0 + ISBN_ZONE[1], ISBN_ZONE[2], ISBN_ZONE[3]
     for seg in (rect(zx, zy, zw, t), rect(zx, zy + zh, zw, t), rect(zx, zy, t, zh), rect(zx + zw, zy, t, zh)):
         sc.add(seg, {"GUIDES"}, ink=(0, 1, 0, 0))
-    lab = line("ISBN / barcode: reserved for the publisher", faces.serif, 2.2, latin=True)
-    sc.add(set_left(lab, zx + 1.5, zy + zh / 2 + 0.8), {"GUIDES"}, ink=(0, 1, 0, 0))
-    lab = line(f"spine {sw:.1f} mm (provisional caliper)", faces.serif, 2.2, latin=True)
-    sc.add(set_left(lab, sx + 0.5, y0 + H + 2.2), {"GUIDES"}, ink=(0, 1, 0, 0))
+    n = sc.volume
+    num, printable = isbn_of(n)
+    state = "printed" if printable else ("PROVISIONAL, not printed" if isbn_valid(num) else "PROVISIONAL, INVALID check digit, not printed")
+    for k, txt in enumerate(("ISBN / barcode zone", f"{num or 'no number'}", state)):
+        sc.add(set_left(line(txt, faces.serif, 2.2, latin=True), zx + 1.5, zy + 6.0 + 4.0 * k), {"GUIDES"}, ink=(0, 1, 0, 0))
+    if num and isbn_valid(num) and not printable:
+        # the symbol as it will stand, drawn on the guides only: for the publisher's approval of the layout
+        bars, _ = ean13(num, zx + (zw - (95 + 18) * 0.297) / 2, zy + 16.0, height=8.0)
+        sc.add(bars, {"GUIDES"}, ink=(0, 1, 0, 0))
 
 
 # ------------------------------------------------------------------------------------------------ the device inside
@@ -679,7 +835,6 @@ def house_mark_svg(width=14.0, on_dark=False):
 
 
 # ------------------------------------------------------------------------------------------------ plates
-WHITE = (0, 0, 0, 0)
 
 
 def colour_on(it, plate):
@@ -696,6 +851,8 @@ def colour_on(it, plate):
         return CHAMPAGNE if "FOIL" in pl else None
     if plate == "GUIDES":
         return it["ink"] if "GUIDES" in pl else None
+    if plate == "DEBOSS" and "DEBOSS-FINE" in pl:
+        return K100
     return K100 if plate in pl else None
 
 
@@ -729,6 +886,32 @@ def write(sc, plate, path, title):
     c.save()
 
 
+def endpapers():
+    """The flagship's endpapers (Bible, ch. 25 §5: sapphire, with a pattern of the same colour): one spread
+    (2 × 170 × 240 + bleed), the same in every volume. The pattern is the series' own unit, not an ornament: the
+    qalam's dot set on the lattice of the measure (a dot's height apart, every other row shifted half a step), a
+    shade off the field so that it is found rather than seen; one line of the سطر at the height it has on the
+    covers, crossing the gutter."""
+    b = BLEED
+    w, h = 2 * W + 2 * b, H + 2 * b
+    sc = Scene(w, h)
+    sc.add(rect(0, 0, w, h), {"PRINT", "PRINT-FLAT"}, ink=SAPPHIRE)
+    step = U * 1.5
+    row = 0
+    y = b + step / 2
+    while y < h:
+        x = b + (step / 2 if row % 2 else 0.0)
+        while x < w:
+            sc.add(rect(0, 0, 0, 0) + nuqta(x, y, U * 0.30), {"PRINT", "PRINT-FLAT"}, ink=SAPPHIRE_LINE)
+            x += step
+        y += step * 0.5
+        row += 1
+    sc.add(rect(0, b + BASE - 0.12, w, 0.24), {"PRINT", "PRINT-FLAT"}, ink=SAPPHIRE_LINE)
+    for plate in ("PRINT",):
+        write(sc, plate, OUT / "Endpapers_PRINT.pdf", f"{FM.TITLE} — endpapers (all volumes)")
+    return OUT / "Endpapers_PRINT.pdf"
+
+
 def main(argv):
     vols = [int(a) for a in argv if a.isdigit()] or list(range(1, 12))
     OUT.mkdir(exist_ok=True)
@@ -737,14 +920,19 @@ def main(argv):
     spines = json.loads(spines_path.read_text()) if spines_path.exists() else {}
     for n in vols:
         sc, sw = build(n, faces)
-        spines[str(n)] = dict(pages=pages(n), caliper_mm_per_leaf=CALIPER, cover_allowance_mm=COVER_ALLOW,
-                              spine_mm=sw, wrap_mm=[round(sc.w, 1), round(sc.h, 1)], bleed_mm=BLEED,
-                              status="provisional: the printer confirms the caliper of the chosen paper")
+        lay = sc.layout
+        spines[str(n)] = dict(pages=pages(n), binding=SPEC["binding"], caliper_mm_per_leaf=CALIPER,
+                              block_mm=round(block_mm(n), 1), spine_mm=sw, wrap_mm=[round(sc.w, 1), round(sc.h, 1)],
+                              front=[round(v, 2) for v in lay["front"]], spine=[round(v, 2) for v in lay["spine"]],
+                              back=[round(v, 2) for v in lay["back"]], margin_mm=lay["margin"], joint_mm=lay["joint"],
+                              isbn=isbn_of(n)[0], isbn_printed=isbn_of(n)[1],
+                              status="provisional: from covers/printer-spec.json until the printer confirms it")
         for plate in PLATES:
             path = OUT / f"Cover-{n:02d}_{LATIN[n]}_{plate}.pdf"
             write(sc, plate, path, f"{FM.TITLE} — {FM.volume_line(n)} — {plate}")
         print(f"volume {n}: spine {sw} mm, wrap {sc.w:.1f} × {sc.h:.1f} mm")
     spines_path.write_text(json.dumps(dict(sorted(spines.items(), key=lambda kv: int(kv[0]))), ensure_ascii=False, indent=1))
+    endpapers()
 
 
 if __name__ == "__main__":
