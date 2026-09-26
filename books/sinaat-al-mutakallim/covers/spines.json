@@ -136,13 +136,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "5": {
-  "pages": 463,
+  "pages": 473,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 28.4,
-  "spine_mm": 34.4,
+  "block_mm": 29.0,
+  "spine_mm": 35.0,
   "wrap_mm": [
-   416.4,
+   417.0,
    276.0
   ],
   "front": [
@@ -154,13 +154,13 @@
   "spine": [
    191.0,
    15.0,
-   225.4,
+   226.0,
    261.0
   ],
   "back": [
-   232.4,
+   233.0,
    15.0,
-   401.4,
+   402.0,
    261.0
   ],
   "margin_mm": 15.0,
@@ -204,13 +204,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "7": {
-  "pages": 395,
+  "pages": 407,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 24.3,
-  "spine_mm": 30.3,
+  "block_mm": 25.0,
+  "spine_mm": 31.0,
   "wrap_mm": [
-   412.3,
+   413.0,
    276.0
   ],
   "front": [
@@ -222,13 +222,13 @@
   "spine": [
    191.0,
    15.0,
-   221.3,
+   222.0,
    261.0
   ],
   "back": [
-   228.3,
+   229.0,
    15.0,
-   397.3,
+   398.0,
    261.0
   ],
   "margin_mm": 15.0,
