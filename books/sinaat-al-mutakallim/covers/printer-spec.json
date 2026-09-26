@@ -67,17 +67,19 @@
   "matn": {
    "folder": "2-Matn",
    "name": "Al-Matn wal-Hashiya: the scholar's page",
-   "see": "finishes (above)"
+   "see": "finishes (above)",
+   "note": "bright gold for the architecture (the seams raised, their jewels, the matn's jadwal, the title's dots); the lit dots of the glosses in the antique gold (FOIL-CHAMPAGNE); the author's full name in pearl over emboss"
   },
   "contemporary": {
    "folder": "3-Contemporary",
    "name": "Contemporary: the architecture of the line",
    "cold_foil": "the flutes of the uprights, the construction (plumb lines, compass, module scale), the echoes and pulses of the line",
    "hot_foil_gold": "the line, the lit edges of the uprights, the floating dots (jewels), the frame's rule, the seal",
-   "hot_foil_pearl": "the title, the knots, the spine's numeral and name, the thesis engraved along the beam",
+   "hot_foil_pearl": "the title, the knots, the spine's numeral and name, the thesis engraved along the beam, the author's full name",
    "hot_foil_ruby": "one dot on each front where the nib first touches, and the nun's dot of the title",
    "spot_uv": "none by default: the field stays open",
-   "emboss": "the uprights and the title; no deboss"
+   "emboss": "the uprights and the title; no deboss",
+   "hot_foil_champagne": "the frame's rule (antique gold, so that the word's gold leads)"
   }
  }
 }

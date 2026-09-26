@@ -28,12 +28,13 @@ import frontmatter as FM
 import illumination as IL
 import linearch as LA
 import typeset as T
+from marks import bevel
 
 W, H = 170.0, 240.0
-BASE = 192.0                 # the line the words stand on, front and spines
+BASE = 178.5                 # the line the words stand on, front and spines (raised to give the colophon its air)
 TITLE_RULE = 104.0           # the rule under the subtitle, where the plumb lines hang from
 MEASURE = 128.0              # the widest a name may be built
-U_MAX = 9.2                  # the module of the approved front (vol. 2): the most a name is built at
+U_MAX = 8.4                  # the largest module: every part stays between the title rule and the colophon
 FRAME = 9.5
 
 
@@ -61,7 +62,7 @@ def lines_of(n):
     if any(el[0] == "|" and len(el) > 1 and el[1] == "word" for el in spec["els"]):
         parts = _split(spec)
         wd = max(ink(p, 1.0)[1] for p in parts)
-        u = min(U_MAX, MEASURE / wd, 4.4)
+        u = min(U_MAX, MEASURE / wd, 3.8)
         return [(parts[0], u, BASE - 10.4 * u), (parts[1], u, BASE)]
     wd = ink(spec, 1.0)[1]
     return [(spec, min(U_MAX, MEASURE / wd), BASE)]
@@ -80,9 +81,27 @@ def ink(spec, u):
 
 def frame(P):
     outer = box(FRAME, FRAME, W - FRAME, H - FRAME)
-    P.gold(IL.band(outer, 0, -0.7, join=2))
+    P.champagne(IL.band(outer, 0, -0.7, join=2))   # the frame in the antique gold: the word's gold leads
     P.pearl(IL.band(outer, -1.6, -1.78, join=2))
     return outer.buffer(-2.6, join_style=2)
+
+
+def colophon_line(P, F, base=217.4):
+    """The author at the foot, as restrained as the edition: the humble formula and the full name on one line in
+    two weights, the prayer quieter beneath. The words are the author's own (colophon.py)."""
+    from colophon import AUTHOR_NAME, BY, PRAYER
+    s1, s2, gap = 3.2, 4.3, 2.4
+    w1, w2 = T.line(BY, F.amiri4, s1).width, T.line(AUTHOR_NAME, F.amiri7, s2).width
+    k = min(1.0, 128.0 / (w1 + w2 + gap))
+    total = (w1 + w2 + gap) * k
+    xr = W / 2 + total / 2
+    by, _ = T.text(BY, F.amiri4, s1 * k, x_right=xr, base=base)
+    P.ink(by, AW.CHAMPAGNE_INK)
+    nm, _ = T.text(AUTHOR_NAME, F.amiri7, s2 * k, x_right=xr - (w1 + gap) * k, base=base)
+    P.pearl(nm)
+    P.emboss(nm, 0.6)
+    pr, _ = T.text(PRAYER, F.amiri4, 2.8, cx=W / 2, base=base + 6.0)
+    P.ink(pr, AW.PEARL_SOFT)
 
 
 def front(n):
@@ -92,7 +111,8 @@ def front(n):
     ordinal, name = FM.VOLUMES[n - 1][:2]
     rub, _ = T.text(f"المجلد {ordinal}", F.changa4, 3.0, cx=W / 2, base=31.0)
     P.ink(rub, AW.CHAMPAGNE_INK)
-    CA.set_title(P, W / 2, [("صناعة", 20.0, 60.0), ("المتكـلّم العربي", 12.2, 82.0)])
+    letters = CA.set_title(P, W / 2, [("صناعة", 20.0, 60.0), ("المتكـلّم العربي", 12.2, 82.0)])
+    bevel(P, letters, top=1.0, base=0.45, depth=0.5, steps=4)        # the title chiselled
     sub, _ = T.text(FM.SUBTITLE, F.sch4, 4.3, cx=W / 2, base=96.0)
     P.ink(sub, AW.PEARL_SOFT)
     P.gold(box(40, TITLE_RULE - 0.12, W - 40, TITLE_RULE + 0.12))
@@ -103,8 +123,7 @@ def front(n):
         last = i == len(lines) - 1
         LA.render(P, A, field=field, title_line=TITLE_RULE if i == 0 else lines[0][2] + 3.0 * u,
                   lead_in=last, echo=last, construction=True, reflect=False)
-    au, _ = T.text(FM.AUTHOR_SHORT, F.sch6, 4.2, cx=W / 2, base=222.0)
-    P.ink(au, AW.PEARL_INK)
+    colophon_line(P, F)
     u0, b0 = lines[-1][1], lines[-1][2]
     P.L.glow.append((W / 2, b0 - 3.5 * u0, 70, 0.7))
     return P, field
@@ -173,7 +192,7 @@ def back(n):
     field = frame(P)
     right = W - 24.0
     y = matn.back_words(P, n, right, W - 48.0, 40.0)
-    if y > 160.0:
+    if y > BASE - 30.0:
         raise SystemExit(f"back {n}: the words overrun the field ({y:.1f} mm)")
     zx, zy, zw, zh = CA.ISBN_ZONE
     # the line: from the spine edge to the zone, where it pauses on a dot; and on again past it to the fore-edge
@@ -186,9 +205,9 @@ def back(n):
     slot = 7.4
     for v in range(1, 12):
         x = W - FRAME - 9.0 - (v - 1) * slot
-        h = 10.0 + 1.3 * min(v, 10)
+        h = 8.0 + 1.0 * min(v, 10)
         if v == 11:
-            h = 10.0
+            h = 8.0
         up = box(x - 0.9, BASE - 0.3 - h, x + 0.9, BASE - 0.3)
         if v == n:
             P.gold(up)

@@ -335,10 +335,7 @@ def inscription(P, x0, y0, x1, y1, bracket=9.0, star=True, fill=None, foot=None)
 MED_CY, MED_SCALE = 142.0, 0.84      # the front's medallion: where it stands and at what size
 AUTHOR_TOP = 190.0
 SUBSTRATE_BASE = 0.215                # a deeper sapphire than the other editions, so that the light pools in it
-BY = "تأليف الفقير إلى ربه"             # the author's own wording, never shortened on this edition
-AUTHOR_NAME = "أبي عبد الله جلال الدين أحمد بن إبراهيم السليمي"
-AUTHOR_LINES = ("أبي عبد الله جلال الدين", "أحمد بن إبراهيم السليمي")   # the same words, broken as a colophon breaks them
-PRAYER = "غفر الله له ولوالديه وللمسلمين"
+from colophon import AUTHOR_LINES, AUTHOR_NAME, BY, PRAYER  # noqa: E402,F401  (the author's own words)
 
 
 def author(P, F):

@@ -41,6 +41,7 @@ INDENT = 1.5                                  # a paragraph's first line opens a
 GLOSS_SIZE, GLOSS_LEAD = 2.9, 4.25
 MATN = (42.0, 42.0, W - 36.0, 166.0)          # the front's text block: toward the spine, the wide margin outside
 FIELD_INSET = 9.5 + 3.6
+SUBSTRATE_BASE = 0.235                # a deeper sapphire, so the page's light pools behind the matn
 
 
 @lru_cache(maxsize=1)
@@ -267,8 +268,8 @@ def lay_gloss(P, acc, clip, halo=None):
     if dots is not None:
         lit = dots if halo is None else dots.intersection(halo)
         if not lit.is_empty:
-            P.gold(lit)
-            P.emboss(lit, 0.8)
+            P.champagne(lit)                 # the voice in the antique gold: the architecture is the brightest
+            P.emboss(lit, 0.5)
         if halo is not None:
             P.L.uv.append(AW.valid(dots.difference(halo)))
     if vowels is not None:
@@ -337,7 +338,7 @@ def seams(P, field, m, beam=0.6):
         ln = LineString([a, b])
         bm = ln.buffer(beam, cap_style=2)
         P.gold(bm.difference(ln.buffer(0.07)))
-        bevel(P, bm, depth=beam, steps=3)
+        bevel(P, bm, top=1.0, base=0.45, depth=beam, steps=3)
         jewel(P, b[0], b[1], 3.6)
         jewel(P, a[0] + (2.2 if a[0] < W / 2 else -2.2), a[1] + (2.2 if a[1] < H / 2 else -2.2), 4.4)
 
@@ -350,7 +351,7 @@ def front(n):
     outer = box(9.5, 9.5, W - 9.5, H - 9.5)
     tajdwil(P, outer)
     field = outer.buffer(-3.6, join_style=2)
-    mb, m = matn_block(P, MATN, rulings=[93.0, 114.0, 126.5, 143.0, 156.0])
+    mb, m = matn_block(P, MATN, rulings=[93.0, 114.0, 126.5, 139.5, 154.6])
     angles = (0, 0, 0, 0) if n == 11 else (0, 45, 0, 45)
     words = Words(paragraphs(n))
     acc = Acc()
@@ -365,14 +366,23 @@ def front(n):
     rub, _ = T.text(f"المجلد {ordinal}", F.changa4, 3.0, cx=cx, base=63.0)
     P.ink(rub, AW.CHAMPAGNE_INK)
     import coverart as CA
-    CA.set_title(P, cx, [("صناعة", 18.5, 93.0), ("المتكـلّم العربي", 11.2, 114.0)])
+    letters = CA.set_title(P, cx, [("صناعة", 18.5, 93.0), ("المتكـلّم العربي", 11.2, 114.0)])
+    bevel(P, letters, top=1.0, base=0.45, depth=0.5, steps=4)        # the title chiselled into the matn
     sub, _ = T.text(FM.SUBTITLE, F.sch4, 3.9, cx=cx, base=126.5)
     P.ink(sub, AW.PEARL_SOFT)
     size = 4.8 * min(1.0, 80.0 / T.line(label, F.changa5, 4.8).width)
-    nm, _ = T.text(label, F.changa5, size, cx=cx, base=143.0)
+    nm, _ = T.text(label, F.changa5, size, cx=cx, base=139.5)
     P.champagne(nm)
-    au, _ = T.text(FM.AUTHOR_SHORT, F.sch6, 3.8, cx=cx, base=156.0)
-    P.ink(au, AW.PEARL_INK)
+    # the colophon, where a scholarly page names its author: the humble line, the name, the prayer
+    from colophon import AUTHOR_NAME, BY, PRAYER
+    by, _ = T.text(BY, F.amiri4, 2.9, cx=cx, base=147.8)
+    P.ink(by, AW.CHAMPAGNE_INK)
+    asz = 4.3 * min(1.0, 80.0 / T.line(AUTHOR_NAME, F.amiri7, 4.3).width)
+    au, _ = T.text(AUTHOR_NAME, F.amiri7, asz, cx=cx, base=154.6)
+    P.pearl(au)
+    P.emboss(au, 0.6)
+    pr, _ = T.text(PRAYER, F.amiri4, 2.6, cx=cx, base=160.0)
+    P.ink(pr, AW.PEARL_SOFT)
     P.L.glow.append((cx, 104.0, 64.0, 0.95))
     P.arch.append(field.buffer(0))
     return P, field
