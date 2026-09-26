@@ -87,12 +87,17 @@ class Logotype:
         self.width = self.main.width
         self.size = s
 
-    def svg(self, x_right, top, shadow=True):
+    def svg(self, x_right, top, shadow=True, flat=None):
+        """flat: one ink and nothing else (no shadow, no lit edge) — the logotype printed inside the book, where no
+        foil is simulated; the covers keep the foil."""
         cb, mb = self.crown.bounds, self.main.bounds
         base_c = top - cb[1]
         base_m = base_c + cb[3] + self.gap - mb[1]
         out = []
         for ln, x, b in ((self.crown, x_right - self.crown.width, base_c), (self.main, x_right - self.main.width, base_m)):
+            if flat:
+                out.append(L.svg_path(ln, x, b, fill=flat))
+                continue
             if shadow:
                 out.append(L.svg_path(ln, x + 0.18, b + 0.24, fill="#020A1E", fill_opacity="0.6"))
             out.append(L.svg_path(ln, x, b, fill=GOLD))

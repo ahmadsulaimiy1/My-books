@@ -68,7 +68,7 @@ def volume_line(n):
 
 CSS = r"""
 /* ---------------------------------------------------------------- front matter (Bible, part fourteen) */
-.fm { position: absolute; inset: 0; background: var(--paper); color: var(--ink); }
+.fm { position: absolute; inset: 0; color: var(--ink); }
 .diamond { display: inline-block; width: 1.5mm; height: 1.5mm; background: var(--gold); transform: rotate(45deg); }
 .grule { display: flex; align-items: center; justify-content: center; gap: 2.2mm; }
 .grule i { display: block; width: 14mm; border-top: .45pt solid var(--gold); }
@@ -76,7 +76,7 @@ CSS = r"""
 .imark { display: flex; flex-direction: column; align-items: center; gap: 1.4mm; }
 .imark .w { font: 600 15pt/1 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--sapphire); letter-spacing: .4pt; }
 .imark .e { font: 400 6.4pt/1 "Source Serif 4"; letter-spacing: 1.6pt; text-transform: uppercase; color: var(--ink-3); direction: ltr; }
-.imark.on-dark .w { color: var(--gold-l); } .imark.on-dark .e { color: #C9C2B2; }
+.imark.on-dark .w { color: var(--gold-l); } .imark.on-dark .e { color: var(--on-dark-2); }
 /* 1. half-title: quiet */
 .ht { position: absolute; top: 56mm; left: 0; right: 0; text-align: center; }
 .ht .t { font: 600 23pt/1.5 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--sapphire); }
@@ -94,8 +94,8 @@ CSS = r"""
 .sm.r { right: 22mm; left: 16mm; }
 .sm.l { right: 16mm; left: 22mm; }
 .sm-rule { position: absolute; top: 25.2mm; border-top: .45pt solid var(--gold); }
-.sm.r .sm-rule { right: 0; left: -16mm; }
-.sm.l .sm-rule { right: -16mm; left: 0; }
+.sm.r .sm-rule { right: 0; left: 0; }
+.sm.l .sm-rule { right: 0; left: 0; }
 .sm.l .sm-rule::after { content: ""; position: absolute; left: -1.1mm; top: -1.35mm; width: 2.2mm; height: 2.2mm; transform: rotate(45deg); background: var(--gold); }
 .sm-k { position: absolute; top: 23.4mm; right: 0; background: var(--paper); padding: 0 0 0 3mm; font: 300 10pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .5pt; }
 .sm-h { position: absolute; top: 32mm; right: 0; left: 0; }
@@ -114,7 +114,7 @@ CSS = r"""
 .smv .b i, .smv .b span { position: absolute; top: 1.6mm; right: 3.4mm; width: 7.2mm; height: 7.2mm; box-sizing: border-box; }
 .smv .b i { transform: rotate(45deg); border: .6pt solid var(--gold); background: var(--paper); }
 .smv .b span { display: flex; align-items: center; justify-content: center; font: 700 11.2pt/1 "Amiri"; color: var(--sapphire); padding-top: .5mm; }
-.smv.here::after { content: ""; position: absolute; top: .4mm; bottom: .6mm; right: -3mm; left: -3mm; background: var(--paper-2); border-right: 1.2pt solid var(--gold); z-index: -1; }
+.smv.here::after { content: ""; position: absolute; top: .4mm; bottom: .6mm; right: -3mm; left: -3mm; background: var(--ice); border-right: 1.2pt solid var(--gold); z-index: -1; }
 .smv.here .b i { background: var(--gold); border-color: var(--gold); }
 .smv .l1 { display: flex; align-items: baseline; gap: 2.4mm; }
 .smv .w { font: 300 9pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .3pt; }
@@ -141,21 +141,21 @@ CSS = r"""
 .smr .x { font: 400 8.6pt/1.6 "IBM Plex Sans Arabic"; color: var(--gold-ink); margin-top: 1.6mm; display: flex; gap: 2.2mm; align-items: center; }
 .smr .x i { width: 1.9mm; height: 1.9mm; border: .5pt solid var(--gold-ink); transform: rotate(45deg); box-sizing: border-box; flex: none; }
 .smc { margin-top: 8mm; font: 400 10.4pt/1.7 "Scheherazade New"; color: var(--ink-2); }
-.sml { position: absolute; bottom: 22mm; right: 0; left: 0; display: flex; flex-wrap: wrap; gap: 1.6mm 6mm; font: 400 8pt/1.4 "IBM Plex Sans Arabic"; color: var(--ink-3); border-top: .3pt solid #DCD6CA; padding-top: 2.6mm; }
+.sml { position: absolute; bottom: 22mm; right: 0; left: 0; display: flex; flex-wrap: wrap; gap: 1.6mm 6mm; font: 400 8pt/1.4 "IBM Plex Sans Arabic"; color: var(--ink-3); border-top: .3pt solid var(--hair); padding-top: 2.6mm; }
 .sml span { display: inline-flex; align-items: center; gap: 1.8mm; }
 .sml .f, .sml .e { width: 2.1mm; height: 2.1mm; transform: rotate(45deg); box-sizing: border-box; }
 .sml .f { background: var(--gold); } .sml .e { border: .5pt solid var(--gold-ink); }
 .sml .dt { display: inline-flex; gap: .8mm; } .sml .dt i { width: 1.1mm; height: 1.1mm; border-radius: 50%%; background: var(--gold); }
 /* 3. the title page's volume: number, name, and the line of its stage and babs (Bible, ch. 111 §٥) */
-.tpv { position: absolute; top: 96mm; right: 24mm; left: 24mm; }
+.tpv { position: absolute; top: 90mm; right: 34mm; left: 64mm; }
 .tpv .w { font: 400 11pt/1.3 "Changa"; color: var(--gold-l); letter-spacing: .4pt; }
-.tpv .nm { font: 700 25pt/1.3 "Changa"; color: #F4ECD9; margin-top: .6mm; }
-.tpv .ln { font: 400 8.6pt/1.5 "IBM Plex Sans Arabic"; color: #C9C2B2; margin-top: 1.6mm; }
+.tpv .nm { font: 700 25pt/1.3 "Changa"; color: var(--on-dark); margin-top: .6mm; }
+.tpv .ln { font: 400 8.6pt/1.5 "IBM Plex Sans Arabic"; color: var(--on-dark-2); margin-top: 1.6mm; }
 /* 4. imprint: a typographic table */
 .im { position: absolute; top: 30mm; right: 24mm; left: 24mm; }
 .im h4 { font: 300 10pt/1 "Changa"; color: var(--gold-ink); margin: 0 0 7mm; display: flex; gap: 3mm; align-items: center; }
 .im h4 i { flex: 1; border-top: .4pt solid var(--gold); }
-.im-row { display: grid; grid-template-columns: 20mm 1fr; gap: 4mm; padding: 2.6mm 0; border-bottom: .3pt solid #E0DBD0; }
+.im-row { display: grid; grid-template-columns: 20mm 1fr; gap: 4mm; padding: 2.6mm 0; border-bottom: .3pt solid var(--hair); }
 .im-row .l { font: 400 8.4pt/1.7 "IBM Plex Sans Arabic"; color: var(--ink-3); }
 .im-row .v { font: 400 11.2pt/1.65 "Scheherazade New"; color: var(--ink); }
 .im-row .v small { display: block; font: 400 8.2pt/1.5 "Source Serif 4"; color: var(--ink-3); direction: ltr; text-align: right; }
@@ -180,7 +180,7 @@ CSS = r"""
 .rt .ed-row { display: grid; grid-template-columns: 30mm 1fr; gap: 4mm; font: 400 9pt/1.7 "IBM Plex Sans Arabic"; color: var(--ink-2); }
 .rt .top { position: absolute; top: -150mm; right: 0; left: 0; text-align: center; }
 /* 6. deliberate white */
-.blank { position: absolute; inset: 0; background: var(--paper); }
+.blank { position: absolute; inset: 0; }
 /* contents: several levels */
 .toc2 h2.tt { font: 700 22pt/1.3 "Changa"; color: var(--sapphire); margin: 0 0 1.6mm; }
 .toc2 .tsub { font: 300 10pt/1.4 "Changa"; color: var(--gold-ink); margin-bottom: 9mm; }
@@ -195,14 +195,14 @@ CSS = r"""
 .toc2 .e.lite .t { font: 500 11.6pt/1.45 "Changa"; color: var(--ink); }
 /* symbols and terms */
 .sy h2.tt { font: 700 20pt/1.3 "Changa"; color: var(--sapphire); margin: 0 0 8mm; }
-.sy-row { display: grid; grid-template-columns: 26mm 1fr; gap: 5mm; padding: 2.5mm 0; border-bottom: .3pt solid #E0DBD0; align-items: baseline; }
+.sy-row { display: grid; grid-template-columns: 26mm 1fr; gap: 5mm; padding: 2.5mm 0; border-bottom: .3pt solid var(--hair); align-items: baseline; }
 .sy-row .m { font: 400 13pt/1.5 "Amiri"; color: var(--sapphire); text-align: center; }
 .sy-row .m.s { font: 600 10pt/1.5 "Changa"; }
 .sy-row .d { font: 400 11pt/1.7 "Scheherazade New"; color: var(--ink-2); }
 .sy h3 { font: 600 11.6pt/1.3 "Changa"; color: var(--gold-ink); margin: 9mm 0 2mm; display: flex; gap: 3mm; align-items: center; }
 .sy h3 i { flex: 1; border-top: .4pt solid var(--gold); }
-.sy .sy-note { margin-top: 7mm; padding-top: 3mm; border-top: .3pt solid #DCD6CA; font: 400 10.6pt/1.75 "Scheherazade New"; color: var(--ink-2); text-indent: 0; text-align: right; }
-.sy-scale { display: grid; grid-template-columns: 10mm 26mm 1fr; gap: 0 4mm; padding: 1.8mm 0; border-bottom: .3pt solid #E0DBD0; align-items: baseline; }
+.sy .sy-note { margin-top: 7mm; padding-top: 3mm; border-top: .3pt solid var(--hair); font: 400 10.6pt/1.75 "Scheherazade New"; color: var(--ink-2); text-indent: 0; text-align: right; }
+.sy-scale { display: grid; grid-template-columns: 10mm 26mm 1fr; gap: 0 4mm; padding: 1.8mm 0; border-bottom: .3pt solid var(--hair); align-items: baseline; }
 .sy-scale .n { font: 700 12pt/1.4 "Amiri"; color: var(--sapphire); text-align: center; }
 .sy-scale .t { font: 600 10pt/1.5 "Changa"; color: var(--ink); }
 .sy-scale .d { font: 400 10.6pt/1.6 "Scheherazade New"; color: var(--ink-2); }

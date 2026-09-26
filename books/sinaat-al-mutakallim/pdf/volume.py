@@ -42,6 +42,7 @@ import heads as H  # noqa: E402
 import ids as IDS  # noqa: E402
 import indexes as IX  # noqa: E402
 import opening as O  # noqa: E402
+import events as EV  # noqa: E402
 import proto2 as P2  # noqa: E402
 from paths import AUTHOR_WORD, INTRO, OPENING  # noqa: E402
 from volumes import APPENDIX, BOOK, PROGRAM, VOL_OF_BAB, VOLUMES, unit_files  # noqa: E402
@@ -102,14 +103,14 @@ LESSON_CSS = r"""
 /* a short table is never broken, so its head never stays alone at the foot of a page; a long one breaks with its head repeated */
 div.tblk { break-inside: avoid; }
 .grades.gfirst { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-.grades.gcont { margin-top: 0; padding-top: 0; border-top: .35pt solid #E2DACB; }
+.grades.gcont { margin-top: 0; padding-top: 0; border-top: .35pt solid var(--hair); }
 .gl { display: inline-block; width: .8em; height: .8em; vertical-align: -.06em; margin: 0 .4mm; overflow: visible; }
 .gl.ok { color: var(--sapphire-2); } .gl.no { color: var(--crimson); } .gl.mid { color: var(--gold-ink); } .gl.sq { color: var(--sapphire); }
 .gl.s1 { color: var(--crimson); } .gl.s3 { color: var(--gold-ink); } .gl.s4 { color: var(--ink-3); } .gl.ne { color: var(--ink-2); }
 /* code spans of the manuscript (the marks of the voice drills) are set in Plex, never in a system face */
 code { font: 500 .92em "IBM Plex Sans Arabic"; color: var(--gold-ink); background: none; }
 /* the glossary and the bibliography of the reference */
-dl.gloss { margin: 3mm 0; } dl.gloss > div { padding: 1.8mm 0; border-bottom: .35pt solid #E2DACB; break-inside: avoid; }
+dl.gloss { margin: 3mm 0; } dl.gloss > div { padding: 1.8mm 0; border-bottom: .35pt solid var(--hair); break-inside: avoid; }
 dl.gloss dt { font: 600 12pt/1.5 "Changa"; color: var(--sapphire); }
 dl.gloss dt .en { font: 400 9pt "Source Serif 4"; color: var(--ink-3); margin-right: 3mm; direction: ltr; unicode-bidi: isolate; }
 dl.gloss dd { margin: .6mm 0 0; font: 400 12pt/1.75 "Scheherazade New"; color: var(--ink-2); }
@@ -117,27 +118,27 @@ ul.biblio { list-style: none; padding: 0; } ul.biblio > li { padding-right: 6mm;
 ul.biblio > li::before { content: none; } ul.biblio b { color: var(--sapphire); }
 .gm { display: inline-flex; align-items: center; justify-content: center; width: 1.32em; height: 1.32em; box-sizing: border-box;
   border-radius: 50%; border: .6pt solid currentColor; font: 700 max(.74em, 8.2pt)/1 "Amiri"; padding-top: .14em; min-width: 11.5pt; min-height: 11.5pt; vertical-align: .06em; margin: 0 .5mm; }
-.gm.g1 { color: var(--ruby); } .gm.g2 { color: var(--gold-ink); } .gm.g3 { color: var(--sapphire); }
-.gm.g4 { color: #F4ECD9; background: var(--sapphire); border-color: var(--sapphire); }
+.gm.g1 { color: var(--crimson); } .gm.g2 { color: var(--gold-ink); } .gm.g3 { color: var(--sapphire); }
+.gm.g4 { color: var(--on-dark); background: var(--sapphire); border-color: var(--sapphire); }
 .gp { font-family: "IBM Plex Sans Arabic"; font-weight: 500; color: var(--gold-ink); }
 /* ﷺ in a line set in Changa (headings, bands, the contents, the posters): Changa has no glyph for it */
-h1 .salla, h2 .salla, h3 .salla, h4 .salla, .chap-band .salla, .toc2 .salla, .poster .salla, .sm .salla, .k .salla, .t .salla,
+h1 .salla, h2 .salla, h3 .salla, h4 .salla, .lintel .salla, .toc2 .salla, .poster .salla, .sm .salla, .k .salla, .t .salla,
 .card .ch .salla, .pl .who .salla { font-family: "Amiri"; font-weight: 400; }
 /* the review tags of the proof: visible, never mistaken for the text */
 .rv { font: 400 8pt/1.5 "IBM Plex Sans Arabic"; color: var(--crimson); background: #F6E7E4; padding: .2mm 1.2mm; border-radius: .6mm;
   -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 /* the chapter of a bab: its scope under the band, its sections, its headings */
 p.scope { font: 400 9pt/1.7 "IBM Plex Sans Arabic"; color: var(--ink-3); text-align: right; text-indent: 0; margin: 0 0 3mm;
-  padding-bottom: 2.4mm; border-bottom: .4pt solid #DCD6CA; }
+  padding-bottom: 2.4mm; border-bottom: .4pt solid var(--hair); }
 .chap-open > p.scope:first-child { font-size: 9pt; line-height: 1.7; }
 h2.sec { margin: 0 0 6mm; padding-top: 1mm; break-after: avoid; }
 h2.sec.brk { break-before: page; }
 h2.sec .k { display: flex; gap: 3mm; align-items: center; font: 300 10pt/1 "Changa"; color: var(--gold-ink); letter-spacing: .3pt; margin-bottom: 2.4mm; }
 h2.sec .k i { flex: 1; border-top: .45pt solid var(--gold); }
-h2.sec .t { display: block; font: 700 18pt/1.4 "Changa"; color: var(--sapphire); text-wrap: pretty; }
+h2.sec .t { display: block; font: 700 18pt/1.4 "Changa"; color: var(--sapphire); text-wrap: balance; }
 h2.sec.lite { margin: 2mm 0 3.4mm; }
 h2.sec.lite .t { font-size: 15pt; }
-h4 { font: 600 12.6pt/1.45 "Changa"; color: var(--sapphire-2); margin: 5mm 0 1.6mm; break-after: avoid; }
+h4 { font: 600 12.6pt/1.45 "Changa"; color: var(--sapphire-2); margin: 5mm 0 1.6mm; break-after: avoid; text-wrap: balance; }
 h4 + p, h4 + ol, h4 + ul { text-indent: 0; }
 p.ph { text-indent: 0; margin-top: 4.2mm; break-after: avoid; }
 p.ph + p, p.ph + ol, p.ph + ul { text-indent: 0; }
@@ -146,17 +147,17 @@ p.ph + p, p.ph + ol, p.ph + ul { text-indent: 0; }
 .panel { margin: 5mm 0; padding: 3.2mm 5mm 3.6mm; break-inside: avoid; }
 .panel > h3, .panel > h4, .panel > .phk > h3 { margin: 0 0 1.6mm; font: 600 10.6pt/1.4 "Changa"; color: var(--gold-ink); letter-spacing: .2pt; }
 .panel > h3::after, .panel > .phk > h3::after { content: none; }
-.panel.obj { background: var(--paper-2); border-top: .8pt solid var(--gold); break-inside: auto; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.panel.obj { border-top: .8pt solid var(--gold); border-bottom: .4pt solid var(--hair); break-inside: auto; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .panel.obj ol > li, .panel.obj p { font-size: 12.2pt; line-height: 1.75; }
-.panel.oq { border-right: 1.4pt solid var(--sapphire-2); background: #F1F2F6; }
+.panel.oq { border-right: 1.4pt solid var(--sapphire-2); }
 .panel.oq p { color: var(--ink); }
 .panel.mastery { border: .6pt solid var(--gold); background: var(--paper); padding: 4mm 6mm 4.4mm; }
 .panel.mastery > h3, .panel.mastery > .phk > h3 { font: 700 12pt/1.4 "Changa"; color: var(--sapphire); }
 .panel.mastery ul { list-style: none; padding: 0; margin: 1mm 0 0; counter-reset: m; }
-.panel.mastery ul > li { counter-increment: m; display: grid; grid-template-columns: 7mm 1fr; padding: 1.8mm 0; border-top: .35pt solid #E2DACB; margin: 0; }
+.panel.mastery ul > li { counter-increment: m; display: grid; grid-template-columns: 7mm 1fr; padding: 1.8mm 0; border-top: .35pt solid var(--hair); margin: 0; }
 .panel.mastery ul > li::before { content: counter(m, arabic-indic); position: static; width: auto; height: auto; transform: none; background: none;
   font: 700 11pt/1.6 "Amiri"; color: var(--gold-ink); }
-.trainer { margin: 7mm 0 2mm; padding: 4mm 5.5mm 4mm; background: var(--paper-2); border-right: 1.4pt solid var(--gold); }
+.trainer { margin: 7mm 0 2mm; padding: 1mm 5.5mm 1mm 0; border-right: 1.4pt solid var(--gold); }
 .trainer > h3, .trainer > .phk > h3 { margin-top: 0; font: 600 12pt/1.4 "Changa"; color: var(--gold-ink); }
 .trainer > h3::after, .trainer > .phk > h3::after { content: none; }
 .trainer p, .trainer li { font-size: 11.8pt; line-height: 1.75; }
@@ -164,7 +165,7 @@ p.ph + p, p.ph + ol, p.ph + ul { text-indent: 0; }
 /* the example: a line in the text, its code small in the margin (Bible, part eight, §٣) */
 .exm { position: relative; margin: 3.2mm 0 3.6mm; break-inside: avoid; }
 .exm .exh { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; margin-bottom: .4mm; }
-.exm .exid { font: 400 7.8pt/1.3 "IBM Plex Sans Arabic"; color: #9A9282; letter-spacing: .15pt; white-space: nowrap; flex: none; }
+.exm .exid { font: 400 8pt/1.3 "IBM Plex Sans Arabic"; color: var(--ink-3); letter-spacing: .15pt; white-space: nowrap; flex: none; }
 .exm .exg { font: 400 9.4pt/1.6 "IBM Plex Sans Arabic"; color: var(--ink-3); }
 .exl { display: grid; grid-template-columns: 5.2mm 1fr; align-items: baseline; margin: .5mm 0; }
 .exl .mk .gl { width: .92em; height: .92em; }
@@ -176,17 +177,17 @@ p.ph + p, p.ph + ol, p.ph + ul { text-indent: 0; }
 /* the graded models: one frame, each speech under the mark of its grade */
 .grades { margin: 5mm 0 6mm; border-top: .8pt solid var(--gold); border-bottom: .4pt solid var(--gold); padding: 1mm 0; }
 .grade { display: grid; grid-template-columns: 11mm 1fr; column-gap: 2mm; padding: 3mm 0 3.2mm; }
-.grade + .grade { border-top: .35pt solid #E2DACB; }
+.grade + .grade { border-top: .35pt solid var(--hair); }
 .grade > .gmk { grid-column: 1; grid-row: 1; padding-top: 1.2mm; text-align: center; }
 /* a speech that runs on to the next page continues there without its mark: its body keeps the second column */
 .grade > .gbd { grid-column: 2; min-width: 0; }
 .grade > .gmk .gm { font-size: 16pt; width: 1.36em; height: 1.36em; }
 .grade > .gbd > p:first-child { text-indent: 0; }
 .grade > .gbd > p:first-child strong { font: 600 11.2pt/1.5 "Changa"; color: var(--sapphire); }
-.grade.g1 > .gbd > p:first-child strong { color: var(--ruby); }
+.grade.g1 > .gbd > p:first-child strong { color: var(--crimson); }
 .grade.g2 > .gbd > p:first-child strong { color: var(--gold-ink); }
 .grade blockquote { margin: 1.6mm 0 2mm; padding: 0 4mm 0 0; border-right: 1.2pt solid var(--gold); break-inside: auto; }
-.grade.g1 blockquote { border-right-color: var(--ruby-2); }
+.grade.g1 blockquote { border-right-color: var(--crimson); }
 .grade.g3 blockquote, .grade.g4 blockquote { border-right-color: var(--sapphire); }
 .grade blockquote p { font: 400 13.4pt/1.85 "Amiri"; color: var(--ink); text-indent: 0; }
 .grade ul > li { font-size: 12.4pt; }
@@ -202,7 +203,7 @@ blockquote.warn p > strong:first-child { font: 600 10.4pt/1.5 "Changa"; color: v
 blockquote.defn { border-top: .6pt solid var(--gold); border-bottom: .4pt solid var(--gold); padding: 2.6mm 2mm 2.8mm; margin: 5mm 0; }
 blockquote.defn p { font: 400 13.4pt/1.85 "Scheherazade New"; color: var(--sapphire); text-indent: 0; text-align: center; text-wrap: balance; }
 blockquote.defn p > strong:first-child { display: block; font: 600 10.4pt/1.5 "Changa"; color: var(--gold-ink); margin-bottom: .6mm; }
-blockquote.tr { background: var(--paper-2); padding: 2.6mm 5mm 2.8mm; margin: 5mm 0; }
+blockquote.tr { border-right: 1pt solid var(--gold); padding: .6mm 5mm .8mm 0; margin: 5mm 0; }
 blockquote.tr p { font: 400 11.2pt/1.75 "IBM Plex Sans Arabic"; color: var(--ink-2); text-indent: 0; text-align: right; }
 blockquote.tr p > strong:first-child { font: 600 10pt/1.5 "Changa"; color: var(--gold-ink); margin-left: 1.4mm; }
 blockquote.speech p { font: 400 13.4pt/1.85 "Amiri"; color: var(--ink); text-indent: 0; }
@@ -211,7 +212,7 @@ blockquote.lead { margin: 2mm 0 6mm; text-align: center; }
 blockquote.lead p { font: 400 14.6pt/1.8 "Scheherazade New"; color: var(--ink-2); text-align: center; text-indent: 0; }
 blockquote.lead p strong { display: block; font: 700 19pt/1.5 "Changa"; color: var(--sapphire); margin-top: 1mm; }
 blockquote.note p { font: 400 12.4pt/1.8 "Scheherazade New"; color: var(--ink-2); text-indent: 0; }
-blockquote.note { border-right: .6pt solid #CFC5B1; padding: 0 4.5mm 0 0; }
+blockquote.note { border-right: .6pt solid var(--hair-2); padding: 0 4.5mm 0 0; }
 /* the situation card: Plex lines, not a coloured table */
 .card { margin: 4mm 0 4.6mm; padding: 2.2mm 0 2.4mm; border-top: .6pt solid var(--gold); border-bottom: .35pt solid var(--gold); break-inside: avoid; }
 .card .ch { font: 600 9.2pt/1.4 "Changa"; color: var(--sapphire); margin-bottom: 1mm; display: flex; gap: 1.6mm; align-items: center; }
@@ -223,18 +224,18 @@ blockquote.note { border-right: .6pt solid #CFC5B1; padding: 0 4.5mm 0 0; }
 /* the dialogue: a play text */
 .play { margin: 4mm 0 5mm; border-top: .6pt solid var(--gold); border-bottom: .35pt solid var(--gold); padding: 1.6mm 0; }
 .pl { display: grid; grid-template-columns: 7mm 21mm 1fr; column-gap: 2.4mm; align-items: baseline; padding: .9mm 0; break-inside: avoid; }
-.pl .ln { font: 400 7.8pt/1 "IBM Plex Sans Arabic"; color: #978E7E; text-align: right; }
+.pl .ln { font: 400 8pt/1 "IBM Plex Sans Arabic"; color: var(--ink-3); text-align: right; }
 .pl .who { font: 600 8.8pt/1.5 "IBM Plex Sans Arabic"; color: var(--sapphire); }
 .pl .say { font: 400 13.2pt/1.8 "Amiri"; color: var(--ink); text-align: right; }
 .pl .say .sd { font: 400 9.4pt/1.6 "IBM Plex Sans Arabic"; color: var(--ink-3); }
-/* the voice drill: a frame on a deeper pearl */
-.voice { background: #EAE5DA; border: .5pt solid #D9CBA6; padding: 4mm 6mm; margin: 4mm 0 5mm; break-inside: avoid; }
+/* the voice drill: a frame of hairlines on the white, its sapphire rule on the start side */
+.voice { border: .5pt solid var(--hair-2); border-right: 1.4pt solid var(--sapphire-2); padding: 4mm 6mm; margin: 4mm 0 5mm; break-inside: avoid; }
 .voice .vl { font: 400 14pt/2.05 "Scheherazade New"; color: var(--ink); text-align: right; }
 .voice .vl strong { color: var(--sapphire); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 1.4mm; }
 .voice .ps { color: var(--gold-ink); font-family: "IBM Plex Sans Arabic"; font-weight: 500; margin: 0 .8mm; }
 .voice .br { font: 400 8.4pt "IBM Plex Sans Arabic"; color: var(--sapphire-2); }
 /* the chapter's exercises: numbered cards */
-.ex-card { border: .45pt solid #D9CBA6; background: var(--paper); margin: 3.2mm 0; padding: 2.6mm 5mm 3mm; break-inside: auto; }
+.ex-card { border: .45pt solid var(--hair-2); background: var(--paper); margin: 3.2mm 0; padding: 2.6mm 5mm 3mm; break-inside: auto; }
 .ex-card h4 { break-after: avoid; }
 .ex-head { break-inside: avoid; }
 .keep { break-inside: avoid; }
@@ -253,7 +254,7 @@ ul.check > li::before { content: ""; position: absolute; right: 0; top: 2.6mm; w
 .lesson-t table { break-inside: auto; }
 .lesson-t thead { display: table-header-group; }
 .lesson-t tr { break-inside: avoid; }
-.lesson-t table th { background: var(--paper-2); color: var(--sapphire); border-bottom: .8pt solid var(--gold); font-weight: 600; }
+.lesson-t table th { background: none; color: var(--sapphire); border-bottom: .8pt solid var(--gold); font-weight: 600; }
 .lesson-t table td { font-size: 8.8pt; }
 .lesson-t table tr:nth-child(even) td { background: none; }
 /* the figure */
@@ -270,16 +271,16 @@ def spectrum():
     """The spectrum of Arabic (Bible, part eight, §٤: المدخل، ف١): from the heritage tongue to the colloquial, the
     situations placed on it; the professional styles are colours of the modern fuṣḥā, not a level of their own.
     Sapphire and sand only; labels in Plex, the title in Kufam; no shadow, no gradient."""
-    zones = [("العربية التراثية", "نقرؤها ونحفظها ونستشهد بها", "#0C2766", "#F4ECD9"),
-             ("الفصحى المعاصرة المكتوبة", "الكتاب والصحيفة والمراسلة", "#2B4A8F", "#F4ECD9"),
-             ("الفصحى المنطوقة", "المحاضرة والندوة والمقابلة والخطبة", "#C9A95C", "#1C1915"),
-             ("العاميات", "البيت والسوق", "#EFECE5", "#4A443C")]
+    zones = [("العربية التراثية", "نقرؤها ونحفظها ونستشهد بها", "#0C2766", "#F2F4F8"),
+             ("الفصحى المعاصرة المكتوبة", "الكتاب والصحيفة والمراسلة", "#2B4A8F", "#F2F4F8"),
+             ("الفصحى المنطوقة", "المحاضرة والندوة والمقابلة والخطبة", "#C9A95C", "#1F2329"),
+             ("العاميات", "البيت والسوق", "#EDF1F7", "#474B53")]
     w, x = 122.0, 122.0
     cells, under = [], []
     for name, where, fill, ink in zones:
         cw = w / 4
         x -= cw
-        stroke = ' stroke="#C9A95C" stroke-width=".4"' if fill == "#EFECE5" else ""
+        stroke = ' stroke="#C9A95C" stroke-width=".4"' if fill == "#EDF1F7" else ""
         cells.append(f'<rect x="{x:.2f}" y="15" width="{cw:.2f}" height="14"{stroke} fill="{fill}"/>')
         under.append(f'<div class="fz" style="right:{w - x - cw:.2f}mm;width:{cw:.2f}mm"><b style="color:{ink}">{name}</b></div>'
                      f'<div class="fw" style="right:{w - x - cw:.2f}mm;width:{cw:.2f}mm">{where}</div>')
@@ -287,7 +288,7 @@ def spectrum():
     lx0, lx1 = w - field[1], w - field[0]
     svg = (f'<svg viewBox="0 0 {w} 55" style="position:absolute;top:0;left:0;width:{w}mm;height:55mm">'
            f'{"".join(cells)}'
-           f'<path d="M{lx0 + 1.5:.2f} 12.2 V10 H{lx1 - 1.5:.2f} V12.2" fill="none" stroke="#8A6A1F" stroke-width=".45"/>'
+           f'<path d="M{lx0 + 1.5:.2f} 12.2 V10 H{lx1 - 1.5:.2f} V12.2" fill="none" stroke="#7F5F12" stroke-width=".45"/>'
            f'<line x1="{w - 1:.2f}" y1="4" x2="1" y2="4" stroke="#C9A95C" stroke-width=".35"/>'
            f'<path d="M3.2 2.4 L1 4 L3.2 5.6" fill="none" stroke="#C9A95C" stroke-width=".35"/>'
            f'<rect x="{w / 4:.2f}" y="42.5" width="{w / 2:.2f}" height="10.5" fill="none" stroke="#2B4A8F" stroke-width=".4" stroke-dasharray="1.2 .9"/>'
@@ -312,11 +313,11 @@ FIG_CSS = ('<style>.fg { position: relative; width: 122mm; margin: 0 auto; }'
            '.fg .n { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-sizing: border-box; }'
            '.fg .q { font: 600 9.4pt/1.25 "Changa"; color: var(--sapphire); }'
            '.fg .r { font: 400 8pt/1.3 "IBM Plex Sans Arabic"; color: var(--ink-3); margin-top: .6mm; }'
-           '.fg .o .q { color: #F4ECD9; font-size: 11pt; } .fg .o .r { color: #D9CFB8; font-size: 8.2pt; }'
+           '.fg .o .q { color: #F2F4F8; font-size: 11pt; } .fg .o .r { color: #C9D1E0; font-size: 8.2pt; }'
            '.fg .k { position: absolute; font: 300 8pt/1 "Changa"; color: var(--gold-ink); background: var(--paper); padding: 0 1.6mm; }'
            '.fg .t { position: absolute; font: 600 9.6pt/1.3 "Changa"; color: var(--sapphire); text-align: center; }'
            '.fg .d { position: absolute; font: 400 8pt/1.45 "IBM Plex Sans Arabic"; color: var(--ink-2); text-align: center; }'
-           '.fg .d.on { color: #E7DFCE; } .fg .t.on { color: #F4ECD9; }</style>')
+           '.fg .d.on { color: #C9D1E0; } .fg .t.on { color: #F2F4F8; }</style>')
 
 
 def sextet():
@@ -330,7 +331,7 @@ def sextet():
     for k, (q, r) in enumerate(inputs):
         x = w - nw - k * (nw + gap)             # right to left
         cx = x + nw / 2
-        svg.append(f'<rect x="{x:.2f}" y="{top}" width="{nw}" height="{nh}" fill="#F8F6F1" stroke="#C9A95C" stroke-width=".4"/>')
+        svg.append(f'<rect x="{x:.2f}" y="{top}" width="{nw}" height="{nh}" fill="#FFFFFF" stroke="#C9A95C" stroke-width=".4"/>')
         svg.append(f'<path d="M{cx:.2f} {top + nh:.2f} C{cx:.2f} {top + nh + 9:.2f} {w / 2:.2f} {oy - 9:.2f} {w / 2:.2f} {oy:.2f}" fill="none" stroke="#C9A95C" stroke-width=".35"/>')
         html.append(f'<div class="n" style="right:{w - x - nw:.2f}mm;top:{top}mm;width:{nw}mm;height:{nh}mm"><span class="q">{q}</span><span class="r">{r}</span></div>')
     svg.append(f'<rect x="{ox:.2f}" y="{oy}" width="{ow}" height="{oh}" fill="#0C2766"/>')
@@ -349,8 +350,8 @@ def three_terms():
     """الرسم ٣ (الباب ١، ف٣): الفصاحة within البلاغة within البيان, as the chapter's rules state them: «الفصاحة شرط، والبلاغة
     مطابقة، والبيان غاية»، «كل بليغ فصيح، وليس كل فصيح بليغًا»، والبيان «أوسع الثلاثة»."""
     w, h = 122.0, 66.0
-    svg = (f'<rect x=".3" y=".3" width="{w - .6}" height="{h - .6}" fill="#EFECE5" stroke="#C9A95C" stroke-width=".4"/>'
-           f'<rect x="10" y="17" width="{w - 20}" height="{h - 21}" fill="#F8F6F1" stroke="#2B4A8F" stroke-width=".45"/>'
+    svg = (f'<rect x=".3" y=".3" width="{w - .6}" height="{h - .6}" fill="#EDF1F7" stroke="#C9A95C" stroke-width=".4"/>'
+           f'<rect x="10" y="17" width="{w - 20}" height="{h - 21}" fill="#FFFFFF" stroke="#2B4A8F" stroke-width=".45"/>'
            f'<rect x="22" y="36" width="{w - 44}" height="{h - 42}" fill="#0C2766"/>')
     html = (f'<div class="t" style="right:4mm;top:3mm">البيان · غاية</div>'
             f'<div class="d" style="left:4mm;top:3.4mm;text-align:left">كل ما بلغ به الإفهام، بلفظٍ وغير لفظ</div>'
@@ -368,7 +369,7 @@ def situation():
     a fixed core within a ring that varies; the elements of مقتضى الحال from its definition beside it."""
     import math
     w, h, cx, cy, R, r = 122.0, 74.0, 40.0, 37.0, 34.0, 17.0
-    svg = [f'<circle cx="{cx}" cy="{cy}" r="{R}" fill="#F8F6F1" stroke="#C9A95C" stroke-width=".45"/>',
+    svg = [f'<circle cx="{cx}" cy="{cy}" r="{R}" fill="#FFFFFF" stroke="#C9A95C" stroke-width=".45"/>',
            f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="#0C2766"/>']
     ring = ["اللفظ", "الطول", "النبرة", "درجة التفصيل", "المقدمات", "ترتيب الأولويات"]
     html = []
@@ -815,6 +816,7 @@ def lesson_html(md, breaks=True):
             h.string = h.string[m.end():]
             num = soup.new_tag("span", attrs={"class": "hn"}); num.string = m.group(1)
             h.insert(0, num)
+    EV.wrap(soup)                                         # the declared colour events (events.py) become fields
     keep_headings(soup)
     forced_breaks(soup, CURRENT["n"])
     html = O.ayat(str(soup).replace("←", O.ARROW))
@@ -869,7 +871,7 @@ def chapter_md(files):
     are numbered through all its files, from ١ (Bible, ch. 34 §٣), in the order of their calls."""
     parts, n = [], 0
     for i, f in enumerate(files):
-        md = f.read_text(encoding="utf-8")
+        md = EV.stage(f, f.read_text(encoding="utf-8"), CURRENT["n"])
         md = re.sub(r"^#\s+.+$", "", md, count=1, flags=re.M)
         if i == 0:
             md = re.sub(r"^##\s+.+$", "", md, count=1, flags=re.M)
@@ -894,14 +896,14 @@ def lesson_sections(md):
     return out
 
 
-def threshold(kick, big, line):
-    """A unit's threshold: a long name («الدبلوماسية والتواصل الرسمي») in the middle size, never squeezed."""
-    return O.poster(kick, big, line, kufam=True, mid=len(big) > 14)
+def threshold(kick, big, line, field="sapphire"):
+    """A unit's door (opening.door): a long name («الدبلوماسية والتواصل الرسمي») in the middle size, never squeezed."""
+    return O.door(kick, big, line, field)
 
 
 def opener_of(files):
     """A bab's opener (or the reference's): its title, label and name, its subtitle, its question, and its body."""
-    omd = files[0].read_text(encoding="utf-8")
+    omd = EV.stage(files[0], files[0].read_text(encoding="utf-8"), CURRENT["n"])
     title = re.search(r"^#\s+(.+)$", omd, re.M).group(1).strip()
     label, name = [x.strip() for x in title.split(":", 1)]
     lead = re.search(r"^>\s*(السؤال الذي يجيب عنه [^:]+):.*$", omd, re.M)
@@ -954,7 +956,12 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
         tag = f"b{b}" if b else "r"
         opener, chapters = bab_chapters(b, files)
         title, label, name, sub, lead, obody = opener_of(files)
-        pieces.append(("fixed", doc(css, threshold(label, name, lead), fixed),
+        if u[0] == "bab":                                   # the door's kicker: the stage, the bab, the stage's dots
+            st = list(FM.STAGES)[VOLUMES[n - 1]["stage"] - 1]
+            dkick = f'{FM.STAGES[st]} · {label}<span class="dots">{"<b></b>" * FM.STAGE_DOTS[st]}</span>'
+        else:
+            dkick = label
+        pieces.append(("fixed", doc(css, threshold(dkick, name, lead, "graphite" if u[0] == "reference" else "sapphire"), fixed),
                        {"recto": True, "anchor": "main" if first else tag }))
         outline.append((title, "main" if first else tag, 0))
         if first:
@@ -981,7 +988,9 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
             heads = (head, [("label", "الفصل"), ("num", str(c).translate(AR)), ("title", short.group(1) if short else ctitle)])
             CURRENT["chap"] = f"الفصل {ORD[c]}: {ctitle}"
             body = f'<section class="chap"><div class="chap-open">{lesson_html(md)}</div></section>'
-            band = O.band(f"{label}: {name} · الفصل {ORD[c]}", ctitle, question)
+            plate, lead = EV.hinge(n, b, c) if b else (None, None)
+            kick = f"{label}: {name} · الفصل {ORD[c]}" + (" · خاتمة الباب" if lead == "close" else "")
+            band = O.band(kick, ctitle, question, plate, None if lead == "close" else lead)
             pieces.append(("flow", flow(css, (body, band)), {"anchor": key, "head": heads}))
         return
 
@@ -991,7 +1000,8 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
         kick, title = [x.strip() for x in PROGRAM.split(":", 1)]
         CURRENT["chap"] = PROGRAM
         body = f'<section class="chap"><div class="chap-open">{lesson_html(md, breaks=False)}</div></section>'
-        pieces.append(("flow", flow(css, (body, O.band(kick, title, ""))),
+        plate, lead = EV.hinge(n, "program", 0)
+        pieces.append(("flow", flow(css, (body, O.band(kick, title, "", plate, lead))),
                        {"recto": True, "anchor": "prog", "head": ([("title", kick)], [("title", "برنامج النطق اليومي")])}))
         toc.append(("part", "", kick))
         toc.append(("e", "", title, "prog", []))
@@ -1002,7 +1012,10 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
         md = unit_files(n, u)[0].read_text(encoding="utf-8")
         md = re.sub(r"^## ", "### ", md, flags=re.M)
         md = re.sub(r"^# ", "## ", md, count=1, flags=re.M)
-        # the book's close opens once, on its band: no threshold repeats its title
+        # the last word to the reader, re-staged before the book's close (events.py: a statement, verbatim)
+        for _, kick, pre, main, _src in EV.statements(n, "closing"):
+            pieces.append(("fixed", doc(css, O.statement(kick, pre, main), fixed), {"recto": True}))
+        # the book's close opens once, on its lintel: no threshold repeats its title
         outline.append(("خاتمة الكتاب", "closing-t", 0))
         heads = ([("title", "خاتمة الكتاب")], [("title", "خاتمة الكتاب")])
         for kind, part in O.chapter_parts(md, "خاتمة الكتاب"):
@@ -1019,6 +1032,9 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
         raw = "\n\n".join(f.read_text(encoding="utf-8") for f in files)
         h1 = re.search(r"^#\s+(.+)$", raw, re.M).group(1).strip()
         md = "\n\n".join(flat(f.read_text(encoding="utf-8")) if i == 0 else f.read_text(encoding="utf-8") for i, f in enumerate(files))
+        # the unit's line under its title (<!-- sub: … -->) stands on the opening, never in the text
+        sub = re.search(r"<!--\s*sub:\s*(.+?)\s*-->", raw)
+        md = re.sub(r"<!--\s*sub:.*?-->\s*", "", md, flags=re.S)
         if u[0] == "app":
             kick, title = [x.strip() for x in h1.split(":", 1)]
             key, group = f"app-{u[1]}", "الملاحق"
@@ -1032,7 +1048,7 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
         outline.append((h1, key, 1))
         CURRENT["chap"] = h1
         body = f'<section class="chap"><div class="chap-open">{lesson_html(md, breaks=False)}</div></section>'
-        pieces.append(("flow", flow(css, (body, O.band(kick, title, ""))),
+        pieces.append(("flow", flow(css, (body, O.band(kick, title, sub.group(1) if sub else ""))),
                        {"recto": True, "anchor": key, "head": ([("title", group)], [("title", title if len(title) < 22 else kick)])}))
         return
     raise SystemExit(f"no builder for the unit {u}")
@@ -1046,7 +1062,7 @@ def folios(css, pages, slug=None):
         body = body.replace('<section class="hd-page">', f'<section class="hd-page"><div class="slug">{slug}</div>')
     return doc(css, body, O.FIXED_CSS % dict(w=G.W, h=G.H) + " html, body { background: transparent !important; }" + H.CSS
                + '.slug { position: absolute; bottom: 5.2mm; left: 0; right: 0; text-align: center; font: 400 6.2pt/1 "IBM Plex Sans Arabic"; '
-                 'color: #A39A8A; letter-spacing: .4pt; }')
+                 'color: var(--ink-3); letter-spacing: .4pt; }')
 
 
 # ------------------------------------------------------------------------------------------------ the volume
@@ -1055,6 +1071,9 @@ def main(n=1, review=False):
     from pypdf import PdfReader, PdfWriter
     IX.use_volume(n)
     CURRENT["n"] = n
+    problems = EV.check()                                  # every colour event anchored in the manuscript, or no build
+    if problems:
+        raise SystemExit("events.py: " + "; ".join(problems))
     css = C2.fonts()
     fixed = O.FIXED_CSS % dict(w=G.W, h=G.H)
     R = {"recto": True}
@@ -1089,7 +1108,7 @@ def main(n=1, review=False):
                {"recto": True, "anchor": "author", "head": O.same("كلمة المؤلف")}),
               ("toc", None, {"recto": True, "head": O.same("المحتويات"), "opens": True}),
               ("cont", doc(css, FM.symbols(), O.CONT_CSS), {"recto": True, "anchor": "symbols", "head": O.same("الرموز والاصطلاحات"), "opens": True}),
-              ("fixed", doc(css, O.poster("المجلد الأول", "المقدمة", "في صناعة الكلام: البيان في خلق الإنسان وفي الكتاب والسنة وعند علماء العربية، ومنزلة العربية وعلومها، والفرق بين أن تعرف اللغة وأن تملكها، وأيّ عربيةٍ نتكلّم.", kufam=True), fixed),
+              ("fixed", doc(css, O.door("المجلد الأول", "المقدمة", "في صناعة الكلام: البيان في خلق الإنسان وفي الكتاب والسنة وعند علماء العربية، ومنزلة العربية وعلومها، والفرق بين أن تعرف اللغة وأن تملكها، وأيّ عربيةٍ نتكلّم.", "midnight"), fixed),
                {"recto": True, "anchor": "main"})]
     toc = [("part", "", "المقدّمات"), ("e", "", "كلمة الناشر", "publisher", []), ("e", "", "كلمة المؤلف", "author", []),
            ("e", "", "الرموز والاصطلاحات", "symbols", []), ("part", "", "المقدمة: في صناعة الكلام"), ("e", "", "تمهيد", "01", [])]
@@ -1100,15 +1119,11 @@ def main(n=1, review=False):
     tamhid = muq[0].read_text(encoding="utf-8").replace("# المقدمة: في صناعة الكلام\n", "")
     pieces.append(("flow", flow(css, O.chapter(tamhid, "المقدمة")), {"anchor": "01", "head": (O.MUQ, [("title", "تمهيد")])}))
     interludes = {
-        "05-": ("fixed", lambda: O.heritage("سيبويه", "«فمنه مستقيمٌ حسن، ومُحال، ومستقيمٌ كذب، ومستقيمٌ قبيح، وما هو مُحالٌ كذب»", "الكتاب، باب الاستقامة من الكلام والإحالة")),
         "07-": ("fixed", lambda: O.verse_poster("العربية والوحي", "إِنَّا نَحْنُ نَزَّلْنَا ٱلذِّكْرَ وَإِنَّا لَهُۥ لَحَٰفِظُونَ", "(الحجر: ٩)")),
-        "10-": ("fixed", lambda: O.poster("السؤال الذي وُلد منه الكتاب", "كيف نصنع المتكلّم العربي؟",
-                                          "لا: كيف نعلّم الطالب مزيدًا من العربية؛ بل: كيف نجعل العربية التي تعلّمها تظهر على لسانه حين يحتاج إليها، ثم يُحسن وضعها في موضعها.", kufam=True, mid=True)),
-        "11-": ("fixed", lambda: O.poster("المقدمة", "فأين الخلل؟", "ليس في علم المتعلّم، ولا في عقله، ولا في دينه؛ بل في صناعةٍ لم تُعلَّم تعليمًا مقصودًا: أن يصير ما يعرفه كلامًا يُقال، لمن يُقال له، حين يُقال.")),
-        "14-": ("fixed", lambda: O.heritage("من الصحيفة المنسوبة إلى بشر بن المعتمر", "«فيجعل لكلّ طبقةٍ من ذلك كلامًا، ولكلّ حالةٍ من ذلك مقامًا»", "رواها الجاحظ في البيان والتبيين")),
+        "10-": ("fixed", lambda: O.statement(*EV.statements(1, "10-")[0][1:4])),
     }
     for k, f in enumerate(muq[1:], 1):
-        md = f.read_text(encoding="utf-8")
+        md = EV.stage(f, f.read_text(encoding="utf-8"), n)
         if f.name[:3] in interludes:
             pieces.append(("fixed", doc(css, interludes[f.name[:3]][1](), fixed), {}))
         title = re.sub(r"^الفصل [^:]+:\s*", "", re.search(r"^##\s+(.+)$", md, re.M).group(1))
@@ -1124,9 +1139,7 @@ def main(n=1, review=False):
             else:
                 pieces.append(("cont", doc(css, part, O.CONT_CSS, paged="fn-note" in part), {"head": heads}))
 
-    # the introduction: a threshold, then its chapter, with the spectrum where the text announces it
-    pieces.append(("fixed", doc(css, threshold("المجلد الأول", "المدخل", "العربية التي نتكلّمها: لغةٌ واحدة لها مستويات، ولكل مستوًى مقامه؛ وأين يقف المتكلّم منها، وإلى أين يريد أن يصل."), fixed),
-                   {"recto": True, "anchor": "intro"}))
+    # the introduction: one chapter, opening on its own lintel (no door: a single chapter is not a unit to enter)
     toc.append(("part", "", "المدخل"))
     outline.append(("المدخل", "intro", 0))
     for k, f in enumerate(sorted(INTRO.glob("ف*.md")), 1):
@@ -1140,7 +1153,10 @@ def main(n=1, review=False):
         heads = ([("title", "المدخل")], O.head_of(md, k))
         for kind, part in O.chapter_parts(md, f"المدخل · الفصل {ORD[k]}"):
             if kind == "flow":
-                pieces.append(("flow", flow(css, part), {"anchor": key, "head": heads}))
+                meta = {"anchor": key, "head": heads}
+                if k == 1 and not any(p[2].get("alias") == "intro" for p in pieces):
+                    meta.update(recto=True, alias="intro")
+                pieces.append(("flow", flow(css, part), meta))
             else:
                 pieces.append((kind, doc(css, part, fixed if kind == "fixed" else O.CONT_CSS, paged="fn-note" in part), {"head": heads}))
 
@@ -1191,7 +1207,7 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
         return doc(css, FM.contents(rows, n), O.CONT_CSS, paged=True)
 
     tag = f"vol{n:02d}"
-    paper = B.render(doc(css, '<div style="width:170mm;height:240mm;background:var(--paper)"></div>', fixed), f"{tag}-paper")
+    paper = B.render(doc(css, '<div style="width:170mm;height:240mm"></div>', fixed), f"{tag}-paper")   # an empty page: the field is white, nothing painted
     out, anchors, toc_slot = [], {"toc": None}, None       # out: [(page, kind, heads)]; page 1 is out[0]
     def place(i, kind, html, meta):
         nonlocal toc_slot
@@ -1290,6 +1306,13 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
         meta["/ISBN"] = FM.ISBN[n]
     w.add_metadata(meta)
     w.page_mode = "/UseOutlines"
+    # digital-first: an Arabic book opens right to left, its spreads with the odd page on the left
+    w.page_layout = "/TwoPageRight"
+    try:
+        w.create_viewer_preferences()
+        w.viewer_preferences.direction = "/R2L"
+    except AttributeError:
+        pass
     dest = out_path(n, review)
     w.write(str(dest))
     import pymupdf

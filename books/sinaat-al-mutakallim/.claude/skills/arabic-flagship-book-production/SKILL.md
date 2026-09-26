@@ -52,7 +52,14 @@ Decoration never compensates for weak typography or weak page architecture.
   reading. If everything becomes sapphire, nothing is special.
 - **Not mechanical:** each volume's colour rhythm answers its own intellectual character and structure while remaining
   one recognisable 11-volume system. The per-volume plan is declared in data, not improvised per build.
-- The Quran is sapphire alone and never texture. The feel: clean, luminous, scholarly, architectural, luxurious — not
+- **The system as built** (Bible ch. 22 §7; `pdf/opening.py` `:root`): white by absence (nothing painted under the
+  text); inks `--ink #1F2329`, `--ink-2 #474B53`, `--ink-3 #6A6F78`; hairlines `#DDE0E5` / `#C9CDD4`; gold-ink
+  `#7F5F12`. Events are declared in `pdf/events.py` and checked against the manuscript and the quotation ledger at
+  every build: a sapphire door for each bab (graphite for the reference, midnight for the Muqaddima), at most one
+  pale-sapphire framework and one warm-pearl heritage field per volume, at most two hinge plates, and verbatim
+  midnight statements in V1 and V10 only. The chapter opens on a sapphire lintel at 84 mm; text from 92 mm.
+- The Quran («ياقوتيٌّ وحده»: deep ruby `#7B1730`, Bible part 16) is never on a coloured field and never texture;
+  ruby belongs to the Quran alone, error and danger take crimson `#A8172E`. The feel: clean, luminous, scholarly, architectural, luxurious — not
   vintage, parchment, rustic, or artificially «Islamic».
 
 ## 4. Digital-first page architecture — no bleed by default

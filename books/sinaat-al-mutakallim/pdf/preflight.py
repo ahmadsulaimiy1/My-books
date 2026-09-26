@@ -189,11 +189,58 @@ def main(v=1, proof=False):
     for p in doc:
         t = p.get_text()
         for mark in ("<!--", "-->", "head", "figure", "page:", "sub:", "**", "##", "|---", "*[", "]*"):
-            if (re.search(rf"(?<![A-Za-z]){mark}(?![A-Za-z])", t) if mark.isalpha() else mark in t):
+            # the page's text comes out in visual order in a right-to-left line: «sub:» can read «:sub» there
+            seen = mark in t or (mark.endswith(":") and ":" + mark[:-1] in t)
+            if (re.search(rf"(?<![A-Za-z]){mark}(?![A-Za-z])", t) if mark.isalpha() else seen):
                 leaks.append(f"{labels[p.number]} «{mark}»")
                 review.append((labels[p.number], f"علامةٌ من المصدر ظاهرة في الصفحة: «{mark}»"))
     add("الحرفية", "لا يظهر من علامات المصدر شيء (التعليقات، والنجوم، والعناوين، وخطوط الجداول)", "يجتاز" if not leaks else "لا يجتاز",
         "، ".join(leaks) or "لا شيء")
+    # the white page and its events (Bible ch. 22 §7): nothing coloured reaches the trim (the interior has no bleed),
+    # no transparency, no warm tint but the declared heritage pearl, no field split across two pages, no Quran on a field
+    MM = 72 / 25.4
+    W, H = doc[0].rect.width, doc[0].rect.height
+    PEARL_WARM = (0.969, 0.953, 0.925)
+    trim, warm, split, qfield = [], [], [], []
+    for pg in doc:
+        fields = []
+        for dr in pg.get_drawings():
+            f, r = dr.get("fill"), dr["rect"]
+            if not f or len(f) != 3 or min(f) > 0.985 or r.width * r.height < 20:
+                continue
+            if r.y0 >= -0.5 and r.x0 >= -0.5 and r.y1 <= H + 0.5 and r.x1 <= W + 0.5 and \
+                    (r.x0 <= 0.5 or r.y0 <= 0.5 or r.x1 >= W - 0.5 or r.y1 >= H - 0.5):
+                trim.append(labels[pg.number])
+            lum = 0.299 * f[0] + 0.587 * f[1] + 0.114 * f[2]
+            if lum > 0.85 and f[0] - f[2] > 0.025 and max(abs(a - b) for a, b in zip(f, PEARL_WARM)) > 0.006:
+                warm.append(labels[pg.number])
+            if r.width > 100 * MM and r.height > 12 * MM:
+                fields.append(r)
+                touches_top = abs(r.y0 - 22 * MM) < 1.2 and abs(r.height - 62 * MM) > 2 and abs(r.height - 128 * MM) > 2 \
+                    and abs(r.height - 108 * MM) > 2
+                touches_foot = abs(r.y1 - (H - 28 * MM)) < 1.2
+                if lum > 0.85 and (touches_top or touches_foot):
+                    split.append(labels[pg.number])
+        if fields:
+            for b in pg.get_text("dict")["blocks"]:
+                for l in b.get("lines", []):
+                    for sp in l["spans"]:
+                        if "Quran" in sp["font"] and any(pymupdf.Rect(sp["bbox"]).intersects(r) for r in fields):
+                            qfield.append(labels[pg.number])
+    alpha = []                                            # every graphics state of the file: none below full opacity
+    for x in range(1, doc.xref_length()):
+        try:
+            o = doc.xref_object(x, compressed=True)
+        except Exception:
+            continue
+        m = re.findall(r"/(?:ca|CA)\s*([0-9.]+)", o)
+        if m and any(float(v) < 0.999 for v in m):
+            alpha.append(str(x))
+    add("الإخراج الفني", "لا شيء ملوّن يبلغ حدّ القصّ (المتن بلا نزف، الدليل ٢٢ §٦)", "يجتاز" if not trim else "لا يجتاز", "، ".join(sorted(set(trim))) or "لا شيء")
+    add("الإخراج الفني", "لا شفافية في الصفحات", "يجتاز" if not alpha else "لا يجتاز", f"{len(alpha)} حالة رسم شفافة" if alpha else "لا شيء")
+    add("الإخراج الفني", "الأرضية بيضاء: لا لون دافئ فاتح إلا اللؤلؤي الدافئ للشاهد المعلن (الدليل ٢٢ §٧)", "يجتاز" if not warm else "لا يجتاز", "، ".join(sorted(set(warm))) or "لا شيء")
+    add("الإخراج الفني", "لا حقلٌ ملوّن ينقسم بين صفحتين", "يجتاز" if not split else "لا يجتاز", "، ".join(sorted(set(split))) or "لا شيء")
+    add("العلمية", "لا يوضع القرآن على حقلٍ ملوّن", "يجتاز" if not qfield else "لا يجتاز", "، ".join(sorted(set(qfield))) or "لا شيء")
     add("اللغوية", "لا نقطة وسطى «·» بجوار رقمٍ مشرقي (الدليل ٠٦)", "يجتاز" if not dots else "لا يجتاز", "، ".join(dots))
 
     # ------------------------------------------------------------------ 3. the pedagogical gate

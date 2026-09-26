@@ -145,9 +145,9 @@ table.cmp td:first-child { font-weight: 600; color: var(--ink); white-space: now
 .card p { font-size: 12pt; line-height: 1.8; text-indent: 0; }
 .mastery h3 { font: 600 9.4pt/1.4 var(--sans); color: var(--sapphire); margin: 4mm 0 1.6mm; }
 /* --- title page */
-.tp-band { position: absolute; top: 0; left: 0; right: 0; height: 138mm; background: var(--sapphire); }
-.tp-sub { position: absolute; top: 150mm; right: 24mm; left: 24mm; font: 400 19pt/1.4 var(--read); color: var(--ink); }
-.tp-desc { position: absolute; top: 164mm; right: 24mm; left: 44mm; font: 400 10pt/1.7 var(--sans); color: var(--ink-2); }
+.tp-band { position: absolute; top: 22mm; right: 24mm; left: 24mm; height: 108mm; background: var(--sapphire); }
+.tp-sub { position: absolute; top: 146mm; right: 24mm; left: 24mm; font: 400 19pt/1.4 var(--read); color: var(--ink); }
+.tp-desc { position: absolute; top: 160mm; right: 24mm; left: 44mm; font: 400 10pt/1.7 var(--sans); color: var(--ink-2); }
 .tp-vol { position: absolute; top: 106mm; right: 24mm; color: var(--gold-l); font: 500 8.6pt/1.6 var(--sans); }
 .tp-auth { position: absolute; bottom: 26mm; right: 24mm; }
 .tp-auth small { font: 400 8pt/1.5 var(--sans); color: var(--ink-3); display: block; }
@@ -196,20 +196,22 @@ def essay():
 def title_page(css, volume=None, n=None):
     """volume: the volume's block (frontmatter.title_volume); the prototype's line stands in when none is given.
     n: the volume, whose device (the alif in its circle, as on its cover) stands on the band's gold line."""
-    logo = C2.Logotype(css, width=122.0)
-    svg, bottom = logo.svg(146.0, 50.0, shadow=True)
+    # the white page (Bible ch. 22 §6.5): a sapphire field inside the text block, no bleed; the logotype flat gold,
+    # no simulated foil, shadow or lit edge inside the book; the device stands on the field's foot
+    logo = C2.Logotype(css, width=100.0)
+    svg, bottom = logo.svg(136.0, 36.0, flat="#E4CB8C")
     if n is None:
-        mark = '<circle cx="146" cy="137.85" r="1.3" fill="#A8172E"/>'
+        mark = '<circle cx="146" cy="130" r="1.3" fill="#A8172E"/>'
         dev = ""
     else:
         import marks
-        a = 40.0
+        a = 34.0
         mark = ""
-        dev = (f'<div style="position:absolute;left:{38.0 - a / 2 * 1.15:.2f}mm;top:{137.85 - a - 0.5:.2f}mm">'
+        dev = (f'<div style="position:absolute;left:{47.0 - a / 2 * 1.15:.2f}mm;top:{130.0 - a - 0.5:.2f}mm">'
                f'{marks.device_svg(n, a, on_dark=True, ext=a / 2 * 1.15)}</div>')
     return page(f'''<div class="tp-band"></div>
 <svg viewBox="0 0 170 240" style="position:absolute;inset:0;width:170mm;height:240mm"><defs>{C2.K.gold_defs()}</defs>{svg}
-<rect x="0" y="137.6" width="170" height="0.5" fill="url(#foil)"/>{mark}</svg>{dev}
+{mark}</svg>{dev}
 {volume or '<div class="tp-vol">المجلد الأول<span class="kufi" style="display:block;font-size:22pt;line-height:1.3;color:#E4CB8C;font-weight:500">التأسيس</span></div>'}
 <div class="tp-sub">من سلامة اللسان إلى حسن البيان</div>
 <div class="tp-desc">منهجٌ شامل في النطق والتعبير والخطاب وآداب التواصل والملكة الشفهية</div>

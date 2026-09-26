@@ -36,6 +36,7 @@ import heads as H  # noqa: E402
 BOOK = HERE.parent / "book"
 from paths import AUTHOR_WORD, OPENING  # noqa: E402
 import ids as IDS  # noqa: E402
+import events as EV  # noqa: E402
 import indexes as IX  # noqa: E402
 OUT = HERE.parent / "Volume-I_Opening.pdf"
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
@@ -48,27 +49,47 @@ CSS = r"""
    knows whether it is a left-hand or a right-hand page (Bible, ch. 117b) */
 @page { size: 170mm 240mm; margin: 22mm 24mm 28mm 24mm; }
 @page :first { margin-top: 92mm; }
-:root { --ink: #1C1915; --ink-2: #4A443C; --ink-3: #7C7467; --paper: #F8F6F1; --paper-2: #EFECE5;
-  --sapphire: #0C2766; --sapphire-2: #2B4A8F; --gold: #C9A95C; --gold-l: #E4CB8C; --gold-ink: #8A6A1F; --crimson: #A8172E;
-  --ruby: #7B1730; --ruby-2: #9A4A58; --charcoal: #232A3A; }
-html, body { margin: 0; background: var(--paper); }
+/* the page field is white: nothing is painted under the text (the Bible, ch. 22 §1 and §6.5; the stock gives the white
+   in print). The warm greys and browns tuned for the old cream page are neutral graphite now; sapphire, gold and ruby
+   are the identity, unchanged (gold-ink is the Bible's own value). The fields below are events, each with one meaning */
+:root { --ink: #1F2329; --ink-2: #474B53; --ink-3: #6A6F78; --paper: #FFFFFF;
+  --sapphire: #0C2766; --sapphire-2: #2B4A8F; --gold: #C9A95C; --gold-l: #E4CB8C; --gold-ink: #7F5F12; --crimson: #A8172E;
+  --ruby: #7B1730; --ruby-2: #9A4A58; --charcoal: #232A3A;
+  --hair: #DDE0E5; --hair-2: #C9CDD4; --ice: #EDF1F7; --ice-rule: #CDD5E3; --pearl-warm: #F7F3EC;
+  --midnight: #0A163F; --graphite: #2A2F37; --on-dark: #F2F4F8; --on-dark-2: #C9D1E0; }
+html, body { margin: 0; background: none; }
 body { direction: rtl; color: var(--ink); font: 400 13.2pt/1.85 "Scheherazade New", serif; }
 .full { position: relative; width: 170mm; height: 240mm; overflow: hidden; break-before: page; break-after: page; }
 .wrap-pg { page: wrap; break-after: page; }
-.dark { background: var(--sapphire); color: #EFE7D6; }
+.dark { background: var(--sapphire); color: var(--on-dark); }
 .chap { break-before: page; }
-.chap-band { position: absolute; top: 0; left: 0; right: 0; height: 80mm; background: var(--sapphire); color: #EFE7D6; }
-.chap-band .k { position: absolute; top: 30mm; right: 24mm; font: 300 11pt/1 "Changa"; color: var(--gold-l); display: flex; gap: 3mm; align-items: center; }
-.chap-band .k i { width: 10mm; border-top: .5pt solid var(--gold); display: inline-block; }
-.chap-band .tt { position: absolute; top: 40mm; right: 24mm; left: 24mm; }
-.chap-band h2 { margin: 0; font: 700 29pt/1.25 "Changa"; color: #F4ECD9; string-set: chap content(); text-wrap: balance; }
-.chap-band .sub { margin-top: 3.2mm; font: 300 12.5pt/1.5 "Changa"; color: var(--gold-l); }
-.chap-band .dot { position: absolute; bottom: -1.3mm; right: 24mm; width: 2.4mm; height: 2.4mm; transform: rotate(45deg); background: var(--gold); }
+/* the chapter's opening: no painted band (the page is white, nothing runs to the trim); a sapphire lintel across the
+   text block at 84 mm, the gold rhombus at its reading end, and above it, standing on it, the kicker, the title and the
+   chapter's question — the text begins at 92 mm as before */
+.lintel { position: absolute; inset: 0; }
+.lintel .blk { position: absolute; right: 24mm; left: 24mm; bottom: 163mm; }
+.lintel .k { display: flex; gap: 3mm; align-items: center; font: 300 10.4pt/1.3 "Changa"; color: var(--gold-ink); letter-spacing: .2pt; }
+.lintel .k i { width: 12mm; border-top: .5pt solid var(--gold); display: inline-block; }
+.lintel h2 { margin: 5.2mm 0 0; font: 700 29pt/1.24 "Changa"; color: var(--sapphire); string-set: chap content(); text-wrap: balance; text-align: right; }
+.lintel .sub { margin-top: 3.2mm; font: 300 13pt/1.5 "Changa"; color: var(--ink-2); text-wrap: balance; text-align: right; }
+.lintel .rule { position: absolute; top: 84mm; right: 24mm; left: 24mm; border-top: 1pt solid var(--sapphire); }
+.lintel .dot { position: absolute; top: 82.8mm; right: 22.8mm; width: 2.4mm; height: 2.4mm; transform: rotate(45deg); background: var(--gold); }
+/* a hinge (events.py): the chapter the bab itself declares a turn opens on a head plate — the text block's width, from
+   its top to the lintel — carrying the bab's own words for that movement; very pale sapphire, or graphite where
+   reading turns into a workbook */
+.lintel .field { position: absolute; top: 22mm; right: 24mm; left: 24mm; height: 62mm; background: var(--ice); }
+.lintel.graphite .field { background: var(--graphite); }
+.lintel.plate .blk { right: 30mm; left: 30mm; }
+.lintel .lead { position: absolute; top: 27mm; right: 30mm; left: 30mm; font: 400 10.6pt/1.65 "Scheherazade New"; color: var(--ink-2); text-align: right; text-wrap: pretty; }
+.lintel .lead b { font: 600 10pt/1 "Changa"; color: var(--sapphire); margin-left: 1mm; }
+.lintel.graphite .k { color: var(--gold-l); } .lintel.graphite h2 { color: var(--on-dark); } .lintel.graphite .sub { color: var(--on-dark-2); }
+.lintel.graphite .lead { color: var(--on-dark-2); } .lintel.graphite .lead b { color: var(--gold-l); }
+.lintel.graphite .rule { border-top-color: var(--graphite); }
 .chap-open { position: relative; }
 p { margin: 0; text-align: justify; }
 p + p { text-indent: 6mm; }
 .chap-open > p:first-child, .chap-open > .keep:first-child > p { font-size: 14.4pt; line-height: 1.8; text-indent: 0; }
-h3 { font: 700 15pt/1.45 "Changa"; color: var(--sapphire); margin: 7mm 0 2.4mm; break-after: avoid; }
+h3 { font: 700 15pt/1.45 "Changa"; color: var(--sapphire); margin: 7mm 0 2.4mm; break-after: avoid; text-wrap: balance; }
 h3::after { content: ""; display: block; width: 12mm; border-top: .8pt solid var(--gold); margin-top: 1.6mm; }
 h3 + p { text-indent: 0; }
 strong { font-weight: 700; }
@@ -84,7 +105,7 @@ blockquote.hadith { margin: 6.5mm 5mm; text-align: center; }
 blockquote.hadith::before, blockquote.hadith::after { content: ""; display: block; height: 2mm; background: url("data:image/svg+xml;utf8,%%3Csvg%%20xmlns%%3D%%22http%%3A//www.w3.org/2000/svg%%22%%20width%%3D%%2228mm%%22%%20height%%3D%%222mm%%22%%20viewBox%%3D%%220%%200%%20280%%2020%%22%%3E%%3Cg%%20fill%%3D%%22none%%22%%20stroke%%3D%%22%%23C9A95C%%22%%20stroke-width%%3D%%222%%22%%3E%%3Cline%%20x1%%3D%%220%%22%%20y1%%3D%%2210%%22%%20x2%%3D%%22125%%22%%20y2%%3D%%2210%%22/%%3E%%3Cline%%20x1%%3D%%22155%%22%%20y1%%3D%%2210%%22%%20x2%%3D%%22280%%22%%20y2%%3D%%2210%%22/%%3E%%3Cpath%%20d%%3D%%22M140%%202%%20L148%%2010%%20L140%%2018%%20L132%%2010%%20Z%%22/%%3E%%3C/g%%3E%%3C/svg%%3E") no-repeat center / 28mm 2mm; }
 blockquote.hadith p { font: 400 14.8pt/1.95 "Amiri"; color: var(--charcoal); text-align: center; text-indent: 0; padding: 2.6mm 0; text-wrap: balance; }
 blockquote.quote p { font: 400 14pt/1.9 "Amiri"; color: var(--sapphire); text-indent: 0; }
-blockquote.lesson { background: var(--paper-2); border-top: .8pt solid var(--gold); padding: 3mm 5mm 3.4mm; margin: 5mm 0 5.5mm; }
+blockquote.lesson { border-top: .8pt solid var(--gold); border-bottom: .4pt solid var(--hair); padding: 3mm 5mm 3.4mm; margin: 5mm 0 5.5mm; }
 blockquote.lesson p { font: 400 12.4pt/1.75 "Scheherazade New"; color: var(--ink-2); text-indent: 0; text-align: justify; }
 blockquote.lesson p > strong:first-child { display: block; font: 600 10.4pt/1.5 "Changa"; color: var(--gold-ink); margin-bottom: .8mm; }
 blockquote.litany { margin: 6mm 0; padding: 4mm 0; border-top: .5pt solid var(--gold); border-bottom: .5pt solid var(--gold); text-align: center; }
@@ -96,7 +117,7 @@ blockquote.title-line p strong { font-weight: 600; }
 blockquote.def p { font: 400 13.6pt/1.8 "Scheherazade New"; color: var(--sapphire); text-align: center; text-indent: 0; }
 .bayt { display: grid; grid-template-columns: 1fr 7mm 1fr; padding: 0 3mm; font: 400 13.8pt/2.1 "Amiri"; color: var(--ink); }
 .bayt span { text-align: center; white-space: nowrap; }
-blockquote.poem { background: var(--paper-2); padding: 4.5mm 0; margin: 6mm 0; border-top: .5pt solid var(--gold); border-bottom: .5pt solid var(--gold); }
+blockquote.poem { padding: 4.5mm 0; margin: 6mm 0; border-top: .5pt solid var(--gold); border-bottom: .5pt solid var(--gold); }
 ol, ul { margin: 1mm 0 2mm; padding: 0 6.5mm 0 0; }
 li { text-align: justify; margin: .4mm 0; }
 ul { list-style: none; } ul > li { position: relative; }
@@ -109,9 +130,8 @@ ul.cols { columns: 2; column-gap: 9mm; } ul.cols > li { break-inside: avoid; }
 .sig-du { display: block; font: 400 11pt/1.6 "Amiri"; color: var(--gold-ink); margin-top: 1mm; }
 ol { list-style: arabic-indic; } ol > li { padding-right: 1.6mm; } ol > li::marker { font: 600 11pt "Changa"; color: var(--gold-ink); }
 table { width: 100%%; border-collapse: collapse; font: 400 8.8pt/1.55 "IBM Plex Sans Arabic"; margin: 4mm 0; break-inside: avoid; }
-th { font: 600 9.2pt/1.4 "Changa"; text-align: right; color: #F3ECDC; background: var(--sapphire); padding: 1.6mm 2mm; }
-td { border-bottom: .4pt solid #D8D0C0; padding: 1.4mm 2mm; vertical-align: top; color: var(--ink-2); }
-tr:nth-child(even) td { background: #F6F1E6; }
+th { font: 600 9.2pt/1.4 "Changa"; text-align: right; color: var(--on-dark); background: var(--sapphire); padding: 1.6mm 2mm; }
+td { border-bottom: .4pt solid var(--hair); padding: 1.4mm 2mm; vertical-align: top; color: var(--ink-2); }
 td:first-child { font-weight: 600; color: var(--ink); }
 /* notes at the foot of the page where they are called (Bible, chs. 45 and 82): a short gold rule from the
    right, then the notes in a smaller Scheherazade, each hanging on its chapter number */
@@ -143,7 +163,7 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .lat { direction: ltr; unicode-bidi: isolate; font-family: "Source Serif 4"; font-size: max(.86em, 7.8pt); }
 /* heritage and poster interludes */
 .her { position: absolute; top: 36mm; bottom: 36mm; right: 18mm; left: 18mm; border: .6pt solid var(--gold); padding: 3mm; }
-.her-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; padding: 16mm 12mm; display: flex; flex-direction: column; justify-content: center; background: var(--paper-2); text-align: center; }
+.her-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; padding: 16mm 12mm; display: flex; flex-direction: column; justify-content: center; background: var(--pearl-warm); text-align: center; }
 .her .who { font: 300 12pt/1.4 "Changa"; color: var(--gold-ink); margin-bottom: 7mm; }
 .her .qt { font: 400 18pt/2 "Amiri"; color: var(--sapphire); }
 .her .src { font: 400 8.4pt/1.5 "IBM Plex Sans Arabic"; color: var(--ink-3); margin-top: 6mm; }
@@ -153,20 +173,63 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .poster .big { font: 700 60pt/1.2 "Changa"; color: var(--gold-l); text-wrap: balance; }
 .poster .big.mid { font-size: 36pt; line-height: 1.45; }
 .poster .big.kufam { font-family: "Kufam SMA"; font-feature-settings: "liga" 0; font-weight: 600; }
-.poster .line { font: 400 16pt/1.8 "Scheherazade New"; color: #E7DFCE; max-width: 120mm; margin-top: 9mm; }
+.poster .line { font: 400 16pt/1.8 "Scheherazade New"; color: var(--on-dark-2); max-width: 120mm; margin-top: 9mm; }
+/* the door of a unit (a bab, the reference, the Muqaddima): a field inside the text block — nothing reaches the trim —
+   carrying the unit's name at its foot; the unit's own question stands below it on the white. Deep sapphire for a bab,
+   graphite for the reference (of the series, outside its numbering), midnight for the series' own doors */
+.door { position: absolute; top: 22mm; right: 24mm; left: 24mm; height: 128mm; display: flex; flex-direction: column; justify-content: flex-end;
+  box-sizing: border-box; padding: 14mm 12mm 15mm; background: var(--sapphire); color: var(--on-dark); }
+.door.graphite { background: var(--graphite); } .door.midnight { background: var(--midnight); }
+.door .kick { font: 300 11pt/1.3 "Changa"; color: var(--gold-l); display: flex; gap: 3mm; align-items: center; margin-bottom: 5mm; }
+.door .kick i { width: 12mm; border-top: .5pt solid var(--gold); display: inline-block; }
+.door .kick .dots { display: inline-flex; gap: .9mm; margin-right: 2.4mm; }
+.door .kick .dots b { width: 1.3mm; height: 1.3mm; border-radius: 50%%; background: var(--gold); }
+.door .big { font: 600 60pt/1.2 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--gold-l); text-wrap: balance; text-align: right; }
+.door .big.mid { font-size: 36pt; line-height: 1.45; }
+.door-dot { position: absolute; top: 148.8mm; right: 22.8mm; width: 2.4mm; height: 2.4mm; transform: rotate(45deg); background: var(--gold); }
+.door-q { position: absolute; top: 162mm; right: 24mm; left: 24mm; }
+.door-q .lb { font: 300 10.4pt/1.3 "Changa"; color: var(--gold-ink); display: flex; gap: 3mm; align-items: center; margin-bottom: 3.4mm; }
+.door-q .lb i { width: 12mm; border-top: .5pt solid var(--gold); display: inline-block; }
+.door-q .q2 { font: 700 17pt/1.5 "Changa"; color: var(--sapphire); text-wrap: balance; text-align: right; }
+.door-q .ln { font: 400 14pt/1.8 "Scheherazade New"; color: var(--ink-2); text-align: right; text-wrap: pretty; }
+/* a statement: the governing sentence of a unit, re-staged from its own text on a midnight field inside the text block */
+.stmt { position: absolute; top: 48mm; right: 24mm; left: 24mm; height: 138mm; box-sizing: border-box; padding: 13mm; background: var(--midnight);
+  display: flex; flex-direction: column; justify-content: center; }
+.stmt .kick { font: 300 11pt/1.3 "Changa"; color: var(--gold-l); display: flex; gap: 3mm; align-items: center; margin-bottom: 7mm; }
+.stmt .kick i { width: 12mm; border-top: .5pt solid var(--gold); display: inline-block; }
+.stmt .pre { font: 400 14pt/1.85 "Scheherazade New"; color: var(--on-dark-2); margin-bottom: 5mm; text-wrap: pretty; }
+.stmt .main { font: 700 21pt/1.75 "Scheherazade New"; color: var(--on-dark); text-wrap: balance; }
+.stmt .main .hw { font: 300 14pt/1 "Changa"; color: var(--gold-l); margin-left: 1.4mm; }
+.stmt-dot { position: absolute; top: 184.8mm; right: 22.8mm; width: 2.4mm; height: 2.4mm; transform: rotate(45deg); background: var(--gold); }
+/* the verse page: the Quran is never on a field — the white, the mushaf face in its own ink, a gold rule under it */
+.vw { position: absolute; top: 0; bottom: 0; right: 24mm; left: 24mm; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+.vw .kick { font: 300 11pt/1.3 "Changa"; color: var(--gold-ink); display: flex; gap: 3mm; align-items: center; margin-bottom: 12mm; }
+.vw .kick i { width: 12mm; border-top: .5pt solid var(--gold); display: inline-block; }
+.vw .a { font: 400 28pt/2 "Amiri Quran"; color: var(--ruby); text-wrap: balance; }
+.vw .rl { width: 26mm; border-top: .5pt solid var(--gold); margin: 8mm 0 4mm; }
+.vw .r { font: 300 10pt/1.4 "Changa"; color: var(--ruby-2); }
+/* a declared event in the flow (events.py): exactly the column's width, never wider; the knockout labels inside it
+   take its ground, not the page's white */
+.fld { margin: 6mm 0 6.4mm; padding: 5.2mm 6mm 5.6mm; break-inside: avoid; }
+.fld.ice { background: var(--ice); border-top: 1.2pt solid var(--sapphire); --paper: var(--ice); }
+.fld.warm { background: var(--pearl-warm); border-top: .6pt solid var(--gold); border-bottom: .6pt solid var(--gold); --paper: var(--pearl-warm); }
+.fld > h3:first-child, .fld > .keep:first-child > h3, .fld > .phk:first-child > h3 { margin-top: 0; }
+.fld blockquote { margin-bottom: 0; }
+.fld.warm blockquote.quote { border-right-color: var(--gold); }
+.fld.warm blockquote.quote p, .fld.warm .qt { font-family: "Amiri"; color: var(--ink); }
 /* the measure page: four questions turned, on pearl within a double gold rule */
 .mz { position: absolute; top: 20mm; bottom: 20mm; right: 16mm; left: 16mm; border: .6pt solid var(--gold); padding: 3mm; }
-.mz-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; background: var(--paper-2); display: flex; flex-direction: column; justify-content: center; padding: 12mm 13mm; text-align: center; }
+.mz-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; padding: 12mm 13mm; text-align: center; }
 .mz .kick { font: 300 12pt/1 "Changa"; color: var(--gold-ink); margin-bottom: 11mm; display: flex; gap: 3mm; align-items: center; justify-content: center; }
 .mz .kick i { width: 10mm; border-top: .5pt solid var(--gold); }
 .mz-pair { padding: 5.2mm 0; }
-.mz-pair + .mz-pair { border-top: .4pt solid #D9CBA6; }
+.mz-pair + .mz-pair { border-top: .4pt solid var(--ice-rule); }
 .mz .no { font: 300 13pt/1.5 "Changa"; color: var(--ink-3); }
 .mz .yes { font: 700 17.5pt/1.5 "Changa"; color: var(--sapphire); margin-top: 1.4mm; text-wrap: balance; }
 .mz .coda { font: 600 16pt/1.7 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--gold-ink); margin-top: 11mm; text-wrap: balance; }
 /* the map of formation: a chain of growing rings on pearl, within the double gold rule of the measure page */
 .mp { position: absolute; top: 14mm; bottom: 14mm; right: 12mm; left: 12mm; border: .6pt solid var(--gold); padding: 3mm; }
-.mp-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; background: var(--paper-2); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 8mm 0; }
+.mp-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 8mm 0; }
 .mp .kick { font: 600 13pt/1 "Changa"; color: var(--sapphire); margin-bottom: 6mm; display: flex; gap: 3mm; align-items: center; }
 .mp .kick i { width: 10mm; border-top: .5pt solid var(--gold); }
 .mp-draw { position: relative; width: 138mm; }
@@ -181,7 +244,7 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .mp-coda { font: 600 14pt/1.6 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--gold-ink); margin-top: 3mm; }
 .vp { align-items: center; text-align: center; } .vp .kick { justify-content: center; }
 .vp-a { font: 400 30pt/2 "Amiri Quran"; color: var(--gold-l); text-wrap: balance; }
-.vp-r { font: 300 11pt/1.4 "Changa"; color: #E7DFCE; margin-top: 7mm; }
+.vp-r { font: 300 11pt/1.4 "Changa"; color: var(--on-dark-2); margin-top: 7mm; }
 .arw { display: inline-block; width: 1.05em; height: .66em; vertical-align: .05em; margin: 0 1.4mm; color: var(--gold-ink); }
 h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
 .sc-draw { position: relative; width: 138mm; }
@@ -189,15 +252,15 @@ h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
 .sc-core b { display: block; font: 600 12.2pt/1.25 "Changa"; color: var(--sapphire); }
 .sc-core span { display: block; font: 400 8.3pt/1.4 "Scheherazade New"; color: var(--ink-2); margin-top: .8mm; }
 .sc-mid { position: absolute; transform: translate(-50%%, -50%%); font: 500 8.6pt/1.25 "Changa"; color: var(--gold-l); text-align: center; }
-.sc-sup { position: absolute; transform: translate(-50%%, -50%%); font: 400 9.2pt/1 "Changa"; color: var(--ink-2); background: var(--paper-2); padding: 1.2mm 2mm; white-space: nowrap; display: flex; gap: 1.6mm; align-items: center; }
+.sc-sup { position: absolute; transform: translate(-50%%, -50%%); font: 400 9.2pt/1 "Changa"; color: var(--ink-2); background: var(--paper); padding: 1.2mm 2mm; white-space: nowrap; display: flex; gap: 1.6mm; align-items: center; }
 .sc-sup i { width: 1.2mm; height: 1.2mm; background: var(--gold); transform: rotate(45deg); }
 .sc-leg { display: flex; gap: 8mm; font: 300 8.6pt/1 "Changa"; color: var(--ink-3); margin-top: 1mm; }
 .sc-leg span { display: flex; gap: 2mm; align-items: center; }
-.sc-leg i.c { width: 3.4mm; height: 3.4mm; border-radius: 50%%; background: rgba(201,169,92,.25); border: .35pt solid #0C2766; }
+.sc-leg i.c { width: 3.4mm; height: 3.4mm; border-radius: 50%%; background: #FFFFFF; border: .35pt solid #0C2766; }
 .sc-leg i.s { width: 1.4mm; height: 1.4mm; background: var(--gold); transform: rotate(45deg); }
 .sc-arrow { font: 300 9.6pt/1 "Changa"; color: var(--gold-ink); margin-top: 7mm; }
 .sc-band { margin-top: 3mm; background: var(--sapphire); padding: 3.4mm 4mm; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.4mm 3.2mm; max-width: 128mm; box-sizing: border-box; }
-.sc-band span { font: 500 9.8pt/1.3 "Changa"; color: #F1EADB; white-space: nowrap; }
+.sc-band span { font: 500 9.8pt/1.3 "Changa"; color: var(--on-dark); white-space: nowrap; }
 .sc-band span + span::before { content: ""; display: inline-block; width: 1.2mm; height: 1.2mm; background: var(--gold); transform: rotate(45deg); margin-left: 3.2mm; vertical-align: middle; }
 /* ثبت المصادر: hanging entries, no bullets */
 .app-91 ul { list-style: none; padding: 0; }
@@ -210,18 +273,18 @@ h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
 .app-91 .deg { font: 400 8pt/1 "Changa"; color: var(--gold-ink); white-space: nowrap; margin-right: 1.2mm; }
 .app-91 ul:last-of-type .deg { font-family: "Changa"; direction: rtl; unicode-bidi: isolate; }
 .toc-p { font: 400 12pt/1.9 "Scheherazade New"; }
-.toc-row { display: flex; gap: 3mm; align-items: baseline; border-bottom: .4pt dotted #CFC5B1; padding: 1.2mm 0; }
+.toc-row { display: flex; gap: 3mm; align-items: baseline; border-bottom: .4pt dotted var(--hair-2); padding: 1.2mm 0; }
 .toc-row b { font: 600 10pt "Changa"; color: var(--gold-ink); min-width: 22mm; }
 .toc-row span { font: 400 13pt "Scheherazade New"; }
 
 /* «فإن قيل… قلنا»: the objection in its own block, the answer after it (Bible, ch. 100) */
-p.obj { background: var(--paper-2); border-right: 1.3pt solid var(--sapphire-2); padding: 2.6mm 4.5mm 2.8mm 3mm; margin: 5mm 0 0; text-indent: 0; }
+p.obj { border-right: 1.3pt solid var(--sapphire-2); padding: 2.6mm 4.5mm 2.8mm 3mm; margin: 5mm 0 0; text-indent: 0; }
 p.ans { border-right: 1.3pt solid var(--gold); padding: 2.4mm 4.5mm 2.6mm 3mm; margin: 0 0 5mm; text-indent: 0; }
 p.obj + p.ans { margin-top: 0; }
 /* a line that introduces a verse, a hadith or a quotation never stays behind at the foot of a page */
 p:has(+ p.ayah), p:has(+ blockquote), p:has(+ .keep > blockquote) { break-after: avoid; }
 /* the close of a chapter (خلاصة، ما يترتّب): its own quieter panel, so the chapter ends on a different rhythm */
-.summary { background: var(--paper-2); border-top: .8pt solid var(--gold); border-bottom: .4pt solid var(--gold); padding: 1mm 5.5mm 4.2mm; margin: 7mm 0 2mm; }
+.summary { border-top: .8pt solid var(--gold); border-bottom: .4pt solid var(--gold); padding: 1mm 5.5mm 4.2mm; margin: 7mm 0 2mm; }
 .summary > h3, .summary > .phk > h3 { margin-top: 3.4mm; }
 .summary p, .summary li { font-size: 12.8pt; }
 .summary.whole { break-inside: avoid; }
@@ -378,6 +441,7 @@ def md_to_html(md):
         items = ul.find_all("li", recursive=False)
         if len(items) >= 5 and all(len(li.get_text()) <= 32 and not li.find("ul") for li in items):
             ul["class"] = ["cols"]
+    EV.wrap(soup)                                         # the declared colour events (events.py) become fields
     latinize(soup)
     if IX.ACTIVE and not IX.listing(md):
         IX.mark(soup, IX.QUOTES, IX.NAMES, IX.GLOSSARY)                 # the entries of the volume's indexes
@@ -401,27 +465,28 @@ def chapter(md, kicker):
     return f'<section class="chap"><div class="chap-open">{html}{notes}</div></section>', band(kicker, title, sub.group(1) if sub else "")
 
 
-# a title of three lines (with its question under it) would run past the band's foot, where cream on paper vanishes:
-# once the faces are loaded, the title steps down a point at a time to 23pt, then the kicker and title rise together
-# (at most 16mm); a title that fits, which is nearly all of them, is left exactly as it was
-BAND_FIT = ("<script>document.fonts.ready.then(() => { const mm = 96 / 25.4; for (const b of document.querySelectorAll('.chap-band')) {"
-            " const tt = b.querySelector('.tt'), h = b.querySelector('h2'), k = b.querySelector('.k');"
-            " const over = () => tt.getBoundingClientRect().bottom - (b.getBoundingClientRect().bottom - 7 * mm);"
-            " let pt = 29; while (over() > 0 && pt > 23) { pt -= 1; h.style.fontSize = pt + 'pt'; }"
-            " const up = Math.min(Math.max(over(), 0), 16 * mm);"
-            " if (up > 0) { tt.style.top = `calc(40mm - ${up}px)`; k.style.top = `calc(30mm - ${up}px)`; } } });</script>")
+# a long title grows upward from the lintel; once the faces are loaded, one that would push its kicker above 26 mm from the
+# trim steps down a point at a time to 23pt (a title that fits, nearly all of them, is left as it is)
+LINTEL_FIT = ("<script>document.fonts.ready.then(() => { const mm = 96 / 25.4; for (const b of document.querySelectorAll('.lintel')) {"
+              " const k = b.querySelector('.k'), h = b.querySelector('h2'), ld = b.querySelector('.lead');"
+              " const lim = ld ? ld.getBoundingClientRect().bottom + 4 * mm : 26 * mm;"
+              " let pt = 29; while (k.getBoundingClientRect().top < lim && pt > 22) { pt -= 1; h.style.fontSize = pt + 'pt'; } } });</script>")
 
 
-def band(kicker, title, sub=""):
-    return (f'<section class="full"><div class="chap-band"><div class="k"><span>{kicker}</span><i></i></div>'
-            f'<div class="tt"><h2>{title}</h2>{f"<div class=sub>{sub}</div>" if sub else ""}</div><div class="dot"></div></div></section>'
-            + BAND_FIT)
+def band(kicker, title, sub="", plate=None, lead=None):
+    """The opening of a chapter (the name is the old one: it was a sapphire band; it is a lintel on the white now).
+    plate: "ice" or "graphite" for a hinge (events.py), lead: the bab's own line for it, verbatim."""
+    cls = f"lintel plate {plate}" if plate else "lintel"
+    return (f'<section class="full"><div class="{cls}">{"<div class=field></div>" if plate else ""}'
+            f'{f"<div class=lead>{lead}</div>" if lead else ""}<div class="blk"><div class="k"><span>{kicker}</span><i></i></div>'
+            f'<h2>{title}</h2>{f"<div class=sub>{sub}</div>" if sub else ""}</div><div class="rule"></div><div class="dot"></div></div></section>'
+            + LINTEL_FIT)
 
 
 def verse_poster(kick, ayah, ref):
-    """A sapphire page that carries one verse in the mushaf face (never Changa or Kufam), with its reference."""
-    return full(f'<div class="poster vp"><div class="kick"><span>{kick}</span><i></i></div><div class="vp-a">﴿{ayah}﴾</div>'
-                f'<div class="vp-r">{ref}</div></div>', "dark")
+    """A verse on its own page: on the white (the Quran is never on a coloured field), in the mushaf face and its ink."""
+    return full(f'<div class="vw"><div class="kick"><i></i><span>{kick}</span><i></i></div><div class="a">﴿{ayah}﴾</div>'
+                f'<div class="rl"></div><div class="r">{ref}</div></div>')
 
 
 def full(inner, cls=""):
@@ -432,9 +497,25 @@ def heritage(who, quote, src):
     return full(f'<div class="her"><div class="her-in"><div class="who">{who}</div><div class="qt">{quote}</div><div class="src">{src}</div></div></div>')
 
 
-def poster(kick, big, line, kufam=False, mid=False):
-    return full(f'<div class="poster"><div class="kick"><span>{kick}</span><i></i></div><div class="big{" kufam" if kufam else ""}{" mid" if mid else ""}">{big}</div>'
-                f'<div class="line">{line}</div></div>', "dark")
+def statement(kick, pre, main):
+    """A statement: a unit's governing sentence re-staged verbatim (events.py checks it against the source) on a
+    midnight field inside the text block, in the author's reading face; «بل صار:» and its like, the hinge word, in
+    Changa light gold."""
+    m = re.match(r"^(\S+ \S+:|\S+:)\s*(.+)$", main) if main.startswith("بل ") else None
+    body = (f'<span class="hw">{m.group(1)}</span> {m.group(2)}' if m else main)
+    return full(f'<div class="stmt"><div class="kick"><span>{kick}</span><i></i></div>'
+                f'{f"<div class=pre>{pre}</div>" if pre else ""}<div class="main">{body}</div></div><div class="stmt-dot"></div>')
+
+
+def door(kick, big, line, field="sapphire"):
+    """The door of a unit: its name on the field, its question («السؤال الذي يجيب عنه هذا الباب: …») below on the white;
+    a line that is not a question is set there as a line."""
+    m = re.match(r"^\s*(السؤال الذي يجيب عنه [^:]+):\s*(.+)$", line)
+    below = (f'<div class="lb"><span>{m.group(1)}</span><i></i></div><div class="q2">{m.group(2)}</div>' if m
+             else f'<div class="ln">{line}</div>')
+    return full(f'<div class="door {field}"><div class="kick"><span>{kick}</span><i></i></div>'
+                f'<div class="big{" mid" if len(big) > 14 else ""}">{big}</div></div><div class="door-dot"></div>'
+                f'<div class="door-q">{below}</div>')
 
 
 MEASURE = [("كم درستَ؟", "ماذا ملكتَ مما درست؟"),
@@ -466,7 +547,7 @@ def sciences_page():
     for k, (name, sub) in enumerate(CORE):
         ang = math.radians(-90 + k * 72)
         x, y = cx + R * math.cos(ang), cy + R * math.sin(ang)
-        svg.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="{r}" fill="rgba(201,169,92,.15)" stroke="#0C2766" stroke-width=".35"/>')
+        svg.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="{r}" fill="#FFFFFF" stroke="#0C2766" stroke-width=".35"/>')
         html.append(f'<div class="sc-core" style="left:{x:.2f}mm;top:{y:.2f}mm"><b>{name}</b><span>{sub}</span></div>')
     svg.append(f'<circle cx="{cx}" cy="{cy}" r="11" fill="#0C2766"/>')
     html.append(f'<div class="sc-mid" style="left:{cx}mm;top:{cy}mm">علوم<br>العربية</div>')

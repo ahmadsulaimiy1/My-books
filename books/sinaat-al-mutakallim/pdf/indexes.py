@@ -364,10 +364,10 @@ def html(hits: dict, label) -> list[tuple[str, str, str]]:
 PAGE_CSS = """
 section.ix { padding-top: 2mm; }
 h2.ix-t { font: 700 17pt/1.3 "Changa"; color: var(--sapphire); margin: 0 0 5mm; }
-ul.ix-l { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 8mm; column-rule: .4pt solid #D8D0C0; }
+ul.ix-l { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 8mm; column-rule: .4pt solid var(--hair); }
 ul.ix-l li { break-inside: avoid; font: 400 10.6pt/1.55 "Scheherazade New"; color: var(--ink); text-align: right;
-  padding: .5mm 4.5mm .5mm 0; text-indent: -4.5mm; border-bottom: .3pt dotted #D8D0C0; }
-ul.ix-l li .ix-q { font: 400 10.4pt/1.6 "Amiri Quran"; color: #8A1C2B; }
+  padding: .5mm 4.5mm .5mm 0; text-indent: -4.5mm; border-bottom: .3pt dotted var(--hair); }
+ul.ix-l li .ix-q { font: 400 10.4pt/1.6 "Amiri Quran"; color: var(--ruby); }
 ul.ix-l li .ix-r, ul.ix-l li .ix-w { font: 300 8.2pt/1.4 "Changa"; color: var(--gold-ink); }
 ul.ix-l li .ix-p { font: 400 10.4pt/1.4 "Amiri"; color: var(--sapphire); }
 ul.ix-l li .lat { font-family: "Source Serif 4", "Scheherazade New"; font-size: 9.4pt; direction: ltr; unicode-bidi: isolate; }

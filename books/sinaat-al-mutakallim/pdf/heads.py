@@ -38,8 +38,8 @@ FOLIO_ARM = 9.0                   # each arm of the folio's rule
 SERIES = "صناعة المتكلّم العربي"
 SALUTATIONS = "ﷺ"                  # set in Amiri: Changa has no glyph for them
 
-GOLD, GOLD_INK, PAPER = "#C9A95C", "#8A6A1F", "#F8F6F1"
-SAPPHIRE, SAPPHIRE_2, QUIET, INK = "#0C2766", "#2B4A8F", "#6B7390", "#1C1915"
+GOLD, GOLD_INK = "#C9A95C", "#7F5F12"
+SAPPHIRE, SAPPHIRE_2, QUIET, INK = "#0C2766", "#2B4A8F", "#6B7390", "#1F2329"
 
 CSS = f"""
 .hd-page {{ position: relative; width: {PAGE_W}mm; height: {PAGE_H}mm; break-after: page; }}
