@@ -583,10 +583,13 @@ def keep_headings(soup):
             nxt["class"] = (nxt.get("class") or []) + ["runon"]
         elif nxt.name == "p" and text < 900:
             keep.append(nxt.extract())
-        else:
-            # a long paragraph, a table, a long short list: the heading keeps room for three lines of what follows,
-            # a spacer that takes no place once it fits (its height given back by the margin); if the room is not
-            # there, the heading goes to the next page with its text (no heading alone at a page's foot)
+        elif nxt.name == "table" or nxt.find("table") is not None or "card" in cls or "grades" in cls:
+            # a block that does not break (a table, a card): the heading goes with it, whole
+            if text < 2400:
+                keep.append(nxt.extract())
+        elif nxt.name in ("p", "ul", "ol", "blockquote"):
+            # a long paragraph or list that breaks: the heading keeps room for three of its lines, a spacer whose
+            # height the margin gives back once it fits; without the room the heading goes over with its text
             keep.append(soup.new_tag("div", attrs={"class": "reserve"}))
 
 
