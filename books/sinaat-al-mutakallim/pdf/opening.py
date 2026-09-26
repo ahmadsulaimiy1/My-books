@@ -60,8 +60,9 @@ body { direction: rtl; color: var(--ink); font: 400 13.2pt/1.85 "Scheherazade Ne
 .chap-band { position: absolute; top: 0; left: 0; right: 0; height: 80mm; background: var(--sapphire); color: #EFE7D6; }
 .chap-band .k { position: absolute; top: 30mm; right: 24mm; font: 300 11pt/1 "Changa"; color: var(--gold-l); display: flex; gap: 3mm; align-items: center; }
 .chap-band .k i { width: 10mm; border-top: .5pt solid var(--gold); display: inline-block; }
-.chap-band h2 { position: absolute; top: 40mm; right: 24mm; left: 24mm; margin: 0; font: 700 29pt/1.25 "Changa"; color: #F4ECD9; string-set: chap content(); text-wrap: balance; }
-.chap-band .sub { position: absolute; top: 56mm; right: 24mm; left: 24mm; font: 300 12.5pt/1.5 "Changa"; color: var(--gold-l); }
+.chap-band .tt { position: absolute; top: 40mm; right: 24mm; left: 24mm; }
+.chap-band h2 { margin: 0; font: 700 29pt/1.25 "Changa"; color: #F4ECD9; string-set: chap content(); text-wrap: balance; }
+.chap-band .sub { margin-top: 3.2mm; font: 300 12.5pt/1.5 "Changa"; color: var(--gold-l); }
 .chap-band .dot { position: absolute; bottom: -1.3mm; right: 24mm; width: 2.4mm; height: 2.4mm; transform: rotate(45deg); background: var(--gold); }
 .chap-open { position: relative; }
 p { margin: 0; text-align: justify; }
@@ -400,9 +401,21 @@ def chapter(md, kicker):
     return f'<section class="chap"><div class="chap-open">{html}{notes}</div></section>', band(kicker, title, sub.group(1) if sub else "")
 
 
+# a title of three lines (with its question under it) would run past the band's foot, where cream on paper vanishes:
+# once the faces are loaded, the title steps down a point at a time to 23pt, then the kicker and title rise together
+# (at most 16mm); a title that fits, which is nearly all of them, is left exactly as it was
+BAND_FIT = ("<script>document.fonts.ready.then(() => { const mm = 96 / 25.4; for (const b of document.querySelectorAll('.chap-band')) {"
+            " const tt = b.querySelector('.tt'), h = b.querySelector('h2'), k = b.querySelector('.k');"
+            " const over = () => tt.getBoundingClientRect().bottom - (b.getBoundingClientRect().bottom - 7 * mm);"
+            " let pt = 29; while (over() > 0 && pt > 23) { pt -= 1; h.style.fontSize = pt + 'pt'; }"
+            " const up = Math.min(Math.max(over(), 0), 16 * mm);"
+            " if (up > 0) { tt.style.top = `calc(40mm - ${up}px)`; k.style.top = `calc(30mm - ${up}px)`; } } });</script>")
+
+
 def band(kicker, title, sub=""):
     return (f'<section class="full"><div class="chap-band"><div class="k"><span>{kicker}</span><i></i></div>'
-            f'<h2>{title}</h2>{f"<div class=sub>{sub}</div>" if sub else ""}<div class="dot"></div></div></section>')
+            f'<div class="tt"><h2>{title}</h2>{f"<div class=sub>{sub}</div>" if sub else ""}</div><div class="dot"></div></div></section>'
+            + BAND_FIT)
 
 
 def verse_poster(kick, ayah, ref):

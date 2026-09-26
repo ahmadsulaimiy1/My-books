@@ -139,6 +139,8 @@ h2.sec.lite { margin: 2mm 0 3.4mm; }
 h2.sec.lite .t { font-size: 15pt; }
 h4 { font: 600 12.6pt/1.45 "Changa"; color: var(--sapphire-2); margin: 5mm 0 1.6mm; break-after: avoid; }
 h4 + p, h4 + ol, h4 + ul { text-indent: 0; }
+p.ph { text-indent: 0; margin-top: 4.2mm; break-after: avoid; }
+p.ph + p, p.ph + ol, p.ph + ul { text-indent: 0; }
 .chap-open h3 + p, .chap-open h4 + p { text-indent: 0; }
 /* the panels of the lesson: objectives, the opening question, the summary, the mastery, the trainer */
 .panel { margin: 5mm 0; padding: 3.2mm 5mm 3.6mm; break-inside: avoid; }
@@ -547,6 +549,15 @@ def forced_breaks(soup, n):
 def keep_headings(soup):
     """A heading never ends a page: it travels with the headings right under it and with the start of what follows
     (a short block whole; a long list by its first two items; a long table or block after it is left to break)."""
+    for ph in soup.find_all("p", class_="ph"):              # a minor head likewise, with a short block after it
+        nxt = ph.find_next_sibling()
+        if ph.parent is None or "keep" in (ph.parent.get("class") or []) or nxt is None or heading_level(nxt):
+            continue
+        if len(nxt.get_text(" ", strip=True)) < 600 and nxt.name != "table":
+            keep = soup.new_tag("div", attrs={"class": "keep"})
+            ph.insert_before(keep)
+            keep.append(ph.extract())
+            keep.append(nxt.extract())
     for h in soup.find_all(["h3", "h4"]):
         if h.parent is None or any(c in (h.parent.get("class") or []) for c in ("keep",)):
             continue
@@ -705,6 +716,14 @@ def lesson_html(md, breaks=True):
             frame = soup.new_tag("div", attrs={"class": "grades"})
             box.insert_before(frame)
             frame.append(box.extract())
+    # a paragraph that is nothing but a short bold line is a minor head («(ج) بحسب المكان والقناة»): air above, kept
+    # with what it introduces
+    for p in soup.find_all("p"):
+        kids = [c for c in p.contents if not (isinstance(c, str) and not c.strip())]
+        if (len(kids) == 1 and getattr(kids[0], "name", None) == "strong" and len(p.get_text(strip=True)) <= 70
+                and not p.get("class") and p.find_parent(["blockquote", "table", "li"]) is None
+                and p.find_parent("div", class_="gbd") is None):
+            p["class"] = ["ph"]
     # blockquotes by their lead word
     for bq in soup.find_all("blockquote"):
         if bq.get("class"):
