@@ -3,7 +3,7 @@
  "edition": "الطبعة الرائدة (Bible, ch. 25 §5): case binding",
  "binding": "case",
  "text_paper": {
-  "name": "ivory uncoated, 100 g/m²",
+  "name": "premium bright-white uncoated book paper, ~100 g/m² (provisional): neutral white — not yellow, cream or ivory, and not blue-white; high opacity (≥ 95% targeted), so dense colour on the reverse does not grey the front; the exact stock chosen with the printer and approved on a physical proof",
   "caliper_mm_per_leaf": 0.12
  },
  "endpapers": {
@@ -81,5 +81,10 @@
    "emboss": "the uprights and the title; no deboss",
    "hot_foil_champagne": "the frame's rule (antique gold, so that the word's gold leads)"
   }
+ },
+ "interior": {
+  "design": "digital-first: the PDF is the first-class design object; the page field is premium sharp white (the stock gives the white in print)",
+  "bleed": "none at this stage: no bleed is assumed, requested or built into the interior; colour fields sit inside the safe page architecture. Trim, bleed, colour profile and PDF/X are added when the printer, paper and binding are confirmed",
+  "proof": "a physical printed proof of the interior on the chosen stock before production"
  }
 }
