@@ -52,7 +52,6 @@ import coverart as CA  # noqa: E402
 import frontmatter as FM  # noqa: E402
 import geometry as G  # noqa: E402
 import illumination as IL  # noqa: E402
-import matn as MT  # noqa: E402
 from marks import device_svg, house_mark_svg, seal_svg  # noqa: E402,F401  (the book's marks, used by its pages)
 import typeset as T  # noqa: E402
 
@@ -68,6 +67,25 @@ SIMPLIFY = 0.006                        # mm: far under what any process holds
 
 LATIN = {1: "Al-Usul", 2: "Al-Lisan", 3: "Al-Ibara", 4: "Al-Bayan", 5: "Al-Maqam", 6: "Al-Adab", 7: "Al-Hiwar",
          8: "Al-Majalis-wal-Minbar", 9: "Al-Muassasa", 10: "Al-Tamkin", 11: "Marji-al-Mutakallim"}
+# the three official editions of the covers (Bible, ch. 25 §14): one book, three doors into it
+EDITIONS = {
+    "heritage": dict(folder="1-Heritage", module="heritage", name="التراث: الشمسة وأثر القلم"),
+    "matn": dict(folder="2-Matn", module="matn", name="المتن والحاشية"),
+    "contemporary": dict(folder="3-Contemporary", module="contemporary", name="المعاصرة: عمارة السطر"),
+}
+
+
+def edition(ed):
+    import importlib
+    return importlib.import_module(EDITIONS[ed]["module"])
+
+
+def dest(ed):
+    d = OUT / EDITIONS[ed]["folder"]
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
 PLATES = ("PRINT", "SPOT-SAPPHIRE", "COLD-FOIL", "FOIL-GOLD", "FOIL-PEARL", "FOIL-RUBY", "EMBOSS", "DEBOSS", "SPOT-UV",
           "PRINT-FLAT", "GUIDES")
 SPOT_NAME = "PANTONE 2728 C"
@@ -118,20 +136,11 @@ def widths():
     return {v: spine_width(v) for v in range(1, 12)}
 
 
-def build(n):
-    """The wrap of volume n: its layers, its layout and its spine width."""
+def build(n, ed):
+    """The wrap of volume n in edition ed: its layers, its layout and its spine width."""
     sw = widths()[n]
     lay = layout(sw)
-    L = AW.Layers()
-    P, field = MT.front(n)
-    fx, fy = lay["front_art"]
-    L.extend(CA.translate(P.L, fx, fy))
-    B, bfield = MT.back(n)
-    bx, by = lay["back_art"]
-    L.extend(CA.translate(B.L, bx, by))
-    S = MT.spine(n, sw)
-    L.extend(CA.translate(S.L, lay["spine"][0], lay["art_top"]))
-    return dict(layers=L, lay=lay, sw=sw, n=n)
+    return dict(layers=edition(ed).wrap(n, sw, lay, widths()), lay=lay, sw=sw, n=n, ed=ed)
 
 
 # ------------------------------------------------------------------------------------------------ the substrate
@@ -374,47 +383,28 @@ def guides(c, wrap, pt):
 
 
 # ------------------------------------------------------------------------------------------------ the endpapers
-def endpapers():
-    """The flagship's endpapers (Bible, ch. 25 §5): the sapphire, and on it in its own tone the page of the covers:
-    its rulings across the spread, and on them the words of the series, as a text pressed into the colour.
-    One spread, the same in every volume."""
+def endpapers(ed):
+    """The endpapers of edition ed (Bible, ch. 25 §5): one spread, the same in every volume."""
     b = BLEED
     w, h = 2 * W + 2 * b, H + 2 * b
-    wrap = dict(lay=dict(w=w, h=h, margin=b), n=0, sw=0.0)
-    L = AW.Layers()
-    F = CA.faces()
-    rules, lines = [], []
-    words = MT.Words([CA.SERIES] + list(CA.LEAD))
-    for y in np.arange(14.0, h - 8.0, MT.GLOSS_LEAD * 1.5):
-        rules.append(box(8.0, y + 0.55 - 0.06, w - 8.0, y + 0.55 + 0.06))
-        lw = []
-        while True:
-            w_ = words.take()
-            if w_ is None:
-                break
-            if T.line(" ".join(lw + [w_]), F.amiri4, 3.4).width > w - 16.0:
-                words.back()
-                break
-            lw.append(w_)
-        if lw:
-            g, _ = T.text(" ".join(lw), F.amiri4, 3.4, x_right=w - 8.0, base=y)
-            lines.append(g)
-    L.body.append((AW.valid(unary_union(rules)), ("lift", 0.05)))
-    L.body.append((AW.valid(unary_union(lines)), ("lift", 0.035)))
+    wrap = dict(lay=dict(w=w, h=h, margin=b), n=0, sw=0.0, ed=ed)
+    L, glow = edition(ed).endpaper_layers(w, h)
     wrap["layers"] = L
-    inks, t = AW.substrate(w, h, DPI, [(w / 2, h * 0.45, 140, 0.25)], base=0.24)
+    inks, t = AW.substrate(w, h, DPI, glow, base=0.24)
     wrap["ops"] = ops(wrap, t_sampler(t))
     ras = raster_images(inks)
-    write(wrap, "PRINT", OUT / "Endpapers_PRINT.pdf", f"{FM.TITLE}: endpapers (all volumes)", raster=ras["PRINT"])
-    write(wrap, "SPOT-SAPPHIRE", OUT / "Endpapers_SPOT-SAPPHIRE.pdf", f"{FM.TITLE}: endpapers, {SPOT_NAME}", raster=ras["SPOT-SAPPHIRE"])
-    return OUT / "Endpapers_PRINT.pdf"
+    d = dest(ed)
+    write(wrap, "PRINT", d / "Endpapers_PRINT.pdf", f"{FM.TITLE}: endpapers (all volumes)", raster=ras["PRINT"])
+    write(wrap, "SPOT-SAPPHIRE", d / "Endpapers_SPOT-SAPPHIRE.pdf", f"{FM.TITLE}: endpapers, {SPOT_NAME}", raster=ras["SPOT-SAPPHIRE"])
+    return d / "Endpapers_PRINT.pdf"
 
 
 # ------------------------------------------------------------------------------------------------ inside the book
 # ------------------------------------------------------------------------------------------------ main
-def make(n):
+def make(job):
+    n, ed = job
     T.LOG.clear()
-    wrap = build(n)
+    wrap = build(n, ed)
     bad = T.check()
     if bad and not bad[0].startswith("typeset.check: skia"):
         raise SystemExit(f"volume {n}: the cover's type does not match its font:\n  " + "\n  ".join(bad))
@@ -435,8 +425,9 @@ def make(n):
     isbn_zone(wrap)
     ras = raster_images(inks)
     for plate in PLATES:
-        path = OUT / f"Cover-{n:02d}_{LATIN[n]}_{plate}.pdf"
-        write(wrap, plate, path, f"{FM.TITLE}: {FM.volume_line(n)}: {plate}", raster=ras.get(plate))
+        path = dest(ed) / f"Cover-{n:02d}_{LATIN[n]}_{plate}.pdf"
+        write(wrap, plate, path, f"{FM.TITLE}: {FM.volume_line(n)}: {plate} ({EDITIONS[ed]['folder']})",
+              raster=ras.get(plate))
     lay = wrap["lay"]
     rec = dict(pages=pages(n), binding=SPEC["binding"], caliper_mm_per_leaf=CALIPER, block_mm=round(block_mm(n), 1),
                spine_mm=wrap["sw"], wrap_mm=[round(lay["w"], 1), round(lay["h"], 1)],
@@ -445,27 +436,30 @@ def make(n):
                shelf_x0=round(sum(widths()[v] for v in range(1, n)), 2), isbn=isbn_of(n)[0], isbn_printed=isbn_of(n)[1],
                plates=list(PLATES), spot=SPOT_NAME,
                status="provisional: from covers/printer-spec.json until the printer confirms it")
-    return n, rec
+    return n, ed, rec
 
 
 def main(argv):
     vols = [int(a) for a in argv if a.isdigit()] or list(range(1, 12))
+    eds = [argv[i + 1] for i, a in enumerate(argv) if a == "--edition"] or list(EDITIONS)
     OUT.mkdir(exist_ok=True)
     spines_path = OUT / "spines.json"
     spines = json.loads(spines_path.read_text()) if spines_path.exists() else {}
+    jobs = [(n, ed) for ed in eds for n in vols]
     lanes = 4 if "--serial" not in argv else 1
-    if lanes > 1 and len(vols) > 1:
+    if lanes > 1 and len(jobs) > 1:
         from multiprocessing import Pool
-        with Pool(min(lanes, len(vols))) as pool:
-            results = pool.map(make, vols)
+        with Pool(min(lanes, len(jobs))) as pool:
+            results = pool.map(make, jobs, chunksize=1)
     else:
-        results = [make(n) for n in vols]
-    for n, rec in results:
-        spines[str(n)] = rec
-        print(f"volume {n}: spine {rec['spine_mm']} mm, wrap {rec['wrap_mm'][0]} × {rec['wrap_mm'][1]} mm")
+        results = [make(j) for j in jobs]
+    for n, ed, rec in results:
+        spines[str(n)] = rec                 # the geometry of the wrap is the same in every edition
+        print(f"volume {n} ({ed}): spine {rec['spine_mm']} mm, wrap {rec['wrap_mm'][0]} × {rec['wrap_mm'][1]} mm")
     spines_path.write_text(json.dumps(dict(sorted(spines.items(), key=lambda kv: int(kv[0]))), ensure_ascii=False, indent=1))
     if "--no-endpapers" not in argv:
-        endpapers()
+        for ed in eds:
+            endpapers(ed)
 
 
 if __name__ == "__main__":

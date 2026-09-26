@@ -446,38 +446,11 @@ def spine(n, sw):
 BACK_MATN = (30.0, 28.0, W - 30.0, 166.0)
 
 
-def back(n):
-    """The back: the same page. Its matn carries what the book says of itself and of this volume; its glosses
-    continue the volume's words, their voice quieter; the eleven volumes stand in a row as eleven small pages; the
-    house, the edition, and the ISBN zone kept clear."""
+def back_words(P, n, right, measure, y):
+    """What the book says of itself, of the series and of this volume, set right at right (mm) from the baseline
+    y down; returns where it ends. Shared by the editions whose back carries it so (matn, contemporary)."""
     import coverart as CA
     F = faces()
-    P = _page()
-    outer = box(9.5, 9.5, W - 9.5, H - 9.5)
-    tajdwil(P, outer)
-    field = outer.buffer(-3.6, join_style=2)
-    mb, m = matn_block(P, BACK_MATN)
-    fx0, fy0, fx1, fy1 = field.bounds
-    mx0, my0, mx1, my1 = m.bounds
-    # glosses on the head and the two sides only; the foot holds the row of the series and the colophon
-    foot = my1 + 3.0
-    head = Polygon([(fx0, fy0), (fx1, fy0), (mx1, my0), (mx0, my0)])
-    side_r = Polygon([(fx1, fy0), (fx1, foot), (mx1, foot), (mx1, my0)])
-    side_l = Polygon([(fx0, fy0), (mx0, my0), (mx0, foot), (fx0, foot)])
-    words = Words(paragraphs(n)[2:] or paragraphs(n))
-    acc = Acc()
-    for reg, ang in ((head, 0), (side_r, 45), (side_l, 45)):
-        gloss(AW.valid(reg), ang, words, acc, numerals=(n == 11))
-    halo = m.buffer(voice_reach(max(1, n // 2)), join_style=2)
-    lay_gloss(P, acc, AW.valid(field.difference(m)).intersection(box(0, 0, W, foot)), halo)
-    for (a, b) in (((fx0, fy0), (mx0, my0)), ((fx1, fy0), (mx1, my0))):
-        ln = LineString([a, b])
-        P.gold(ln.buffer(0.45, cap_style=2).difference(ln.buffer(0.06)))
-        jewel(P, b[0], b[1], 3.0)
-    P.gold(box(fx0, foot - 0.2, fx1, foot + 0.2))
-    # what the book says
-    right, measure = BACK_MATN[2] - 8.0, (BACK_MATN[2] - BACK_MATN[0]) - 16.0
-    y = 42.0
     for t in CA.LEAD:
         g, _ = T.text(t, F.sch6, 4.7, x_right=right, base=y)
         P.ink(g, AW.PEARL_INK)
@@ -509,6 +482,41 @@ def back(n):
         babs = re.sub(r"<[^>]+>", "", FM.VOLUMES[n - 1][4])
         lab, _ = T.text(f"{FM.STAGES[stage]}: {stage} · {babs}", F.changa4, 2.6, x_right=right, base=y)
         P.ink(lab, AW.CHAMPAGNE_INK)
+    return y
+
+
+def back(n):
+    """The back: the same page. Its matn carries what the book says of itself and of this volume; its glosses
+    continue the volume's words, their voice quieter; the eleven volumes stand in a row as eleven small pages; the
+    house, the edition, and the ISBN zone kept clear."""
+    import coverart as CA
+    F = faces()
+    P = _page()
+    outer = box(9.5, 9.5, W - 9.5, H - 9.5)
+    tajdwil(P, outer)
+    field = outer.buffer(-3.6, join_style=2)
+    mb, m = matn_block(P, BACK_MATN)
+    fx0, fy0, fx1, fy1 = field.bounds
+    mx0, my0, mx1, my1 = m.bounds
+    # glosses on the head and the two sides only; the foot holds the row of the series and the colophon
+    foot = my1 + 3.0
+    head = Polygon([(fx0, fy0), (fx1, fy0), (mx1, my0), (mx0, my0)])
+    side_r = Polygon([(fx1, fy0), (fx1, foot), (mx1, foot), (mx1, my0)])
+    side_l = Polygon([(fx0, fy0), (mx0, my0), (mx0, foot), (fx0, foot)])
+    words = Words(paragraphs(n)[2:] or paragraphs(n))
+    acc = Acc()
+    for reg, ang in ((head, 0), (side_r, 45), (side_l, 45)):
+        gloss(AW.valid(reg), ang, words, acc, numerals=(n == 11))
+    halo = m.buffer(voice_reach(max(1, n // 2)), join_style=2)
+    lay_gloss(P, acc, AW.valid(field.difference(m)).intersection(box(0, 0, W, foot)), halo)
+    for (a, b) in (((fx0, fy0), (mx0, my0)), ((fx1, fy0), (mx1, my0))):
+        ln = LineString([a, b])
+        P.gold(ln.buffer(0.45, cap_style=2).difference(ln.buffer(0.06)))
+        jewel(P, b[0], b[1], 3.0)
+    P.gold(box(fx0, foot - 0.2, fx1, foot + 0.2))
+    # what the book says
+    right, measure = BACK_MATN[2] - 8.0, (BACK_MATN[2] - BACK_MATN[0]) - 16.0
+    y = back_words(P, n, right, measure, 42.0)
     if y > BACK_MATN[3] - 4:
         raise SystemExit(f"back {n}: the words overrun the matn ({y:.1f} mm)")
     # the series: eleven small pages in a row, this volume's lit
@@ -534,3 +542,44 @@ def back(n):
     P.arch.append(box(zx - 1, zy - 1, zx + zw + 1, zy + zh + 1))
     P.L.glow.append((85.0, 90.0, 70.0, 0.55))
     return P, field
+
+
+# ------------------------------------------------------------------------------------------------ the wrap
+def wrap(n, sw, lay, widths=None):
+    """The wrap of volume n in the wrap's coordinates (covers.py lays it on the binding)."""
+    import coverart as CA
+    L = AW.Layers()
+    P, _ = front(n)
+    L.extend(CA.translate(P.L, *lay["front_art"]))
+    B, _ = back(n)
+    L.extend(CA.translate(B.L, *lay["back_art"]))
+    S = spine(n, sw)
+    L.extend(CA.translate(S.L, lay["spine"][0], lay["art_top"]))
+    return L
+
+
+def endpaper_layers(w, h):
+    """The endpapers: the sapphire, and on it in its own tone the page of the covers: its rulings across the
+    spread, and on them the words of the series, pressed into the colour. Returns the layers and the light."""
+    import coverart as CA
+    F = faces()
+    L = AW.Layers()
+    rules, lines = [], []
+    words = Words([CA.SERIES] + list(CA.LEAD))
+    for y in np.arange(14.0, h - 8.0, GLOSS_LEAD * 1.5):
+        rules.append(box(8.0, y + 0.55 - 0.06, w - 8.0, y + 0.55 + 0.06))
+        lw = []
+        while True:
+            w_ = words.take()
+            if w_ is None:
+                break
+            if T.line(" ".join(lw + [w_]), F.amiri4, 3.4).width > w - 16.0:
+                words.back()
+                break
+            lw.append(w_)
+        if lw:
+            g, _ = T.text(" ".join(lw), F.amiri4, 3.4, x_right=w - 8.0, base=y)
+            lines.append(g)
+    L.body.append((AW.valid(unary_union(rules)), ("lift", 0.05)))
+    L.body.append((AW.valid(unary_union(lines)), ("lift", 0.035)))
+    return L, [(w / 2, h * 0.45, 140, 0.25)]

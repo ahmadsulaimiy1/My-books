@@ -11,8 +11,9 @@ No glow, no smoke, no light the object would not make (Bible, ch. 25 §9).
 
     python3 pdf/cover_proofs.py            everything below
     python3 pdf/cover_proofs.py 5          one volume's wrap proof
+    python3 pdf/cover_proofs.py --edition heritage    one edition (all three by default)
 
-Writes into covers/:
+Writes into covers/<edition>/ (1-Heritage, 2-Matn, 3-Contemporary):
   Cover-NN_<Latin>_Proof.jpg    the flat wrap, lit
   Series_Fronts.jpg             the eleven fronts
   Series_Shelf.jpg              the eleven on a shelf, straight on
@@ -40,6 +41,8 @@ sys.path.insert(0, str(HERE))
 import artwork as AW  # noqa: E402
 
 OUT = HERE.parent / "covers"
+EDITIONS = {"heritage": "1-Heritage", "matn": "2-Matn", "contemporary": "3-Contemporary"}
+DIR = OUT / EDITIONS["matn"]               # the edition being proofed (main sets it)
 LATIN = {1: "Al-Usul", 2: "Al-Lisan", 3: "Al-Ibara", 4: "Al-Bayan", 5: "Al-Maqam", 6: "Al-Adab", 7: "Al-Hiwar",
          8: "Al-Majalis-wal-Minbar", 9: "Al-Muassasa", 10: "Al-Tamkin", 11: "Marji-al-Mutakallim"}
 
@@ -49,7 +52,7 @@ def spines():
 
 
 def plate(n, name, dpi, clip=None, cmyk=False):
-    doc = pymupdf.open(str(OUT / f"Cover-{n:02d}_{LATIN[n]}_{name}.pdf"))
+    doc = pymupdf.open(str(DIR / f"Cover-{n:02d}_{LATIN[n]}_{name}.pdf"))
     page = doc[0]
     kw = dict(dpi=dpi, colorspace=pymupdf.csCMYK if cmyk else pymupdf.csGRAY, alpha=False)
     if clip is not None:
@@ -168,7 +171,7 @@ def wrap_proof(n, dpi=110):
     sp = spines()[str(n)]
     lin = render(n, dpi)
     im = to_image(lin)
-    im.save(OUT / f"Cover-{n:02d}_{LATIN[n]}_Proof.jpg", quality=90)
+    im.save(DIR / f"Cover-{n:02d}_{LATIN[n]}_Proof.jpg", quality=90)
     return im
 
 
@@ -198,7 +201,7 @@ def series_fronts(dpi=60):
         r, c = divmod(i, cols)
         x = sheet.width - gap - (c + 1) * (w + gap) + (0 if r == 0 else 0)
         sheet.paste(im, (x, gap + r * (h + gap)))
-    sheet.save(OUT / "Series_Fronts.jpg", quality=90)
+    sheet.save(DIR / "Series_Fronts.jpg", quality=90)
 
 
 # ------------------------------------------------------------------------------------------------ a small 3-D studio
@@ -344,7 +347,7 @@ def shelf_scene(angled=False, dpi=95, width=2600):
     v = 1 - 0.28 * (((xx - width / 2) / (width * 0.62)) ** 2 + ((yy - h / 2) / (h * 0.75)) ** 2)
     img = Image.fromarray((np.clip(a * v[..., None], 0, 1) * 255).astype(np.uint8))
     name = "Series_Shelf-Angled.jpg" if angled else "Series_Shelf.jpg"
-    img.save(OUT / name, quality=92)
+    img.save(DIR / name, quality=92)
     return img
 
 
@@ -370,7 +373,7 @@ def spines_closeup(vols=(11, 10, 9, 8), dpi=260, out="Series_Spines-Closeup.jpg"
         x += s.shape[1] + gap
     # crop to the upper two thirds, where the title, the medallion and the band are
     img = img[: int(hgt * 0.62)]
-    to_image(img, 1.08).save(OUT / out, quality=92)
+    to_image(img, 1.08).save(DIR / out, quality=92)
 
 
 def hero_head(wb, sw, k=4.0):
@@ -404,7 +407,7 @@ def front_hero(n=10, dpi=150, out=None, width=2000):
     h = int(width * 1.18)
     cam = Camera((Wb * 1.55, 330.0, 520.0), (Wb * 0.52, 112.0, -18.0), width * 1.58, (width, h))
     img = render_scene(cam, faces, (width, h), (-300, 500), sw, shadow_rect=(0, Wb))
-    img.save(OUT / (out or f"Volume-{n:02d}_Front-Hero.jpg"), quality=92)
+    img.save(DIR / (out or f"Volume-{n:02d}_Front-Hero.jpg"), quality=92)
 
 
 def finish_closeup(n=10, dpi=520, out=None):
@@ -416,30 +419,34 @@ def finish_closeup(n=10, dpi=520, out=None):
     clip = (fx + sq + 16, fy + sq + 26, fx + sq + 86, fy + sq + 82)
     light = Light(key=(-0.80, -0.30, 0.52), strip=(0.6, 0.3, 0.74), key_size=0.26, strip_power=0.35, camera=300)
     lin = render(n, dpi, clip=clip, light=light)
-    to_image(lin, 1.1).save(OUT / (out or f"Volume-{n:02d}_Finish-Closeup.jpg"), quality=93)
+    to_image(lin, 1.1).save(DIR / (out or f"Volume-{n:02d}_Finish-Closeup.jpg"), quality=93)
 
 
 def wrap_view(n=10, dpi=130):
     im = to_image(render(n, dpi), 1.03)
-    im.save(OUT / f"Volume-{n:02d}_Wrap.jpg", quality=91)
+    im.save(DIR / f"Volume-{n:02d}_Wrap.jpg", quality=91)
 
 
 def main(argv):
+    global DIR
     vols = [int(a) for a in argv if a.isdigit()]
-    if vols:
-        for n in vols:
-            wrap_proof(n)
-        return
-    from multiprocessing import Pool
-    with Pool(4) as p:
-        p.map(wrap_proof, range(1, 12))
-    series_fronts()
-    shelf()
-    shelf_angled()
-    spines_closeup()
-    front_hero(10)
-    wrap_view(10)
-    finish_closeup(10)
+    eds = [argv[i + 1] for i, a in enumerate(argv) if a == "--edition"] or list(EDITIONS)
+    for ed in eds:
+        DIR = OUT / EDITIONS[ed]
+        if vols:
+            for n in vols:
+                wrap_proof(n)
+            continue
+        from multiprocessing import Pool
+        with Pool(4) as p:
+            p.map(wrap_proof, range(1, 12))
+        series_fronts()
+        shelf()
+        shelf_angled()
+        spines_closeup()
+        front_hero(10)
+        wrap_view(10)
+        finish_closeup(10)
 
 
 if __name__ == "__main__":
