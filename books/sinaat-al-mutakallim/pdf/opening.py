@@ -36,6 +36,7 @@ import heads as H  # noqa: E402
 BOOK = HERE.parent / "book"
 from paths import AUTHOR_WORD, OPENING  # noqa: E402
 import ids as IDS  # noqa: E402
+import indexes as IX  # noqa: E402
 OUT = HERE.parent / "Volume-I_Opening.pdf"
 AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 ORD = ["", "الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس", "السابع", "الثامن", "التاسع", "العاشر",
@@ -230,7 +231,10 @@ CSS += FM.CSS
 
 def ayat(html):
     """﴿…﴾ (ref) → Amiri Quran span + reference; a paragraph that is only an ayah becomes a display ayah."""
-    html = re.sub(r"﴿([^﴾]+)﴾\s*\(([^)]+)\)", r'<span class="q">﴿\1﴾</span><span class="qref">(\2)</span>', html)
+    def one(m):
+        verse = f'<span class="q">﴿{m.group(1)}﴾</span><span class="qref">({m.group(2)})</span>'
+        return IX.ayah(verse, m.group(2), m.group(1)) if IX.ACTIVE else verse   # marked for the index of the verses
+    html = re.sub(r"﴿([^﴾]+)﴾\s*\(([^)]+)\)", one, html)
     html = re.sub(r'(?<!<span class="q">)﴿([^﴾]+)﴾', r'<span class="q">﴿\1﴾</span>', html)
     return html
 
@@ -277,6 +281,8 @@ def note_span(n, text):
     body = markdown.markdown(text).removeprefix("<p>").removesuffix("</p>")
     body = re.sub(r"^(%s):" % "|".join(TAGS), r'<span class="fn-tag">\1:</span>', body)
     body = re.sub(r"(?<![*\w])\*([^*]+)\*", r"<i>\1</i>", ayat(body))
+    if IX.ACTIVE:
+        body = IX.mark_sources(body, IX.TITLES)                         # the source the note cites, for its index
     num = n.translate(AR)
     return f'<span class="fn-note fn-n{n} fn-{note_kind(text)}" data-n="{num}">{body}</span>'
 
@@ -372,6 +378,8 @@ def md_to_html(md):
         if len(items) >= 5 and all(len(li.get_text()) <= 32 and not li.find("ul") for li in items):
             ul["class"] = ["cols"]
     latinize(soup)
+    if IX.ACTIVE and not IX.listing(md):
+        IX.mark(soup, IX.QUOTES, IX.NAMES, IX.GLOSSARY)                 # the entries of the volume's indexes
     # «←» is in none of the book's faces: it is drawn, so no system font enters the page
     html = str(soup).replace("←", ARROW)
     html = calls(html, notes)
@@ -526,7 +534,7 @@ def doc(css, body, page_css, paged=False):
     # a page that carries notes is paginated by Paged.js, which alone places a note at the foot of its page
     script = f'{PAGED_CONFIG}<script src="{PAGED.as_uri()}"></script>' if paged else ""
     return (f'<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>صناعة المتكلّم العربي</title>'
-            f'<style>{css}</style><style>{CSS % dict(wrapw=0, wraph=0, calls=CALLS)}{C2.TEXT_CSS}{extra_css()}</style>'
+            f'<style>{css}</style><style>{CSS % dict(wrapw=0, wraph=0, calls=CALLS)}{C2.TEXT_CSS}{extra_css()}{IX.CSS}</style>'
             f'<style>{page_css}</style>{script}</head><body>{IDS.check(body)}</body></html>')
 
 

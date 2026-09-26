@@ -27,7 +27,10 @@ def volume_name(n):
 
 
 def out_of(n):
-    """Where a volume keeps its thabat: the first beside the opening's appendix, the others among their closings."""
+    """Where a volume keeps its thabat: the first beside the opening's appendix, the others among their closings; the
+    thabat of the whole series («all», الثبت الجامع) closes the eleventh as its «المصادر والمراجع» (Bible, ch. 111 §4)."""
+    if n == "all":
+        return vol_folder(11) / "الخواتيم" / "المصادر-والمراجع.md"
     return OPENING / "91-ثبت-المصادر.md" if n == 1 else vol_folder(n) / "الخواتيم" / "ثبت-المصادر.md"
 
 
@@ -61,6 +64,10 @@ FOREIGN = {
     "Diglossia": ("Ferguson, Charles A.", '"Diglossia."', "*Word* 15, no. 2 (1959): 325–340."),
     "On Communicative Competence": ("Hymes, Dell", '"On Communicative Competence."', "In J. B. Pride and J. Holmes (eds.), *Sociolinguistics: Selected Readings*. Harmondsworth: Penguin, 1972."),
     "What Is Educated Spoken Arabic?": ("Mitchell, T. F.", '"What Is Educated Spoken Arabic?"', "*International Journal of the Sociology of Language* 61 (1986): 7–32."),
+    "How to Do Things with Words": ("Austin, J. L.", "*How to Do Things with Words.*", "Edited by J. O. Urmson. Oxford: Clarendon Press, 1962."),
+    "Logic and Conversation": ("Grice, H. P.", '"Logic and Conversation."', "In P. Cole and J. L. Morgan (eds.), *Syntax and Semantics*, vol. 3: *Speech Acts*, 41–58. New York: Academic Press, 1975."),
+    "A Synopsis of Linguistic Theory, 1930–1955": ("Firth, J. R.", '"A Synopsis of Linguistic Theory, 1930–1955."', "In *Studies in Linguistic Analysis*. Oxford: Basil Blackwell, 1962."),
+    "Shadowing Procedures in Teaching and Their Future": ("Hamada, Yo", '"Shadowing Procedures in Teaching and Their Future."', "*The Language Teacher* 45, no. 6 (2021): 32–35. doi:10.37546/JALTTLT45.6-3."),
 }
 FOREIGN_OUTSIDE = [
     (("الأول",), "Sharp, H. (ed.)", "*Selections from Educational Records, Part I: 1781–1839.*", "Calcutta: Superintendent Government Printing, 1920. (Macaulay's Minute, 2 February 1835; Lord Bentinck's Resolution, 7 March 1835.)"),
@@ -80,7 +87,8 @@ def tidy(ed):
 
 
 DEGREE = {"print": "طوبق على المطبوع", "digital": "على نسخةٍ رقمية", "general": "إحالةٌ عامّة"}
-FOREIGN_DEGREE = {"Sharp, H. (ed.)": "print", "Spitta-Bey, Wilhelm": "print"}
+FOREIGN_DEGREE = {"Sharp, H. (ed.)": "print", "Spitta-Bey, Wilhelm": "print", "Austin, J. L.": "print", "Grice, H. P.": "print",
+                  "Firth, J. R.": "print", "Hamada, Yo": "print"}
 # the Qur'an was set from the Uthmani text of two digital services; the second editions of the Sahihs and of Abu
 # Dawud were used for comparison and grading only
 OVERRIDE = {"مصحف المدينة النبوية": "digital"}
@@ -133,15 +141,24 @@ def edition_for(author, title):
 
 
 def cited(n):
-    """The base's titles the notes of volume n cite."""
-    name = volume_name(n)
+    """The base's titles the notes of volume n cite (n = «all»: of any volume)."""
+    names = {volume_name(k) for k in range(1, 12)} if n == "all" else {volume_name(n)}
     with open(BASE, encoding="utf-8") as fh:
-        return [r for r in csv.DictReader(fh, delimiter="\t") if name in [v.strip() for v in r["المجلدات"].split("،")]]
+        return [r for r in csv.DictReader(fh, delimiter="\t") if names & {v.strip() for v in r["المجلدات"].split("،")}]
+
+
+def volumes_of(r):
+    """«١، ٣، ٦»: the volumes whose notes cite a title of the base."""
+    AR = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
+    ks = [k for k in range(1, 12) if volume_name(k) in [v.strip() for v in r["المجلدات"].split("،")]]
+    return "، ".join(str(k).translate(AR) for k in ks)
 
 
 def main():
-    n = int(sys.argv[1]) if len(sys.argv) > 1 else 1
-    ord_ = ORD[n - 1]
+    arg = sys.argv[1] if len(sys.argv) > 1 else "1"
+    n = "all" if arg == "all" else int(arg)
+    ords = set(ORD) if n == "all" else {ORD[n - 1]}
+    where = {}                                          # (author, title) -> the volumes that cite it (for «all»)
     rows, foreign, open_ = {}, [], []
     for r in cited(n):
         author, title = r["المؤلف"], r["العنوان"]
@@ -154,6 +171,7 @@ def main():
         e = edition_for(author, title)
         if e:
             rows[(e[0], e[1])] = e
+            where[(e[0], e[1])] = volumes_of(r)
             continue
         ed = re.sub(r"\s*\[ت [^\]]*\]", "", r["الطبعة (من سجلّ فهرسة)"]).replace("&lt;i&gt;", "").replace("&lt;/i&gt;", "")
         if "تُحدَّد" in ed:
@@ -161,20 +179,32 @@ def main():
             continue
         title = re.sub(r"\s*\((طوق النجاة|دار التأصيل|ترقيم عبد الباقي|الطبعة التركية|ت\. [^)]*|تاريخ ابن خلدون، ج١|الجواب الكافي|رواية حفص)[^)]*\)", "", title)
         rows[(author, r["العنوان"])] = (author, title.strip(), tidy(ed))
+        where[(author, r["العنوان"])] = volumes_of(r)
+    label = "الثبت الجامع" if n == "all" else volume_name(n)
     if open_:
-        raise SystemExit("the thabat of " + volume_name(n) + " cannot be set:\n  " + "\n  ".join(open_))
+        raise SystemExit("the thabat of " + label + " cannot be set:\n  " + "\n  ".join(open_))
     for vols, a, t, e in OUTSIDE:
-        if ord_ in vols:
+        if ords & set(vols):
             rows[(a, t)] = (a, t, e)
-    foreign += [(a, t, e) for vols, a, t, e in FOREIGN_OUTSIDE if ord_ in vols]
+            where[(a, t)] = "، ".join(str(ORD.index(v) + 1).translate(str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")) for v in vols)
+    foreign += [(a, t, e) for vols, a, t, e in FOREIGN_OUTSIDE if ords & set(vols)]
     if not rows and not foreign:
-        raise SystemExit(volume_name(n) + ": the base marks no title as cited in its notes")
+        raise SystemExit(label + ": the base marks no title as cited in its notes")
     ar = sorted(rows.values(), key=lambda x: (key(x[0]), x[1]))
     EDITIONS.update({(a, t): e for a, t, e in ar})
     names = [a.split("،")[0].strip() for a, _, _ in ar]
     MULTI.update(x for x in names if names.count(x) > 1 and x not in ("البخاري", "مسلم", "أبو داود"))
-    ar = [(a, t, e + f'. <span class="deg">{DEGREE[degree(a, t, e)]}</span>') for a, t, e in ar]
-    md = ["## ثبت المصادر", "", "<!-- sub: ما أُحيل إليه في حواشي هذا المجلد، بالطبعة التي أُحيل إليها -->", "",
+    vols = {(a, t): where.get((a, t), "") for (a, t) in [(x[0], x[1]) for x in rows.values()]}
+    tail = (lambda a, t: f' <span class="vols">(المجلد {vols[(a, t)]})</span>' if n == "all" and vols.get((a, t)) else "")
+    ar = [(a, t, e + f'. <span class="deg">{DEGREE[degree(a, t, e)]}</span>' + tail(a, t)) for a, t, e in ar]
+    if n == "all":
+        head = ["# المصادر والمراجع", "", "<!-- sub: الثبت الجامع: ما أُحيل إليه في حواشي المجلدات الأحد عشر، بالطبعة التي أُحيل إليها -->", "",
+                "هذا ثبتُ السلسلة كلها: كل كتابٍ أُحيل إليه في حاشيةٍ من حواشي مجلداتها، بالطبعة التي أُحيل إليها، وبعده أرقام "
+                "المجلدات التي أُحيل إليه فيها. ولكل مجلدٍ ثبتُه في آخره.", ""]
+    else:
+        head = ["## ثبت المصادر" if n == 1 else "# ثبت المصادر", "",
+                "<!-- sub: ما أُحيل إليه في حواشي هذا المجلد، بالطبعة التي أُحيل إليها -->", ""]
+    md = head + [
           "رُتّبت المصادر العربية على شهرة مؤلّفيها، من غير اعتدادٍ بـ«ال» و«ابن» و«أبي» في أولها، ثم المصادر الأجنبية على أسماء عائلات مؤلّفيها. "
           "وحيث ذُكر للكتاب طبعتان فالأولى للإحالة والثانية للمقابلة.",
           "وليست المصادر كلّها على درجةٍ واحدة من الاستعمال، فبُيّنت درجة كلٍّ منها في آخره: «طوبق على المطبوع» لما رُئي النقل منه "
@@ -186,7 +216,7 @@ def main():
     out = out_of(n)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(md) + "\n", encoding="utf-8")
-    print(volume_name(n) + ":", out.relative_to(HERE.parent), len(ar), "Arabic,", len(foreign), "foreign")
+    print(label + ":", out.relative_to(HERE.parent), len(ar), "Arabic,", len(foreign), "foreign")
 
 
 if __name__ == "__main__":

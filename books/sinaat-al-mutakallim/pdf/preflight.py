@@ -41,7 +41,9 @@ APPROVED = ("ScheherazadeNew", "Scheherazade", "Amiri", "AmiriQuran", "Changa", 
 AVOIDED = ["من المهم أن", "تجدر الإشارة إلى", "في هذا السياق", "لا شك أن", "لا شكّ أن", "يمكن القول إن", "يهدف هذا الفصل إلى",
            "في هذا الفصل سوف نستعرض", "في عالمنا المتسارع", "مما لا ريب فيه", "مفتاح النجاح"]
 PRODUCTION = ["يحتاج إلى تحقق", "يحتاج إلى مراجعة", "يجب التحقق", "يُعرض على مختص", "يعرض على مختص", "مسودة", "ملاحظة تحرير",
-              "سنراجع", "ربما نضيف", "يمكننا لاحقًا", "سوف نقرّر", "على المؤلف أن", "TODO", "placeholder", "draft", "verify"]
+              "سنراجع", "ربما نضيف", "يمكننا لاحقًا", "سوف نقرّر", "على المؤلف أن", "TODO", "placeholder", "draft", "verify",
+              "بوسم", "وسم التحقق", "المراجعة العلمية الأخيرة", "المراجعة الأخيرة", "حتى تُطابَق", "حتى تطابق", "تُحدَّد لاحقًا",
+              "تحدد لاحقا", "سيُحدَّد", "لم يُحدَّد بعد", "نسخة المراجعة"]
 TAG_KINDS = [("يحتاج إلى تحقق", "يحتاج إلى تحقق"), ("يُعرض على مختص", "يُعرض على مختص"), ("استنباط تربوي", "استنباط تربوي"),
              ("تحليل حديث", "تحليل حديث"), ("أداة تدريبية", "أداة تدريبية من إنشاء الكتاب")]
 
@@ -357,6 +359,21 @@ def main(v=1, proof=False):
         add("التقنية", f"إحالات الباب {ORD[b - 1]} إلى فصوله (١–{n(len(chapters))})", "يجتاز" if not bab_bad else "للمراجعة", "؛ ".join(bab_bad[:8]))
 
     # ------------------------------------------------------------------ 8. the thabat against the notes
+    # every title the base marks as cited in this volume's notes stands in its thabat (a thabat set before a note was
+    # added is stale); the eleventh's is the thabat of the whole series
+    import thabat as T
+    which = "all" if v == 11 else v
+    tf = T.out_of(which)
+    cited_rows = T.cited(which)
+    if tf.exists():
+        tt = tf.read_text(encoding="utf-8")
+        absent = [f"{r['المؤلف']}، {T.short(r['العنوان'])}" for r in cited_rows
+                  if T.short(r["العنوان"]) not in tt and r["العنوان"].split(",")[0] not in tt]
+        add("العلمية", "الثبت: فيه كل ما أُحيل إليه في حواشي المجلد (قاعدة المصادر)", "يجتاز" if not absent else "لا يجتاز",
+            f"{n(len(cited_rows))} عنوانًا" + (f"؛ ليس فيه: {'؛ '.join(absent)}" if absent else ""))
+    elif cited_rows:
+        add("العلمية", "الثبت: فيه كل ما أُحيل إليه في حواشي المجلد (قاعدة المصادر)", "لا يجتاز",
+            f"لا ثبت للمجلد، وفي قاعدة المصادر {n(len(cited_rows))} عنوانًا أُحيل إليه في حواشيه")
     if v == 1:
         notes_text = " ".join(" ".join(re.findall(r"^\[\^\d+\]:\s*(.+)$", texts[f], re.M)) for f in note_files)
         notes_text += " ".join(texts[f] for f in note_files if f.name.startswith("90-"))

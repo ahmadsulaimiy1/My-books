@@ -40,6 +40,7 @@ import frontmatter as FM  # noqa: E402
 import geometry as G  # noqa: E402
 import heads as H  # noqa: E402
 import ids as IDS  # noqa: E402
+import indexes as IX  # noqa: E402
 import opening as O  # noqa: E402
 import proto2 as P2  # noqa: E402
 from paths import AUTHOR_WORD, INTRO, OPENING  # noqa: E402
@@ -727,6 +728,8 @@ def lesson_html(md, breaks=True):
         t = p.get_text().strip()
         if t.startswith("﴿") and len(p.find_all(class_="q")) == 1 and t.endswith(")"):
             p["class"] = ["ayah"]
+    if IX.ACTIVE and not IX.listing(md):
+        IX.mark(soup, IX.QUOTES, IX.NAMES, IX.GLOSSARY)                 # the entries of the volume's indexes
     html = O.calls(str(soup), notes)
     missing = set(notes) - set(re.findall(r'class="fn-note fn-n(\d+) ', html))
     if missing:
@@ -951,6 +954,7 @@ def folios(css, pages, slug=None):
 
 def main(n=1, review=False):
     from pypdf import PdfReader, PdfWriter
+    IX.use_volume(n)
     css = C2.fonts()
     fixed = O.FIXED_CSS % dict(w=G.W, h=G.H)
     R = {"recto": True}
@@ -976,6 +980,7 @@ def main(n=1, review=False):
         outline = [("المقدّمات", "toc", 0), ("المحتويات", "toc", 1), ("الرموز والاصطلاحات", "symbols", 1)]
         for u in vol["units"]:
             unit(css, n, u, pieces, toc, outline, fixed, first=u is vol["units"][0])
+        index_contents(toc, outline)
         return assemble(css, n, review, pieces, toc, outline, fixed)
     pieces += [("fixed", doc(css, FM.dedication(), fixed), {}),
               ("fixed", doc(css, P2.verse_page().replace('class="pg', 'class="full'), fixed), R),
@@ -1059,14 +1064,27 @@ def main(n=1, review=False):
                 body, bandhtml = part
                 part = (body.replace('<section class="chap">', f'<section class="chap app-{key}">', 1), bandhtml)
                 pieces.append(("flow", flow(css, part), {"recto": True, "anchor": key, "head": ([("title", "الملاحق")], [("title", title)])}))
+    index_contents(toc, outline)
     return assemble(css, n, review, pieces, toc, outline, fixed)
+
+
+def index_contents(toc, outline):
+    """The volume's indexes (Bible, ch. 111 §4) in its contents and bookmarks: one line for each index that has entries."""
+    kinds = [k for k, _ in IX.KINDS if any(kk == k for kk, _ in IX.SEEN)]
+    if not kinds:
+        return
+    toc.append(("part", "", "الفهارس"))
+    for k in kinds:
+        toc.append(("e", "", IX.TITLE[k], f"ix-{k}", []))
+    outline.append(("الفهارس", f"ix-{kinds[0]}", 0))
+    outline.extend((IX.TITLE[k], f"ix-{k}", 1) for k in kinds)
 
 
 def assemble(css, n, review, pieces, toc, outline, fixed):
     """The pieces set, paged, numbered, headed, bookmarked, compacted and guarded; the colophon closes the volume."""
     from pypdf import PdfReader, PdfWriter
     proof = f"نسخة المراجعة (<span class='lat'>Proof</span>)، أُخرجت في {PROOF_DATE} لفحصها قبل الطبع؛ وليست الطبعة المعتمدة." if review else None
-    pieces.append(("fixed", doc(css, FM.colophon(n, proof=proof), fixed), {"recto": True}))
+    colophon = ("fixed", doc(css, FM.colophon(n, proof=proof), fixed), {"recto": True})
 
     def toc_html(numbers):
         rows = [r if r[0] == "part" else ("e", r[1], r[2], numbers.get(r[3], "٠٠٠"), r[4]) for r in toc]
@@ -1075,7 +1093,8 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
     tag = f"vol{n:02d}"
     paper = B.render(doc(css, '<div style="width:170mm;height:240mm;background:var(--paper)"></div>', fixed), f"{tag}-paper")
     out, anchors, toc_slot = [], {"toc": None}, None       # out: [(page, kind, heads)]; page 1 is out[0]
-    for i, (kind, html, meta) in enumerate(pieces):
+    def place(i, kind, html, meta):
+        nonlocal toc_slot
         hd = meta.get("head")
         # page p = len(out) + 1; a recto is odd, a spread opens on an even page
         if meta.get("recto") and (len(out) + 1) % 2 == 0:
@@ -1092,7 +1111,7 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
             toc_slot = (len(out), len(r.pages[:O.body_pages(r)]))
             for pg in r.pages[:toc_slot[1]]:
                 out.append((pg, "toc", hd))
-            continue
+            return
         if kind == "flow":
             body, bandhtml = html
             r = PdfReader(str(B.render(body, f"{tag}-{i:02d}")))
@@ -1101,14 +1120,32 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
                 under = PdfReader(str(band if j == 0 else paper)).pages[0]
                 under.merge_page(pg)
                 out.append((under, "open" if j == 0 else "flow", hd))
-            continue
+            return
         r = PdfReader(str(B.render(html, f"{tag}-{i:02d}")))
-        for j, pg in enumerate(r.pages[:O.body_pages(r)] if kind == "cont" else r.pages):
+        for j, pg in enumerate(r.pages[:O.body_pages(r)] if kind == "cont" and not meta.get("keep") else r.pages):
             if kind == "cont":
                 under = PdfReader(str(paper)).pages[0]
                 under.merge_page(pg)
                 pg = under
             out.append((pg, ("open" if meta.get("opens") and j == 0 else "flow") if kind == "cont" else kind, hd))
+
+    for i, (kind, html, meta) in enumerate(pieces):
+        place(i, kind, html, meta)
+    # the indexes, set when every page of the text has its number: their entries' pages are read from the links
+    # the text's pages carry (indexes.py); then the colophon closes the volume
+    if IX.ACTIVE and IX.SEEN:
+        main_at = anchors["main"]
+        hits = IX.collect([pg for pg, _, _ in out])
+        wanted = {a for _, _, _, a, _ in [r for r in toc if r[0] == "e"] if str(a).startswith("ix-")}
+        parts = IX.html(hits, lambda k: O.ABJAD[k] if k < main_at else str(k - main_at + 1).translate(AR))
+        found = {a for a, _, _ in parts}
+        if wanted - found:
+            raise SystemExit(f"an index in the contents has no entry found on the pages: {sorted(wanted - found)}")
+        for j, (anchor, title, body) in enumerate(parts):
+            place(len(pieces) + j, "cont", doc(css, body, O.CONT_CSS + IX.PAGE_CSS),
+                  {"recto": j == 0, "anchor": anchor, "keep": True, "opens": True,
+                   "head": ([("title", "الفهارس")], [("title", title)])})
+    place(len(pieces) + 99, *colophon)
     # the preliminaries in abjad letters from the half-title; the text from ١ at the Muqaddima
     main_at = anchors["main"]
     label = [O.ABJAD[i] if i < main_at else str(i - main_at + 1).translate(AR) for i in range(len(out))]
@@ -1161,6 +1198,8 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
     tmp = dest.with_suffix(".tmp.pdf")
     pymupdf.open(str(dest)).save(str(tmp), garbage=4, deflate=True, deflate_fonts=True)
     tmp.replace(dest)
+    if IX.ACTIVE:
+        IX.strip(dest)                                                  # the index links served only to find the pages
     O.guard_fonts(dest)
     t3 = sorted({label[pg.number] for pg in pymupdf.open(str(dest)) for f in pg.get_fonts() if f[2] == "Type3"})
     if t3:
