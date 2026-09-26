@@ -52,6 +52,8 @@ def build(n):
         r = subprocess.run([sys.executable, str(HERE / "volume.py"), str(n)], capture_output=True, text=True)
         if r.returncode:
             return n, False, r.stdout[-400:] + r.stderr[-400:]
+        # preflight reports the stranded headings (its cover check may fail until the covers are redrawn below)
+        subprocess.run([sys.executable, str(HERE / "preflight.py"), str(n)], capture_output=True, text=True)
         fb = subprocess.run([sys.executable, str(HERE / "fixbreaks.py"), str(n)], capture_output=True, text=True)
         if "added []" in fb.stdout:
             break

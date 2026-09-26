@@ -236,6 +236,7 @@ blockquote.note { border-right: .6pt solid #CFC5B1; padding: 0 4.5mm 0 0; }
 .ex-card h4 { break-after: avoid; }
 .ex-head { break-inside: avoid; }
 .keep { break-inside: avoid; }
+.pbreak { break-before: page; }
 .reserve { height: 17mm; margin-bottom: -17mm; }
 .ex-card h4 { margin: 0 0 1.4mm; display: flex; gap: 2.6mm; align-items: baseline; color: var(--sapphire); font-size: 11.8pt; }
 .ex-card h4 .no { font: 700 13pt/1 "Amiri"; color: var(--gold-ink); }
@@ -524,12 +525,13 @@ def loosen_lists(md):
 PAGE_BREAKS_FILE = Path(__file__).resolve().parent.parent / "book" / "_production" / "الإخراج" / "فواصل-الصفحات.json"
 
 
-CURRENT = {"n": 0}
+CURRENT = {"n": 0, "chap": ""}
 
 
 def forced_breaks(soup, n):
     """The typesetter's last word: headings that open a new page because the layout left them alone at the foot
-    of one (found by preflight, recorded per volume in فواصل-الصفحات.json)."""
+    of one (found by preflight, recorded per volume in فواصل-الصفحات.json as «bookmark ▸ heading», the bookmark
+    being the chapter or unit the heading stands in). Set by class: Paged.js reads breaks from the stylesheet."""
     import json as _j
     if not PAGE_BREAKS_FILE.exists():
         return
@@ -537,9 +539,9 @@ def forced_breaks(soup, n):
     if not want:
         return
     for h in soup.find_all(["h2", "h3", "h4"]):
-        if h.get_text(" ", strip=True) in want:
+        if f'{CURRENT["chap"]} ▸ {h.get_text(" ", strip=True)}' in want:
             target = h.parent if h.parent is not None and "keep" in (h.parent.get("class") or []) else h
-            target["style"] = (target.get("style", "") + ";break-before:page").lstrip(";")
+            target["class"] = (target.get("class") or []) + ["pbreak"]
 
 
 def keep_headings(soup):
@@ -572,6 +574,9 @@ def keep_headings(soup):
                 nxt["class"] = (nxt.get("class") or []) + ["runon"]
             continue
         run = [h]
+        above = h.find_previous_sibling()
+        if above is not None and above.name == "h2":        # a section title never stays behind its first heading
+            run.insert(0, above)
         nxt = h.find_next_sibling()
         while nxt is not None and nxt.name in ("h3", "h4"):
             run.append(nxt)
@@ -579,7 +584,10 @@ def keep_headings(soup):
         if nxt is None or nxt.name == "h2":
             continue
         keep = soup.new_tag("div", attrs={"class": "keep"})
-        h.insert_before(keep)
+        run[0].insert_before(keep)
+        if "brk" in (run[0].get("class") or []):
+            keep["class"] = ["keep", "pbreak"]              # the page opens on the keep, not inside it
+            run[0]["class"] = [c for c in run[0]["class"] if c != "brk"]
         for x in run:
             keep.append(x.extract())
         cls = nxt.get("class") or []
@@ -934,6 +942,7 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
             pieces[-1][2]["alias"] = tag
         short = re.search(r"<!--\s*head:\s*(.+?)\s*-->", files[0].read_text(encoding="utf-8"))
         head = [("label", label), ("title", short.group(1) if short else name)]
+        CURRENT["chap"] = "فاتحة الباب" if b else "فاتحة المرجع"
         ohtml = (f'<section class="chap chap-open"><div class="opener-k"><span>{title}</span><i></i></div>'
                  f'<h2 class="op-t">{"فاتحة الباب" if b else "فاتحة المرجع"}</h2><p class="op-s">{sub}</p>{lesson_html(obody)}</section>')
         oname = "فاتحة الباب" if b else "فاتحة المرجع"
@@ -951,6 +960,7 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
             outline.append((f"الفصل {ORD[c]}: {ctitle}", key, 1))
             short = re.search(r"<!--\s*head:\s*(.+?)\s*-->", first_md)
             heads = (head, [("label", "الفصل"), ("num", str(c).translate(AR)), ("title", short.group(1) if short else ctitle)])
+            CURRENT["chap"] = f"الفصل {ORD[c]}: {ctitle}"
             body = f'<section class="chap"><div class="chap-open">{lesson_html(md)}</div></section>'
             band = O.band(f"{label}: {name} · الفصل {ORD[c]}", ctitle, question)
             pieces.append(("flow", flow(css, (body, band)), {"anchor": key, "head": heads}))
@@ -960,6 +970,7 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
         files = unit_files(n, u)
         md = "\n\n".join(flat(f.read_text(encoding="utf-8")) for f in files)
         kick, title = [x.strip() for x in PROGRAM.split(":", 1)]
+        CURRENT["chap"] = PROGRAM
         body = f'<section class="chap"><div class="chap-open">{lesson_html(md, breaks=False)}</div></section>'
         pieces.append(("flow", flow(css, (body, O.band(kick, title, ""))),
                        {"recto": True, "anchor": "prog", "head": ([("title", kick)], [("title", "برنامج النطق اليومي")])}))
@@ -1000,6 +1011,7 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
             outline.append((group, key, 0))
         toc.append(("e", kick if u[0] == "app" else "", title, key, numbered(md)))
         outline.append((h1, key, 1))
+        CURRENT["chap"] = h1
         body = f'<section class="chap"><div class="chap-open">{lesson_html(md, breaks=False)}</div></section>'
         pieces.append(("flow", flow(css, (body, O.band(kick, title, ""))),
                        {"recto": True, "anchor": key, "head": ([("title", group)], [("title", title if len(title) < 22 else kick)])}))
