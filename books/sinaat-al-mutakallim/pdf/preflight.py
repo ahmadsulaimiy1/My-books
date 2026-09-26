@@ -254,6 +254,16 @@ def main(v=1, proof=False):
                 short.append(i)
                 review.append((labels[i], f"صفحةٌ قصيرة ({n(round(fill * 100))}٪) في وسط فصل"))
     add("الإخراج الفني", "لا عنوان في أسفل صفحةٍ بلا نصّ بعده", "يجتاز" if not orphan else "للمراجعة", "، ".join(labels[i] for i in orphan))
+    # a framed block that runs on to the next page must keep its measure there: a page set a word to the line is a
+    # column that lost its width (a grid box continued without its mark)
+    narrow = []
+    for i, page in enumerate(doc):
+        lines = ["".join(s["text"] for s in l["spans"]).strip() for b in page.get_text("dict")["blocks"] for l in b.get("lines", [])]
+        lines = [t for t in lines if t]
+        single = [t for t in lines if len(t.split()) == 1]
+        if len(single) >= 12 and len(single) > .6 * len(lines):
+            narrow.append(i)
+    add("الإخراج الفني", "لا عمود انهار إلى كلمةٍ في السطر", "يجتاز" if not narrow else "لا يجتاز", "، ".join(labels[i] for i in narrow))
     add("الإخراج الفني", "لا صفحة قصيرة في وسط فصل إلا قبل درسٍ يفتتح صفحته", "يجتاز" if not short else "للمراجعة", "، ".join(labels[i] for i in short))
     if v == 1:
         planned = re.findall(r"^\|\s*(المدخل، ف[٠-٩]+|الباب ١، ف[٠-٩]+)\s*\|\s*(.+?)\s*\|$",

@@ -166,7 +166,8 @@ h4 + p, h4 + ol, h4 + ul { text-indent: 0; }
 .exm .exg { font: 400 9.4pt/1.6 "IBM Plex Sans Arabic"; color: var(--ink-3); }
 .exl { display: grid; grid-template-columns: 5.2mm 1fr; align-items: baseline; margin: .5mm 0; }
 .exl .mk .gl { width: .92em; height: .92em; }
-.exl .tx { font: 400 13pt/1.8 "Scheherazade New"; text-align: right; }
+.exl .mk { grid-column: 1; grid-row: 1; }
+.exl .tx { grid-column: 2; min-width: 0; font: 400 13pt/1.8 "Scheherazade New"; text-align: right; }
 .exl.no .tx { color: var(--ink-2); }
 .ctx { font: 400 9.4pt/1.6 "IBM Plex Sans Arabic"; color: var(--ink-3); }
 .sd { font-size: .86em; color: var(--ink-3); }
@@ -174,7 +175,9 @@ h4 + p, h4 + ol, h4 + ul { text-indent: 0; }
 .grades { margin: 5mm 0 6mm; border-top: .8pt solid var(--gold); border-bottom: .4pt solid var(--gold); padding: 1mm 0; }
 .grade { display: grid; grid-template-columns: 11mm 1fr; column-gap: 2mm; padding: 3mm 0 3.2mm; }
 .grade + .grade { border-top: .35pt solid #E2DACB; }
-.grade > .gmk { padding-top: 1.2mm; text-align: center; }
+.grade > .gmk { grid-column: 1; grid-row: 1; padding-top: 1.2mm; text-align: center; }
+/* a speech that runs on to the next page continues there without its mark: its body keeps the second column */
+.grade > .gbd { grid-column: 2; min-width: 0; }
 .grade > .gmk .gm { font-size: 16pt; width: 1.36em; height: 1.36em; }
 .grade > .gbd > p:first-child { text-indent: 0; }
 .grade > .gbd > p:first-child strong { font: 600 11.2pt/1.5 "Changa"; color: var(--sapphire); }
