@@ -591,6 +591,24 @@ def keep_headings(soup):
             # a long paragraph or list that breaks: the heading keeps room for three of its lines, a spacer whose
             # height the margin gives back once it fits; without the room the heading goes over with its text
             keep.append(soup.new_tag("div", attrs={"class": "reserve"}))
+    # a head kept with only a short lead-in («اقرأ النص الآتي…») still needs what the lead-in introduces: an
+    # unbroken block (the voice drill, a table, a card) comes into the keep; a list or a paragraph that breaks
+    # leaves three lines' room after it
+    for keep in soup.find_all("div", class_="keep"):
+        last = keep.find_all(recursive=False)[-1] if keep.find_all(recursive=False) else None
+        if last is None or last.get("class") == ["reserve"] or last.name not in ("p", "h4", "h3"):
+            continue
+        if last.name == "p" and len(last.get_text(" ", strip=True)) > 360:
+            continue
+        after = keep.find_next_sibling()
+        if after is None or heading_level(after) is not None:
+            continue
+        acls = after.get("class") or []
+        whole = after.name == "table" or after.find("table") is not None or any(c in acls for c in ("voice", "card", "grades", "exm"))
+        if whole and len(after.get_text(" ", strip=True)) < 1800:
+            keep.append(after.extract())
+        elif after.name in ("ul", "ol", "p", "blockquote") or whole:
+            keep.append(soup.new_tag("div", attrs={"class": "reserve"}))
 
 
 def lesson_html(md, breaks=True):
