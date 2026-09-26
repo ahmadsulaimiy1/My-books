@@ -19,7 +19,7 @@ Writes into covers/<edition>/ (1-Heritage, 2-Matn, 3-Contemporary):
   Series_Shelf.jpg              the eleven on a shelf, straight on
   Series_Shelf-Angled.jpg       the same, from the side
   Series_Spines-Closeup.jpg     four spines near
-  Volume-10_Front-Hero.jpg      the tenth's front in raking light
+  Volume-NN_Front-Hero.jpg      each volume standing, its front in raking light
   Volume-10_Wrap.jpg            the tenth's wrap, front, spine and back
   Volume-10_Finish-Closeup.jpg  the finishes near: foil, emboss, engraving, gloss
 The proofs simulate; the printer's wet proof and a finished sample decide.
@@ -444,7 +444,8 @@ def main(argv):
         shelf()
         shelf_angled()
         spines_closeup()
-        front_hero(10)
+        for n in range(1, 12):               # every volume standing, for the publisher's presentation
+            front_hero(n)
         wrap_view(10)
         finish_closeup(10)
 
