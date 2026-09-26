@@ -29,9 +29,9 @@ from coverart import AR, ISBN_ZONE, LEAD, Page, SERIES, TAU, faces, floriate, se
 W, H = 170.0, 240.0
 
 
-def frame(P, x0=0.0, y0=0.0, w=W, h=H, corners=((1, 1), (1, 1))):
+def frame(P, x0=0.0, y0=0.0, w=W, h=H, corners=((1, 1), (1, 1)), quiet=False):
     """The tooled frame: an outer gold rule, the engraved band between two fine rules, a pearl line, the inner
-    rule; jewelled roundels where the band turns."""
+    rule; jewelled roundels where the band turns, and jewels along it (quiet: without those, for the back)."""
     fr = IL.rounded_rect(x0 + 8.5, y0 + 8.5, x0 + w - 8.5, y0 + h - 8.5, 2.0)
     P.gold(IL.band(fr, 0, -1.0))
     P.pearl(IL.band(fr, -1.75, -1.95))
@@ -42,7 +42,7 @@ def frame(P, x0=0.0, y0=0.0, w=W, h=H, corners=((1, 1), (1, 1))):
     P.cold(waves.intersection(IL.band(mid, 1.8, -1.8)), 0.75)
     ext = LineString(mid.exterior.coords)
     nj = int(ext.length / 21.0)
-    for i in range(nj):
+    for i in range(0 if quiet else nj):
         q = ext.interpolate(ext.length * (i + 0.5) / nj)
         if min(abs(q.x - x0 - 13.25), abs(q.x - x0 - w + 13.25)) < 9 and min(abs(q.y - y0 - 13.25), abs(q.y - y0 - h + 13.25)) < 9:
             continue
@@ -296,70 +296,101 @@ def index_medallion(P, cx=MCX, cy=MCY, scale=1.0, field=None, engrave=True):
     return frame_
 
 
+def inscription(P, x0, y0, x1, y1, bracket=9.0, star=True, fill=None):
+    """The inscription field (كتيبة) of the architecture: not a box but its corners and its two long rules. Gold
+    angles at the four corners; a fine gold rule along head and foot, stopping short of the angles; a small
+    eight-point khatam, the medallion's own geometry, set into each rule at its middle. The field itself stays
+    the sapphire (fill: a panel tint where words must be read on it). Returns the field's area."""
+    t, gap = 0.6, 2.2
+    for (cx, cy, sx, sy) in ((x0, y0, 1, 1), (x1, y0, -1, 1), (x0, y1, 1, -1), (x1, y1, -1, -1)):
+        P.gold(box(min(cx, cx + sx * bracket), min(cy, cy + sy * t), max(cx, cx + sx * bracket), max(cy, cy + sy * t)))
+        P.gold(box(min(cx, cx + sx * t), min(cy, cy + sy * bracket), max(cx, cx + sx * t), max(cy, cy + sy * bracket)))
+        # the inner step of the angle, one rule finer
+        ix, iy = cx + sx * 1.5, cy + sy * 1.5
+        P.cold(box(min(ix, ix + sx * bracket * 0.55), min(iy, iy + sy * 0.14), max(ix, ix + sx * bracket * 0.55), max(iy, iy + sy * 0.14)), 0.85)
+        P.cold(box(min(ix, ix + sx * 0.14), min(iy, iy + sy * bracket * 0.55), max(ix, ix + sx * 0.14), max(iy, iy + sy * bracket * 0.55)), 0.85)
+    xm = (x0 + x1) / 2
+    for yy in (y0, y1):
+        cut = 4.6 if star else 0.0
+        for (a, b) in ((x0 + bracket + gap, xm - cut), (xm + cut, x1 - bracket - gap)):
+            if b > a:
+                P.gold(box(a, yy - 0.15, b, yy + 0.15))
+        if star:
+            g, _ = girih(xm, yy, 1.5, 3.3, 8, strap=0.5)
+            P.gold(g)
+            P.gold(AW.nuqta(xm, yy, 1.2, 90))
+    area = box(x0, y0, x1, y1)
+    if fill is not None:
+        P.panel(area.buffer(-1.0, join_style=2), fill)
+    P.arch.append(area.buffer(1.0, join_style=2))
+    return area
+
+
+MED_CY, MED_SCALE = 145.0, 0.9       # the front's medallion: where it stands and at what size
+AUTHOR_TOP = 196.0
+BY = "تأليف الفقير إلى ربه"             # the author's own wording, never shortened on this edition
+AUTHOR_NAME = "أبي عبد الله جلال الدين أحمد بن إبراهيم السليمي"
+PRAYER = "غفر الله له ولوالديه وللمسلمين"
+
+
+def author(P, F):
+    """The authorship as the scholarly book states it: a fine gold rule with the khatam at its middle; the
+    humble line; the full name, the one line of weight; the prayer, quieter still."""
+    y = AUTHOR_TOP
+    for (a, b) in ((MCX - 30, MCX - 5.0), (MCX + 5.0, MCX + 30)):
+        P.gold(box(a, y - 0.14, b, y + 0.14))
+    g, _ = girih(MCX, y, 1.3, 2.9, 8, strap=0.45)
+    P.gold(g)
+    by, _ = T.text(BY, F.amiri4, 3.7, cx=MCX, base=y + 6.9)
+    P.ink(by, AW.CHAMPAGNE_INK)
+    size = 5.0                               # Amiri, the face of the heritage texts (Bible, ch. 104)
+    ln = T.line(AUTHOR_NAME, F.amiri7, size)
+    size *= min(1.0, 94.0 / ln.width)       # between the bottom cornerpieces
+    nm, _ = T.text(AUTHOR_NAME, F.amiri7, size, cx=MCX, base=y + 14.3)
+    P.pearl(nm)
+    P.emboss(nm, 0.7)
+    pr, _ = T.text(PRAYER, F.amiri4, 3.3, cx=MCX, base=y + 20.6)
+    P.ink(pr, AW.PEARL_SOFT)
+    P.arch.append(box(MCX - 49, y - 3.5, MCX + 49, y + 22.0))
+
+
 def front(n):
     F = faces()
     P = Page()
     inner = frame(P)
-    cornerpieces(P, ("tl", "tr", "bl", "br"))
-    # the heading panel, its palmette reaching into the band toward the fore-edge
-    cart = IL.cartouche(31, 25, 151, 92, lobes=4, depth=0.08)
-    P.panel(cart, 0.13)
-    P.L.uv.append(cart)
-    P.gold(IL.band(cart, 1.3, 0.6))
-    P.pearl(IL.band(cart, 0.28, 0.1))
-    P.gold(IL.band(cart, -1.0, -1.25))
-    pal = IL.palmette(31.5, 58.5, 25, 21, angle=180)
-    P.panel(pal, 0.05)
-    P.gold(IL.band(pal, 0.5, 0))
-    P.pearl(IL.band(pal, -0.9, -1.05))
-    P.cold(IL.rose_field(19.0, 58.5, 0.6, 6.0, 6, 2, 9, w=0.10).intersection(pal.buffer(-1.2)), 0.85)
-    P.gold(AW.nuqta(19.0, 58.5, 2.0, 70))
-    P.arch += [cart.buffer(1.6), pal.buffer(0.8)]
-    letters = set_title(P, 92, [("صناعة", 21.0, 51.0), ("المتكـلّم العربي", 12.6, 72.5)])
-    ground = IL.moire(cart.buffer(-1.6), spacing=0.95, amp=0.55, wavelength=6.5, angle=0, w=0.10)
-    P.L.body.append((ground.difference(letters.buffer(1.1)), ("lift", 0.065)))
-    sub, _ = T.text(FM.SUBTITLE, F.sch4, 4.6, cx=91, base=85.5)
+    cornerpieces(P, ("tl", "tr", "bl", "br"), r=18.0)
+    # the title engraved into the architecture: an inscription field, its title pressed in pearl on the sapphire
+    # the front declares (Bible, ch. 25 §14 ي): the title, its subtitle and the volume in the inscription field;
+    # the medallion free in the sapphire; and the author, as the scholarly book names him
+    TITLE_FIELD = (40.0, 21.0, 130.0, 93.0)
+    inscription(P, *TITLE_FIELD)
+    set_title(P, MCX, [("صناعة", 21.0, 43.5), ("المتكـلّم العربي", 12.4, 62.0)])
+    sub, _ = T.text(FM.SUBTITLE, F.sch4, 4.2, cx=MCX, base=72.8)
     P.ink(sub, AW.PEARL_SOFT)
-    # the medallion, and the plaque of the volume's name under it
-    plaque_y = 207.75                          # the plaque 202.5–213, the author under it clear of the frame (222)
+    ordinal, name = FM.VOLUMES[n - 1][:2]
+    label = name if n < 11 else "مرجع المتكلّم العربي"
+    kg, kw = T.text(f"المجلد {ordinal}", F.changa4, 2.6, cx=MCX, base=80.4)
+    P.ink(kg, AW.CHAMPAGNE_INK)
+    ng, nw = T.text(label, F.kufi6, 5.0 if len(label) < 10 else 4.3, cx=MCX, base=88.0, features=T.KF)
+    P.pearl(ng)
+    P.emboss(ng, 0.8)
+    P.L.glow.append((MCX, 55.0, 42.0, 0.35))
+    author(P, F)                             # first, so that the medallion's rays keep clear of it
+    # the medallion
     field = AW.valid(inner.difference(unary_union(P.arch)))
     first = len(P.L.gold)                    # what the medallion draws, and nothing of the frame round it
     if n == 11:
-        med = index_medallion(P, field=field)
+        med = index_medallion(P, cy=MED_CY, scale=MED_SCALE, field=field)
     else:
-        med = shamsa(P, n, field=field)
-    # the medallion keeps its air: clear of the heading panel above and of the plaque below
+        med = shamsa(P, n, cy=MED_CY, scale=MED_SCALE, field=field)
     reach = unary_union([med] + P.L.gold[first:])
-    if reach.bounds[1] < 92.8 or reach.bounds[3] > plaque_y - 6.25:
+    if reach.bounds[1] < TITLE_FIELD[3] + 5.0 or reach.bounds[3] > AUTHOR_TOP - 4.0:
         raise SystemExit(f"volume {n}: the medallion ({reach.bounds[1]:.1f}–{reach.bounds[3]:.1f} mm) crowds the "
-                         f"heading panel (92) or the plaque ({plaque_y - 5.25:.1f})")
-    # a jewel where the medallion meets the heading panel, a stem to the plaque
-    top = med.bounds[1]
-    bot = med.bounds[3]
-    if top > 96:
-        P.gold(box(MCX - 0.25, 92.5, MCX + 0.25, top))
-    P.gold(AW.nuqta(MCX, 94.6, 3.4, 90))
-    if bot < plaque_y - 6.75:
-        P.gold(box(MCX - 0.25, bot, MCX + 0.25, plaque_y - 5.25))
-    plaque = IL.cartouche(MCX - 38, plaque_y - 5.25, MCX + 38, plaque_y + 5.25, lobes=3, depth=0.1)
-    P.panel(plaque, 0.10)
-    P.L.uv.append(plaque)
-    P.gold(IL.band(plaque, 0.8, 0.25))
-    P.pearl(IL.band(plaque, -0.5, -0.65))
-    P.arch.append(plaque.buffer(1.2))
-    ordinal, name = FM.VOLUMES[n - 1][:2]
-    label = name if n < 11 else "المرجع"
-    kick = f"المجلد {ordinal}"
-    kg, kw = T.text(kick, F.changa4, 2.5, cx=MCX, base=plaque_y - 1.8)
-    P.ink(kg, AW.CHAMPAGNE_INK)
-    ng, nw = T.text(label, F.kufi6, 4.9 if len(label) < 10 else 4.3, cx=MCX, base=plaque_y + 3.7, features=T.KF)
-    P.pearl(ng)
-    au, _ = T.text(FM.AUTHOR_SHORT, F.sch6, 3.7, cx=MCX, base=218.6)
-    P.ink(au, AW.PEARL_INK)
+                         f"title field ({TITLE_FIELD[3]:.0f}) or the author ({AUTHOR_TOP:.0f})")
     # the field: the nib's hatching, tone on tone; and the great stroke, pressed in gloss alone
     field = AW.valid(inner.difference(unary_union(P.arch)))
     P.L.body.insert(0, (IL.hatch(field, spacing=1.15, angle=70, w=0.09), ("lift", 0.035)))
-    P.L.glow.append((MCX, MCY, 58 + 3 * n, 0.45 + 0.05 * min(n, 10)))
+    P.L.glow.append((MCX, MED_CY, 58 + 3 * n, 0.45 + 0.05 * min(n, 10)))
     return P, field
 
 
@@ -504,81 +535,39 @@ def set_shelf(widths):
 
 
 def back(n):
+    """The back is silent (Bible, ch. 25 §14 ي): the front declares, the spine identifies, the back says nothing.
+    The same tooled frame, quieter; the corners' rosettes; in the open sapphire, the volume's own rosette pressed
+    blind and varnished, seen only when the book turns in the light, with one gold khatam at its heart; at the
+    foot the house alone, and the ISBN zone left clear until its number is issued."""
     F = faces()
     P = Page()
-    inner = frame(P)
-    cornerpieces(P, ("tl", "tr"))
-    # the panel of the words: tall, its head and foot lobed
-    pan = AW.valid(unary_union([box(28, 34, 142, 160), IL.lobed(85, 34, 57, 10, 10, 0.12), IL.lobed(85, 160, 57, 10, 10, 0.12)]))
-    P.panel(pan, 0.0)
-    P.gold(IL.band(pan, 1.2, 0.55))
-    P.pearl(IL.band(pan, 0.25, 0.08))
-    P.gold(IL.band(pan, -1.0, -1.22))
-    P.arch.append(pan.buffer(1.5))
-    right, measure = 136.0, 102.0
-    y = 44.5
-    for t in LEAD:
-        g, _ = T.text(t, F.sch6, 5.0, x_right=right, base=y)
-        P.ink(g, AW.PEARL_INK)
-        y += 8.4
-    y += 1.0
-    P.gold(box(right - 16, y - 0.18, right, y + 0.18))
-    P.gold(AW.nuqta(right - 17.6, y, 2.0, 70))
-    y += 9.5
-    for ln in T.paragraph(SERIES, F.sch4, 3.55, measure):
-        P.ink(T.segs_to_geom(T.set_right(ln, right, y)), AW.PEARL_SOFT)
-        y += 6.2
-    y += 5.5
-    kick, _ = T.text("في هذا المجلد", F.changa4, 2.6, x_right=right, base=y)
-    P.ink(kick, AW.CHAMPAGNE_INK)
-    y += 7.6
-    head = "مرجع المتكلّم العربي" if n == 11 else FM.volume_line(n)
-    hg, _ = T.text(head, F.changa5, 4.3, x_right=right, base=y)
-    P.pearl(hg)
-    y += 7.2
-    what = FM.VOLUMES[n - 1][2]
-    if n == 11:
-        what = f"{FM.REFERENCE_SUB}: {what}"
-    for ln in T.paragraph(what + ".", F.sch4, 3.55, measure):
-        P.ink(T.segs_to_geom(T.set_right(ln, right, y)), AW.PEARL_SOFT)
-        y += 6.1
-    stage = FM.VOLUMES[n - 1][3]
-    if stage:
-        import re
-        y += 2.0
-        babs = re.sub(r"<[^>]+>", "", FM.VOLUMES[n - 1][4])
-        lab, _ = T.text(f"{FM.STAGES[stage]}: {stage} · {babs}", F.changa4, 2.7, x_right=right, base=y)
-        P.ink(lab, AW.CHAMPAGNE_INK)
-    # the series: the eleven medallions in a row, this volume's in gold and the others drawn in the ground's tone
-    row_y = 176.0
-    slot = 11.6
-    for v in range(1, 12):
-        x = 143.0 - (v - 1) * slot
-        d = Point(x, row_y).buffer(4.4, resolution=48)
-        if v == n:
-            P.panel(d, 0.0)
-            P.gold(IL.band(d, 0.5, 0))
-            P.cold(girih(x, row_y, 1.6, 4.0, 8, strap=0.42)[0], 0.9)
-            ng, _ = T.text(str(v), F.amiri7, 3.6, cx=x, base=row_y + 1.3, digits=True)
-            P.pearl(ng)
-        else:
-            P.L.body.append((IL.band(d, 0.25, 0), ("lift", 0.18)))
-            ng, _ = T.text(str(v), F.amiri4, 3.2, cx=x, base=row_y + 1.2, digits=True)
-            P.L.body.append((ng, ("lift", 0.22)))
-    P.arch.append(box(10, row_y - 6, 160, row_y + 6))
-    # the house and the edition, on the fore-edge side; the ISBN zone on the spine side stays clear
-    for g in seal(126.0, 205.0):
+    inner = frame(P, quiet=True)
+    cornerpieces(P, ("tl", "tr", "bl", "br"), r=18.0)
+    # the echo of the front's medallion: its geometry with the same fold, blind and in gloss, no foil
+    folds = GROWTH[n]["lobes"] if n <= 10 else 12
+    cy = 112.0
+    R = 46.0
+    straps, _ = girih(MCX, cy, 0.42 * R, R, folds, squash=1.1, rot=math.pi / 2, strap=1.0)
+    ring = IL.band(Point(MCX, cy).buffer(R, resolution=96), 0.0, -1.0)
+    ring = affinity.scale(ring, 1.0, 1.1, origin=(MCX, cy))
+    echo = AW.valid(unary_union([straps, ring]))
+    P.emboss(echo, 0.45)
+    P.L.uv.append(echo)
+    g, _ = girih(MCX, cy, 1.9, 4.2, 8, strap=0.55)
+    P.gold(g)
+    P.gold(AW.nuqta(MCX, cy, 1.5, 90))
+    P.arch.append(Point(MCX, cy).buffer(R * 1.12))
+    # the house, and nothing else; the ISBN zone on the spine side stays clear
+    for g in seal(108.0, 200.0):
         P.gold(g)
-    pub, _ = T.text(FM.PUBLISHER_AR, F.sch4, 3.2, cx=126.0, base=214.0)
+    pub, _ = T.text(FM.PUBLISHER_AR, F.sch4, 3.0, cx=108.0, base=209.0)
     P.ink(pub, AW.PEARL_SOFT)
-    ed, _ = T.text(f"{FM.EDITION}، {FM.YEAR}", F.sch4, 2.9, cx=126.0, base=219.5)
-    P.ink(ed, AW.PEARL_SOFT)
-    P.arch.append(box(96, 196, 156, 222))
+    P.arch.append(box(84, 191, 132, 213))
     zx, zy, zw, zh = ISBN_ZONE
     P.arch.append(box(zx - 1, zy - 1, zx + zw + 1, zy + zh + 1))
     field = AW.valid(inner.difference(unary_union(P.arch)))
     P.L.body.insert(0, (IL.hatch(field, spacing=1.15, angle=70, w=0.09), ("lift", 0.035)))
-    P.L.glow.append((85, 90, 70, 0.35))
+    P.L.glow.append((MCX, cy, 70, 0.35))
     return P, field
 
 

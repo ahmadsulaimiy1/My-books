@@ -53,12 +53,13 @@
    "folder": "1-Heritage",
    "name": "Heritage: the illuminated binding (shamsa)",
    "cold_foil": "the rays of the medallion, the frame's roundels, the engraving of the back's row",
-   "hot_foil_gold": "the tooled frame and its chain, the cornerpieces (quarter rosettes), the medallion's rim, chain and strapwork rosette, the heading panel's rules, the seal",
-   "hot_foil_pearl": "the title, the numerals, the plaque's name, fine rules",
+   "hot_foil_gold": "the tooled frame and its chain, the cornerpieces (quarter rosettes), the inscription field's angles and rules, the medallion's rim, chain and strapwork rosette, the author's rule and khatam, the back's central khatam, the seal",
+   "hot_foil_pearl": "the title, the volume's name, the numerals, the author's full name, fine rules",
    "hot_foil_ruby": "the nun's dot of the title; the nib's dot over each medallion's number; on the spines, the band's jewel of the first and the tenth, and the great stroke's first touch on the first",
-   "spot_uv": "the medallion, the heading panel, the plaque, the great stroke (on the board only)",
+   "spot_uv": "the medallion, the great stroke (on the board only), and on the back the echo of the medallion's rosette",
    "deboss": "the tooled frame",
-   "emboss": "the medallion, the title, the numerals"
+   "emboss": "the medallion, the title, the volume's name, the author's name; on the back the rosette's echo, blind",
+   "back": "silent: the frame, the corners, the blind rosette with one gold khatam, the seal and the house's name; the ISBN zone clear"
   },
   "matn": {
    "folder": "2-Matn",
