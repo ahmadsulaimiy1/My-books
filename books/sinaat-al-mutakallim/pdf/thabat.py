@@ -65,10 +65,14 @@ EDITION = [
     ("ابن كثير", "تفسير القرآن العظيم", "تحقيق مصطفى السيد محمد وآخرين، مؤسسة قرطبة ومكتبة أولاد الشيخ للتراث، الجيزة، الأولى، ١٤٢١هـ / ٢٠٠٠م"),
     ("ابن جني", "سر صناعة الإعراب", "دراسة وتحقيق حسن هنداوي، دار القلم، دمشق، الثانية، ١٤١٣هـ / ١٩٩٣م"),
     ("الخليل بن أحمد", "كتاب العين", "تحقيق مهدي المخزومي وإبراهيم السامرائي، سلسلة المعاجم والفهارس"),
+    ("إبراهيم أنيس", "الأصوات اللغوية", "مكتبة الأنجلو المصرية، الخامسة، ١٩٧٥م"),
+    ("كمال بشر", "علم الأصوات", "دار غريب للطباعة والنشر والتوزيع، القاهرة، ٢٠٠٠م"),
+    ("تمام حسان", "اللغة العربية معناها ومبناها", "دار الثقافة، الدار البيضاء، ١٩٩٤م"),
 ]
 # sources the notes cite that the base does not hold (an article, a collection of records): (volumes, author, title,
 # edition); to be entered in the base when it is next revised
 OUTSIDE = [
+    (("الثاني",), "برجشتراسر", "التطور النحوي للغة العربية", "أخرجه وصحّحه وعلّق عليه رمضان عبد التواب، مكتبة الخانجي، القاهرة، ودار الرفاعي، الرياض، ١٤٠٢هـ / ١٩٨٢م"),
     (("الأول",), "العقاد، عباس محمود", "«الحروف اللاتينية»", "مجلة الرسالة، القاهرة، السنة الثانية عشرة، العدد ٥٨٥، ١٨ سبتمبر ١٩٤٤م، ص٧٦١ وما بعدها"),
     (("الرابع",), "النويري", "نهاية الأرب في فنون الأدب", "دار الكتب المصرية، القاهرة"),
     (("الرابع",), "ابن حجة الحموي", "خزانة الأدب وغاية الأرب", "شرح عصام شعيتو"),
@@ -88,6 +92,10 @@ OUTSIDE = [
 ]
 # the foreign sources as the thabat sets them: those the base holds, by the base's title; then those it does not
 FOREIGN = {
+    "The Significance of Learners' Errors": ("Corder, S. P.", '"The Significance of Learner\'s Errors."', "*IRAL: International Review of Applied Linguistics in Language Teaching* 5, no. 4 (1967): 161–170."),
+    "Interaction Ritual: Essays on Face-to-Face Behavior": ("Goffman, Erving", '"On Face-Work: An Analysis of Ritual Elements in Social Interaction."', "*Psychiatry* 18, no. 3 (1955): 213–231. Reprinted in *Interaction Ritual: Essays on Face-to-Face Behaviour*, 5–45. Harmondsworth: Penguin University Books, 1972."),
+    "A Simplest Systematics for the Organization of Turn-Taking for Conversation": ("Sacks, Harvey, Emanuel A. Schegloff, and Gail Jefferson", '"A Simplest Systematics for the Organization of Turn-Taking for Conversation."', "*Language* 50, no. 4 (1974): 696–735. Variant version in J. Schenkein (ed.), *Studies in the Organization of Conversational Interaction*, 7–55. New York: Academic Press, 1978."),
+    "The Role of Deliberate Practice in the Acquisition of Expert Performance": ("Ericsson, K. Anders, Ralf Th. Krampe, and Clemens Tesch-Römer", '"The Role of Deliberate Practice in the Acquisition of Expert Performance."', "*Psychological Review* 100, no. 3 (1993): 363–406."),
     "Diglossia": ("Ferguson, Charles A.", '"Diglossia."', "*Word* 15, no. 2 (1959): 325–340."),
     "On Communicative Competence": ("Hymes, Dell", '"On Communicative Competence."', "In J. B. Pride and J. Holmes (eds.), *Sociolinguistics: Selected Readings*. Harmondsworth: Penguin, 1972."),
     "What Is Educated Spoken Arabic?": ("Mitchell, T. F.", '"What Is Educated Spoken Arabic?"', "*International Journal of the Sociology of Language* 61 (1986): 7–32."),
@@ -97,6 +105,39 @@ FOREIGN = {
     "Shadowing Procedures in Teaching and Their Future": ("Hamada, Yo", '"Shadowing Procedures in Teaching and Their Future."', "*The Language Teacher* 45, no. 6 (2021): 32–35. doi:10.37546/JALTTLT45.6-3."),
 }
 FOREIGN_OUTSIDE = [
+    # WALS / PHOIBLE (online; no pages)
+    (("الثاني", "الحادي عشر"), "Maddieson, Ian", '"Presence of Uncommon Consonants."', "In Matthew S. Dryer and Martin Haspelmath (eds.), *The World Atlas of Language Structures Online*, ch. 19. v2020.4. Zenodo, doi:10.5281/zenodo.13950591. https://wals.info/chapter/19 (accessed 25 Sept. 2026)."),
+    (("الثالث",), "Dahl, Östen, and Viveka Velupillai", '"The Past Tense."', "In Matthew S. Dryer and Martin Haspelmath (eds.), *The World Atlas of Language Structures Online*, ch. 66. v2020.4. Zenodo, doi:10.5281/zenodo.13950591. https://wals.info/chapter/66 (accessed 25 Sept. 2026)."),
+    (("الثالث",), "Dryer, Matthew S.", '"Order of Subject, Object and Verb."', "In Matthew S. Dryer and Martin Haspelmath (eds.), *The World Atlas of Language Structures Online*, ch. 81. v2020.4. Zenodo, doi:10.5281/zenodo.13950591. https://wals.info/chapter/81 (accessed 25 Sept. 2026)."),
+    (("الثالث",), "Dryer, Matthew S.", '"Expression of Pronominal Subjects."', "In Matthew S. Dryer and Martin Haspelmath (eds.), *The World Atlas of Language Structures Online*, ch. 101. v2020.4. Zenodo, doi:10.5281/zenodo.13950591. https://wals.info/chapter/101 (accessed 25 Sept. 2026)."),
+    (("الحادي عشر",), "Haspelmath, Martin", '"Occurrence of Nominal Plurality."', "In Matthew S. Dryer and Martin Haspelmath (eds.), *The World Atlas of Language Structures Online*, ch. 34. v2020.4. Zenodo, doi:10.5281/zenodo.13950591. https://wals.info/chapter/34 (accessed 25 Sept. 2026)."),
+    (("الحادي عشر",), "Moran, Steven, and Daniel McCloy (eds.)", "*PHOIBLE 2.0.*", "Jena: Max Planck Institute for the Science of Human History, 2019. https://phoible.org (accessed 25 Sept. 2026)."),
+    # books and articles
+    (("الثاني", "الثالث"), "Robinson, Charles Henry", "*Dictionary of the Hausa Language.* Vol. 1: *Hausa–English*.", "3rd ed. Cambridge: Cambridge University Press, 1913."),
+    (("الثالث",), "Leslau, Charlotte, and Wolf Leslau (comp.)", "*African Proverbs.*", "Mount Vernon, N.Y.: Peter Pauper Press, 1962."),
+    (("الثالث",), "Clark, Herbert H., and Jean E. Fox Tree", '"Using *uh* and *um* in Spontaneous Speaking."', "*Cognition* 84 (2002): 73–111."),
+    (("الرابع",), "Ong, Walter J.", "*Orality and Literacy: The Technologizing of the Word.*", "London and New York: Routledge, 2002. First published 1982. Cited in the pagination of its e-book (Taylor & Francis e-Library, 2005)."),
+    (("الرابع",), "Bus, Adriana G., Marinus H. van IJzendoorn, and Anthony D. Pellegrini", '"Joint Book Reading Makes for Success in Learning to Read: A Meta-Analysis on Intergenerational Transmission of Literacy."', "*Review of Educational Research* 65, no. 1 (1995): 1–21."),
+    (("الرابع", "الثامن"), "Murdock, Bennet B.", '"The Serial Position Effect of Free Recall."', "*Journal of Experimental Psychology* 64, no. 5 (1962): 482–488."),
+    (("الرابع", "الثامن"), "Unsworth, Nash, Gene A. Brewer, and Gregory J. Spillers", '"Inter- and Intra-Individual Variation in Immediate Free Recall: An Examination of Serial Position Functions and Recall Initiation Strategies."', "*Memory* 19, no. 1 (2011): 67–82."),
+    (("الخامس", "السادس", "السابع"), "Rogers, Carl R., and Richard E. Farson", "*Active Listening.*", "Chicago: Industrial Relations Center, University of Chicago, 1957. Read in the excerpt reprinted in R. G. Newman, M. A. Danziger and M. Cohen (eds.), *Communicating in Business Today*. Lexington, Mass.: D. C. Heath, 1987."),
+    (("السادس",), "Carnegie, Dale", "*How to Win Friends and Influence People.*", "First published 1936. 11th Indian ed. Bombay: D. B. Taraporevala Sons & Co., 1943."),
+    (("السادس",), "Mehrabian, Albert, and Morton Wiener", '"Decoding of Inconsistent Communications."', "*Journal of Personality and Social Psychology* 6, no. 1 (1967): 109–114."),
+    (("السادس",), "Mehrabian, Albert, and Susan R. Ferris", '"Inference of Attitudes from Nonverbal Communication in Two Channels."', "*Journal of Consulting Psychology* 31, no. 3 (1967): 248–252."),
+    (("السادس",), "Mehrabian, Albert", '"\'Silent Messages\' – Description and Ordering Information."', "Web page. http://www.kaaj.com/psych/smorder.html (accessed 25 Sept. 2026)."),
+    (("السادس",), "Ekman, Paul, Richard J. Davidson, and Wallace V. Friesen", '"The Duchenne Smile: Emotional Expression and Brain Physiology II."', "*Journal of Personality and Social Psychology* 58, no. 2 (1990): 342–353."),
+    (("السادس",), "Krumhuber, Eva G., and Antony S. R. Manstead", '"Can Duchenne Smiles Be Feigned? New Evidence on Felt and False Smiles."', "*Emotion* 9, no. 6 (2009): 807–820."),
+    (("السادس",), "Malinowski, B.", '"The Problem of Meaning in Primitive Languages."', "Supplement I in C. K. Ogden and I. A. Richards, *The Meaning of Meaning*, 296–336. 7th ed. New York: Harcourt, Brace; London: Kegan Paul, 1945. First published 1923."),
+    (("السادس",), "Bell, Allan", '"Language Style as Audience Design."', "*Language in Society* 13, no. 2 (1984): 145–204."),
+    (("السابع",), "Kamins, Melissa L., and Carol S. Dweck", '"Person versus Process Praise and Criticism: Implications for Contingent Self-Worth and Coping."', "*Developmental Psychology* 35, no. 3 (1999): 835–847."),
+    (("السابع",), "Hamblin, C. L.", "*Fallacies.*", "London: Methuen, 1970."),
+    (("السابع",), "Hansen, Hans", '"Fallacies."', "In Edward N. Zalta and Uri Nodelman (eds.), *The Stanford Encyclopedia of Philosophy* (Fall 2024 Edition). https://plato.stanford.edu/archives/fall2024/entries/fallacies/."),
+    (("السابع",), "Aristotle", "*Rhetorica.*", "Translated by W. Rhys Roberts. In W. D. Ross (ed.), *The Works of Aristotle*, vol. 11. Oxford: Clarendon Press, 1924."),
+    (("السابع",), "Toulmin, Stephen E.", "*The Uses of Argument.*", "Updated ed. Cambridge: Cambridge University Press, 2003. First published 1958."),
+    (("الثامن",), "Wilson, Karen, and James H. Korn", '"Attention during Lectures: Beyond Ten Minutes."', "*Teaching of Psychology* 34, no. 2 (2007): 85–89."),
+    (("التاسع",), "Development Dimensions International (DDI)", '"STAR Method for Interviewing and Feedback."', "Web page. https://www.ddi.com/solutions/behavioral-interviewing/star-method (accessed 26 Sept. 2026)."),
+    (("التاسع",), "Janis, Irving L.", "*Victims of Groupthink: A Psychological Study of Foreign-Policy Decisions and Fiascoes.*", "Boston: Houghton Mifflin, 1972."),
+    (("العاشر",), "Shure Incorporated", "*Microphone Techniques for Live Sound Reinforcement.*", "Shure, 2014."),
     (("الأول",), "Sharp, H. (ed.)", "*Selections from Educational Records, Part I: 1781–1839.*", "Calcutta: Superintendent Government Printing, 1920. (Macaulay's Minute, 2 February 1835; Lord Bentinck's Resolution, 7 March 1835.)"),
     (("الأول",), "Spitta-Bey, Wilhelm", "*Grammatik des arabischen Vulgärdialectes von Aegypten.*", "Leipzig: J. C. Hinrichs, 1880."),
     (("الأول",), "Wensinck, A. J., et al.", "*Concordance et indices de la tradition musulmane.*", "Leiden: E. J. Brill."),
@@ -114,7 +155,21 @@ def tidy(ed):
 
 
 DEGREE = {"print": "طوبق على المطبوع", "digital": "على نسخةٍ رقمية", "general": "إحالةٌ عامّة"}
-FOREIGN_DEGREE = {"Sharp, H. (ed.)": "print", "Spitta-Bey, Wilhelm": "print", "Austin, J. L.": "print", "Grice, H. P.": "print",
+FOREIGN_DEGREE = {
+    "Corder, S. P.": "print",
+    "Goffman, Erving": "print",
+    "Malinowski, B.": "print",
+    "Robinson, Charles Henry": "print",
+    "Leslau, Charlotte, and Wolf Leslau (comp.)": "print",
+    "Hamblin, C. L.": "print",
+    "Aristotle": "print",
+    "Toulmin, Stephen E.": "print",
+    "Janis, Irving L.": "print",
+    "Carnegie, Dale": "print",
+    "Unsworth, Nash, Gene A. Brewer, and Gregory J. Spillers": "print",
+    "Shure Incorporated": "print",
+    "Clark, Herbert H., and Jean E. Fox Tree": "print",
+                  "Sharp, H. (ed.)": "print", "Spitta-Bey, Wilhelm": "print", "Austin, J. L.": "print", "Grice, H. P.": "print",
                   "Firth, J. R.": "print", "Hamada, Yo": "print"}
 # the Qur'an was set from the Uthmani text of two digital services; the second editions of the Sahihs and of Abu
 # Dawud were used for comparison and grading only
@@ -189,7 +244,7 @@ def main():
     rows, foreign, open_ = {}, [], []
     for r in cited(n):
         author, title = r["المؤلف"], r["العنوان"]
-        if author.isascii():
+        if not re.search(r"[\u0600-\u06FF]", author):   # a Latin name, accents included
             if title not in FOREIGN:
                 open_.append(f"{author}, {title}: no form in FOREIGN")
                 continue
