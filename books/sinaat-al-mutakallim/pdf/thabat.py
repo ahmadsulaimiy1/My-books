@@ -58,6 +58,8 @@ EDITION = [
 # edition); to be entered in the base when it is next revised
 OUTSIDE = [
     (("الأول",), "العقاد، عباس محمود", "«الحروف اللاتينية»", "مجلة الرسالة، القاهرة، السنة الثانية عشرة، العدد ٥٨٥، ١٨ سبتمبر ١٩٤٤م، ص٧٦١ وما بعدها"),
+    (("الرابع",), "النويري", "نهاية الأرب في فنون الأدب", "دار الكتب المصرية، القاهرة"),
+    (("الرابع",), "ابن حجة الحموي", "خزانة الأدب وغاية الأرب", "شرح عصام شعيتو"),
 ]
 # the foreign sources as the thabat sets them: those the base holds, by the base's title; then those it does not
 FOREIGN = {
