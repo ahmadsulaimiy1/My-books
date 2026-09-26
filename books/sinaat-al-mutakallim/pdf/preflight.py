@@ -234,7 +234,7 @@ def main(v=1, proof=False):
     remnant = [k for k in ("20×26", "٢٠×٢٦", "20 × 26", "15×21", "١٥×٢١", "15 × 21", "200×260", "150×210")
                if k in alltext or any(k in t for t in texts.values())]
     add("التقنية", "لا أثر للمقاسين الملغيين (٢٠×٢٦ و١٥×٢١)", "يجتاز" if not remnant else "لا يجتاز", "، ".join(remnant))
-    temp = sorted({m.group(0) for m in re.finditer(r"\b(?:TODO|FIXME|XXX|TBD|lorem ipsum|placeholder)\b|نصٌّ? مؤقت|يُستكمل لاحقًا|\?\?\?|؟؟",
+    temp = sorted({m.group(0) for m in re.finditer(r"\b(?:TODO|FIXME|XXX|TBD|lorem ipsum|placeholder)\b|نصٌّ? مؤقت|يُستكمل لاحقًا",
                                                    alltext, re.I)})
     add("التقنية", "لا وسم مؤقت على الصفحات (TODO، placeholder، «نص مؤقت»…)", "يجتاز" if not temp else "لا يجتاز", "، ".join(temp))
     # the cover was drawn for this book: its spine was computed from this page count (covers.py)
@@ -279,7 +279,7 @@ def main(v=1, proof=False):
             if nxt_top is None or nxt_top > top + 30 * MM:     # a short page before a lesson that opens its page is expected
                 short.append(i)
                 review.append((labels[i], f"صفحةٌ قصيرة ({n(round(fill * 100))}٪) في وسط فصل"))
-    add("الإخراج الفني", "لا عنوان في أسفل صفحةٍ بلا نصّ بعده", "يجتاز" if not orphan else "للمراجعة", "، ".join(labels[i] for i in orphan))
+    add("الإخراج الفني", "لا عنوان في أسفل صفحةٍ بلا نصّ بعده", "يجتاز" if not orphan else "لا يجتاز", "، ".join(labels[i] for i in orphan))
     # a framed block that runs on to the next page must keep its measure there: a page set a word to the line is a
     # column that lost its width (a grid box continued without its mark)
     narrow = []

@@ -233,9 +233,10 @@ blockquote.note { border-right: .6pt solid #CFC5B1; padding: 0 4.5mm 0 0; }
 .voice .br { font: 400 8.4pt "IBM Plex Sans Arabic"; color: var(--sapphire-2); }
 /* the chapter's exercises: numbered cards */
 .ex-card { border: .45pt solid #D9CBA6; background: var(--paper); margin: 3.2mm 0; padding: 2.6mm 5mm 3mm; break-inside: auto; }
-.ex-card > h4 { break-after: avoid; }
-.ex-card > h4 { margin: 0 0 1.4mm; display: flex; gap: 2.6mm; align-items: baseline; color: var(--sapphire); font-size: 11.8pt; }
-.ex-card > h4 .no { font: 700 13pt/1 "Amiri"; color: var(--gold-ink); }
+.ex-card h4 { break-after: avoid; }
+.ex-head { break-inside: avoid; }
+.ex-card h4 { margin: 0 0 1.4mm; display: flex; gap: 2.6mm; align-items: baseline; color: var(--sapphire); font-size: 11.8pt; }
+.ex-card h4 .no { font: 700 13pt/1 "Amiri"; color: var(--gold-ink); }
 .ex-card ol > li, .ex-card p, .ex-card ul > li { font-size: 12.2pt; line-height: 1.75; }
 ul.runon, ol.runon { margin-top: 0; }
 /* the self-check */
@@ -707,6 +708,20 @@ def lesson_html(md, breaks=True):
                     node.clear()
                     node.append(BeautifulSoup(f'<span class="no">{m.group(1)}</span><span>{m.group(2)}</span>', "html.parser"))
                 box = wrap_until(soup, node, "ex-card", lambda n: heading_level(n) is not None)
+                # the card's head goes with its first line: never a heading alone at the foot of a page
+                first = node.find_next_sibling()
+                if first is not None and first.name == "ol" and len(first.find_all("li", recursive=False)) > 1:
+                    lead = soup.new_tag("ol", attrs={"class": first.get("class", [])})
+                    lead.append(first.find("li", recursive=False).extract())
+                    first.insert_before(lead)
+                    start = len(lead.find_all("li")) + 1
+                    first["start"] = str(start)
+                    first = lead
+                keep = soup.new_tag("div", attrs={"class": "ex-head"})
+                node.insert_before(keep)
+                keep.append(node.extract())
+                if first is not None:
+                    keep.append(first.extract())
                 nxt = box.find_next_sibling()
             node = nxt
     # the self-check
