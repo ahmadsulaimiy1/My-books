@@ -370,5 +370,5 @@ ul.ix-l li { break-inside: avoid; font: 400 10.6pt/1.55 "Scheherazade New"; colo
 ul.ix-l li .ix-q { font: 400 10.4pt/1.6 "Amiri Quran"; color: #8A1C2B; }
 ul.ix-l li .ix-r, ul.ix-l li .ix-w { font: 300 8.2pt/1.4 "Changa"; color: var(--gold-ink); }
 ul.ix-l li .ix-p { font: 400 10.4pt/1.4 "Amiri"; color: var(--sapphire); }
-ul.ix-l li .lat { font-family: "Source Serif 4"; font-size: 9.4pt; direction: ltr; unicode-bidi: isolate; }
+ul.ix-l li .lat { font-family: "Source Serif 4", "Scheherazade New"; font-size: 9.4pt; direction: ltr; unicode-bidi: isolate; }
 """

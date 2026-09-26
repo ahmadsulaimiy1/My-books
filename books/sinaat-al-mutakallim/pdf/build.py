@@ -511,7 +511,7 @@ def style_code(soup: BeautifulSoup):
             c["class"] = (c.get("class") or []) + ["ar"]
 
 
-SYMBOLS = "✔✘●◐◔○①②③④◆◇←"
+SYMBOLS = "✔✘●◐◔○①②③④◆◇←▣↑↓"
 # drawn marks for glyphs the text faces lack (a system fallback font would otherwise be embedded)
 SVG_OK = ('<svg class="mk" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.2 6.6 L4.9 9.2 L9.8 2.9" '
           'fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>')
@@ -519,6 +519,8 @@ SVG_NO = ('<svg class="mk" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3 
           'stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>')
 SVG_ARROW = ('<svg class="arw" viewBox="0 0 16 10" aria-hidden="true"><path d="M15 5 H2.2 M6 1.4 L2 5 L6 8.6" '
              'fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+SVG_SQ = ('<svg class="mk" viewBox="0 0 12 12" aria-hidden="true"><rect x="1.6" y="1.6" width="8.8" height="8.8" fill="none" '
+          'stroke="currentColor" stroke-width="1.1"/><rect x="4.2" y="4.2" width="3.6" height="3.6" fill="currentColor"/></svg>')
 
 
 def replace_symbols(soup: BeautifulSoup):
@@ -553,6 +555,10 @@ def replace_symbols(soup: BeautifulSoup):
                 out.append(C.rh("fill-s"))
             elif ch == "◇":
                 out.append(C.rh("line-s"))
+            elif ch == "▣":
+                out.append(SVG_SQ)
+            elif ch in "↑↓":   # in Plex, as in the volumes: the text faces lack the arrows
+                out.append(f'<span style="font-family: \'IBM Plex Sans Arabic\'">{ch}</span>')
             else:
                 out.append(esc(ch))
         s.replace_with(frag("".join(out)))
