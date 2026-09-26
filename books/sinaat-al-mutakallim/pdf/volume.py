@@ -521,6 +521,27 @@ def loosen_lists(md):
     return "\n".join(out)
 
 
+PAGE_BREAKS_FILE = Path(__file__).resolve().parent.parent / "book" / "_production" / "الإخراج" / "فواصل-الصفحات.json"
+
+
+CURRENT = {"n": 0}
+
+
+def forced_breaks(soup, n):
+    """The typesetter's last word: headings that open a new page because the layout left them alone at the foot
+    of one (found by preflight, recorded per volume in فواصل-الصفحات.json)."""
+    import json as _j
+    if not PAGE_BREAKS_FILE.exists():
+        return
+    want = set(_j.loads(PAGE_BREAKS_FILE.read_text(encoding="utf-8")).get(str(n), []))
+    if not want:
+        return
+    for h in soup.find_all(["h2", "h3", "h4"]):
+        if h.get_text(" ", strip=True) in want:
+            target = h.parent if h.parent is not None and "keep" in (h.parent.get("class") or []) else h
+            target["style"] = (target.get("style", "") + ";break-before:page").lstrip(";")
+
+
 def keep_headings(soup):
     """A heading never ends a page: it travels with the headings right under it and with the start of what follows
     (a short block whole; a long list by its first two items; a long table or block after it is left to break)."""
@@ -605,7 +626,7 @@ def keep_headings(soup):
             continue
         acls = after.get("class") or []
         whole = after.name == "table" or after.find("table") is not None or any(c in acls for c in ("voice", "card", "grades", "exm"))
-        if whole and len(after.get_text(" ", strip=True)) < 1800:
+        if whole and len(after.get_text(" ", strip=True)) < 700:
             keep.append(after.extract())
         elif after.name in ("ul", "ol", "p", "blockquote") or whole:
             keep.append(soup.new_tag("div", attrs={"class": "reserve"}))
@@ -768,6 +789,7 @@ def lesson_html(md, breaks=True):
             num = soup.new_tag("span", attrs={"class": "hn"}); num.string = m.group(1)
             h.insert(0, num)
     keep_headings(soup)
+    forced_breaks(soup, CURRENT["n"])
     html = O.ayat(str(soup).replace("←", O.ARROW))
     soup = BeautifulSoup(html, "html.parser")
     for p in soup.find_all("p"):                             # a paragraph that is only an ayah is displayed
@@ -1001,6 +1023,7 @@ def folios(css, pages, slug=None):
 def main(n=1, review=False):
     from pypdf import PdfReader, PdfWriter
     IX.use_volume(n)
+    CURRENT["n"] = n
     css = C2.fonts()
     fixed = O.FIXED_CSS % dict(w=G.W, h=G.H)
     R = {"recto": True}
