@@ -308,6 +308,25 @@ def series_rows():
     return rows
 
 
+# the second review of Volume 1's open rows (scans of the printed editions, 2026/09): field updates keyed by the row's
+# verify id, or by its text where the row has none
+_REVISED = OUT / "مراجعة-المجلد-الأول.json"
+REVISED = json.loads(_REVISED.read_text(encoding="utf-8")) if _REVISED.exists() else []
+_FIELD = {k: i for i, k in enumerate(["vid", "loc", "kind", "text", "form", "author", "source", "edition", "editor", "part",
+                                      "page", "number", "grade", "variants", "state", "stage", "note"])}
+
+
+def revised(row):
+    """A row as the second review left it, and whether that review saw it on print."""
+    for r in REVISED:
+        if (r["vid"] and r["vid"] == row[0]) or (not r["vid"] and r.get("text") == row[3]):
+            row = list(row)
+            for k, v in r["set"].items():
+                row[_FIELD[k]] = v
+            return tuple(row), bool(r.get("on_print"))
+    return row, False
+
+
 def quran_rows():
     rows = []
     report = {(r["file"], r["ref"]): r for r in json.loads((OUT / "مطابقة-القرآن.json").read_text(encoding="utf-8"))}
@@ -332,6 +351,7 @@ def main():
     table = []
     serial = {}                       # a row's number is counted within its volume: م١-٠٠١…، م٣-٠٠١…
     for row in quran_rows() + ROWS + series_rows():
+        row, seen = revised(row)
         vid, loc, kind, text, form, who, src, ed, editor, part, page, num, grade, variants, state, stage, note = row[:17]
         vol = re.match(r"(م[٠-٩]+)\s", loc)
         vol = vol.group(1) if vol else "م١"
@@ -347,7 +367,7 @@ def main():
             elif rec["hits"]:
                 best = max(rec["hits"], key=lambda h: h["ratio"])
                 compared = best["span"][:300]
-        if state in ("ok", "variant") and kind != "قرآن" and vid not in ON_PRINT:
+        if state in ("ok", "variant") and kind != "قرآن" and vid not in ON_PRINT and not seen:
             basis = "طوبق على نسخةٍ رقمية موافقةٍ للمطبوع" + ("، وعلى طبعتين مستقلّتين" if kind.startswith(("حديث", "أثر")) else "")
             note = "؛ ".join(x for x in (basis + "؛ بقيت مطابقة اللفظ والصفحة على مصوّرة الطبعة المعتمدة؛ والحالة بعدها: "
                                          + STATE[state].split(" — ")[0], note) if x)
@@ -358,7 +378,7 @@ def main():
             also = sc.get("also")
             also = f"وطوبق الموضع الثاني على {also['edition']}، ص{also['printed']}: {also['text_read']}" if also else ""
             note = "؛ ".join(x for x in (f"طوبق على مصوّرة المطبوع: الصفحة {sc['page_read']}، والنص {sc['text_read']}", also, note) if x)
-        elif vid in ON_PRINT:
+        elif vid in ON_PRINT or seen:
             note = "؛ ".join(x for x in ("طوبق على مصوّرة المطبوع", note) if x and "طوبق على مصوّرة المطبوع" not in note) or note
         table.append([f"{vol}-{str(i).zfill(3).translate(AR)}", loc, kind, text, form, who, src, ed, editor, part, page, num, grade,
                       compared, variants, STATE[state], stage, FIRST if stage != "العثور" else "", "", note])
