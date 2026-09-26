@@ -124,6 +124,17 @@ def main(v=1, proof=False):
             # a tag nested at the end of an italic aside: «*(…) [يحتاج إلى تحقق…]*»
             for m in re.finditer(r"(?<!\*)\[((?:يحتاج إلى تحقق|يُعرض على|تحليل حديث|استنباط تربوي)[^\]]*)\]", line):
                 tags.append((f, i, next((k for key, k in TAG_KINDS if key in m.group(1)), "أخرى"), m.group(1)))
+    # every hadith quoted with its attribution carries its takhrij in a footnote on the same line (Bible, ch. 43);
+    # an instruction that names the forms («رواه البخاري / متفق عليه») is not a quotation
+    untraced = []
+    for f, t in texts.items():
+        for i, line in enumerate(t.splitlines(), 1):
+            if line.startswith("[^"):
+                continue
+            for m in re.finditer(r"\((?:متفق عليه|رواه [^)]{2,60})\)", line):
+                if "[^" not in line[m.end():] and not re.search(r"…|/|، متفق", m.group(0)):
+                    untraced.append(f"{f.name}:{n(i)}")
+    add("العلمية", "كل حديثٍ منسوبٍ له تخريجٌ في حاشية", "يجتاز" if not untraced else "لا يجتاز", "؛ ".join(untraced))
     by_kind = {}
     for _, _, k, _ in tags:
         by_kind[k] = by_kind.get(k, 0) + 1
