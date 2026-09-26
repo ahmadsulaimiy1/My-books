@@ -363,39 +363,45 @@ def author(P, F):
     P.arch.append(box(MCX - 49, y - 3.5, MCX + 49, y + 31.0))
 
 
-BOX_RUBY = True  # the bibliographic box's field: deep ruby ink (True) or the sapphire itself
-BOX_RUBY_INK = (0.30, 1.00, 0.70, 0.55, 0.00)   # a deep oxblood ruby: a cut stone, not a printed red
+BOX_RUBY = True                          # the bibliographic seal's field: deep ruby lacquer (the official choice)
+BOX_RUBY_INK = (0.12, 1.00, 0.45, 0.56, 0.00)   # deep ruby, cool as the stone (and the title's ruby dot), not a brown or a printed red
 
 
-def volume_box(P, n, cx, cy, w=22.0, h=27.0, ruby=None):
+def volume_box(P, n, cx, cy, w=20.0, h=24.0, ruby=None):
     """The book's bibliographic seal, low on the fore-edge side (Bible, ch. 25 §14 ل): the volume, the edition and
-    its year in a small box square to the frame, its corners cut; a fine gold border and a finer rule within, a
-    tiny khatam on its head and foot. Its field is deep ruby, printed (not foil), or the sapphire itself."""
+    its year in a small box square to the frame, its corners cut, a crisp gold edge, a tiny khatam on its head and
+    foot. Its field is deep ruby lacquer: the ink a shade deeper at its edges than at its heart, and a gloss varnish
+    over it alone, as enamel catches the light."""
     F = faces()
     ruby = BOX_RUBY if ruby is None else ruby
-    c = 2.0
+    c = 1.8
     x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
     shape = Polygon([(x0 + c, y0), (x1 - c, y0), (x1, y0 + c), (x1, y1 - c), (x1 - c, y1), (x0 + c, y1), (x0, y1 - c), (x0, y0 + c)])
     if ruby:
-        P.ink(shape.buffer(-0.2, join_style=2), BOX_RUBY_INK)
+        field = shape.buffer(-0.2, join_style=2)
+        for i in range(4):                    # the lacquer's depth: a whisper lighter toward its heart
+            k_ = BOX_RUBY_INK[3] - 0.03 * i
+            P.ink(field.buffer(-1.1 * i, join_style=2), BOX_RUBY_INK[:3] + (k_, 0.0))
+        P.L.uv.append(field)
+    else:
+        P.cold(IL.band(shape, -1.1, -1.24, join=2), 0.85)
     P.gold(IL.band(shape, 0.0, -0.4, join=2))
-    P.gold(IL.band(shape, -1.15, -1.3, join=2)) if ruby else P.cold(IL.band(shape, -1.1, -1.24, join=2), 0.85)
     for yy in (y0, y1):
         if not ruby:
             P.panel(Point(cx, yy).buffer(2.4), 0.0)
-        g, _ = girih(cx, yy, 0.9, 2.0, 8, strap=0.38)
+        g, _ = girih(cx, yy, 0.8, 1.8, 8, strap=0.36)
         P.gold(g)
     ordinal = FM.VOLUMES[n - 1][0]
     vol = f"المجلد {ordinal}"
-    size = 3.4
+    size = 3.1
     ln = T.line(vol, F.kufi6, size, features=T.KF)
-    size *= min(1.0, (w - 5.0) / ln.width)
-    v, _ = T.text(vol, F.kufi6, size, cx=cx, base=cy - 3.2, features=T.KF)
+    size *= min(1.0, (w - 4.5) / ln.width)
+    v, _ = T.text(vol, F.kufi6, size, cx=cx, base=cy - 2.6, features=T.KF)
     P.pearl(v)
-    ed, _ = T.text(FM.EDITION, F.changa4, 2.5, cx=cx, base=cy + 3.1)
-    (P.gold if ruby else (lambda g_: P.ink(g_, AW.CHAMPAGNE_INK)))(ed)
-    yr, _ = T.text(FM.YEAR, F.amiri4, 2.6, cx=cx, base=cy + 8.3)
-    (P.gold if ruby else (lambda g_: P.ink(g_, AW.CHAMPAGNE_INK)))(yr)
+    ed, _ = T.text(FM.EDITION, F.changa4, 2.3, cx=cx, base=cy + 3.0)
+    yr, _ = T.text(FM.YEAR, F.amiri4, 2.4, cx=cx, base=cy + 7.6)
+    for g_ in (ed, yr):
+        P.gold(g_) if ruby else P.ink(g_, AW.CHAMPAGNE_INK)
     P.arch.append(shape.buffer(3.5, join_style=2))
 
 

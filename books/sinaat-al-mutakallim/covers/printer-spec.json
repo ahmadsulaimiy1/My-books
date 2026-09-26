@@ -57,12 +57,12 @@
    "hot_foil_gold": "the brightest: the medallion's strapwork rosette (over emboss), the author's rule and khatam (over emboss), the title's dots, the inscription field's angles and rules, the medallion's rim, the frame's outer rules, the seal",
    "hot_foil_pearl": "the title, the volume's name, the numerals, the author's full name, fine rules",
    "hot_foil_ruby": "the nun's dot of the title; the nib's dot over each medallion's number; on the spines, the band's jewel of the first and the tenth, and the great stroke's first touch on the first",
-   "spot_uv": "the medallion; on the back the echo of the medallion's rosette",
+   "spot_uv": "the medallion; the bibliographic seal's ruby field (its lacquer); on the back the echo of the medallion's rosette",
    "deboss": "the tooled frame",
    "emboss": "the medallion, the title, the volume's name, the author's name; on the back the rosette's echo, blind",
    "back": "silent: the frame, the corners, the blind rosette with one gold khatam, the seal and the house's name; the ISBN zone clear",
    "hot_foil_champagne": "the antique gold: the cornerpieces, the frame's inner band rules, jewels and roundels, the medallion's chain and inner rings",
-   "print": "the sapphire; the bibliographic box's field in deep ruby ink (C30 M100 Y70 K55), under its gold foil border and type"
+   "print": "the sapphire; the bibliographic seal's field in deep ruby ink (C12 M100 Y45 K56, a shade deeper at its edges), under its gold foil edge and type"
   },
   "matn": {
    "folder": "2-Matn",
