@@ -353,7 +353,7 @@ ARROW = ('<svg class="arw" viewBox="0 0 16 10" aria-hidden="true"><path d="M15 5
 
 # a Latin run: from its first letter (or the bracket that opens it, when the run closes that bracket) to its last
 # letter, stop, bracket, quotation mark or figure — a reference's «1975), 41–58» stays inside it
-LATIN_RUN = re.compile(r"(\(?)([A-Za-z][^؀-ۿ]*[A-Za-z0-9.)\"”’'])")
+LATIN_RUN = re.compile(r"(\(?)([A-Za-z][^؀-ۿ⟦⟧]*[A-Za-z0-9.)\"”’'])")   # a note call (⟦n⟧) ends the run, never joins it
 
 
 def _lat(m):
