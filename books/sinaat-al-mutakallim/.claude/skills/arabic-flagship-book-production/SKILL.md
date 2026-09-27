@@ -56,7 +56,8 @@ Decoration never compensates for weak typography or weak page architecture.
   text); inks `--ink #1F2329`, `--ink-2 #474B53`, `--ink-3 #6A6F78`; hairlines `#DDE0E5` / `#C9CDD4`; gold-ink
   `#7F5F12`. Events are declared in `pdf/events.py` and checked against the manuscript and the quotation ledger at
   every build: a sapphire door for each bab (graphite for the reference, midnight for the Muqaddima), at most one
-  pale-sapphire framework and one warm-pearl heritage field per volume, at most two hinge plates, and verbatim
+  pale-sapphire framework and one warm-pearl heritage field per volume (its sentence «متحقّق» in the ledger and, in
+  volumes 2–11, word for word on the printed page unless the ledger declares the variant), at most two hinge plates, and verbatim
   midnight statements in V1 and V10 only. The chapter opens on a sapphire lintel at 84 mm; text from 92 mm.
 - The Quran («ياقوتيٌّ وحده»: deep ruby `#7B1730`, Bible part 16) is never on a coloured field and never texture;
   ruby belongs to the Quran alone, error and danger take crimson `#A8172E`. The feel: clean, luminous, scholarly, architectural, luxurious — not

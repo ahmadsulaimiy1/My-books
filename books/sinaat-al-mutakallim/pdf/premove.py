@@ -29,7 +29,8 @@ ORD_RE = "|".join(sorted(ORD, key=len, reverse=True))
 VOLW = ORD[:10] + ["الحادي عشر"]
 LETTER = r"(?![ء-ي])"
 # the classical usage in the opening (Bible, ch. 112d): «الباب» there is a class of argument, not a bab of the series
-NOT_A_REFERENCE = ["فهي من الباب الثاني لا من الباب الأول"]
+NOT_A_REFERENCE = ["فهي من الباب الثاني لا من الباب الأول",
+                   "«سكريبتات الحلقات»"]          # the companion book's episodes are named by the bab they serve
 # occurrences a human reader has judged, with the reading (the post-move semantic review)
 REVIEWED = {"الباب الثالث عشر (الملكة، المجلد العاشر)، وبنك الأخطاء": "الملكة، ثم بنك الأخطاء: إحالتان صحيحتان"}
 
@@ -97,7 +98,7 @@ def scan(path, vol, text, bab_of_file):
         v = VOLUMES[k - 1]
         own = {v["name"], {1: "التأسيس", 2: "التواصل", 3: "المنصّات", 4: "التمكين"}.get(v["stage"], "المرجع")}
         nm = m.group(2).strip().replace("المنصات", "المنصّات")
-        if nm.startswith(("الباب", "فليس", "قبل", "وهو", "هو")) or any(nm.startswith(x) or x.startswith(nm) for x in own):
+        if nm.startswith(("الباب", "الفصل", "فليس", "قبل", "وهو", "هو")) or any(nm.startswith(x) or x.startswith(nm) for x in own):
             continue
         yield "اسم المجلد", m.group(0), "fail", f"المجلد {m.group(1)} هو «{v['name']}»"
     # references to a bab in another volume carry the volume (Bible, ch. 111 §٢); the named volume must be right
