@@ -201,6 +201,7 @@ CSS = r"""
 .sy-row .d { font: 400 11pt/1.7 "Scheherazade New"; color: var(--ink-2); }
 .sy h3 { font: 600 11.6pt/1.3 "Changa"; color: var(--gold-ink); margin: 9mm 0 2mm; display: flex; gap: 3mm; align-items: center; }
 .sy h3 i { flex: 1; border-top: .4pt solid var(--gold); }
+.sy h3::after { content: none; }
 .sy .sy-note { margin-top: 7mm; padding-top: 3mm; border-top: .3pt solid var(--hair); font: 400 10.6pt/1.75 "Scheherazade New"; color: var(--ink-2); text-indent: 0; text-align: right; }
 .sy-scale { display: grid; grid-template-columns: 10mm 26mm 1fr; gap: 0 4mm; padding: 1.8mm 0; border-bottom: .3pt solid var(--hair); align-items: baseline; }
 .sy-scale .n { font: 700 12pt/1.4 "Amiri"; color: var(--sapphire); text-align: center; }

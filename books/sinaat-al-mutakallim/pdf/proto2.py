@@ -207,7 +207,7 @@ def title_page(css, volume=None, n=None):
         import marks
         a = 34.0
         mark = ""
-        dev = (f'<div style="position:absolute;left:{47.0 - a / 2 * 1.15:.2f}mm;top:{130.0 - a - 0.5:.2f}mm">'
+        dev = (f'<div style="position:absolute;left:{47.0 - a / 2 * 1.15:.2f}mm;top:{130.0 - a - 1.37:.2f}mm">'
                f'{marks.device_svg(n, a, on_dark=True, ext=a / 2 * 1.15)}</div>')
     return page(f'''<div class="tp-band"></div>
 <svg viewBox="0 0 170 240" style="position:absolute;inset:0;width:170mm;height:240mm"><defs>{C2.K.gold_defs()}</defs>{svg}

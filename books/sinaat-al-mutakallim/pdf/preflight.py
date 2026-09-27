@@ -149,6 +149,10 @@ def main(v=1, proof=False):
     bad = [r for r in qv if not r["result"].startswith("مطابق")]
     add("العلمية", "الآيات بالرسم العثماني لمصحف المدينة (quran.py)", "يجتاز" if not bad else "لا يجتاز",
         f"{n(len(qv))} موضعًا، {n(len(qv) - len(bad))} مطابقًا")
+    import quran as QR
+    retyped = [f"{f.name}: ﴿{x[:40]}﴾" for f in files for x in QR.unvocalised(texts[f])]
+    add("العلمية", "لا آية بغير الرسم العثماني: كل ﴿…﴾ بلا إحالة مشكولٌ من المصحف (الدليل ٢٣ §٤.١)", "يجتاز" if not retyped else "لا يجتاز",
+        "؛ ".join(retyped) or "لا شيء")
     inline_refs = []
     for f in lesson_files(v):
         for i, line in enumerate(texts[f].splitlines(), 1):
@@ -432,6 +436,49 @@ def main(v=1, proof=False):
                 lost.append(f"{f.name}، الحاشية {n(num)}")
     add("التقنية", "الحواشي كلها في الصفحات (حواشي صفحة بـPaged.js)", "يجتاز" if not lost else "للمراجعة",
         f"{n(total_notes)} حاشية" + (f"؛ لم تُعثر ألفاظ: {'، '.join(lost)}" if lost else ""))
+    # the text whole: every paragraph of the manuscript opens and closes on the pages as it is written (Paged.js once
+    # lost the first lines of a paragraph, Volume 1, folio ١٢٢). The words are compared as one ordered run of letter
+    # skeletons, the glyphs of each line taken in their order on the page; a few letters the extraction drops are
+    # forgiven, a lost line is not
+    def skel(s):
+        s = unicodedata.normalize("NFKC", s).replace("ى", "ي").replace("ة", "ه")
+        return re.sub(r"[^ء-ي]|[اأإآٱل]", "", s)
+
+    def found(w, k=6, slack=4):
+        ch = [(o, w[o:o + k]) for o in range(0, len(w) - k + 1, k)]
+        for x, (oa, a) in enumerate(ch):
+            i = stream.find(a)
+            while i >= 0:
+                for ob, b in ch[x + 1:]:
+                    lo = max(i + ob - oa - slack, 0)
+                    if stream.find(b, lo, lo + len(b) + 2 * slack) >= 0:
+                        return True
+                i = stream.find(a, i + 1)
+        return False
+    runs = []
+    for p in doc:
+        for b in p.get_text("rawdict")["blocks"]:
+            for l in b.get("lines", []):
+                if top < (l["bbox"][1] + l["bbox"][3]) / 2 < bottom:
+                    ch = sorted(((c["origin"][0], c["c"]) for sp in l["spans"] if sp["size"] >= 11.5 for c in sp["chars"]), key=lambda c: -c[0])
+                    runs.append(skel("".join(c for _, c in ch)))
+    stream = "".join(runs)
+    dropped, checked = [], 0
+    for f in files:
+        for i, line in enumerate(texts[f].splitlines(), 1):
+            t = line.strip()
+            if not re.match(r"[ء-ي«]", t) or "﴿" in t or re.search(r"[A-Za-z]", t):
+                continue                                  # prose only: not the Quran (its own script), not a Latin run
+            t = re.sub(r"\[\^\d+\]|<!--.*?-->|\[[^\]]*\]", "", t)
+            k = skel(t)
+            if len(k) < 90 or len(re.findall(r"[\u064B-\u0652]", t)) > .3 * len(k):
+                continue                                  # a short line, or a fully vowelled text set in its own frame
+            checked += 1
+            for part, a, b in (("أوله", k[:30], k[30:60]), ("آخره", k[-30:], k[-60:-30])):
+                if not found(a) and not found(b):
+                    dropped.append(f"{f.name}:{n(i)} ({part}: «{' '.join(t.split()[:5] if part == 'أوله' else t.split()[-5:])}»)")
+    add("التقنية", "النص كاملٌ في الصفحات: كل فقرةٍ تبدأ وتنتهي كما في المخطوطة", "يجتاز" if not dropped else "لا يجتاز",
+        f"{n(checked)} فقرة" + (f"؛ لم يُعثر على: {'؛ '.join(dropped)}" if dropped else ""))
     if v == 1:
         xref_bad = []
         muq = {k: f for k, f in enumerate(sorted(OPENING.glob("*.md"))[1:18], 1)}

@@ -162,6 +162,11 @@ def listing(md: str) -> bool:
     return bool(re.search(r"^#{1,3}\s+(?:ثبت المصادر|المصادر والمراجع|المسرد)", md, re.M))
 
 
+# the combining marks: a link that ended before them left a shadda outside its element, and Paged.js then lost the
+# paragraph's opening lines (Volume 1, folio ١٢٢)
+MARKS_AFTER = re.compile(r"[\u064B-\u065F\u0670]*")
+
+
 def mark(soup, quotes=(), names=None, glossary=None):
     """Marks, in a page's HTML (a BeautifulSoup), the quotations `quotes` [(kind, key, phrase, entry)], the people and the
     bold terms. The Qur'an (span.q), the example codes and the titles of the page are left alone."""
@@ -188,6 +193,7 @@ def mark(soup, quotes=(), names=None, glossary=None):
             if k < 0:
                 continue
             a, b = where[k], where[k + len(p) - 1] + 1
+            b += len(MARKS_AFTER.match(s, b).group(0))     # a link never ends before the vowel of its last letter
             html = escape(s[:a]) + link(kind, key, escape(s[a:b]), **entry) + escape(s[b:])
             t.replace_with(BeautifulSoup(html, "html.parser"))
             break
@@ -202,8 +208,9 @@ def mark(soup, quotes=(), names=None, glossary=None):
             for m in pat.finditer(s):
                 k = int(next(g for g, v in m.groupdict().items() if v is not None)[1:])
                 r = names[k]
-                out += escape(s[last:m.start()]) + link("n", r["name"], escape(m.group(0)), name=r["name"], what=r["what"])
-                last = m.end()
+                end = m.end() + len(MARKS_AFTER.match(s, m.end()).group(0))
+                out += escape(s[last:m.start()]) + link("n", r["name"], escape(s[m.start():end]), name=r["name"], what=r["what"])
+                last = end
             t.replace_with(BeautifulSoup(out + escape(s[last:]), "html.parser"))
     # the terms, where the book sets them in bold
     if glossary:
@@ -367,6 +374,7 @@ h2.ix-t { font: 700 17pt/1.3 "Changa"; color: var(--sapphire); margin: 0 0 5mm; 
 ul.ix-l { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 8mm; column-rule: .4pt solid var(--hair); }
 ul.ix-l li { break-inside: avoid; font: 400 10.6pt/1.55 "Scheherazade New"; color: var(--ink); text-align: right;
   padding: .5mm 4.5mm .5mm 0; text-indent: -4.5mm; border-bottom: .3pt dotted var(--hair); }
+ul.ix-l li::before { content: none; }
 ul.ix-l li .ix-q { font: 400 10.4pt/1.6 "Amiri Quran"; color: var(--ruby); }
 ul.ix-l li .ix-r, ul.ix-l li .ix-w { font: 300 8.2pt/1.4 "Changa"; color: var(--gold-ink); }
 ul.ix-l li .ix-p { font: 400 10.4pt/1.4 "Amiri"; color: var(--sapphire); }

@@ -88,11 +88,17 @@ body { direction: rtl; color: var(--ink); font: 400 13.2pt/1.85 "Scheherazade Ne
 .chap-open { position: relative; }
 p { margin: 0; text-align: justify; }
 p + p { text-indent: 6mm; }
-.chap-open > p:first-child, .chap-open > .keep:first-child > p { font-size: 14.4pt; line-height: 1.8; text-indent: 0; }
+/* a heading kept with its first paragraph: the paragraph after that keep is a new paragraph like any other */
+.keep:has(> p:last-child) + p:not([class]), .keep:has(> p + .reserve:last-child) + p:not([class]) { text-indent: 6mm; }
+.chap-open p.lede { font-size: 14.4pt; line-height: 1.8; text-indent: 0; }
 h3 { font: 700 15pt/1.45 "Changa"; color: var(--sapphire); margin: 7mm 0 2.4mm; break-after: avoid; text-wrap: balance; }
 h3::after { content: ""; display: block; width: 12mm; border-top: .8pt solid var(--gold); margin-top: 1.6mm; }
 h3 + p { text-indent: 0; }
 strong { font-weight: 700; }
+/* Arabic has no italic: an aside is set upright and quieter; a Latin title keeps Source Serif's own italic */
+em, i { font-style: normal; color: var(--ink-2); }
+:is(h1, h2, h3, h4) :is(em, i) { color: inherit; }
+.lat em, .lat i, em .lat, i .lat { font-style: italic; color: inherit; }
 .q { font: 400 14.6pt/1.9 "Amiri Quran", "Amiri"; color: var(--ruby); }
 .qref { font: 400 8.2pt/1 "Changa"; color: var(--ruby-2); margin-right: 1.4mm; white-space: nowrap; }
 p.ayah { text-align: center; text-indent: 0; margin: 7mm 0 7.5mm; padding: 6.2mm 5mm 5.4mm; break-inside: avoid; text-wrap: balance;
@@ -128,9 +134,9 @@ ul.cols { columns: 2; column-gap: 9mm; } ul.cols > li { break-inside: avoid; }
 .sig { margin: 9mm 0 0 0; text-align: left; break-inside: avoid; }
 .sig-name { display: block; font: 700 14pt "Changa"; color: var(--sapphire); }
 .sig-du { display: block; font: 400 11pt/1.6 "Amiri"; color: var(--gold-ink); margin-top: 1mm; }
-ol { list-style: arabic-indic; } ol > li { padding-right: 1.6mm; } ol > li::marker { font: 600 11pt "Changa"; color: var(--gold-ink); }
+ol { list-style: arabic-indic; } ol > li { padding-right: 1.6mm; } ol > li::marker { content: counter(list-item, arabic-indic) "."; font: 700 11pt "Amiri"; color: var(--gold-ink); }
 table { width: 100%%; border-collapse: collapse; font: 400 8.8pt/1.55 "IBM Plex Sans Arabic"; margin: 4mm 0; break-inside: avoid; }
-th { font: 600 9.2pt/1.4 "Changa"; text-align: right; color: var(--on-dark); background: var(--sapphire); padding: 1.6mm 2mm; }
+th { font: 600 9.2pt/1.4 "Changa"; text-align: right; color: var(--sapphire); background: none; border-bottom: .8pt solid var(--gold); padding: 1.6mm 2mm; }
 td { border-bottom: .4pt solid var(--hair); padding: 1.4mm 2mm; vertical-align: top; color: var(--ink-2); }
 td:first-child { font-weight: 600; color: var(--ink); }
 /* notes at the foot of the page where they are called (Bible, chs. 45 and 82): a short gold rule from the
@@ -154,7 +160,11 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .fn-tag { font: 300 8pt "Changa"; color: var(--gold-ink); margin-left: .8mm; }
 .fn-note[data-split-from]::before { content: none; }
 .fn-note .q { font-size: 11.2pt; line-height: 1.55; }
-.fn-note .qref { font-size: 7.6pt; }
+.fn-note .qref { font-size: 8pt; }
+/* an ayah within a paragraph or an item: the mushaf face does not push its own line down; the whole paragraph takes
+   the vowelled text's leading instead (Bible, ch. 23 §3, rule 6), so its lines keep one pitch */
+p:not(.ayah):has(.q:not(.fn-note .q)), li:has(.q:not(.fn-note .q)) { line-height: 2.3; }
+p:not(.ayah) .q:not(.fn-note .q), li .q:not(.fn-note .q) { line-height: 0; }
 .fn-note i, .fn-note em { font-style: normal; color: var(--sapphire); }
 .fn-note .lat em { font-style: italic; color: inherit; }
 .fn-note[data-footnote-call]::after { vertical-align: .44em; font: 700 11pt/0 "Amiri"; font-variant-position: normal;
@@ -215,8 +225,12 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .fld.warm { background: var(--pearl-warm); border-top: .6pt solid var(--gold); border-bottom: .6pt solid var(--gold); --paper: var(--pearl-warm); }
 .fld > h3:first-child, .fld > .keep:first-child > h3, .fld > .phk:first-child > h3 { margin-top: 0; }
 .fld blockquote { margin-bottom: 0; }
+.fld blockquote:last-child { margin-bottom: 0; }
 .fld.warm blockquote.quote { border-right-color: var(--gold); }
 .fld.warm blockquote.quote p, .fld.warm .qt { font-family: "Amiri"; color: var(--ink); }
+/* the heritage field stages a scholar's sentence: in the classical face, whether it is quoted as a block or a paragraph */
+.fld.warm > p { font: 400 14pt/1.9 "Amiri"; color: var(--ink); text-indent: 0; }
+.fld.warm blockquote.quote { margin-top: 0; }
 /* the measure page: four questions turned, on pearl within a double gold rule */
 .mz { position: absolute; top: 20mm; bottom: 20mm; right: 16mm; left: 16mm; border: .6pt solid var(--gold); padding: 3mm; }
 .mz-in { border: .3pt solid var(--gold); height: 100%%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; padding: 12mm 13mm; text-align: center; }
@@ -240,7 +254,7 @@ td:first-child { font-weight: 600; color: var(--ink); }
 .mp-band { position: absolute; right: 0; width: 7mm; border-right: .5pt solid var(--gold); }
 .mp-band span { position: absolute; top: 50%%; right: 1.6mm; transform: translateY(-50%%); writing-mode: vertical-rl; font: 400 9.4pt "Changa"; color: var(--gold-ink); letter-spacing: .3pt; }
 .mp-band.b2 { border-right-color: var(--sapphire-2); }
-.mp-note { font: 300 10.4pt/1.6 "Changa"; color: var(--ink-3); margin-top: 6mm; }
+.mp-note { font: 300 10.4pt/1.6 "Changa"; color: var(--ink-3); margin-top: 6mm; max-width: 122mm; text-align: center; text-wrap: balance; }
 .mp-coda { font: 600 14pt/1.6 "Kufam SMA"; font-feature-settings: "liga" 0; color: var(--gold-ink); margin-top: 3mm; }
 .vp { align-items: center; text-align: center; } .vp .kick { justify-content: center; }
 .vp-a { font: 400 30pt/2 "Amiri Quran"; color: var(--gold-l); text-wrap: balance; }
@@ -259,7 +273,8 @@ h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
 .sc-leg i.c { width: 3.4mm; height: 3.4mm; border-radius: 50%%; background: #FFFFFF; border: .35pt solid #0C2766; }
 .sc-leg i.s { width: 1.4mm; height: 1.4mm; background: var(--gold); transform: rotate(45deg); }
 .sc-arrow { font: 300 9.6pt/1 "Changa"; color: var(--gold-ink); margin-top: 7mm; }
-.sc-band { margin-top: 3mm; background: var(--sapphire); padding: 3.4mm 4mm; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.4mm 3.2mm; max-width: 128mm; box-sizing: border-box; }
+.sc-band { margin-top: 3mm; background: var(--sapphire); padding: 3.4mm 4mm; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.4mm 3.2mm; max-width: 122mm; box-sizing: border-box; }
+.sc-band .br { flex-basis: 100%%; height: 0; }
 .sc-band span { font: 500 9.8pt/1.3 "Changa"; color: var(--on-dark); white-space: nowrap; }
 .sc-band span + span::before { content: ""; display: inline-block; width: 1.2mm; height: 1.2mm; background: var(--gold); transform: rotate(45deg); margin-left: 3.2mm; vertical-align: middle; }
 /* ثبت المصادر: hanging entries, no bullets */
@@ -267,11 +282,12 @@ h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
 .app-91 ul > li { padding-right: 6mm; text-indent: -6mm; margin: 0 0 1.2mm; font-size: 11.6pt; line-height: 1.66; text-align: right; }
 .app-91 ul > li::before { content: none; }
 .app-91 ul > li strong { color: var(--sapphire); }
-.app-91 ul:last-of-type { direction: ltr; }
-.app-91 ul:last-of-type > li { padding: 0 0 0 6mm; text-indent: -6mm; text-align: left; font: 400 10.6pt/1.6 "Source Serif 4"; }
-.app-91 ul:last-of-type .lat { font-size: 1em; }
+.app-91 ul.fx { direction: ltr; }
+.app-91 ul.fx > li { padding: 0 0 0 6mm; text-indent: -6mm; text-align: left; font: 400 10.6pt/1.6 "Source Serif 4"; }
+.app-91 ul.fx .lat { font-size: 1em; }
 .app-91 .deg { font: 400 8pt/1 "Changa"; color: var(--gold-ink); white-space: nowrap; margin-right: 1.2mm; }
-.app-91 ul:last-of-type .deg { font-family: "Changa"; direction: rtl; unicode-bidi: isolate; }
+.app-91 ul.fx .deg { font-family: "Changa"; direction: rtl; unicode-bidi: isolate; }
+.app-91 .vols { white-space: nowrap; }
 .toc-p { font: 400 12pt/1.9 "Scheherazade New"; }
 .toc-row { display: flex; gap: 3mm; align-items: baseline; border-bottom: .4pt dotted var(--hair-2); padding: 1.2mm 0; }
 .toc-row b { font: 600 10pt "Changa"; color: var(--gold-ink); min-width: 22mm; }
@@ -282,13 +298,18 @@ p.obj { border-right: 1.3pt solid var(--sapphire-2); padding: 2.6mm 4.5mm 2.8mm 
 p.ans { border-right: 1.3pt solid var(--gold); padding: 2.4mm 4.5mm 2.6mm 3mm; margin: 0 0 5mm; text-indent: 0; }
 p.obj + p.ans { margin-top: 0; }
 /* a line that introduces a verse, a hadith or a quotation never stays behind at the foot of a page */
-p:has(+ p.ayah), p:has(+ blockquote), p:has(+ .keep > blockquote) { break-after: avoid; }
+/* (a display ayah after another is not chained to it: a run of ayat may turn the page between two ayat, never
+   inside one; a heading kept with its introduction goes over with it) */
+p:not(.ayah):has(+ p.ayah), p:has(+ blockquote), p:has(+ .keep > blockquote), .keep:has(+ p.ayah),
+.keep:has(+ blockquote.hadith), .keep:has(+ blockquote.quote), .keep:has(+ blockquote.speech),
+ul:has(> li:only-child):has(+ blockquote), ul:has(> li:only-child):has(+ p.ayah) { break-after: avoid; }
 /* the close of a chapter (خلاصة، ما يترتّب): its own quieter panel, so the chapter ends on a different rhythm */
 .summary { border-top: .8pt solid var(--gold); border-bottom: .4pt solid var(--gold); padding: 1mm 5.5mm 4.2mm; margin: 7mm 0 2mm; }
 .summary > h3, .summary > .phk > h3 { margin-top: 3.4mm; }
 .summary p, .summary li { font-size: 12.8pt; }
 .summary.whole { break-inside: avoid; }
 .summary table { margin-bottom: 1mm; }
+.summary table + p { margin-top: 3mm; }
 """
 CSS += FM.CSS
 
@@ -330,18 +351,28 @@ ARROW = ('<svg class="arw" viewBox="0 0 16 10" aria-hidden="true"><path d="M15 5
          'stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>')
 
 
+# a Latin run: from its first letter (or the bracket that opens it, when the run closes that bracket) to its last
+# letter, stop, bracket, quotation mark or figure — a reference's «1975), 41–58» stays inside it
+LATIN_RUN = re.compile(r"(\(?)([A-Za-z][^؀-ۿ]*[A-Za-z0-9.)\"”’'])")
+
+
+def _lat(m):
+    lead, run = m.groups()
+    return f'<span class="lat">({run}</span>' if lead and ")" in run else f'{lead}<span class="lat">{run}</span>'
+
+
 def latinize(soup):
     """A Latin run inside Arabic is isolated left-to-right in Source Serif, so its word order holds."""
     for t in soup.find_all(string=re.compile(r"[A-Za-z]{3,}")):
         if t.parent.name not in ("style",) and not t.find_parent(class_="lat"):
-            t.replace_with(BeautifulSoup(re.sub(r"([A-Za-z][^؀-ۿ]*[A-Za-z.)\"”’'])", r'<span class="lat">\1</span>', str(t)), "html.parser"))
+            t.replace_with(BeautifulSoup(LATIN_RUN.sub(_lat, str(t)), "html.parser"))
 
 
 def note_span(n, text):
     """A note as the page carries it: an inline element at its call, which the paginator floats to the foot
     of the page where the call falls (float: footnote). Its number is the chapter's, never the page's."""
     # a whole Latin reference (title in italics and all) is one left-to-right isolate, not a run per word group
-    text = re.sub(r"([A-Za-z][^؀-ۿ]*[A-Za-z.)\"”’'])", r'<span class="lat">\1</span>', text)
+    text = LATIN_RUN.sub(_lat, text)
     body = markdown.markdown(text).removeprefix("<p>").removesuffix("</p>")
     body = re.sub(r"^(%s):" % "|".join(TAGS), r'<span class="fn-tag">\1:</span>', body)
     body = re.sub(r"(?<![*\w])\*([^*]+)\*", r"<i>\1</i>", ayat(body))
@@ -360,8 +391,13 @@ def calls(html, notes):
     return re.sub(r"((?:⟦\d+⟧)+)([.،؛:!؟]*)", one, html)
 
 
+# an ellipsis that closes a sentence («… قال: …».) stays on the line of the word before it
+ELLIPSIS_TAIL = re.compile(r" (?=(?:…|\.\.\.)(?:[»”).،؛؟!:]|\n|$))")     # not a hemistich's « ... »
+
+
 def md_to_html(md):
     md = IDS.printed(md)          # production IDs never reach the page (Bible, ch. 112d §٥)
+    md = ELLIPSIS_TAIL.sub("\u00A0", md)
     notes = dict(re.findall(r"^\[\^(\d+)\]:\s*(.+)$", md, re.M))
     md = re.sub(r"^\[\^\d+\]:.*$", "", md, flags=re.M)
     md = re.sub(r"\[\^(\d+)\]", lambda m: f"⟦{m.group(1)}⟧", md)
@@ -408,6 +444,10 @@ def md_to_html(md):
             p["class"] = (p.get("class") or []) + ["obj"]
         elif t.startswith(("قلنا", "قلتُ:")) and (prev := p.find_previous_sibling()) is not None and "obj" in (prev.get("class") or []):
             p["class"] = (p.get("class") or []) + ["ans"]
+    # the thabat's foreign sources: a left-to-right list (marked, not found by position)
+    for h in soup.find_all("h3", string=re.compile("المصادر الأجنبية")):
+        for ul in h.find_next_siblings("ul"):
+            ul["class"] = (ul.get("class") or []) + ["fx"]
     # a heading never ends a page: it travels with the paragraph or display that follows it
     for h in soup.find_all("h3"):
         m = re.match(r"^([٠-٩]+)\.\s*", h.get_text())
@@ -454,6 +494,18 @@ def md_to_html(md):
     return html, ""
 
 
+def lede(html):
+    """The chapter's first paragraph, in the lead size: marked, since Paged.js rebuilds .chap-open on every page and
+    a :first-child there would match the first fragment of every page."""
+    soup = BeautifulSoup(html, "html.parser")
+    first = next((c for c in soup.contents if getattr(c, "name", None)), None)
+    if first is not None and first.name == "div" and "keep" in (first.get("class") or []):
+        first = first.find("p", recursive=False)
+    if first is not None and first.name == "p":
+        first["class"] = (first.get("class") or []) + ["lede"]
+    return str(soup)
+
+
 def chapter(md, kicker):
     m = re.search(r"^##\s+(.+)$", md, re.M)
     title = m.group(1)
@@ -462,7 +514,7 @@ def chapter(md, kicker):
     sub = re.search(r"<!--\s*sub:\s*(.+?)\s*-->", body)
     body = re.sub(r"<!--.*?-->", "", body, flags=re.S)
     html, notes = md_to_html(body)
-    return f'<section class="chap"><div class="chap-open">{html}{notes}</div></section>', band(kicker, title, sub.group(1) if sub else "")
+    return f'<section class="chap"><div class="chap-open">{lede(html)}{notes}</div></section>', band(kicker, title, sub.group(1) if sub else "")
 
 
 # a long title grows upward from the lintel; once the faces are loaded, one that would push its kicker above 26 mm from the
@@ -470,7 +522,9 @@ def chapter(md, kicker):
 LINTEL_FIT = ("<script>document.fonts.ready.then(() => { const mm = 96 / 25.4; for (const b of document.querySelectorAll('.lintel')) {"
               " const k = b.querySelector('.k'), h = b.querySelector('h2'), ld = b.querySelector('.lead');"
               " const lim = ld ? ld.getBoundingClientRect().bottom + 4 * mm : 26 * mm;"
-              " let pt = 29; while (k.getBoundingClientRect().top < lim && pt > 22) { pt -= 1; h.style.fontSize = pt + 'pt'; } } });</script>")
+              " let pt = 29; while (k.getBoundingClientRect().top < lim && pt > 22) { pt -= 1; h.style.fontSize = pt + 'pt'; }"
+              # a title at its floor that still meets the lead: the sub steps down (on a hinge plate, V5)
+              " const s = b.querySelector('.sub'); let sp = 13; while (s && k.getBoundingClientRect().top < lim && sp > 11) { sp -= .5; s.style.fontSize = sp + 'pt'; } } });</script>")
 
 
 def band(kicker, title, sub="", plate=None, lead=None):
@@ -507,6 +561,11 @@ def statement(kick, pre, main):
                 f'{f"<div class=pre>{pre}</div>" if pre else ""}<div class="main">{body}</div></div><div class="stmt-dot"></div>')
 
 
+# the unit's name at its full size unless a word of it would overrun the field: then a point at a time, down to 36pt
+DOOR_FIT = ("<script>document.fonts.ready.then(() => { for (const b of document.querySelectorAll('.door .big')) {"
+            " let pt = 60; while (b.scrollWidth > b.clientWidth + 1 && pt > 36) { pt -= 1; b.style.fontSize = pt + 'pt'; } } });</script>")
+
+
 def door(kick, big, line, field="sapphire"):
     """The door of a unit: its name on the field, its question («السؤال الذي يجيب عنه هذا الباب: …») below on the white;
     a line that is not a question is set there as a line."""
@@ -514,8 +573,8 @@ def door(kick, big, line, field="sapphire"):
     below = (f'<div class="lb"><span>{m.group(1)}</span><i></i></div><div class="q2">{m.group(2)}</div>' if m
              else f'<div class="ln">{line}</div>')
     return full(f'<div class="door {field}"><div class="kick"><span>{kick}</span><i></i></div>'
-                f'<div class="big{" mid" if len(big) > 14 else ""}">{big}</div></div><div class="door-dot"></div>'
-                f'<div class="door-q">{below}</div>')
+                f'<div class="big">{big}</div></div><div class="door-dot"></div>'
+                f'<div class="door-q">{below}</div>') + DOOR_FIT
 
 
 MEASURE = [("كم درستَ؟", "ماذا ملكتَ مما درست؟"),
@@ -559,7 +618,7 @@ def sciences_page():
     draw = (f'<div class="sc-draw" style="height:{h:.1f}mm"><svg viewBox="0 0 138 {h:.1f}" style="position:absolute;inset:0;width:138mm;height:{h:.1f}mm">'
             f'{"".join(svg)}</svg>{"".join(html)}</div>')
     legend = ('<div class="sc-leg"><span><i class="c"></i>العلوم الأساسية</span><span><i class="s"></i>العلوم المساندة والتخصّصية</span></div>')
-    band = "".join(f'<span>{x}</span>' for x in SHARIA)
+    band = "".join(f'<span>{x}</span>' + ('<i class="br"></i>' if k == 2 else "") for k, x in enumerate(SHARIA))   # three and three
     return full(f'<div class="mp"><div class="mp-in"><div class="kick"><i></i><span>خريطة علوم العربية وعلوم الشريعة</span><i></i></div>'
                 f'{draw}{legend}<div class="sc-arrow">والعربية آلةٌ لعلوم الشريعة</div><div class="sc-band">{band}</div>'
                 f'<div class="mp-note">في الخريطة العلوم وحدها؛ وأبوابها ومسائلها تحتها، والمهارات تتكوّن منها ومن الممارسة</div></div></div>')
@@ -624,9 +683,24 @@ PAGED_CONFIG = ("<script>window.PagedConfig = { auto: true, before: async () => 
                 "after: () => { window.__pagedDone = true; } };</script>")
 
 
+# a long table that Paged.js carries over repeats its head on the new page, laid out with the rows so its height is
+# counted; a table of which only the head would stay behind goes over whole (Chromium alone repeats a thead natively)
+REPEAT_HEAD = ("<script>Paged.registerHandlers(class extends Paged.Handler {"
+               " afterPageLayout(page, _, token) { const n = token && token.node; if (!n) return;"
+               " const src = (n.nodeType === 1 ? n : n.parentElement).closest('table');"
+               " if (!src || !src.querySelector(':scope > thead') || !src.dataset.ref) return;"
+               " const shown = page.querySelector(`table[data-ref=\"${src.dataset.ref}\"]`);"
+               " if (shown && !shown.querySelector('tbody tr')) { shown.remove(); token.node = src; token.offset = 0; } }"
+               " renderNode(clone, node) { if (clone.nodeType !== 1 || clone.tagName !== 'TR' || !node.parentElement || node.parentElement.tagName !== 'TBODY') return;"
+               " const table = clone.closest('table'); if (!table || table.querySelector(':scope > thead')) return;"
+               " const head = node.closest('table').querySelector(':scope > thead'); if (!head) return;"
+               " const h = head.cloneNode(true); h.removeAttribute('data-ref'); h.querySelectorAll('[data-ref]').forEach(e => e.removeAttribute('data-ref'));"
+               " table.insertBefore(h, table.firstChild); } });</script>")
+
+
 def doc(css, body, page_css, paged=False):
     # a page that carries notes is paginated by Paged.js, which alone places a note at the foot of its page
-    script = f'{PAGED_CONFIG}<script src="{PAGED.as_uri()}"></script>' if paged else ""
+    script = f'{PAGED_CONFIG}<script src="{PAGED.as_uri()}"></script>{REPEAT_HEAD}' if paged else ""
     return (f'<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>صناعة المتكلّم العربي</title>'
             f'<style>{css}</style><style>{CSS % dict(wrapw=0, wraph=0, calls=CALLS)}{C2.TEXT_CSS}{extra_css()}{IX.CSS}</style>'
             f'<style>{page_css}</style>{script}</head><body>{IDS.check(body)}</body></html>')
@@ -831,12 +905,26 @@ def guard_fonts(pdf):
         raise SystemExit(f"system fonts in the PDF: {sorted(bad)}")
 
 
+def fonts():
+    """The interior's faces: the series' (cover2), with Source Serif's true italic for the Latin titles, and the
+    Arabic figures of Changa and Plex drawn from Amiri (Bible, ch. 104 §2: «أرقام الكتاب كلها بحرف أميري»). Each digit
+    face mirrors one weight of its family exactly, so it joins that weight's own faces instead of competing with them."""
+    css = C2.fonts() + B.static_instances(B.ensure_fonts(
+        ["https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@1,400&display=swap"], "fonts-ssi"))
+    amiri = {w: Path(C2.face(css, "Amiri", w)).as_uri() for w in (400, 700)}
+    for fam, weights in (("Changa", (300, 400, 500, 600, 700)), ("IBM Plex Sans Arabic", (300, 400, 500, 600))):
+        for w in weights:
+            css += (f"@font-face {{ font-family: '{fam}'; font-style: normal; font-weight: {w}; "
+                    f"src: url({amiri[400 if w < 600 else 700]}) format('woff2'); unicode-range: U+0660-0669; }}\n")
+    return css
+
+
 def extra_css():
     """Styles the borrowed title and verse pages need (from proto2), scoped to .full pages."""
     keep = []
     for sel in (".tp-band", ".tp-sub", ".tp-desc", ".tp-vol", ".tp-auth", ".verse", ".kufi", ".gold-foil", ".qref"):
         for m in re.finditer(r"(?m)^" + re.escape(sel) + r"[^{]*\{[^}]*\}", P2.CSS.replace("%%", "%")):
-            keep.append(m.group(0))
+            keep.append(".verse " + m.group(0) if sel == ".qref" else m.group(0))   # the verse page's, not every verse's
     return "\n".join(keep).replace("var(--read)", '"Scheherazade New"').replace("var(--sans)", '"IBM Plex Sans Arabic"').replace("var(--quran)", '"Amiri Quran"')
 
 

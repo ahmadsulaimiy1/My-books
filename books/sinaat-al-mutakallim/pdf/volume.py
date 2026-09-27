@@ -92,6 +92,7 @@ _GLYPH_RE = re.compile("[" + "".join(GLYPHS) + "]")
 
 
 def glyphs(html):
+    html = re.sub(r"[ \t\n]+(?=ﷺ)", "\u00A0", html)          # the salutation never opens a line apart from the name
     return _GLYPH_RE.sub(lambda m: GLYPHS[m.group(0)], html)
 
 
@@ -117,7 +118,7 @@ dl.gloss dd { margin: .6mm 0 0; font: 400 12pt/1.75 "Scheherazade New"; color: v
 ul.biblio { list-style: none; padding: 0; } ul.biblio > li { padding-right: 6mm; text-indent: -6mm; margin: 0 0 1.4mm; font-size: 11.8pt; line-height: 1.7; }
 ul.biblio > li::before { content: none; } ul.biblio b { color: var(--sapphire); }
 .gm { display: inline-flex; align-items: center; justify-content: center; width: 1.32em; height: 1.32em; box-sizing: border-box;
-  border-radius: 50%; border: .6pt solid currentColor; font: 700 max(.74em, 8.2pt)/1 "Amiri"; padding-top: .14em; min-width: 11.5pt; min-height: 11.5pt; vertical-align: .06em; margin: 0 .5mm; }
+  border-radius: 50%; border: .6pt solid currentColor; font: 700 max(.74em, 8.2pt)/1 "Amiri"; padding-top: .14em; min-width: 11.5pt; min-height: 11.5pt; vertical-align: .06em; margin: 0 .5mm; text-indent: 0; }
 .gm.g1 { color: var(--crimson); } .gm.g2 { color: var(--gold-ink); } .gm.g3 { color: var(--sapphire); }
 .gm.g4 { color: var(--on-dark); background: var(--sapphire); border-color: var(--sapphire); }
 .gp { font-family: "IBM Plex Sans Arabic"; font-weight: 500; color: var(--gold-ink); }
@@ -140,6 +141,7 @@ h2.sec.lite { margin: 2mm 0 3.4mm; }
 h2.sec.lite .t { font-size: 15pt; }
 h4 { font: 600 12.6pt/1.45 "Changa"; color: var(--sapphire-2); margin: 5mm 0 1.6mm; break-after: avoid; text-wrap: balance; }
 h4 + p, h4 + ol, h4 + ul { text-indent: 0; }
+h4 .hn { font: 700 .92em/1 "Amiri"; color: var(--gold-ink); margin-left: 2mm; }
 p.ph { text-indent: 0; margin-top: 4.2mm; break-after: avoid; }
 p.ph + p, p.ph + ol, p.ph + ul { text-indent: 0; }
 .chap-open h3 + p, .chap-open h4 + p { text-indent: 0; }
@@ -154,8 +156,8 @@ p.ph + p, p.ph + ol, p.ph + ul { text-indent: 0; }
 .panel.mastery { border: .6pt solid var(--gold); background: var(--paper); padding: 4mm 6mm 4.4mm; }
 .panel.mastery > h3, .panel.mastery > .phk > h3 { font: 700 12pt/1.4 "Changa"; color: var(--sapphire); }
 .panel.mastery ul { list-style: none; padding: 0; margin: 1mm 0 0; counter-reset: m; }
-.panel.mastery ul > li { counter-increment: m; display: grid; grid-template-columns: 7mm 1fr; padding: 1.8mm 0; border-top: .35pt solid var(--hair); margin: 0; }
-.panel.mastery ul > li::before { content: counter(m, arabic-indic); position: static; width: auto; height: auto; transform: none; background: none;
+.panel.mastery ul > li { counter-increment: m; display: block; position: relative; padding: 1.8mm 7mm 1.8mm 0; border-top: .35pt solid var(--hair); margin: 0; }
+.panel.mastery ul > li::before { content: counter(m, arabic-indic); position: absolute; right: 0; top: 1.8mm; width: auto; height: auto; transform: none; background: none;
   font: 700 11pt/1.6 "Amiri"; color: var(--gold-ink); }
 .trainer { margin: 7mm 0 2mm; padding: 1mm 5.5mm 1mm 0; border-right: 1.4pt solid var(--gold); }
 .trainer > h3, .trainer > .phk > h3 { margin-top: 0; font: 600 12pt/1.4 "Changa"; color: var(--gold-ink); }
@@ -202,6 +204,7 @@ blockquote.warn p { font: 400 12.6pt/1.8 "Scheherazade New"; color: var(--ink-2)
 blockquote.warn p > strong:first-child { font: 600 10.4pt/1.5 "Changa"; color: var(--crimson); margin-left: 1.4mm; }
 blockquote.defn { border-top: .6pt solid var(--gold); border-bottom: .4pt solid var(--gold); padding: 2.6mm 2mm 2.8mm; margin: 5mm 0; }
 blockquote.defn p { font: 400 13.4pt/1.85 "Scheherazade New"; color: var(--sapphire); text-indent: 0; text-align: center; text-wrap: balance; }
+blockquote.defn p + p { margin-top: 2.6mm; }
 blockquote.defn p > strong:first-child { display: block; font: 600 10.4pt/1.5 "Changa"; color: var(--gold-ink); margin-bottom: .6mm; }
 blockquote.tr { border-right: 1pt solid var(--gold); padding: .6mm 5mm .8mm 0; margin: 5mm 0; }
 blockquote.tr p { font: 400 11.2pt/1.75 "IBM Plex Sans Arabic"; color: var(--ink-2); text-indent: 0; text-align: right; }
@@ -226,6 +229,7 @@ blockquote.note { border-right: .6pt solid var(--hair-2); padding: 0 4.5mm 0 0; 
 .pl { display: grid; grid-template-columns: 7mm 21mm 1fr; column-gap: 2.4mm; align-items: baseline; padding: .9mm 0; break-inside: avoid; }
 .pl .ln { font: 400 8pt/1 "IBM Plex Sans Arabic"; color: var(--ink-3); text-align: right; }
 .pl .who { font: 600 8.8pt/1.5 "IBM Plex Sans Arabic"; color: var(--sapphire); }
+.pl .who .nw { white-space: nowrap; }
 .pl .say { font: 400 13.2pt/1.8 "Amiri"; color: var(--ink); text-align: right; }
 .pl .say .sd { font: 400 9.4pt/1.6 "IBM Plex Sans Arabic"; color: var(--ink-3); }
 /* the voice drill: a frame of hairlines on the white, its sapphire rule on the start side */
@@ -256,6 +260,7 @@ ul.check > li::before { content: ""; position: absolute; right: 0; top: 2.6mm; w
 .lesson-t tr { break-inside: avoid; }
 .lesson-t table th { background: none; color: var(--sapphire); border-bottom: .8pt solid var(--gold); font-weight: 600; }
 .lesson-t table td { font-size: 8.8pt; }
+.lesson-t td .nw { white-space: nowrap; }
 .lesson-t table tr:nth-child(even) td { background: none; }
 /* the figure */
 .fig { margin: 6mm 0 6.4mm; break-inside: avoid; }
@@ -388,8 +393,9 @@ def situation():
     svg.append(f'<path d="M{w - 44:.1f} {top + 4:.1f} V{top + 4 + 42:.1f}" fill="none" stroke="#C9A95C" stroke-width=".4"/>')
     svg.append(f'<path d="M{w - 44:.1f} {cy:.1f} H{cx + R + 1.5:.1f}" fill="none" stroke="#C9A95C" stroke-width=".4"/>'
                f'<path d="M{cx + R + 3.8:.1f} {cy - 1.6:.1f} L{cx + R + 1.5:.1f} {cy:.1f} L{cx + R + 3.8:.1f} {cy + 1.6:.1f}" fill="none" stroke="#C9A95C" stroke-width=".4"/>')
-    html.append(f'<div class="k" style="left:{cx - 16:.1f}mm;top:0">يتغيّر بتغيّر الحال</div>')
-    html.append(f'<div class="k" style="left:{cx - 15:.1f}mm;top:{h - 3.5:.1f}mm">ولا يتغيّر أبدًا: القلب</div>')
+    # the ring's two labels on its axis, each straddling the ring it interrupts
+    html.append(f'<div class="k" style="left:{cx:.1f}mm;top:{cy - R - 1.4:.1f}mm;transform:translateX(-50%);white-space:nowrap">يتغيّر بتغيّر الحال</div>')
+    html.append(f'<div class="k" style="left:{cx:.1f}mm;top:{cy + R - 1.4:.1f}mm;transform:translateX(-50%);white-space:nowrap">ولا يتغيّر أبدًا: القلب</div>')
     return (f'<div class="fig">{FIG_CSS}<div class="ft">ما يتغيّر بالمقام وما لا يتغيّر</div>'
             f'<div class="fg" style="height:{h}mm"><svg viewBox="0 0 {w} {h}" style="position:absolute;inset:0;width:{w}mm;height:{h}mm">{"".join(svg)}</svg>{"".join(html)}</div>'
             f'<div class="fc"><b>الرسم ٤</b>الأسلوب يخدم الحال: يتغيّر اللفظ والطول والنبرة بتغيّر المقام، ويثبت الصدق والصحة والأدب ووضوح المعنى؛ '
@@ -459,6 +465,7 @@ def voice(bq):
     rows = []
     for l in lines:
         l = re.sub(r"(//|(?<![/<])/(?![/>]))", r'<span class="ps">\1</span>', l)
+        l = re.sub(r"\s+(<span class=\"ps\">)", "\u00A0\\1", l)     # a pause mark never opens a line: it stays with its word
         l = l.replace("(ت)", '<span class="br">(ت)</span>')
         rows.append(f'<div class="vl">{l.strip()}</div>')
     new = BeautifulSoup(f'<div class="voice">{"".join(rows)}</div>', "html.parser")
@@ -482,6 +489,17 @@ def card(p, table):
         p.decompose()
 
 
+UNIT = r"(?:ثانية|ثوانٍ|ثوان|دقيقة|دقيقتان|دقيقتين|دقائق|ساعة|ساعات|مرة|مرات)"
+
+
+def nowrap_figures(table):
+    """A quantity with its unit («٢٠ دقيقة») and a range («س٨–س١١») are never broken in a cell."""
+    for s in list(table.find_all(string=True)):
+        t = re.sub(rf"(س?[٠-٩]+(?:–س?[٠-٩]+)?\s+{UNIT}|س?[٠-٩]+–س?[٠-٩]+)", r'<span class="nw">\1</span>', str(s))
+        if t != str(s):
+            s.replace_with(BeautifulSoup(t, "html.parser"))
+
+
 def play(table):
     rows = []
     for tr in table.find_all("tr")[1:]:
@@ -489,6 +507,7 @@ def play(table):
         if len(tds) != 3:
             return
         ln, who, say = tds[0].get_text(strip=True), tds[1].decode_contents().strip(), tds[2].decode_contents().strip()
+        who = re.sub(r"(عبد\s+\S+|\([^()]*\))", r'<span class="nw">\1</span>', who)   # «عبد الرحمن», «(على الهواء)» unbroken
         say = re.sub(r"\[([^\]\[]{1,160})\]", r'<span class="sd">[\1]</span>', say)
         rows.append(f'<div class="pl"><span class="ln">{ln}</span><span class="who">{who}</span><span class="say">{say}</span></div>')
     table.replace_with(BeautifulSoup(f'<div class="play">{"".join(rows)}</div>', "html.parser"))
@@ -652,9 +671,32 @@ def keep_headings(soup):
             keep.append(soup.new_tag("div", attrs={"class": "reserve"}))
 
 
+# an ellipsis that closes a sentence («… قال: …».) stays on the line of the word before it
+ELLIPSIS_TAIL = O.ELLIPSIS_TAIL
+
+
+def _skel(t):
+    t = re.sub(r"[\u064B-\u0652\u0670ـ]", "", t).replace("أ", "ا").replace("إ", "ا").replace("آ", "ا").replace("ى", "ي").replace("ة", "ه")
+    return " ".join(re.sub(r"[^ء-ي ]", " ", t).split())
+
+
+_SCHOLARS = []
+
+
+def scholar_quote(text):
+    """A quotation the ledger (سجل النقول) records as a scholar's words or an athar: its recorded opening begins the block."""
+    if not _SCHOLARS:
+        import csv
+        _SCHOLARS.extend(k for r in csv.DictReader(open(EV.LEDGER, encoding="utf-8"), delimiter="\t")
+                         if r["النوع"].startswith(("نقل عالم", "أثر")) and len(k := _skel(r["النص"])) >= 15)
+    t = _skel(text)
+    return any(t.startswith(k) for k in _SCHOLARS)
+
+
 def lesson_html(md, breaks=True):
     """A bab's chapter (or its opener) as the page carries it. breaks: a lesson opens its page."""
     md = re.sub(r"<!--\s*head:.*?-->\s*", "", md)          # the short head is the running head's, never the page's
+    md = re.sub(ELLIPSIS_TAIL, "\u00A0", md)
     # the notes, as the Muqaddima sets them: the call hugs what it documents, the punctuation follows, and each note
     # floats to the foot of the page of its call (Paged.js)
     notes = dict(re.findall(r"^\[\^(\d+)\]:\s*(.+)$", md, re.M))
@@ -662,9 +704,10 @@ def lesson_html(md, breaks=True):
     md = re.sub(r"\[\^(\d+)\]", lambda m: f"⟦{m.group(1)}⟧", md)
     md = re.sub(r"([.،؛:])((?:⟦\d+⟧)+)", r"\2\1", md)
     md = loosen_lists(IDS.printed(with_figures(md)))
+    md = re.sub(r"(?<=\S)\n(?=(?:\*\*)?[①②③④])", "\n\n", md)     # a grade set on the next line is a grade of its own
     md = re.sub(r"^---+\s*$", "", md, flags=re.M)
     md = REVIEW.sub(lambda m: f'<span class="rv">{m.group(1)}</span>', md)
-    md = re.sub(r"^\*\((الباب [^)]*)\)\*\s*$", r'<p class="scope">\1</p>', md, flags=re.M)
+    md = re.sub(r"^\*\(((?:فصل محوري في )?(?:الباب|المرجع) .*)\)\*\s*$", r'<p class="scope">\1</p>', md, flags=re.M)
     md = examples(md)
     md = re.sub(r"^- \[ \] ", "- ⊡", md, flags=re.M)
     soup = BeautifulSoup(markdown.markdown(md, extensions=["tables"]), "html.parser")
@@ -742,28 +785,34 @@ def lesson_html(md, breaks=True):
             bq["class"] = ["warn"]
         elif lw.startswith("تعريف"):
             bq["class"] = ["defn"]
+        elif t.startswith("«") and "⟦" in t and not (bq.parent is not None and "gbd" in (bq.parent.get("class") or [])) \
+                and scholar_quote(t):
+            bq["class"] = ["quote"]                         # a scholar's words of the ledger, set as the opening sets them
         elif t.startswith("«") or (bq.parent is not None and "gbd" in (bq.parent.get("class") or [])):
             bq["class"] = ["speech"]
         else:
             bq["class"] = ["note"]
     # tables: the card, the dialogue, and the rest in the lesson's quieter style
     for table in soup.find_all("table"):
+        head = [th.get_text(" ", strip=True) for th in table.find_all("th")]
+        if head[:2] == ["البند", "البيان"]:                # the card is its own unbroken block, its mark read before any wrap
+            prev = table.find_previous_sibling()
+            card(prev if prev is not None and prev.name == "p" and prev.get_text().strip().startswith("▣") else None, table)
+            continue
         if len(table.find_all("tr")) <= 9 and not (table.parent is not None and "tblk" in (table.parent.get("class") or [])):
             box = soup.new_tag("div", attrs={"class": "tblk"})       # Paged.js keeps a block whole, not a table
             table.insert_before(box)
             box.append(table.extract())
-        head = [th.get_text(" ", strip=True) for th in table.find_all("th")]
-        prev = table.find_previous_sibling()
-        if head[:2] == ["البند", "البيان"]:
-            card(prev if prev is not None and prev.name == "p" and prev.get_text().strip().startswith("▣") else None, table)
-        elif head and head[0] == "السطر" and len(head) == 3:
+        if head and head[0] == "السطر" and len(head) == 3:
             play(table)
+        else:
+            nowrap_figures(table)
     # panels
     for h in soup.find_all("h3"):
         t = h.get_text(" ", strip=True)
         stop = lambda n: heading_level(n) in ("h2", "h3")   # noqa: E731
         if t.startswith("أهداف"):
-            wrap_until(soup, h, "panel obj", stop)
+            wrap_until(soup, h, "panel obj", lambda n: heading_level(n) is not None)   # its own sections are the lesson's
         elif t.startswith("سؤال افتتاحي"):
             wrap_until(soup, h, "panel oq", stop)
         elif t == "الخلاصة":
@@ -777,14 +826,16 @@ def lesson_html(md, breaks=True):
         if not h.get_text(strip=True).startswith("تدريبات"):
             continue
         node = h.find_next_sibling()
-        while node is not None and heading_level(node) not in ("h2", "h3"):
+        # the last card ends before a panel already built (the mastery that follows the exercises)
+        built = lambda n: n.name == "div" and any(c in (n.get("class") or []) for c in ("panel", "summary", "trainer"))   # noqa: E731
+        while node is not None and heading_level(node) not in ("h2", "h3") and not built(node):
             nxt = node.find_next_sibling()
             if node.name == "h4":
                 m = re.match(r"^([٠-٩]+)\.\s*(.+)$", node.get_text(" ", strip=True))
                 if m:
                     node.clear()
                     node.append(BeautifulSoup(f'<span class="no">{m.group(1)}</span><span>{m.group(2)}</span>', "html.parser"))
-                box = wrap_until(soup, node, "ex-card", lambda n: heading_level(n) is not None)
+                box = wrap_until(soup, node, "ex-card", lambda n: heading_level(n) is not None or built(n))
                 # the card's head goes with its first line: never a heading alone at the foot of a page
                 first = node.find_next_sibling()
                 if first is not None and first.name == "ol" and len(first.find_all("li", recursive=False)) > 1:
@@ -809,11 +860,12 @@ def lesson_html(md, breaks=True):
             for li in items:
                 for s in li.find_all(string=re.compile("⊡")):
                     s.replace_with(s.replace("⊡", "", 1))
-    # the numbered headings of the opening's kind (### ١. …)
-    for h in soup.find_all("h3"):
-        m = re.match(r"^([٠-٩]+)\.\s*", h.get_text())
-        if m and h.string:
-            h.string = h.string[m.end():]
+    # the numbered headings of the opening's kind (### ١. …, #### ١. …): the number in Amiri, without its dot
+    for h in soup.find_all(["h3", "h4"]):
+        first = next(h.strings, None)
+        m = re.match(r"^\s*([٠-٩]+)\.\s*", first or "")
+        if m and not h.find(class_="no"):
+            first.replace_with(first[m.end():])
             num = soup.new_tag("span", attrs={"class": "hn"}); num.string = m.group(1)
             h.insert(0, num)
     EV.wrap(soup)                                         # the declared colour events (events.py) become fields
@@ -1047,7 +1099,10 @@ def unit(css, n, u, pieces, toc, outline, fixed, first=False):
         toc.append(("e", kick if u[0] == "app" else "", title, key, numbered(md)))
         outline.append((h1, key, 1))
         CURRENT["chap"] = h1
-        body = f'<section class="chap"><div class="chap-open">{lesson_html(md, breaks=False)}</div></section>'
+        if h1 in ("ثبت المصادر", "المصادر والمراجع"):          # the thabat is set as the first volume's (opening.py, .app-91)
+            body = f'<section class="chap app-91"><div class="chap-open">{O.lede(O.md_to_html(md)[0])}</div></section>'
+        else:
+            body = f'<section class="chap"><div class="chap-open">{lesson_html(md, breaks=False)}</div></section>'
         pieces.append(("flow", flow(css, (body, O.band(kick, title, sub.group(1) if sub else ""))),
                        {"recto": True, "anchor": key, "head": ([("title", group)], [("title", title if len(title) < 22 else kick)])}))
         return
@@ -1074,7 +1129,7 @@ def main(n=1, review=False):
     problems = EV.check()                                  # every colour event anchored in the manuscript, or no build
     if problems:
         raise SystemExit("events.py: " + "; ".join(problems))
-    css = C2.fonts()
+    css = O.fonts()
     fixed = O.FIXED_CSS % dict(w=G.W, h=G.H)
     R = {"recto": True}
     vol = VOLUMES[n - 1]

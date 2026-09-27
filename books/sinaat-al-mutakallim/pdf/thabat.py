@@ -152,7 +152,11 @@ def tidy(ed):
     ed = re.sub(r"مجموعة محققين\s*وهم:\s*،", "مجموعة من المحققين،", ed).replace("وهم:،", "،").replace("مجموعة محققين،", "مجموعة من المحققين،").replace("٢. أجزاء", "٢ أجزاء").replace(" م.،", " م،")
     ed = re.sub(r"،\s*٢ أجزاء", "، جزآن", ed)
     ed = re.sub(r"،\s*([٠-٩]+) أجزاء", lambda m: f"، {m.group(1)} أجزاء", ed)
-    return re.sub(r"\s+", " ", ed).strip(" ،.")
+    # the date pair in the imprint's own form, «١٤١٣هـ / ١٩٩٣م», its era letters never apart from their years
+    ed = re.sub(r"([٠-٩]+)\s*هـ\s*[-–/]\s*([٠-٩]+)\s*م(?=[\s،.]|$)", "\\1هـ\u00A0/\u00A0\\2م", ed)
+    ed = re.sub(r"([٠-٩]+)\s+(هـ|م)(?=[\s،.]|$)", r"\1\2", ed)
+    ed = re.sub(r"\s+-\s+(?=لبنان)", "\u00A0- ", ed)
+    return re.sub(r"[ \t\n]+", " ", ed).strip(" ،.")
 
 
 DEGREE = {"print": "طوبق على المطبوع", "digital": "على نسخةٍ رقمية", "general": "إحالةٌ عامّة"}

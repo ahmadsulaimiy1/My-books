@@ -18,6 +18,7 @@ title in the manuscript: <!-- head: … -->.
 """
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -152,7 +153,10 @@ class Measure:
                 plain = text
                 for s in SALUTATIONS:
                     plain = plain.replace(s, "")
+                digits = "".join(re.findall("[٠-٩]", plain))      # the figures of a title are Amiri's (opening.fonts)
+                plain = re.sub("[٠-٩]", "", plain)
                 w += L.Line(plain, self.changa5, 8.3 * PT).width + 3.2 * sum(text.count(s) for s in SALUTATIONS)
+                w += L.Line(digits, self.amiri, 8.3 * PT).width if digits else 0.0
         if lead and titles:
             w += L.Line(": ", self.changa3, 8.3 * PT).width
         return w

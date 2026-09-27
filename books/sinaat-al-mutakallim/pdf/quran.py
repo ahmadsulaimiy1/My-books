@@ -37,6 +37,20 @@ EN = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
 CITE = re.compile(r"﴿([^﴾]+)﴾\s*\(([^:()]+):\s*([٠-٩]+)(?:\s*[–-]\s*([٠-٩]+))?\)")
 
 
+def unvocalised(text: str):
+    """The ﴿…﴾ with no reference whose words carry (almost) no vowels: a verse retyped, not taken from the mushaf; the
+    page would dress it as the Quran all the same (Bible, ch. 23 §4.1)."""
+    cited = [m.span() for m in CITE.finditer(text)]
+    out = []
+    for m in re.finditer(r"﴿([^﴾]+)﴾", text):
+        if any(a <= m.start() < b for a, b in cited):
+            continue
+        letters = len(re.findall(r"[ء-ي]", m.group(1)))
+        if letters and len(re.findall(r"[\u064B-\u0652\u0670\u06D6-\u06ED]", m.group(1))) < .3 * letters:
+            out.append(m.group(1))
+    return out
+
+
 def get(url: str):
     f = CACHE / re.sub(r"[^A-Za-z0-9]+", "_", url)
     if not f.exists():
@@ -161,6 +175,9 @@ def main(apply: bool):
             report.append(row)
         if new != text:
             changed[f] = new
+    for f in FILES:
+        for ours in unvocalised(f.read_text(encoding="utf-8")):
+            report.append({"file": f.name, "ref": "", "ours": ours, "result": "آية بلا إحالة ولا رسم عثماني"})
     for r in report:
         print(r["result"], "|", r["file"], "|", r["ref"], "|", r.get("uthmani", r["ours"])[:90])
     (OUT / "مطابقة-القرآن.json").write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
