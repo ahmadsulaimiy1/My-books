@@ -30,7 +30,8 @@ VOLW = ORD[:10] + ["الحادي عشر"]
 LETTER = r"(?![ء-ي])"
 # the classical usage in the opening (Bible, ch. 112d): «الباب» there is a class of argument, not a bab of the series
 NOT_A_REFERENCE = ["فهي من الباب الثاني لا من الباب الأول",
-                   "«سكريبتات الحلقات»"]          # the companion book's episodes are named by the bab they serve
+                   "«سكريبتات الحلقات»",
+                   "**الباب الأول: رفض", "**الباب الثاني: عدم الرد", "**الباب الثالث: كلمة تحفظ"]  # V5: «ثلاثة أبواب» = ways          # the companion book's episodes are named by the bab they serve
 # occurrences a human reader has judged, with the reading (the post-move semantic review)
 REVIEWED = {"الباب الثالث عشر (الملكة، المجلد العاشر)، وبنك الأخطاء": "الملكة، ثم بنك الأخطاء: إحالتان صحيحتان"}
 
