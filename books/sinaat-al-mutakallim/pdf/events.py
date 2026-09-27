@@ -74,6 +74,15 @@ def vol_dir(n):
     return BOOK / f"المجلد-{ORD[n - 1]}"
 
 
+def _bare(s):
+    """Arabic letters only, for comparing a quotation with the printed page: no marks, note calls, brackets or hamza
+    seats."""
+    s = re.sub(r"[\u064B-\u0652\u0670\u0640]|\([0-9٠-٩]+\)", "", s)
+    s = re.sub(r"[^\u0621-\u064A]+", " ", s)
+    s = s.translate(str.maketrans("أإآىة", "ااايه"))
+    return " ".join(s.split())
+
+
 def _block(lines, i, heading, table=False):
     """The line range of the event: a section to the next heading of any level, figure or table (its core — the rules
     themselves — before its sub-steps and reference tables), or one paragraph."""
@@ -192,6 +201,13 @@ def check(verbose=False):
                     problems.append(f"volume {n}: heritage «{anchor}»: ledger {lid} is not «متحقّق»")
                 elif row["الصيغة"].strip() != "نص":
                     problems.append(f"volume {n}: heritage «{anchor}»: ledger {lid} is not a verbatim text")
+                elif n > 1 and not row["الحالة"].startswith("متحقّق مع اختلاف"):
+                    # volumes 2–11 carry the printed page's wording in the ledger: the field's quotation must be in it
+                    printed = _bare(row["النص المقارن"])
+                    for q in re.findall(r"«([^»]{20,})»", block):
+                        if _bare(q) not in printed:
+                            problems.append(f"volume {n}: heritage «{anchor}»: «{q[:40]}…» departs from the printed page "
+                                            f"and ledger {lid} declares no variant")
             count += 1
     for (n, bab, c), (plate, label) in HINGES.items():
         if label and label != "close":

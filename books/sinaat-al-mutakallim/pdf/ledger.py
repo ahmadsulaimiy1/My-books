@@ -288,6 +288,13 @@ SERIES_STATE = {"quote-verified": ("ok", ""), "meaning-verified": ("ok", "طوب
                 "named-disagreement": ("variant", "خلافٌ مسمًّى أطرافه في المتن")}
 # outcomes that leave no citation in the text (the statement became the author's, or the tag sat on no claim)
 SERIES_SKIP = {"recast-author-voice", "no-claim", "delete"}
+# the wording read on the printed page, by row id: the ledger's «النص المقارن»
+SERIES_PRINTED = {}
+# outcomes whose recorded «text» is the wording before the correction, not the book's wording now
+SERIES_CORRECTED = {"quote-corrected", "claim-wrong"}
+# rows whose adopted wording departs from the print on purpose, the note giving the variant and the choice
+SERIES_VARIANT = {"P-65": "المطبوع «ببيانه أغنى» بالغين، والمتن على «أعنى» بالعين كأكثر الناقلين، والحاشية تبيّن الاختيار "
+                          "وعلّته؛ و«[إنما]» زيادة المحقق"}
 
 
 def series_rows():
@@ -296,13 +303,18 @@ def series_rows():
         if r["outcome"] in SERIES_SKIP:
             continue
         state, why = SERIES_STATE.get(r["outcome"], ("incomplete", ""))
+        if r["id"] in SERIES_VARIANT:
+            state, why = "variant", SERIES_VARIANT[r["id"]]
         vol = "م" + str(r["volume"]).translate(AR)
         where = r["file"].split("/")[-1].split("-")[0].translate(AR) if r.get("file") else ""
         if state != "incomplete":
             ON_PRINT.add(r["id"])
         src = "، ".join(x for x in (r["author"], r["title"]) if x)
         ev = "؛ ".join(r["evidence"][:3])
-        rows.append((r["id"], f"{vol} {where}", r["kind"], r["text"][:120], "نص", r["author"], src, r["edition"], "",
+        if r.get("printed"):
+            SERIES_PRINTED[r["id"]] = r["printed"]
+        text = ("قبل التصحيح: " if r["outcome"] in SERIES_CORRECTED else "") + r["text"][:120]
+        rows.append((r["id"], f"{vol} {where}", r["kind"], text, "نص", r["author"], src, r["edition"], "",
                      r["part"], r["page"], r["number"], r["grade"], "", state, "التوثيق",
                      "؛ ".join(x for x in (why, "المصوّرة: " + r["url"] if r["url"] else "", "الشاهد: " + ev if ev else "") if x)))
     return rows
@@ -367,6 +379,8 @@ def main():
             elif rec["hits"]:
                 best = max(rec["hits"], key=lambda h: h["ratio"])
                 compared = best["span"][:300]
+        if not compared and vid in SERIES_PRINTED:
+            compared = "على المطبوع: " + SERIES_PRINTED[vid][:300]
         if state in ("ok", "variant") and kind != "قرآن" and vid not in ON_PRINT and not seen:
             basis = "طوبق على نسخةٍ رقمية موافقةٍ للمطبوع" + ("، وعلى طبعتين مستقلّتين" if kind.startswith(("حديث", "أثر")) else "")
             note = "؛ ".join(x for x in (basis + "؛ بقيت مطابقة اللفظ والصفحة على مصوّرة الطبعة المعتمدة؛ والحالة بعدها: "
