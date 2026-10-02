@@ -511,6 +511,23 @@ def main(v=1, proof=False):
                 review.append((labels[i], f"بياضٌ قدره {n(round(gap))} مم فوق الحواشي وفصلها متّصل"))
     add("الإخراج الفني", "لا بياض كبيرًا في وسط فصل (أكثر من ٣٠ مم فوق الحواشي)", "للمراجعة" if holes else "يجتاز",
         f"{n(len(holes))} صفحة" + (": " + "، ".join(labels[i] for i in holes) if holes else ""))
+    # a note begins on the page of its call (Bible, ch. 86): only its rest may run on to the next page
+    away = []
+    for i, p in enumerate(doc):
+        if not marks[i]:
+            continue
+        lines = [l for b in p.get_text("dict")["blocks"] for l in b.get("lines", []) if l["bbox"][1] > top - 15 and l["bbox"][3] < bottom]
+        edge = max(l["bbox"][2] for l in lines)
+        calls = []
+        for l in lines:
+            big = any(t["size"] >= 11.5 and t["text"].strip() for t in l["spans"])
+            for s in l["spans"]:
+                if s["color"] != sapphire or (not big and s["bbox"][2] >= edge - 1.5 and s["font"].startswith("Amiri-Bold")):
+                    continue                             # a note's own number is not its call
+                calls += re.findall(r"[٠-٩]+", s["text"])
+        if [m for m in marks[i] if m not in calls]:
+            away.append(labels[i])
+    add("التقنية", "كل حاشيةٍ تبدأ في صفحة إحالتها (الدليل ٨٦)", "يجتاز" if not away else "لا يجتاز", "، ".join(away))
     twice = [labels[i + 1] for i in range(len(marks) - 1) if kinds[i + 1] == "flow" and set(marks[i]) & set(marks[i + 1])]
     printed, expected = sum(map(len, marks)), meta.get("notes")
     ok = not twice and (expected is None or printed == expected)

@@ -93,6 +93,7 @@ _GLYPH_RE = re.compile("[" + "".join(GLYPHS) + "]")
 
 def glyphs(html):
     html = re.sub(r"[ \t\n]+(?=ﷺ)", "\u00A0", html)          # the salutation never opens a line apart from the name
+    html = re.sub(r"([●◐◔○])[ \t]+", "\\1\u00A0", html)        # a severity mark never ends a line apart from its name
     return _GLYPH_RE.sub(lambda m: GLYPHS[m.group(0)], html)
 
 
@@ -876,6 +877,15 @@ def lesson_html(md, breaks=True):
             first.replace_with(first[m.end():])
             num = soup.new_tag("span", attrs={"class": "hn"}); num.string = m.group(1)
             h.insert(0, num)
+    # a numbered run-in head (**٨. المثال…**): its number in Amiri as the headings carry it, without the full stop that
+    # beside an Eastern digit reads as «٠» (Bible, ch. 22 §٩)
+    for st in soup.find_all("strong"):
+        first = next(st.strings, None)
+        m = re.match(r"^\s*([٠-٩]+)\.\s+", first or "")
+        if m and st.parent is not None and st.parent.name == "p" and st is st.parent.contents[0]:
+            first.replace_with(first[m.end():])
+            num = soup.new_tag("span", attrs={"class": "hn"}); num.string = m.group(1)
+            st.insert(0, num)
     EV.wrap(soup)                                         # the declared colour events (events.py) become fields
     keep_headings(soup)
     O.lead_lists(soup)

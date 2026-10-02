@@ -126,6 +126,7 @@ blockquote.def p { font: 400 13.6pt/1.8 "Scheherazade New"; color: var(--sapphir
 blockquote.poem { padding: 4.5mm 0; margin: 6mm 0; border-top: .5pt solid var(--gold); border-bottom: .5pt solid var(--gold); }
 ol, ul { margin: 1mm 0 2mm; padding: 0 6.5mm 0 0; }
 ul.runhead, ol.runhead { margin-bottom: 0; } ul.runon, ol.runon { margin-top: 0; }   /* a list split after its first items (lead_lists) */
+li[data-split-from]::marker { content: none; } ul > li[data-split-from]::before { content: none; }   /* an item that runs on to the next page is not numbered twice */
 li { text-align: justify; margin: .4mm 0; }
 ul { list-style: none; } ul > li { position: relative; }
 ul > li::before { content: ""; position: absolute; right: -4.8mm; top: 3.9mm; width: 1.4mm; height: 1.4mm; transform: rotate(45deg); background: var(--gold); }
@@ -268,6 +269,7 @@ p:not(.ayah) .q:not(.fn-note .q), li .q:not(.fn-note .q) { line-height: 0; }
 .vp-r { font: 300 11pt/1.4 "Changa"; color: var(--on-dark-2); margin-top: 7mm; }
 .arw { display: inline-block; width: 1.05em; height: .66em; vertical-align: .05em; margin: 0 1.4mm; color: var(--gold-ink); }
 h3 .hn { font: 700 14pt/1 "Amiri"; color: var(--gold-ink); margin-left: 2.4mm; }
+strong > .hn { font: 700 1.05em/1 "Amiri"; color: var(--gold-ink); margin-left: 1.6mm; }   /* a numbered run-in head (volume.py) */
 .sc-draw { position: relative; width: 138mm; }
 .sc-core { position: absolute; transform: translate(-50%%, -50%%); width: 27mm; text-align: center; }
 .sc-core b { display: block; font: 600 12.2pt/1.25 "Changa"; color: var(--sapphire); }
@@ -795,7 +797,11 @@ FOOTNOTE_FIX = """<script>(() => {
         } else if (y === "block") { const q = r.closest("p").previousElementSibling; S = q ? Math.ceil(q.getBoundingClientRect().bottom) : Math.ceil(box.bottom); }
       } else S = Math.ceil(box.bottom);
       const k = kept(r, l.height);
-      if (k) { const kb = Math.ceil(k.getBoundingClientRect().bottom); if (kb > b && kb <= c.top) { b = kb; S = Math.max(S, kb); } }
+      if (k) {                                   // only when the note's first lines still fit under the block (two at least)
+        const kb = Math.ceil(k.getBoundingClientRect().bottom), eh = e.getBoundingClientRect().height;
+        const room = c.height + (Math.floor(c.top) - kb) - g - (s - eh);
+        if (kb > b && kb <= c.top && room >= Math.min(eh, 2 * parseFloat(getComputedStyle(e).lineHeight || 23))) { b = kb; S = Math.max(S, kb); }
+      }
     }
     const v = s + g - c.height, x = b ? f - b : 0, k = b ? Math.floor(c.top) - S : 0, w = a.querySelector("[data-note='footnote']");
     if (n && p.left > d) e.remove();
