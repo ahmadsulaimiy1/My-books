@@ -304,7 +304,9 @@
    written in English, so the same two islands are set the other way round —
    the addressee leads at the left — and nothing else about them changes. No
    rules, no boxes, labels inside the lines. */
-.reg2{ position:absolute; top:107.4mm; left:24mm; right:48mm; z-index:1; direction:ltr; }
+/* the pier is at the left on an English sheet, so the register sits inboard
+   of it; the two islands keep their order — addressee leading, file following */
+.reg2{ position:absolute; top:107.4mm; left:48mm; right:24mm; z-index:1; direction:ltr; }
 .reg2-pair{ display:flex; justify-content:space-between; align-items:flex-start; }
 .reg2-to  { width:72mm; }
 .reg2-file{ width:56mm; padding-top:3.9mm; }
@@ -329,6 +331,9 @@
 
 /* the continuation head carries the running section, so a fourteen-sheet
    paper can be navigated from any sheet in the hand */
+/* the running head shares its band with the Arabic name at the right margin,
+   so it is given a width and wraps rather than running into it */
+.cont-ref{ width:50mm; }
 .cont-ref .sec{ display:block; color:var(--sapphire-700); letter-spacing:.2em;
   text-transform:uppercase; }  /* uppercased by the press, never by the source:
      .upper() in the generator would eat the HTML entities in a title */
@@ -345,8 +350,11 @@
 
 /* the folio is a single unbreakable token; a page number that wraps is a fault
    the reader notices before anything else on the sheet */
+/* nowrap alone keeps the folio on one line; letting the classification grow to
+   fill defeats space-between and runs the two together */
 .foot .folio{ white-space:nowrap; flex:none; }
-.foot .contact{ flex:1; }
+.foot .contact{ flex:0 1 auto; }
+.foot{ gap:8mm; }
 
 /* .full zeroes the left margin to reclaim the rail; the layered model is the
    one full-measure figure that should sit on the column's centre line, so it

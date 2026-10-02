@@ -2,6 +2,12 @@
 """
 Assemble the Digital Campus costing paper on the atelier stationery.
 
+THE PAPER IS ENGLISH, SO THE PLATE IS ON THE LEFT. ../letterhead-en carries the
+mirror of the stationery — the milled plate, its pier and every piece of
+furniture handed to the binding edge at the left, with the nine-member section
+re-lit so the lamp stays fixed at the top left. It is loaded between the
+atelier's stylesheets and this document's own.
+
 ONE SOURCE, ONE DOCUMENT, AND THE PAGINATION IS MEASURED RATHER THAN GUESSED.
 The sheet clips at 210x297 and says nothing when it does, so a long paper laid
 out by hand loses its last paragraph silently. This script therefore runs in
@@ -226,6 +232,7 @@ HEAD = '''<!DOCTYPE html>
 <link rel="stylesheet" href="{at}/letterhead-typography.css">
 <link rel="stylesheet" href="{at}/materials.css">
 <link rel="stylesheet" href="{at}/atelier.css">
+<link rel="stylesheet" href="../letterhead-en/assets/letterhead-en.css">
 <link rel="stylesheet" href="assets/paper.css">
 </head>
 <body>

@@ -12,7 +12,7 @@ This checks, for every sheet:
   · the writing field's content does not pass the field's own lower edge;
   · nothing in the field reaches the microtext, the foot rule or the folio;
   · on sheet one, the register closes above the field rather than into it;
-  · nothing crosses the binding section at 172mm or leaves the trim.
+  · nothing crosses the binding section at 38mm or leaves the trim.
 
     python3 tools/measure-paper.py              check digital-campus-paper.html
     python3 tools/measure-paper.py FILE.html
@@ -42,7 +42,7 @@ document.fonts.ready.then(function(){
     sh.querySelectorAll('.paper > *').forEach(function(e){
       var r = e.getBoundingClientRect();
       if (mm(r.bottom) > 272.1) over++;
-      if (mx(r.right) > 162.1 || mx(r.left) < 23.9) wide++;
+      if (mx(r.right) > 186.1 || mx(r.left) < 47.9) wide++;
     });
     out.push({
       sheet: i+1,
