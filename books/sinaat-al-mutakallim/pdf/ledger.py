@@ -290,11 +290,18 @@ SERIES_STATE = {"quote-verified": ("ok", ""), "meaning-verified": ("ok", "طوب
 SERIES_SKIP = {"recast-author-voice", "no-claim", "delete"}
 # the wording read on the printed page, by row id: the ledger's «النص المقارن»
 SERIES_PRINTED = {}
+# a record's «text» is the passage as it stood when it was verified; where the book has since been corrected (to the
+# print, or recast), the record carries the book's wording now in «book», and that is the ledger's «النص»; the old
+# wording is kept in the notes. «also» lists further files where the same passage stands.
 # outcomes whose recorded «text» is the wording before the correction, not the book's wording now
 SERIES_CORRECTED = {"quote-corrected", "claim-wrong"}
 # rows whose adopted wording departs from the print on purpose, the note giving the variant and the choice
 SERIES_VARIANT = {"P-65": "المطبوع «ببيانه أغنى» بالغين، والمتن على «أعنى» بالعين كأكثر الناقلين، والحاشية تبيّن الاختيار "
-                          "وعلّته؛ و«[إنما]» زيادة المحقق"}
+                          "وعلّته؛ و«[إنما]» زيادة المحقق",
+                  "B2-283": "في مناقب الشافعي للبيهقي (١/١٧٥): «ما كلّمتُ أحدًا قطّ إلا ولم أبالِ…»، والمتن «ما ناظرتُ أحدًا "
+                            "إلا ولم أُبالِ…» على لفظ حلية الأولياء (٩/١١٨، الصف م٧-٠٠٦)"}
+# meaning-verified rows whose passage the book now quotes word for word from the print it was matched on
+SERIES_NOW_QUOTED = {"D2-227", "D2-263", "D2-284", "B2-283", "D2-320"}
 
 
 def series_rows():
@@ -305,18 +312,29 @@ def series_rows():
         state, why = SERIES_STATE.get(r["outcome"], ("incomplete", ""))
         if r["id"] in SERIES_VARIANT:
             state, why = "variant", SERIES_VARIANT[r["id"]]
+        if r["id"] in SERIES_NOW_QUOTED:
+            why = "المتن ينقل اللفظ بنصّه"
+        # only the print itself makes a row «متحقّق»: a match on a catalogue record or abstract alone stays incomplete
+        if state != "incomplete" and r["evidence"] and all(e.endswith(".txt") for e in r["evidence"]):
+            state, why = "incomplete", "طوبقت البيانات على سجلٍّ رقمي (فهرسة أو ملخّص) لا على المطبوع؛ " + why if why else \
+                "طوبقت البيانات على سجلٍّ رقمي (فهرسة أو ملخّص) لا على المطبوع"
         vol = "م" + str(r["volume"]).translate(AR)
-        where = r["file"].split("/")[-1].split("-")[0].translate(AR) if r.get("file") else ""
+        where = "، ".join(dict.fromkeys(f.split("/")[-1].split("-")[0].translate(AR)
+                                        for f in [r.get("file") or ""] + r.get("also", []) if f))
         if state != "incomplete":
             ON_PRINT.add(r["id"])
         src = "، ".join(x for x in (r["author"], r["title"]) if x)
         ev = "؛ ".join(r["evidence"][:3])
         if r.get("printed"):
             SERIES_PRINTED[r["id"]] = r["printed"]
-        text = ("قبل التصحيح: " if r["outcome"] in SERIES_CORRECTED else "") + r["text"][:120]
+        text = (r.get("book") or r["text"])[:120]
+        was = ""
+        if r.get("book"):
+            was = ("كان في المتن قبل التصحيح: " if r["outcome"] in SERIES_CORRECTED else "كان في المتن: ") + r["text"][:120]
+        variants = SERIES_VARIANT.get(r["id"], "") if r["id"] != "P-65" else ""
         rows.append((r["id"], f"{vol} {where}", r["kind"], text, "نص", r["author"], src, r["edition"], "",
-                     r["part"], r["page"], r["number"], r["grade"], "", state, "التوثيق",
-                     "؛ ".join(x for x in (why, "المصوّرة: " + r["url"] if r["url"] else "", "الشاهد: " + ev if ev else "") if x)))
+                     r["part"], r["page"], r["number"], r["grade"], variants, state, "التوثيق",
+                     "؛ ".join(x for x in (why, was, "المصوّرة: " + r["url"] if r["url"] else "", "الشاهد: " + ev if ev else "") if x)))
     return rows
 
 

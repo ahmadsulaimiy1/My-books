@@ -145,15 +145,33 @@ FOREIGN_OUTSIDE = [
 ]
 
 
+def counted(m):
+    """«٢٦ أجزاء» → «٢٦ جزءًا»: the noun after a number in the form the number asks for."""
+    n = int(m.group(1).translate(str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")))
+    sing, plur = ("جزء", "أجزاء") if m.group(2).startswith(("أجزاء", "جزء")) else ("مجلد", "مجلدات")
+    if n == 1:
+        return f"{sing} واحد"
+    if n == 2:
+        return "جزآن" if sing == "جزء" else "مجلدان"
+    r = n % 100
+    if n >= 100 and r == 0:
+        return f"{m.group(1)} {sing}"
+    if 3 <= r <= 10:
+        return f"{m.group(1)} {plur}"
+    return f"{m.group(1)} {sing}ًا"
+
+
 def tidy(ed):
     """A catalogue card is not a bibliography entry: drop its bookkeeping and keep publisher, place, edition, year, parts."""
     ed = re.sub(r"\s*\((?:متسلسلة الترقيم|الأخير فهارس|آخر ٢ فهارس|الثامن فهارس|[٠-٩]+ والفهارس|وأعادوا طباعتها بالتصوير مِرار|الأولى لدار ابن حزم)\)", "", ed)
     ed = re.sub(r"الجزء: [٠-٩]+ - الطبعة: [٠-٩]+، [٠-٩]+،\s*", "", ed)
     ed = re.sub(r"مجموعة محققين\s*وهم:\s*،", "مجموعة من المحققين،", ed).replace("وهم:،", "،").replace("مجموعة محققين،", "مجموعة من المحققين،").replace("٢. أجزاء", "٢ أجزاء").replace(" م.،", " م،")
-    ed = re.sub(r"،\s*٢ أجزاء", "، جزآن", ed)
-    ed = re.sub(r"،\s*([٠-٩]+) أجزاء", lambda m: f"، {m.group(1)} أجزاء", ed)
+    ed = re.sub(r"،\s*٢ (?:أجزاء|جزءان)", "، جزآن", ed)
+    # the counted noun agrees with its number: ٣–١٠ أجزاء، ١١–٩٩ جزءًا، المئة جزء (Bible, ch. 05)
+    ed = re.sub(r"(?<![٠-٩])([٠-٩]+) (أجزاء|جزءًا|جزءا|مجلدات|مجلدًا|مجلدا)(?![\u0600-\u06FF])", counted, ed)
+    ed = re.sub(r"،(?=[^\s])", "، ", ed)
     # the date pair in the imprint's own form, «١٤١٣هـ / ١٩٩٣م», its era letters never apart from their years
-    ed = re.sub(r"([٠-٩]+)\s*هـ\s*[-–/]\s*([٠-٩]+)\s*م(?=[\s،.]|$)", "\\1هـ\u00A0/\u00A0\\2م", ed)
+    ed = re.sub(r"([٠-٩]+)\s*هـ\s*[-–/]\s*([٠-٩]+)\s*مـ?(?=[\s،.]|$)", "\\1هـ\u00A0/\u00A0\\2م", ed)
     ed = re.sub(r"([٠-٩]+)\s+(هـ|م)(?=[\s،.]|$)", r"\1\2", ed)
     ed = re.sub(r"\s+-\s+(?=لبنان)", "\u00A0- ", ed)
     return re.sub(r"[ \t\n]+", " ", ed).strip(" ،.")
@@ -257,7 +275,7 @@ def main():
             continue
         e = edition_for(author, title)
         if e:
-            rows[(e[0], e[1])] = e
+            rows[(e[0], e[1])] = (e[0], e[1], tidy(e[2]))
             where[(e[0], e[1])] = volumes_of(r)
             continue
         ed = re.sub(r"\s*\[ت [^\]]*\]", "", r["الطبعة (من سجلّ فهرسة)"]).replace("&lt;i&gt;", "").replace("&lt;/i&gt;", "")
@@ -272,7 +290,7 @@ def main():
         raise SystemExit("the thabat of " + label + " cannot be set:\n  " + "\n  ".join(open_))
     for vols, a, t, e in OUTSIDE:
         if ords & set(vols):
-            rows[(a, t)] = (a, t, e)
+            rows[(a, t)] = (a, t, tidy(e))
             where[(a, t)] = "، ".join(str(ORD.index(v) + 1).translate(str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")) for v in vols)
     foreign += [(a, t, e) for vols, a, t, e in FOREIGN_OUTSIDE if ords & set(vols)]
     if not rows and not foreign:
