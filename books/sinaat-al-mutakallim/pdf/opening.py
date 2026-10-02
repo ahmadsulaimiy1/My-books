@@ -353,12 +353,17 @@ ARROW = ('<svg class="arw" viewBox="0 0 16 10" aria-hidden="true"><path d="M15 5
 
 # a Latin run: from its first letter (or the bracket that opens it, when the run closes that bracket) to its last
 # letter, stop, bracket, quotation mark or figure — a reference's «1975), 41–58» stays inside it
-LATIN_RUN = re.compile(r"(\(?)([A-Za-z][^؀-ۿ⟦⟧]*[A-Za-z0-9.)\"”’'])")   # a note call (⟦n⟧) ends the run, never joins it
+LATIN_RUN = re.compile(r"(\(?)([A-Za-z][^؀-ۿ⟦⟧«»]*[A-Za-z0-9.?!)\"”’'])")   # a note call (⟦n⟧) or a guillemet ends the run
 
 
 def _lat(m):
     lead, run = m.groups()
-    return f'<span class="lat">({run}</span>' if lead and ")" in run else f'{lead}<span class="lat">{run}</span>'
+    tail = ""
+    while run.endswith(")") and run.count(")") > run.count("(") + bool(lead):   # a ")" closing the Arabic, not the run
+        run, tail = run[:-1].rstrip(), ")" + tail
+    if lead and ")" in run:
+        return f'<span class="lat">({run}</span>{tail}'
+    return f'{lead}<span class="lat">{run}</span>{tail}'
 
 
 def latinize(soup):
