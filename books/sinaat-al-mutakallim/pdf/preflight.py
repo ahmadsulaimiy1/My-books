@@ -150,10 +150,7 @@ def main(v=1, proof=False):
     add("العلمية", "الآيات بالرسم العثماني لمصحف المدينة (quran.py)", "يجتاز" if not bad else "لا يجتاز",
         f"{n(len(qv))} موضعًا، {n(len(qv) - len(bad))} مطابقًا")
     import quran as QR
-    # a verse inside a note's citation (a chapter title of the Sahih, a report from al-Tabari) keeps the wording of the
-    # printed source it quotes: a verified transmission is not altered (the series' report on the Qur'an)
-    body_only = {f: re.sub(r"(?m)^\[\^[^\]]+\]:.*$", "", texts[f]) for f in files}
-    retyped = [f"{f.name}: ﴿{x[:40]}﴾" for f in files for x in QR.unvocalised(body_only[f])]
+    retyped = [f"{f.name}: ﴿{x[:40]}﴾" for f in files for x in QR.unvocalised(texts[f])]
     add("العلمية", "لا آية بغير الرسم العثماني: كل ﴿…﴾ بلا إحالة مشكولٌ من المصحف (الدليل ٢٣ §٤.١)", "يجتاز" if not retyped else "لا يجتاز",
         "؛ ".join(retyped) or "لا شيء")
     inline_refs = []

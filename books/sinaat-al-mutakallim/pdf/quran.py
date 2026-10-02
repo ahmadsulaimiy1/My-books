@@ -39,7 +39,9 @@ CITE = re.compile(r"﴿([^﴾]+)﴾\s*\(([^:()]+):\s*([٠-٩]+)(?:\s*[–-]\s*([
 
 def unvocalised(text: str):
     """The ﴿…﴾ with no reference whose words carry (almost) no vowels: a verse retyped, not taken from the mushaf; the
-    page would dress it as the Quran all the same (Bible, ch. 23 §4.1)."""
+    page would dress it as the Quran all the same (Bible, ch. 23 §4.1). A verse inside a note's citation (a chapter title
+    of the Sahih, a report from al-Tabari) keeps the wording of the printed source it quotes, and is not counted."""
+    text = re.sub(r"(?m)^\[\^[^\]]+\]:.*$", "", text)
     cited = [m.span() for m in CITE.finditer(text)]
     out = []
     for m in re.finditer(r"﴿([^﴾]+)﴾", text):
