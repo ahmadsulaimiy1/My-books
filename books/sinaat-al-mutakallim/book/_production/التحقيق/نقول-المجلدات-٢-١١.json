@@ -3345,7 +3345,7 @@
   "text": "> **من علم التواصل:** يُعرف في أدبيات التواصل الحديث ما يُسمى «الإصغاء الانعكاسي»، وهو أن يُعيد المستمع صياغة كلام الغاضب موجزًا («إذن أنت تقول إن…») قبل أن يجيب، ليشعر الغاضب أنه فُهم قبل أن يُرَدَّ عليه. *[تحليل حديث]*",
   "author": "Carl R. Rogers and Richard E. Farson",
   "title": "Active Listening",
-  "edition": "Chicago: Industrial Relations Center, University of Chicago, 1957 (as stated in the reprint heading); read in the reprint excerpt from Newman, Danziger & Cohen (eds.), Communicating in Business Today (D. C. Heath, 1987), PDF copies circulated by Gordon Training International (2007) and Whole Being Institute",
+  "edition": "Chicago: Industrial Relations Center, University of Chicago, 1957 (as stated in the reprint heading); read only in an excerpt circulated by Gordon Training International (2007), without page numbers",
   "part": "",
   "page": "",
   "number": "",
@@ -3357,7 +3357,8 @@
   "evidence": [
    "مصوّرات/المجلدات-٢-١١/T2/172_187_266_rogers_farson_reprint_text.txt"
   ],
-  "book": "ومن أدوات الإصغاء التي وصفها كارل روجرز وريتشارد فارسون أن يعيد المستمع بكلماته هو ما فهمه من كلام محدّثه، فيعرف من جوابه هل شعر أنه فُهم. وأنفع ما يكون ذلك مع الغاضب قبل الرد عليه: «إذن أنت تقول إن…»، ليشعر أنه فُهم قبل أن يُرَدَّ عليه."
+  "book": "ومن أدوات الإصغاء التي وصفها كارل روجرز وريتشارد فارسون أن يعيد المستمع بكلماته هو ما فهمه من كلام محدّثه، فيعرف من جوابه هل شعر أنه فُهم. وأنفع ما يكون ذلك مع الغاضب قبل الرد عليه: «إذن أنت تقول إن…»، ليشعر أنه فُهم قبل أن يُرَدَّ عليه.",
+  "edition_was": "Chicago: Industrial Relations Center, University of Chicago, 1957 (as stated in the reprint heading); read in the reprint excerpt from Newman, Danziger & Cohen (eds.), Communicating in Business Today (D. C. Heath, 1987), PDF copies circulated by Gordon Training International (2007) and Whole Being Institute"
  },
  {
   "id": "B2-185",
@@ -7910,5 +7911,80 @@
    "مصوّرات/المجلدات-٢-١١/D2/tahdhib1_title.jpg"
   ],
   "same_as": "D2-227"
+ },
+ {
+  "id": "R2E-6",
+  "batch": "R2E",
+  "volume": 5,
+  "file": "book/المجلد-الخامس/الباب-الخامس/ف01-أ-المدخل-والدرس-الأول.md",
+  "line": 72,
+  "kind": "حديث",
+  "text": "«كَانَ النَّبِيُّ ﷺ يَتَخَوَّلُنَا بِالْمَوْعِظَةِ فِي الْأَيَّامِ، كَرَاهَةَ السَّآمَةِ عَلَيْنَا» (متفق عليه)",
+  "author": "البخاري",
+  "title": "الصحيح",
+  "edition": "صحيح البخاري، الطبعة السلطانية (المطبعة الكبرى الأميرية ببولاق، ١٣١١هـ) بترقيم محمد فؤاد عبد الباقي في الحاشية (تحفة)، مصوَّرة دار طوق النجاة، بيروت، ط١، بعناية محمد زهير بن ناصر الناصر",
+  "part": "١",
+  "page": "٢٥",
+  "number": "٦٨ (ومسلم ٢٨٢١)",
+  "grade": "",
+  "printed": "كان النبي صلى الله عليه وسلم يتخوَّلُنا بالموعظة في الأيام كراهةَ السآمة علينا",
+  "outcome": "quote-verified",
+  "summary": "Vol. 5 wording is al-Bukhārī 68 (1/25) exactly («كراهةَ السآمة علينا»), re-read on the scan; Muslim 2821 «كراهيةَ», as the footnote says.",
+  "url": "https://archive.org/details/03-54504",
+  "evidence": [
+   "مصوّرات/المجلدات-٢-١١/HA2/HA14-HA18_bukhari68-69_v1p25.jpg"
+  ],
+  "same_as": "HA14"
+ },
+ {
+  "id": "R2E-7",
+  "batch": "R2E",
+  "volume": 5,
+  "file": "book/المجلد-الخامس/الباب-الخامس/ف01-ب-الدرس-الثاني.md",
+  "line": 77,
+  "kind": "حديث",
+  "text": "«أَنَّهُ كَانَ إِذَا تَكَلَّمَ بِكَلِمَةٍ أَعَادَهَا ثَلَاثًا حَتَّى تُفْهَمَ عَنْهُ» (رواه البخاري)",
+  "author": "البخاري",
+  "title": "الجامع الصحيح",
+  "edition": "صحيح البخاري، الطبعة السلطانية (المطبعة الأميرية ببولاق ١٣١١–١٣١٣هـ) في مصوّرة دار طوق النجاة بعناية محمد زهير بن ناصر الناصر (من صفحة العنوان ومقدمة الناشر)، بترقيم محمد فؤاد عبد الباقي في الهامش",
+  "part": "١",
+  "page": "٣٠",
+  "number": "٩٥",
+  "grade": "",
+  "printed": "عن أنس عن النبي صلى الله عليه وسلم أنه كان إذا تكلّم بكلمةٍ أعادها ثلاثًا حتى تُفهم عنه، وإذا أتى على قومٍ فسلّم عليهم سلّم عليهم ثلاثًا.",
+  "outcome": "quote-verified",
+  "summary": "Vol. 5 wording is al-Bukhārī 95 (1/30) exactly, from Anas; re-read on the scan.",
+  "url": "https://archive.org/details/03-54504 (file 01_54495.pdf)",
+  "evidence": [
+   "مصوّرات/المجلدات-٢-١١/HA1/HA5_bukhari95_v1p30.jpg"
+  ],
+  "same_as": "HA5"
+ },
+ {
+  "id": "R2E-8",
+  "batch": "R2E",
+  "volume": 5,
+  "file": "book/المجلد-الخامس/الباب-الخامس/ف02-أ-المدخل-والدرس-الأول.md",
+  "line": 54,
+  "kind": "حديث",
+  "text": "«أَنَّ النَّبِيَّ ﷺ كَانَ يُحَدِّثُ حَدِيثًا لَوْ عَدَّهُ الْعَادُّ لَأَحْصَاهُ» (متفق عليه)",
+  "author": "البخاري؛ مسلم",
+  "title": "الصحيح",
+  "edition": "صحيح البخاري، الطبعة السلطانية (بولاق ١٣١١هـ) بترقيم محمد فؤاد عبد الباقي، في مصوّرة دار طوق النجاة، ط١، بعناية محمد زهير بن ناصر الناصر (صفحة العنوان وظهرها والمقدمة: اعتماد ترقيم عبد الباقي) ؛ صحيح مسلم، تحقيق محمد فؤاد عبد الباقي، مطبعة دار إحياء الكتب العربية، فيصل عيسى البابي الحلبي، القاهرة (لا سنة على صفحة العنوان)؛ ترقيم الصفحات متسلسل عبر الأجزاء",
+  "part": "البخاري ٤؛ مسلم ٤",
+  "page": "البخاري ٤/١٩٠؛ مسلم ٤/٢٢٩٨",
+  "number": "البخاري ٣٥٦٧؛ مسلم ٢٤٩٣",
+  "grade": "",
+  "printed": "البخاري: عن عائشة رضي الله عنها أنّ النبيّ صلى الله عليه وسلم كان يُحدِّثُ حديثًا لو عدَّه العادُّ لأحصاه. — مسلم: إنّما كان النبيُّ ﷺ يُحدِّثُ حديثًا، لو عدَّه العادُّ لأحصاه.",
+  "outcome": "quote-verified",
+  "summary": "Vol. 5 wording is al-Bukhārī 3567 (4/190) exactly, from ʿĀʾisha (re-read on the scan); Muslim 2493 (4/2298) «إنما كان النبي ﷺ يحدّث حديثًا…», as the footnote says.",
+  "url": "https://archive.org/details/03-54504 ; https://archive.org/details/saheeh_moslem_Abdulbaqy",
+  "evidence": [
+   "مصوّرات/المجلدات-٢-١١/HA3/HA3_bukhari3567_v4p190.jpg",
+   "مصوّرات/المجلدات-٢-١١/HA3/HA3_muslim2493_p2298.jpg",
+   "مصوّرات/المجلدات-٢-١١/HA3/bukhari_title.jpg",
+   "مصوّرات/المجلدات-٢-١١/HA3/muslim_title.jpg"
+  ],
+  "same_as": "HA3"
  }
 ]

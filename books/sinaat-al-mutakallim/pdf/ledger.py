@@ -299,9 +299,16 @@ SERIES_CORRECTED = {"quote-corrected", "claim-wrong"}
 SERIES_VARIANT = {"P-65": "المطبوع «ببيانه أغنى» بالغين، والمتن على «أعنى» بالعين كأكثر الناقلين، والحاشية تبيّن الاختيار "
                           "وعلّته؛ و«[إنما]» زيادة المحقق",
                   "B2-283": "في مناقب الشافعي للبيهقي (١/١٧٥): «ما كلّمتُ أحدًا قطّ إلا ولم أبالِ…»، والمتن «ما ناظرتُ أحدًا "
-                            "إلا ولم أُبالِ…» على لفظ حلية الأولياء (٩/١١٨، الصف م٧-٠٠٦)"}
+                            "إلا ولم أُبالِ…» على لفظ حلية الأولياء (٩/١١٨، الصف م٧-٠٠٦)",
+                  "D2-308": "في المطبوع (المجموع ١/٥٤): «وودت إذا ناظرت» بدالٍ واحدة، خطأ طباعة، وفي الصفحة نفسها «إلا وددت أن يوفّق»؛ "
+                            "والمتن «ووددتُ» على الصواب"}
 # meaning-verified rows whose passage the book now quotes word for word from the print it was matched on
 SERIES_NOW_QUOTED = {"D2-227", "D2-263", "D2-284", "B2-283", "D2-320"}
+# meaning-verified rows whose passage still tells the meaning but now quotes, within guillemets, the print's own words
+SERIES_QUOTED_IN = {"P-4", "P-16", "P-43", "P-51"}
+# the editor's re-review of a row whose recorded outcome no longer describes the passage as the book now has it: (state, why)
+SERIES_REVIEWED = {"P-48": ("ok", "النقل بنصّه على المطبوع، والخبر مرويٌّ بإسناده عند ابن الأنباري ويورده المتن بصيغة «يُروى»؛ "
+                                  "أما ردّ أسماء الحركات إليه فلم يثبت في مصدر، فحُذف من المتن، وما بقي في ذلك تحليلٌ للمؤلف")}
 
 
 def series_rows():
@@ -314,6 +321,10 @@ def series_rows():
             state, why = "variant", SERIES_VARIANT[r["id"]]
         if r["id"] in SERIES_NOW_QUOTED:
             why = "المتن ينقل اللفظ بنصّه"
+        if r["id"] in SERIES_QUOTED_IN:
+            why = "طوبق المعنى، وما بين علامتي التنصيص في المتن لفظ المطبوع بنصّه"
+        if r["id"] in SERIES_REVIEWED:
+            state, why = SERIES_REVIEWED[r["id"]]
         # only the print itself makes a row «متحقّق»: a match on a catalogue record or abstract alone stays incomplete
         if state != "incomplete" and r["evidence"] and all(e.endswith(".txt") for e in r["evidence"]):
             state, why = "incomplete", "طوبقت البيانات على سجلٍّ رقمي (فهرسة أو ملخّص) لا على المطبوع؛ " + why if why else \

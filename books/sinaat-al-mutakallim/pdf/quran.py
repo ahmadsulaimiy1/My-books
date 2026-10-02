@@ -129,8 +129,10 @@ def rebuild(ours: str, sura: int, v1: int, v2: int, vv: dict) -> tuple[str | Non
     span = words[i:j]
     while span and not skeleton(span[-1][1]):
         span = span[:-1]  # no pause mark at the end of a quotation
+    start = i
     while span and span[0][1] == "۞":
         span = span[1:]  # the hizb sign is a division of the mushaf, not part of the verse
+        start += 1
     if "".join(skeleton(w) for _, w in span) != q:
         return None, "حدود الاقتباس لا تنطبق على حدود الكلمات"
     out = []
@@ -140,8 +142,9 @@ def rebuild(ours: str, sura: int, v1: int, v2: int, vv: dict) -> tuple[str | Non
             continue
         out.append(w)
         last_of_verse = k + 1 == len(span) or span[k + 1][0] != v
-        verse_complete = last_of_verse and (words.index((v, w)) + 1 == len(words) or words[words.index((v, w)) + 1][0] != v
-                                            or all(not skeleton(x) for vx, x in words[words.index((v, w)) + 1:] if vx == v))
+        at = start + k                              # this word's own place: a repeated word (الفجر ٢١–٢٢ «دَكًّا دَكًّا»)
+        verse_complete = last_of_verse and (at + 1 == len(words) or words[at + 1][0] != v   # must not find its twin
+                                            or all(not skeleton(x) for vx, x in words[at + 1:] if vx == v))
         if last_of_verse and k + 1 < len(span) and verse_complete:
             out.append("۝" + str(v).translate(AR))
     return " ".join(out), ""
