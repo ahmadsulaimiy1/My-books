@@ -502,6 +502,23 @@ def md_to_html(md, leads=True):
             h.insert(0, num)
     for h in soup.find_all("h3"):
         nxt = h.find_next_sibling()
+        if nxt is not None and nxt.name in ("ul", "ol") and h.parent is not None and "keep" not in (h.parent.get("class") or []):
+            items = nxt.find_all("li", recursive=False)       # a list (a thabat's sources): the heading with its first two
+            keep = soup.new_tag("div", attrs={"class": "keep"})
+            h.insert_before(keep)
+            keep.append(h.extract())
+            if len(items) <= 2:
+                keep.append(nxt.extract())
+                continue
+            head = soup.new_tag(nxt.name, attrs={k: v for k, v in nxt.attrs.items()})
+            head["class"] = (nxt.get("class") or []) + ["runhead"]
+            for li in items[:2]:
+                head.append(li.extract())
+            keep.append(head)
+            if nxt.name == "ol":
+                nxt["start"] = str(int(nxt.get("start", 1)) + 2)
+            nxt["class"] = (nxt.get("class") or []) + ["runon"]
+            continue
         if nxt is not None and nxt.name in ("p", "blockquote"):
             keep = soup.new_tag("div", attrs={"class": "keep"})
             h.insert_before(keep)
