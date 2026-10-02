@@ -878,6 +878,7 @@ def lesson_html(md, breaks=True):
             h.insert(0, num)
     EV.wrap(soup)                                         # the declared colour events (events.py) become fields
     keep_headings(soup)
+    O.lead_lists(soup)
     forced_breaks(soup, CURRENT["n"])
     html = O.ayat(str(soup).replace("←", O.ARROW))
     soup = BeautifulSoup(html, "html.parser")
@@ -1177,7 +1178,7 @@ def main(n=1, review=False):
     pieces += [("fixed", doc(css, FM.dedication(), fixed), {}),
               ("fixed", doc(css, P2.verse_page().replace('class="pg', 'class="full'), fixed), R),
               ("cont", doc(css, FM.publisher_word(), O.CONT_CSS), {"recto": True, "anchor": "publisher", "head": O.same("كلمة الناشر"), "opens": True}),
-              ("flow", flow(css, O.chapter(AUTHOR_WORD.read_text(encoding="utf-8").replace("# كلمة المؤلف", "## كلمة المؤلف"), FM.volume_line(n))),
+              ("flow", flow(css, O.chapter(AUTHOR_WORD.read_text(encoding="utf-8").replace("# كلمة المؤلف", "## كلمة المؤلف"), FM.volume_line(n), leads=False)),
                {"recto": True, "anchor": "author", "head": O.same("كلمة المؤلف")}),
               ("toc", None, {"recto": True, "head": O.same("المحتويات"), "opens": True}),
               ("cont", doc(css, FM.symbols(), O.CONT_CSS), {"recto": True, "anchor": "symbols", "head": O.same("الرموز والاصطلاحات"), "opens": True}),

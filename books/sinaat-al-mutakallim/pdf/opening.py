@@ -125,6 +125,7 @@ blockquote.def p { font: 400 13.6pt/1.8 "Scheherazade New"; color: var(--sapphir
 .bayt span { text-align: center; white-space: nowrap; }
 blockquote.poem { padding: 4.5mm 0; margin: 6mm 0; border-top: .5pt solid var(--gold); border-bottom: .5pt solid var(--gold); }
 ol, ul { margin: 1mm 0 2mm; padding: 0 6.5mm 0 0; }
+ul.runhead, ol.runhead { margin-bottom: 0; } ul.runon, ol.runon { margin-top: 0; }   /* a list split after its first items (lead_lists) */
 li { text-align: justify; margin: .4mm 0; }
 ul { list-style: none; } ul > li { position: relative; }
 ul > li::before { content: ""; position: absolute; right: -4.8mm; top: 3.9mm; width: 1.4mm; height: 1.4mm; transform: rotate(45deg); background: var(--gold); }
@@ -372,6 +373,39 @@ def _lat(m):
     return f'{lead}<span class="lat">{run}</span>{tail}'
 
 
+def lead_lists(soup):
+    """A line that introduces a list («فوصفته بأمرين:») never stays at the foot of a page: it goes over with the list's
+    first items (a short list goes whole), as a heading goes with the start of what follows it."""
+    for p in soup.find_all("p"):
+        lst = p.find_next_sibling()
+        if (p.get("class") or p.parent is None or "keep" in (p.parent.get("class") or []) or lst is None
+                or lst.name not in ("ul", "ol") or "cols" in (lst.get("class") or [])):
+            continue
+        t = p.get_text(" ", strip=True)
+        if len(t) > 200 or not t.endswith(":"):
+            continue
+        items = lst.find_all("li", recursive=False)
+        size = [len(li.get_text(" ", strip=True)) for li in items]
+        keep = soup.new_tag("div", attrs={"class": "keep"})
+        p.insert_before(keep)
+        keep.append(p.extract())
+        if len(items) <= 3 and sum(size) <= 500:          # a short list goes whole; never a block taller than a page
+            keep.append(lst.extract())
+            continue
+        first = 2 if sum(size[:2]) <= 400 else 1 if size and size[0] <= 400 else 0
+        if not first:                                       # long items: room for the first lines, as for a heading
+            keep.append(soup.new_tag("div", attrs={"class": "reserve"}))
+            continue
+        head = soup.new_tag(lst.name, attrs={k: v for k, v in lst.attrs.items()})
+        head["class"] = (lst.get("class") or []) + ["runhead"]
+        for li in items[:first]:
+            head.append(li.extract())
+        keep.append(head)
+        if lst.name == "ol":
+            lst["start"] = str(int(lst.get("start", 1)) + first)
+        lst["class"] = (lst.get("class") or []) + ["runon"]
+
+
 def latinize(soup):
     """A Latin run inside Arabic is isolated left-to-right in Source Serif, so its word order holds."""
     for t in soup.find_all(string=re.compile(r"[A-Za-z]{3,}")):
@@ -406,7 +440,7 @@ def calls(html, notes):
 ELLIPSIS_TAIL = re.compile(r" (?=(?:…|\.\.\.)(?:[»”).،؛؟!:]|\n|$))")     # not a hemistich's « ... »
 
 
-def md_to_html(md):
+def md_to_html(md, leads=True):
     md = IDS.printed(md)          # production IDs never reach the page (Bible, ch. 112d §٥)
     md = ELLIPSIS_TAIL.sub("\u00A0", md)
     notes = dict(re.findall(r"^\[\^(\d+)\]:\s*(.+)$", md, re.M))
@@ -498,6 +532,8 @@ def md_to_html(md):
         if len(items) >= 5 and all(len(li.get_text()) <= 32 and not li.find("ul") for li in items):
             ul["class"] = ["cols"]
     EV.wrap(soup)                                         # the declared colour events (events.py) become fields
+    if leads:                                             # the preliminaries are set as designed, in the 28 abjad letters
+        lead_lists(soup)
     latinize(soup)
     if IX.ACTIVE and not IX.listing(md):
         IX.mark(soup, IX.QUOTES, IX.NAMES, IX.GLOSSARY)                 # the entries of the volume's indexes
@@ -522,14 +558,14 @@ def lede(html):
     return str(soup)
 
 
-def chapter(md, kicker):
+def chapter(md, kicker, leads=True):
     m = re.search(r"^##\s+(.+)$", md, re.M)
     title = m.group(1)
     title = re.sub(r"^الفصل [^:]+:\s*", "", title)
     body = md[m.end():]
     sub = re.search(r"<!--\s*sub:\s*(.+?)\s*-->", body)
     body = re.sub(r"<!--.*?-->", "", body, flags=re.S)
-    html, notes = md_to_html(body)
+    html, notes = md_to_html(body, leads)
     return f'<section class="chap"><div class="chap-open">{lede(html)}{notes}</div></section>', band(kicker, title, sub.group(1) if sub else "")
 
 
@@ -667,7 +703,7 @@ def chapter_parts(md, kicker):
 
 def author_word():
     md = AUTHOR_WORD.read_text(encoding="utf-8").replace("# كلمة المؤلف", "## كلمة المؤلف")
-    return chapter(md, "الافتتاحية")
+    return chapter(md, "الافتتاحية", leads=False)
 
 
 def contents(files):
