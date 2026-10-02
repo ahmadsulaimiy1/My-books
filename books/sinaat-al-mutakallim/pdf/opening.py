@@ -744,11 +744,9 @@ PAGED_CONFIG = ("<script>window.PagedConfig = { auto: true, before: async () => 
 FOOTNOTE_FIX = """<script>(() => {
   const H = Paged.registeredHandlers.find(h => h.prototype && h.prototype.moveFootnote && h.prototype.createFootnoteCall);
   if (!H) throw new Error("Paged.js: no footnote handler to correct");
-  const kept = el => {
-    let out = null;
-    for (let a = el.parentElement; a && !a.classList.contains("pagedjs_page_content"); a = a.parentElement)
-      if (getComputedStyle(a).breakInside === "avoid") out = a;
-    return out;
+  const kept = (el, room) => {                     // the small block kept whole that holds the call: a hadith, an ayah, a row
+    const k = el.closest("blockquote, p.ayah, tr, .exm");
+    return k && k.closest(".pagedjs_page_content") && k.getBoundingClientRect().height < room / 3 ? k : null;
   };
   H.prototype.moveFootnote = function (e, t, n) {
     let r;
@@ -779,7 +777,7 @@ FOOTNOTE_FIX = """<script>(() => {
           S = Math.ceil(last.length ? Math.min(...last.map(q => q.top)) : box.top);
         } else if (y === "block") { const q = r.closest("p").previousElementSibling; S = q ? Math.ceil(q.getBoundingClientRect().bottom) : Math.ceil(box.bottom); }
       } else S = Math.ceil(box.bottom);
-      const k = kept(r);
+      const k = kept(r, l.height);
       if (k) { const kb = Math.ceil(k.getBoundingClientRect().bottom); if (kb > b && kb <= c.top) { b = kb; S = Math.max(S, kb); } }
     }
     const v = s + g - c.height, x = b ? f - b : 0, k = b ? Math.floor(c.top) - S : 0, w = a.querySelector("[data-note='footnote']");

@@ -488,19 +488,22 @@ def main(v=1, proof=False):
         ln = [l for b in p.get_text("dict")["blocks"] for l in b.get("lines", [])
               if any(s["text"].strip() for s in l["spans"]) and top - 2 < l["bbox"][1] and l["bbox"][3] < bottom]
         body = [l for l in ln if any(s["size"] >= 11.5 and s["text"].strip() for s in l["spans"])]
-        if not body:
+        if not ln:
             marks.append([])
             continue
-        # a note's number stands at the right edge of the text block, below the text (a call never opens a line: it
-        # hugs its word); a note that opens on a Latin reference is set smaller, so its size cannot find it
-        edge, low = max(l["bbox"][2] for l in body), max(l["bbox"][3] for l in body)
-        marks.append([s["text"].strip() for l in ln if l["bbox"][1] >= low - 2 for s in l["spans"]
-                      if s["text"].strip() and s["font"].startswith("Amiri-Bold") and s["color"] == sapphire
+        # a note opens on its number at the right edge of the text block, on a line of the notes' size (a call never
+        # opens a line: it hugs its word; a heading's number stands on a larger line). A note that opens on a Latin
+        # reference is set smaller, and a page may hold only a table above its notes, so neither size finds it
+        edge = max(l["bbox"][2] for l in ln)
+        marks.append([] if kinds[i] == "fixed" else
+                     [s["text"].strip() for l in ln if not any(t["size"] >= 11.5 and t["text"].strip() for t in l["spans"])
+                      for s in l["spans"] if s["text"].strip() and s["font"].startswith("Amiri-Bold") and s["color"] == sapphire
                       and all("٠" <= c <= "٩" for c in s["text"].strip()) and s["bbox"][2] >= edge - 1.5])
         # a page of a running chapter that stops well above its notes: what could not be broken (a block kept whole
         # with its note, a table, a heading with its first lines) went over and left its height in white. Listed for
         # the eye: some are the price of a rule (a hadith never split, the line that introduces it never left behind)
-        notes = [l["bbox"][1] for l in ln if l["bbox"][1] >= low - 2]
+        low = max((l["bbox"][3] for l in body), default=None)
+        notes = [l["bbox"][1] for l in ln if low is not None and l["bbox"][1] >= low - 2]
         if notes and kinds[i] in ("flow", "open") and i + 1 < len(doc) and kinds[i + 1] == "flow":
             gap = (min(notes) - low) / MM
             if gap > 30:
