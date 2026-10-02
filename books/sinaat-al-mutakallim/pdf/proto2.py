@@ -150,7 +150,7 @@ table.cmp td:first-child { font-weight: 600; color: var(--ink); white-space: now
 .tp-desc { position: absolute; top: 160mm; right: 24mm; left: 44mm; font: 400 10pt/1.7 var(--sans); color: var(--ink-2); }
 .tp-vol { position: absolute; top: 106mm; right: 24mm; color: var(--gold-l); font: 500 8.6pt/1.6 var(--sans); }
 .tp-auth { position: absolute; bottom: 26mm; right: 24mm; }
-.tp-auth small { font: 400 8pt/1.5 var(--sans); color: var(--ink-3); display: block; }
+.tp-auth small { font: 400 10pt/1.5 var(--read); color: var(--ink-3); display: block; }
 .tp-auth b { font: 600 17pt/1.5 var(--read); color: var(--sapphire); display: block; }
 .tp-auth .kn { font: 400 11.5pt/1.5 var(--read); font-style: normal; color: var(--gold-ink, #8A6A1F); display: block; margin-top: 1mm; }
 .tp-auth span { font: 400 10.4pt/1.5 var(--read); color: var(--ink-2); }
@@ -198,6 +198,7 @@ def title_page(css, volume=None, n=None):
     n: the volume, whose device (the alif in its circle, as on its cover) stands on the band's gold line."""
     # the white page (Bible ch. 22 §6.5): a sapphire field inside the text block, no bleed; the logotype flat gold,
     # no simulated foil, shadow or lit edge inside the book; the device stands on the field's foot
+    import colophon as CO                       # the author's own words, one source with the covers' colophon
     logo = C2.Logotype(css, width=100.0)
     svg, bottom = logo.svg(136.0, 36.0, flat="#E4CB8C")
     if n is None:
@@ -215,7 +216,7 @@ def title_page(css, volume=None, n=None):
 {volume or '<div class="tp-vol">المجلد الأول<span class="kufi" style="display:block;font-size:22pt;line-height:1.3;color:#E4CB8C;font-weight:500">التأسيس</span></div>'}
 <div class="tp-sub">من سلامة اللسان إلى حسن البيان</div>
 <div class="tp-desc">منهجٌ شامل في النطق والتعبير والخطاب وآداب التواصل والملكة الشفهية</div>
-<div class="tp-auth"><small>تأليف</small><i class="kn">أبو عبد الله جلال الدين</i><b>أحمد بن إبراهيم بن عبد السلام السليمي</b><span>غفر الله له ولوالديه ولجميع المسلمين</span></div>''')
+<div class="tp-auth"><small>{CO.BY}</small><i class="kn">{CO.AUTHOR_LINES[0]}</i><b>{CO.AUTHOR_LINES[1]}</b><span>{CO.PRAYER}</span></div>''')
 
 
 def verse_page():
