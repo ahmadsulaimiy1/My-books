@@ -262,6 +262,8 @@ def volumes_of(r):
 def main():
     arg = sys.argv[1] if len(sys.argv) > 1 else "1"
     n = "all" if arg == "all" else int(arg)
+    if n == 11:   # the eleventh has no thabat of its own: it closes with the series thabat (Bible, ch. 111 §4)
+        raise SystemExit("volume 11 keeps the series thabat («المصادر والمراجع»): python3 thabat.py all")
     ords = set(ORD) if n == "all" else {ORD[n - 1]}
     where = {}                                          # (author, title) -> the volumes that cite it (for «all»)
     rows, foreign, open_ = {}, [], []
