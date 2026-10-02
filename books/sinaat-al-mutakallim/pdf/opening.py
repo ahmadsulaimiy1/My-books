@@ -698,9 +698,68 @@ PAGED_CONFIG = ("<script>window.PagedConfig = { auto: true, before: async () => 
                 "await Promise.all([...document.fonts].map(f => f.load().catch(() => null))); await document.fonts.ready; }, "
                 "after: () => { window.__pagedDone = true; } };</script>")
 
+# Paged.js 0.4.3 places a note (Footnotes.moveFootnote) by the call's line; two corrections, the rest as it was:
+# - the line policy measured from the start of the run before the call, which may begin lines above it, so a
+#   whole paragraph went over with the note; it is the call's own line;
+# - a call inside a block kept whole (a hadith, an ayah, a row) needs the block, not its line, above the note.
+# When the note does not fit whole, its first lines stay under the call and the rest goes to the foot of the next
+# page, before any other note (Bible, ch. 86): the hadith, its introducing line and its note no longer go over
+# together and leave their height in white. Preflight counts the notes printed against the notes set.
+FOOTNOTE_FIX = """<script>(() => {
+  const H = Paged.registeredHandlers.find(h => h.prototype && h.prototype.moveFootnote && h.prototype.createFootnoteCall);
+  if (!H) throw new Error("Paged.js: no footnote handler to correct");
+  const kept = el => {
+    let out = null;
+    for (let a = el.parentElement; a && !a.classList.contains("pagedjs_page_content"); a = a.parentElement)
+      if (getComputedStyle(a).breakInside === "avoid") out = a;
+    return out;
+  };
+  H.prototype.moveFootnote = function (e, t, n) {
+    let r;
+    const a = t.querySelector(".pagedjs_footnote_area"), i = a.querySelector(".pagedjs_footnote_content"),
+      o = i.querySelector(".pagedjs_footnote_inner_content");
+    if (!(e && e.nodeType === 1)) return;
+    if (n) r = this.createFootnoteCall(e);
+    e.removeAttribute("data-break-before");
+    if (o.querySelector(`[data-ref="${e.dataset.ref}"]`)) { e.remove(); return; }
+    o.appendChild(e);
+    i.classList.remove("pagedjs_footnote_empty");
+    e.dataset.footnoteMarker = e.dataset.ref; e.id = `note-${e.dataset.ref}`;
+    const s = i.scrollHeight, l = t.querySelector(".pagedjs_page_content").getBoundingClientRect(), d = l.left + l.width,
+      p = r && r.getBoundingClientRect(), c = a.getBoundingClientRect(),
+      u = this.marginsHeight(i), m = this.paddingHeight(i), h = this.borderHeight(i), g = u + m + h;
+    let f = Math.floor(c.top);
+    if (c.height === 0) f -= this.marginsHeight(i, false) + this.paddingHeight(i, false) + this.borderHeight(i, false);
+    const y = e.dataset.notePolicy;
+    let b = 0, S = 0;
+    if (r) {
+      const prev = r.previousSibling, rg = new Range();
+      prev ? rg.setStartBefore(prev) : rg.setStartBefore(r); rg.setEndAfter(r);
+      const box = rg.getBoundingClientRect();
+      b = box.bottom;
+      if (y && y !== "auto") {
+        if (y === "line") {
+          const last = [...rg.getClientRects()].filter(q => q.height && q.bottom >= box.bottom - 2);
+          S = Math.ceil(last.length ? Math.min(...last.map(q => q.top)) : box.top);
+        } else if (y === "block") { const q = r.closest("p").previousElementSibling; S = q ? Math.ceil(q.getBoundingClientRect().bottom) : Math.ceil(box.bottom); }
+      } else S = Math.ceil(box.bottom);
+      const k = kept(r);
+      if (k) { const kb = Math.ceil(k.getBoundingClientRect().bottom); if (kb > b && kb <= c.top) { b = kb; S = Math.max(S, kb); } }
+    }
+    const v = s + g - c.height, x = b ? f - b : 0, k = b ? Math.floor(c.top) - S : 0, w = a.querySelector("[data-note='footnote']");
+    if (n && p.left > d) e.remove();
+    else if (!w && n && g > x) { t.style.setProperty("--pagedjs-footnotes-height", "0px"); const div = document.createElement("div"); div.appendChild(e); this.needsLayout.push(div); }
+    else if (n) {
+      if (b < c.top - v) t.style.setProperty("--pagedjs-footnotes-height", `${s + u + h}px`);
+      else { t.style.setProperty("--pagedjs-footnotes-height", `${c.height + k}px`); o.style.height = c.height + k - g + "px"; }
+    } else t.style.setProperty("--pagedjs-footnotes-height", `${s + g}px`);
+  };
+})();</script>"""
+
 
 # a long table that Paged.js carries over repeats its head on the new page, laid out with the rows so its height is
-# counted; a table that would open with its head and fewer than two rows at the foot of a page goes over whole, and
+# counted; a table that would open with its head and fewer than two rows at the foot of a page goes over whole (and the
+# heading right above it with it), and
 # one that would leave a single row for the next page takes a row over with it (Chromium alone repeats a thead natively)
 REPEAT_HEAD = ("<script>Paged.registerHandlers(class extends Paged.Handler {"
                " afterPageLayout(page, _, token) { const n = token && token.node; if (!n) return;"
@@ -708,7 +767,12 @@ REPEAT_HEAD = ("<script>Paged.registerHandlers(class extends Paged.Handler {"
                " if (!src || !src.querySelector(':scope > thead') || !src.dataset.ref) return;"
                " const shown = page.querySelector(`table[data-ref=\"${src.dataset.ref}\"]`); if (!shown) return;"
                " const rows = shown.querySelectorAll('tbody tr');"
-               " if (!shown.dataset.splitFrom && rows.length < 2) { shown.remove(); token.node = src; token.offset = 0; return; }"
+               " if (!shown.dataset.splitFrom && rows.length < 2) { shown.remove(); token.node = src; token.offset = 0;"
+               " const head = src.previousElementSibling, last = head && (head.matches('h2, h3, h4') ? head : head.matches('.keep') ? head.lastElementChild : null);"
+               " if (last && (last.matches('h2, h3, h4') || last.matches('.reserve') && last.previousElementSibling && last.previousElementSibling.matches('h2, h3, h4'))) {"
+               " const hs = page.querySelector(`[data-ref=\"${head.dataset.ref}\"]`), body = page.querySelector('.pagedjs_page_content');"
+               " if (hs && hs.getBoundingClientRect().top - body.getBoundingClientRect().top > 40) { hs.remove(); token.node = head; } }"   # its heading goes over with it
+               " return; }"
                " const row = el.closest('tr'); if (!row || !row.parentElement || row.parentElement.tagName !== 'TBODY') return;"
                " const all = [...row.parentElement.children];"
                " if (all.length - all.indexOf(row) === 1 && rows.length >= 3) {"
@@ -723,7 +787,7 @@ REPEAT_HEAD = ("<script>Paged.registerHandlers(class extends Paged.Handler {"
 
 def doc(css, body, page_css, paged=False):
     # a page that carries notes is paginated by Paged.js, which alone places a note at the foot of its page
-    script = f'{PAGED_CONFIG}<script src="{PAGED.as_uri()}"></script>{REPEAT_HEAD}' if paged else ""
+    script = f'{PAGED_CONFIG}<script src="{PAGED.as_uri()}"></script>{FOOTNOTE_FIX}{REPEAT_HEAD}' if paged else ""
     return (f'<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>صناعة المتكلّم العربي</title>'
             f'<style>{css}</style><style>{CSS % dict(wrapw=0, wraph=0, calls=CALLS)}{C2.TEXT_CSS}{extra_css()}{IX.CSS}</style>'
             f'<style>{page_css}</style>{script}</head><body>{IDS.check(body)}</body></html>')

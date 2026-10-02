@@ -483,31 +483,29 @@ def main(v=1, proof=False):
     # (opening.py), so one never moved would be lost unseen; and a block pushed to the next page once left its notes
     # behind as well (Volume 6, folios ٢٠–٢١). A note opens on its number, sapphire Amiri at the notes' right edge
     sapphire = int(re.search(r"--sapphire: #([0-9A-Fa-f]{6})", V.O.CSS).group(1), 16)
-    note_pt = float(re.search(r"\.fn-note\[data-footnote-marker\][^}]*font: 400 ([\d.]+)pt", V.O.CSS).group(1))
     marks, holes = [], []
     for i, p in enumerate(doc):
-        ln = []                                         # (top, bottom, size of the line's longest run, its runs)
-        for b in p.get_text("dict")["blocks"]:
-            for l in b.get("lines", []):
-                sp = [s for s in l["spans"] if s["text"].strip()]
-                if sp and top - 2 < l["bbox"][1] and l["bbox"][3] < bottom:
-                    ln.append((l["bbox"][1], l["bbox"][3], max(sp, key=lambda s: len(s["text"].strip()))["size"], sp))
-        notes = [r for r in ln if abs(r[2] - note_pt) < .3]
-        if not notes:
+        ln = [l for b in p.get_text("dict")["blocks"] for l in b.get("lines", [])
+              if any(s["text"].strip() for s in l["spans"]) and top - 2 < l["bbox"][1] and l["bbox"][3] < bottom]
+        body = [l for l in ln if any(s["size"] >= 11.5 and s["text"].strip() for s in l["spans"])]
+        if not body:
             marks.append([])
             continue
-        n0, edge = min(r[0] for r in notes), max(r[3][0]["bbox"][2] for r in notes)
-        marks.append([s["text"].strip() for r in ln if r[0] >= n0 - 3 for s in r[3]
-                      if s["font"].startswith("Amiri-Bold") and s["color"] == sapphire
-                      and all("٠" <= c <= "٩" for c in s["text"].strip()) and s["bbox"][2] > edge - 12])
+        # a note's number stands at the right edge of the text block, below the text (a call never opens a line: it
+        # hugs its word); a note that opens on a Latin reference is set smaller, so its size cannot find it
+        edge, low = max(l["bbox"][2] for l in body), max(l["bbox"][3] for l in body)
+        marks.append([s["text"].strip() for l in ln if l["bbox"][1] >= low - 2 for s in l["spans"]
+                      if s["text"].strip() and s["font"].startswith("Amiri-Bold") and s["color"] == sapphire
+                      and all("٠" <= c <= "٩" for c in s["text"].strip()) and s["bbox"][2] >= edge - 1.5])
         # a page of a running chapter that stops well above its notes: what could not be broken (a block kept whole
         # with its note, a table, a heading with its first lines) went over and left its height in white. Listed for
         # the eye: some are the price of a rule (a hadith never split, the line that introduces it never left behind)
-        if kinds[i] in ("flow", "open") and i + 1 < len(doc) and kinds[i + 1] == "flow":
-            body = [r[1] for r in ln if abs(r[2] - note_pt) >= .3 and r[1] <= n0 + 1]
-            if body and (n0 - max(body)) / MM > 30:
+        notes = [l["bbox"][1] for l in ln if l["bbox"][1] >= low - 2]
+        if notes and kinds[i] in ("flow", "open") and i + 1 < len(doc) and kinds[i + 1] == "flow":
+            gap = (min(notes) - low) / MM
+            if gap > 30:
                 holes.append(i)
-                review.append((labels[i], f"بياضٌ قدره {n(round((n0 - max(body)) / MM))} مم فوق الحواشي وفصلها متّصل"))
+                review.append((labels[i], f"بياضٌ قدره {n(round(gap))} مم فوق الحواشي وفصلها متّصل"))
     add("الإخراج الفني", "لا بياض كبيرًا في وسط فصل (أكثر من ٣٠ مم فوق الحواشي)", "للمراجعة" if holes else "يجتاز",
         f"{n(len(holes))} صفحة" + (": " + "، ".join(labels[i] for i in holes) if holes else ""))
     twice = [labels[i + 1] for i in range(len(marks) - 1) if kinds[i + 1] == "flow" and set(marks[i]) & set(marks[i + 1])]
