@@ -662,8 +662,8 @@ def keep_headings(soup):
         last = keep.find_all(recursive=False)[-1] if keep.find_all(recursive=False) else None
         if last is None or last.get("class") == ["reserve"] or last.name not in ("p", "h4", "h3"):
             continue
-        if last.name == "p" and len(last.get_text(" ", strip=True)) > 360:
-            continue
+        if last.name == "p" and (len(last.get_text(" ", strip=True)) > 360 or not last.get_text().rstrip().endswith(":")):
+            continue                                    # a lead-in introduces (it ends on its colon); a paragraph does not
         after = keep.find_next_sibling()
         if after is None or heading_level(after) is not None:
             continue
