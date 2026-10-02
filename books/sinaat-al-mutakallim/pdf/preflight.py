@@ -534,6 +534,12 @@ def main(v=1, proof=False):
     add("التقنية", "كل حاشيةٍ مطبوعةٌ مرةً واحدة في أسفل صفحتها", "يجتاز" if ok else "لا يجتاز",
         f"{n(printed)} حاشية" + (f" من {n(expected)}" if expected is not None and printed != expected else "")
         + (f"؛ مكرّرة في: {'، '.join(twice)}" if twice else ""))
+    # a mark of vocalisation with no letter beneath it: the speck Chromium leaves at the foot of a page whose next
+    # page opens on a line with a high mark (strays.py removes it at the build's last save)
+    import strays
+    lone = sorted({labels[i] for i, *_ in strays.find(doc)})
+    add("التقنية", "لا علامة شكلٍ يتيمة بلا حرفها (الشدة أو التنوين أسفل الصفحة)", "يجتاز" if not lone else "لا يجتاز",
+        "، ".join(lone))
     if v == 1:
         xref_bad = []
         muq = {k: f for k, f in enumerate(sorted(OPENING.glob("*.md"))[1:18], 1)}

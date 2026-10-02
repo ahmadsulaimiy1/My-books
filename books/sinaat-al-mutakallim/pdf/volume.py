@@ -185,10 +185,10 @@ p.ph + p, p.ph + ol, p.ph + ul { text-indent: 0; }
 /* a speech that runs on to the next page continues there without its mark: its body keeps the second column */
 .grade > .gbd { grid-column: 2; min-width: 0; }
 .grade > .gmk .gm { font-size: 16pt; width: 1.36em; height: 1.36em; }
-.grade > .gbd > p:first-child { text-indent: 0; }
-.grade > .gbd > p:first-child strong { font: 600 11.2pt/1.5 "Changa"; color: var(--sapphire); }
-.grade.g1 > .gbd > p:first-child strong { color: var(--crimson); }
-.grade.g2 > .gbd > p:first-child strong { color: var(--gold-ink); }
+.grade > .gbd > p:first-child, .grade > .gbd > .gk > p:first-child { text-indent: 0; }
+.grade > .gbd > p:first-child strong, .grade > .gbd > .gk > p:first-child strong { font: 600 11.2pt/1.5 "Changa"; color: var(--sapphire); }
+.grade.g1 > .gbd > p:first-child strong, .grade.g1 > .gbd > .gk > p:first-child strong { color: var(--crimson); }
+.grade.g2 > .gbd > p:first-child strong, .grade.g2 > .gbd > .gk > p:first-child strong { color: var(--gold-ink); }
 .grade blockquote { margin: 1.6mm 0 2mm; padding: 0 4mm 0 0; border-right: 1.2pt solid var(--gold); break-inside: auto; }
 .grade.g1 blockquote { border-right-color: var(--crimson); }
 .grade.g3 blockquote, .grade.g4 blockquote { border-right-color: var(--sapphire); }
@@ -570,12 +570,27 @@ def forced_breaks(soup, n):
 def keep_headings(soup):
     """A heading never ends a page: it travels with the headings right under it and with the start of what follows
     (a short block whole; a long list by its first two items; a long table or block after it is left to break)."""
+    for gbd in soup.find_all("div", class_="gbd"):          # a graded model's title with its drill, never apart
+        kids = gbd.find_all(recursive=False)
+        if len(kids) < 2 or kids[0].name != "p" or kids[0].find("strong") is None:
+            continue
+        ncls = kids[1].get("class") or []
+        if any(c in ncls for c in ("voice", "card", "exm")) and len(kids[1].get_text(" ", strip=True)) < 900:
+            # the drill never breaks: kept apart, its title stood alone at the foot of the page (Volume 2, folio ١٢٨)
+            keep = soup.new_tag("div", attrs={"class": "keep gk"})
+            kids[0].insert_before(keep)
+            keep.append(kids[0].extract())
+            keep.append(kids[1].extract())
     for ph in soup.find_all("p", class_="ph"):              # a minor head likewise, with a short block after it
         nxt = ph.find_next_sibling()
         if ph.parent is None or "keep" in (ph.parent.get("class") or []) or nxt is None or heading_level(nxt):
             continue
         keep = soup.new_tag("div", attrs={"class": "keep"})
-        if len(nxt.get_text(" ", strip=True)) < 360 and nxt.name != "table":
+        ncls = nxt.get("class") or []
+        if len(nxt.get_text(" ", strip=True)) < 360 and nxt.name != "table" \
+                or any(c in ncls for c in ("voice", "card", "exm")) and len(nxt.get_text(" ", strip=True)) < 900:
+            # a block that never breaks (a voice drill, a card) takes its head with it, whole: a graded model's head
+            # once stood alone at the foot of the page, its drill overleaf (Volume 2, folio ١٢٨)
             ph.insert_before(keep)
             keep.append(ph.extract())
             keep.append(nxt.extract())
@@ -646,8 +661,13 @@ def keep_headings(soup):
             if nxt.name == "ol":
                 nxt["start"] = str(int(nxt.get("start", 1)) + 2)
             nxt["class"] = (nxt.get("class") or []) + ["runon"]
+        elif nxt.name == "table" and len(nxt.select("tbody > tr")) > 4:
+            # a long table breaks between its rows (its head repeats): the heading keeps room for the head and the
+            # first rows, and goes over with the table when they do not fit. Kept whole, an eight-row table went over
+            # with its heading and left 106 mm of white (Volume 7, folio ٢٦٦)
+            keep.append(soup.new_tag("div", attrs={"class": "reserve"}))
         elif nxt.name == "table" or nxt.find("table") is not None or "card" in cls or "grades" in cls:
-            # a block that does not break (a table, a card): the heading goes with it, whole
+            # a block that does not break (a short table, a card): the heading goes with it, whole
             if text < 2400:
                 keep.append(nxt.extract())
         elif nxt.name in ("p", "ul", "ol", "blockquote"):
@@ -1403,7 +1423,11 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
     # every piece carries its own copy of the faces and pypdf writes them uncompressed: one lossless pass merges
     # the duplicates and compresses the streams (a 35 MB file becomes a fifth of it, page for page the same)
     tmp = dest.with_suffix(".tmp.pdf")
-    pymupdf.open(str(dest)).save(str(tmp), garbage=4, deflate=True, deflate_fonts=True)
+    merged = pymupdf.open(str(dest))
+    import strays                                           # a mark Chromium painted twice across a page break
+    strays.clean(merged)
+    merged.save(str(tmp), garbage=4, deflate=True, deflate_fonts=True)
+    merged.close()
     tmp.replace(dest)
     if IX.ACTIVE:
         IX.strip(dest)                                                  # the index links served only to find the pages
