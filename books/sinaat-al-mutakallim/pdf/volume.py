@@ -799,8 +799,12 @@ def lesson_html(md, breaks=True):
             prev = table.find_previous_sibling()
             card(prev if prev is not None and prev.name == "p" and prev.get_text().strip().startswith("▣") else None, table)
             continue
-        if len(table.find_all("tr")) <= 9 and not (table.parent is not None and "tblk" in (table.parent.get("class") or [])):
-            box = soup.new_tag("div", attrs={"class": "tblk"})       # Paged.js keeps a block whole, not a table
+        # a small table without notes is kept whole (Paged.js keeps a block whole, not a table); a larger one, or one
+        # that calls a note, runs on row by row under its repeated head: kept whole, it left a hole the size of
+        # itself at the foot of the page before it, and Paged.js printed its notes on both pages
+        if (len(table.find_all("tr")) <= 4 and not table.find(class_="fn-note")
+                and not (table.parent is not None and "tblk" in (table.parent.get("class") or []))):
+            box = soup.new_tag("div", attrs={"class": "tblk"})
             table.insert_before(box)
             box.append(table.extract())
         if head and head[0] == "السطر" and len(head) == 3:
@@ -918,9 +922,13 @@ def bab_chapters(n, files=None):
     return files[0] if files and files[0].name.startswith("00-") else None, out
 
 
+NOTES = {}                                                 # rendered piece -> the notes it sets (preflight counts them)
+
+
 def render(html, name):
     """B.render, after the separator check: no dot beside an Eastern digit, in the text or a list number (Bible, ch. 22 §٩)."""
     B.check_separators(BeautifulSoup(html, "html.parser"))
+    NOTES[name] = html.count('<span class="fn-note ')
     return B.render(html, name)
 
 
@@ -1390,7 +1398,8 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
         raise SystemExit(f"Type 3 glyphs (a glyph none of the book's faces holds) on pages: {t3}")
     anchors_page = {a: label[ix] for a, ix in anchors.items() if ix is not None}
     (HERE / ".cache" / f"{tag}-anchors.json").write_text(__import__("json").dumps(
-        {"anchors": anchors_page, "labels": label, "kinds": [k for _, k, _ in out]}, ensure_ascii=False), encoding="utf-8")
+        {"anchors": anchors_page, "labels": label, "kinds": [k for _, k, _ in out],
+         "notes": sum(c for k, c in NOTES.items() if k.startswith(f"{tag}-"))}, ensure_ascii=False), encoding="utf-8")
     print(dest, len(w.pages), "pages")
 
 

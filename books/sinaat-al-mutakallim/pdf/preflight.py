@@ -479,6 +479,44 @@ def main(v=1, proof=False):
                     dropped.append(f"{f.name}:{n(i)} ({part}: «{' '.join(t.split()[:5] if part == 'أوله' else t.split()[-5:])}»)")
     add("التقنية", "النص كاملٌ في الصفحات: كل فقرةٍ تبدأ وتنتهي كما في المخطوطة", "يجتاز" if not dropped else "لا يجتاز",
         f"{n(checked)} فقرة" + (f"؛ لم يُعثر على: {'؛ '.join(dropped)}" if dropped else ""))
+    # every note set is printed once, at the foot of a page: a note waits out of the flow until Paged.js moves it there
+    # (opening.py), so one never moved would be lost unseen; and a block pushed to the next page once left its notes
+    # behind as well (Volume 6, folios ٢٠–٢١). The number that opens a note is sapphire Amiri at the notes' right edge
+    sapphire = int(re.search(r"--sapphire: #([0-9A-Fa-f]{6})", V.O.CSS).group(1), 16)
+    note_pt = float(re.search(r"\.fn-note\[data-footnote-marker\][^}]*font: 400 ([\d.]+)pt", V.O.CSS).group(1))
+    marks = []
+    for p in doc:
+        spans = [(s, l) for b in p.get_text("dict")["blocks"] for l in b.get("lines", []) for s in l["spans"]]
+        lines = [l for s, l in spans if abs(s["size"] - note_pt) < .3]
+        edge = max((l["bbox"][2] for l in lines), default=None)
+        marks.append([s["text"].strip() for s, l in spans if edge is not None and s["font"].startswith("Amiri-Bold")
+                      and s["color"] == sapphire and s["text"].strip() and all("٠" <= c <= "٩" for c in s["text"].strip())
+                      and s["bbox"][2] > edge - 1])
+    twice = [labels[i + 1] for i in range(len(marks) - 1)
+             if kinds[i + 1] == "flow" and set(marks[i]) & set(marks[i + 1])]
+    printed, expected = sum(map(len, marks)), meta.get("notes")
+    ok = not twice and (expected is None or printed == expected)
+    # a page of a running chapter that stops well above its notes: what could not be broken (a block kept whole with
+    # its note, a table, a heading with its first lines) went over and left its height in white. Listed for the eye:
+    # some are the price of a rule (a hadith never split, a line that introduces it never left at the foot)
+    holes = []
+    for i, p in enumerate(doc):
+        if kinds[i] not in ("flow", "open") or i + 1 >= len(doc) or kinds[i + 1] != "flow":
+            continue
+        L = sorted((l["bbox"][1], l["bbox"][3], s["size"]) for b in p.get_text("dict")["blocks"] for l in b.get("lines", [])
+                   for s in l["spans"][:1] if s["text"].strip() and top - 2 < l["bbox"][1] and l["bbox"][3] < bottom)
+        notes = [y0 for y0, _, sz in L if abs(sz - note_pt) < .3]
+        body = [y1 for y0, y1, sz in L if sz >= 11.5 and (not notes or y1 <= min(notes) + 1)]
+        if body:
+            gap = ((min(notes) if notes else bottom) - max(body)) / MM
+            if gap > 30:
+                holes.append(i)
+                review.append((labels[i], f"بياضٌ قدره {n(round(gap))} مم في صفحةٍ يتّصل فصلها بعدها"))
+    add("الإخراج الفني", "لا بياض كبيرًا في وسط فصل (أكثر من ٣٠ مم فوق الحواشي)", "للمراجعة" if holes else "يجتاز",
+        f"{n(len(holes))} صفحة" + (": " + "، ".join(labels[i] for i in holes) if holes else ""))
+    add("التقنية", "كل حاشيةٍ مطبوعةٌ مرةً واحدة في أسفل صفحتها", "يجتاز" if ok else "لا يجتاز",
+        f"{n(printed)} حاشية" + (f" من {n(expected)}" if expected is not None and printed != expected else "")
+        + (f"؛ مكرّرة في: {'، '.join(twice)}" if twice else ""))
     if v == 1:
         xref_bad = []
         muq = {k: f for k, f in enumerate(sorted(OPENING.glob("*.md"))[1:18], 1)}

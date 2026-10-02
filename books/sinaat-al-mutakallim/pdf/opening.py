@@ -135,13 +135,18 @@ ul.cols { columns: 2; column-gap: 9mm; } ul.cols > li { break-inside: avoid; }
 .sig-name { display: block; font: 700 14pt "Changa"; color: var(--sapphire); }
 .sig-du { display: block; font: 400 11pt/1.6 "Amiri"; color: var(--gold-ink); margin-top: 1mm; }
 ol { list-style: arabic-indic; } ol > li { padding-right: 1.6mm; } ol > li::marker { content: counter(list-item, arabic-indic) "\2002"; font: 700 11pt "Amiri"; color: var(--gold-ink); }
-table { width: 100%%; border-collapse: collapse; font: 400 8.8pt/1.55 "IBM Plex Sans Arabic"; margin: 4mm 0; break-inside: avoid; }
+table { width: 100%%; border-collapse: collapse; font: 400 8.8pt/1.55 "IBM Plex Sans Arabic"; margin: 4mm 0; }
+tbody tr { break-inside: avoid; }   /* a table runs on between its rows, never through one; a small one is kept whole by its box (div.tblk) */
 th { font: 600 9.2pt/1.4 "Changa"; text-align: right; color: var(--sapphire); background: none; border-bottom: .8pt solid var(--gold); padding: 1.6mm 2mm; }
 td { border-bottom: .4pt solid var(--hair); padding: 1.4mm 2mm; vertical-align: top; color: var(--ink-2); }
 td:first-child { font-weight: 600; color: var(--ink); }
 /* notes at the foot of the page where they are called (Bible, chs. 45 and 82): a short gold rule from the
    right, then the notes in a smaller Scheherazade, each hanging on its chapter number */
 .fn-note { float: footnote; footnote-policy: line; }
+/* a note waits out of the flow until Paged.js moves it to the foot of its page: laid out inline, a long takhrij made
+   its hadith look taller than the page, and the hadith, its introducing line and its note went over together,
+   leaving a hole the size of all three (preflight counts the notes printed against the notes set) */
+span.fn-note:not([data-footnote-marker]) { display: none; }
 .fn-hug { white-space: nowrap; }
 .fn-hug > .fn-note { white-space: normal; }
 .pagedjs_page_content, .pagedjs_footnote_inner_content { direction: ltr; }
@@ -689,13 +694,20 @@ PAGED_CONFIG = ("<script>window.PagedConfig = { auto: true, before: async () => 
 
 
 # a long table that Paged.js carries over repeats its head on the new page, laid out with the rows so its height is
-# counted; a table of which only the head would stay behind goes over whole (Chromium alone repeats a thead natively)
+# counted; a table that would open with its head and fewer than two rows at the foot of a page goes over whole, and
+# one that would leave a single row for the next page takes a row over with it (Chromium alone repeats a thead natively)
 REPEAT_HEAD = ("<script>Paged.registerHandlers(class extends Paged.Handler {"
                " afterPageLayout(page, _, token) { const n = token && token.node; if (!n) return;"
-               " const src = (n.nodeType === 1 ? n : n.parentElement).closest('table');"
+               " const el = n.nodeType === 1 ? n : n.parentElement; const src = el.closest('table');"
                " if (!src || !src.querySelector(':scope > thead') || !src.dataset.ref) return;"
-               " const shown = page.querySelector(`table[data-ref=\"${src.dataset.ref}\"]`);"
-               " if (shown && !shown.querySelector('tbody tr')) { shown.remove(); token.node = src; token.offset = 0; } }"
+               " const shown = page.querySelector(`table[data-ref=\"${src.dataset.ref}\"]`); if (!shown) return;"
+               " const rows = shown.querySelectorAll('tbody tr');"
+               " if (!shown.dataset.splitFrom && rows.length < 2) { shown.remove(); token.node = src; token.offset = 0; return; }"
+               " const row = el.closest('tr'); if (!row || !row.parentElement || row.parentElement.tagName !== 'TBODY') return;"
+               " const all = [...row.parentElement.children];"
+               " if (all.length - all.indexOf(row) === 1 && rows.length >= 3) {"
+               " const last = rows[rows.length - 1], s = src.querySelector(`tr[data-ref=\"${last.dataset.ref}\"]`);"
+               " if (s && !last.querySelector('[data-footnote-call]')) { last.remove(); token.node = s; token.offset = 0; } } }"   # a row with a note keeps its place, or the note stays behind
                " renderNode(clone, node) { if (clone.nodeType !== 1 || clone.tagName !== 'TR' || !node.parentElement || node.parentElement.tagName !== 'TBODY') return;"
                " const table = clone.closest('table'); if (!table || table.querySelector(':scope > thead')) return;"
                " const head = node.closest('table').querySelector(':scope > thead'); if (!head) return;"
