@@ -573,11 +573,15 @@ def keep_headings(soup):
         nxt = ph.find_next_sibling()
         if ph.parent is None or "keep" in (ph.parent.get("class") or []) or nxt is None or heading_level(nxt):
             continue
-        if len(nxt.get_text(" ", strip=True)) < 600 and nxt.name != "table":
-            keep = soup.new_tag("div", attrs={"class": "keep"})
+        keep = soup.new_tag("div", attrs={"class": "keep"})
+        if len(nxt.get_text(" ", strip=True)) < 360 and nxt.name != "table":
             ph.insert_before(keep)
             keep.append(ph.extract())
             keep.append(nxt.extract())
+        elif nxt.name in ("p", "ul", "ol"):                  # a longer one breaks: room for its first lines, as below
+            ph.insert_before(keep)
+            keep.append(ph.extract())
+            keep.append(soup.new_tag("div", attrs={"class": "reserve"}))
     for h in soup.find_all(["h3", "h4"]):
         if h.parent is None or any(c in (h.parent.get("class") or []) for c in ("keep",)):
             continue
@@ -641,15 +645,15 @@ def keep_headings(soup):
             if nxt.name == "ol":
                 nxt["start"] = str(int(nxt.get("start", 1)) + 2)
             nxt["class"] = (nxt.get("class") or []) + ["runon"]
-        elif nxt.name == "p" and text < 900:
-            keep.append(nxt.extract())
         elif nxt.name == "table" or nxt.find("table") is not None or "card" in cls or "grades" in cls:
             # a block that does not break (a table, a card): the heading goes with it, whole
             if text < 2400:
                 keep.append(nxt.extract())
         elif nxt.name in ("p", "ul", "ol", "blockquote"):
             # a long paragraph or list that breaks: the heading keeps room for three of its lines, a spacer whose
-            # height the margin gives back once it fits; without the room the heading goes over with its text
+            # height the margin gives back once it fits; without the room the heading goes over with its text. (A
+            # paragraph of up to nine lines once went over whole with its heading and its notes, leaving a hole up to
+            # the height of all three at the foot of the page before: Volume 6, folios ٧٦–٨٠)
             keep.append(soup.new_tag("div", attrs={"class": "reserve"}))
     # a head kept with only a short lead-in («اقرأ النص الآتي…») still needs what the lead-in introduces: an
     # unbroken block (the voice drill, a table, a card) comes into the keep; a list or a paragraph that breaks

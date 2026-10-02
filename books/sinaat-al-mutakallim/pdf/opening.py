@@ -130,6 +130,7 @@ ul { list-style: none; } ul > li { position: relative; }
 ul > li::before { content: ""; position: absolute; right: -4.8mm; top: 3.9mm; width: 1.4mm; height: 1.4mm; transform: rotate(45deg); background: var(--gold); }
 .keep { break-inside: avoid; }
 .keep > h3 + p { text-indent: 0; }
+.reserve { height: 17mm; margin-bottom: -17mm; }
 ul.cols { columns: 2; column-gap: 9mm; } ul.cols > li { break-inside: avoid; }
 .sig { margin: 9mm 0 0 0; text-align: left; break-inside: avoid; }
 .sig-name { display: block; font: 700 14pt "Changa"; color: var(--sapphire); }
@@ -471,7 +472,12 @@ def md_to_html(md):
             keep = soup.new_tag("div", attrs={"class": "keep"})
             h.insert_before(keep)
             keep.append(h.extract())
-            keep.append(nxt.extract())
+            if nxt.name == "p" and len(nxt.get_text(" ", strip=True)) >= 360:
+                # a long paragraph breaks: the heading keeps room for its first lines (a spacer the margin gives
+                # back), not the whole paragraph, which went over with it and left its height in white
+                keep.append(soup.new_tag("div", attrs={"class": "reserve"}))
+            else:
+                keep.append(nxt.extract())
     # the close of a chapter (its summary, or what follows from it) is set in its own panel, down to the next heading
     for h in soup.find_all("h3"):
         if not re.search(r"خلاصة|^ما يترتّب|^ما يُستخرج|^موقع هذا الكتاب", h.get_text().lstrip("٠١٢٣٤٥٦٧٨٩. ")):
