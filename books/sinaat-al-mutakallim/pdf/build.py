@@ -1313,6 +1313,9 @@ def check_separators(soup: BeautifulSoup):
             text = " ".join(re.findall(r'content:\s*"([^"]*)"', text))
         for m in DOT_BY_DIGIT.finditer(text):
             hits.append(text[max(0, m.start() - 30):m.end() + 30].replace("\n", " "))
+    for node in soup.find_all("style"):             # a list number followed by a full stop reads «١.» as «٠١» (Bible, ch. 22 §٩)
+        for m in re.finditer(r'counter\([^)]*arabic-indic\)\s*"\s*[.·]', str(node)):
+            hits.append(str(node)[max(0, m.start() - 30):m.end() + 10].replace("\n", " "))
     if hits:
         raise SystemExit("middle dot beside an Arabic-Indic digit (reads as «٠»); use «،» «؛» «:» «/» or "
                          "<i class=\"sep\"></i>:\n  " + "\n  ".join(hits))

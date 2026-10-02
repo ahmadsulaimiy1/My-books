@@ -918,6 +918,12 @@ def bab_chapters(n, files=None):
     return files[0] if files and files[0].name.startswith("00-") else None, out
 
 
+def render(html, name):
+    """B.render, after the separator check: no dot beside an Eastern digit, in the text or a list number (Bible, ch. 22 §٩)."""
+    B.check_separators(BeautifulSoup(html, "html.parser"))
+    return B.render(html, name)
+
+
 def chapter_md(files):
     """The chapter's files joined: the first gives the title and question; the others continue it. A chapter's notes
     are numbered through all its files, from ١ (Bible, ch. 34 §٣), in the order of their calls."""
@@ -1262,7 +1268,7 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
         return doc(css, FM.contents(rows, n), O.CONT_CSS, paged=True)
 
     tag = f"vol{n:02d}"
-    paper = B.render(doc(css, '<div style="width:170mm;height:240mm"></div>', fixed), f"{tag}-paper")   # an empty page: the field is white, nothing painted
+    paper = render(doc(css, '<div style="width:170mm;height:240mm"></div>', fixed), f"{tag}-paper")   # an empty page: the field is white, nothing painted
     out, anchors, toc_slot = [], {"toc": None}, None       # out: [(page, kind, heads)]; page 1 is out[0]
     def place(i, kind, html, meta):
         nonlocal toc_slot
@@ -1278,21 +1284,21 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
             anchors[meta["alias"]] = len(out)
         if kind == "toc":
             anchors["toc"] = len(out)
-            r = PdfReader(str(B.render(toc_html({}), f"{tag}-toc")))
+            r = PdfReader(str(render(toc_html({}), f"{tag}-toc")))
             toc_slot = (len(out), len(r.pages[:O.body_pages(r)]))
             for pg in r.pages[:toc_slot[1]]:
                 out.append((pg, "toc", hd))
             return
         if kind == "flow":
             body, bandhtml = html
-            r = PdfReader(str(B.render(body, f"{tag}-{i:02d}")))
-            band = B.render(bandhtml, f"{tag}-{i:02d}-band")
+            r = PdfReader(str(render(body, f"{tag}-{i:02d}")))
+            band = render(bandhtml, f"{tag}-{i:02d}-band")
             for j, pg in enumerate(r.pages[:O.body_pages(r)]):
                 under = PdfReader(str(band if j == 0 else paper)).pages[0]
                 under.merge_page(pg)
                 out.append((under, "open" if j == 0 else "flow", hd))
             return
-        r = PdfReader(str(B.render(html, f"{tag}-{i:02d}")))
+        r = PdfReader(str(render(html, f"{tag}-{i:02d}")))
         for j, pg in enumerate(r.pages[:O.body_pages(r)] if kind == "cont" and not meta.get("keep") else r.pages):
             if kind == "cont":
                 under = PdfReader(str(paper)).pages[0]
@@ -1321,7 +1327,7 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
     main_at = anchors["main"]
     label = [O.ABJAD[i] if i < main_at else str(i - main_at + 1).translate(AR) for i in range(len(out))]
     numbers = {a: label[ix] for a, ix in anchors.items() if ix is not None}
-    r = PdfReader(str(B.render(toc_html(numbers), f"{tag}-toc")))
+    r = PdfReader(str(render(toc_html(numbers), f"{tag}-toc")))
     if len(r.pages[:O.body_pages(r)]) != toc_slot[1]:
         raise SystemExit("the contents changed length when its page numbers were filled in")
     for k in range(toc_slot[1]):
@@ -1343,7 +1349,7 @@ def assemble(css, n, review, pieces, toc, outline, fixed):
                                  " — give the chapter a short head: <!-- head: … -->")
         marks.append((label[i], st, parts, "odd" if p % 2 else "even"))
     slug = f"نسخة المراجعة · {FM.volume_line(n)} · ليست للنشر" if review else None
-    fr = PdfReader(str(B.render(folios(css, marks, slug), f"{tag}-folios")))
+    fr = PdfReader(str(render(folios(css, marks, slug), f"{tag}-folios")))
     w = PdfWriter()
     for i, (pg, _, _) in enumerate(out):
         pg.merge_page(fr.pages[i])

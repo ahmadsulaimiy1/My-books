@@ -134,7 +134,7 @@ ul.cols { columns: 2; column-gap: 9mm; } ul.cols > li { break-inside: avoid; }
 .sig { margin: 9mm 0 0 0; text-align: left; break-inside: avoid; }
 .sig-name { display: block; font: 700 14pt "Changa"; color: var(--sapphire); }
 .sig-du { display: block; font: 400 11pt/1.6 "Amiri"; color: var(--gold-ink); margin-top: 1mm; }
-ol { list-style: arabic-indic; } ol > li { padding-right: 1.6mm; } ol > li::marker { content: counter(list-item, arabic-indic) "."; font: 700 11pt "Amiri"; color: var(--gold-ink); }
+ol { list-style: arabic-indic; } ol > li { padding-right: 1.6mm; } ol > li::marker { content: counter(list-item, arabic-indic) "\2002"; font: 700 11pt "Amiri"; color: var(--gold-ink); }
 table { width: 100%%; border-collapse: collapse; font: 400 8.8pt/1.55 "IBM Plex Sans Arabic"; margin: 4mm 0; break-inside: avoid; }
 th { font: 600 9.2pt/1.4 "Changa"; text-align: right; color: var(--sapphire); background: none; border-bottom: .8pt solid var(--gold); padding: 1.6mm 2mm; }
 td { border-bottom: .4pt solid var(--hair); padding: 1.4mm 2mm; vertical-align: top; color: var(--ink-2); }
