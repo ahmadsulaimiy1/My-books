@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ثبت المصادر of a volume: every source its notes cite, with the edition the book uses (Bible, chs. 45, 74, 112و).
 
+The degree of each book is read from the quotation ledger (التحقيق/سجل-النقول.tsv), from the rows of the volume itself.
 The sources are the titles the Master Bibliography marks as cited in the volume (its field «المجلدات», set when the
 volume's notes are set), completed by the few the base does not hold (OUTSIDE). The edition is the base's catalogue
 record, or, where that record is open or is not the edition cited, the edition read on the book's card or on the scan
@@ -134,6 +135,10 @@ OUTSIDE = [
     (("الثاني",), "ابن الجزري", "المقدمة فيما يجب على قارئ القرآن أن يعلمه", "عن نسخة عليها خط الناظم، تحقيق محمد خليل الزروق، دار الساقية، بنغازي، الأولى، ٢٠٠٧م"),
     (("الثاني",), "أبو بكر ابن الأنباري", "إيضاح الوقف والابتداء في كتاب الله عز وجل", "تحقيق محيي الدين عبد الرحمن رمضان، مجمع اللغة العربية بدمشق، ١٣٩١هـ / ١٩٧١م"),
     (("الرابع",), "المتنبي", "ديوان أبي الطيب المتنبي", "وفي أثناء متنه شرح الواحدي، نشره فريدرخ ديتريصي، برلين، ١٨٦١م"),
+    # sources of notes added in the final editorial round (edition as the note gives it, from the copy it was read in)
+    (("السادس",), "ابن حجر", "بلوغ المرام", "تحقيق ماهر ياسين الفحل، دار القبس، الرياض، الأولى، ١٤٣٥هـ / ٢٠١٤م"),
+    (("العاشر",), "ابن حجر", "تقريب التهذيب", "تحقيق محمد عوامة، دار الرشيد، سوريا، الأولى، ١٤٠٦هـ / ١٩٨٦م"),
+    (("العاشر",), "السخاوي", "المقاصد الحسنة", "تحقيق محمد عثمان الخشت، دار الكتاب العربي، بيروت، الأولى، ١٤٠٥هـ / ١٩٨٥م"),
     (("الثامن",), "تقي الدين السبكي", "قضاء الأرب في أسئلة حلب", "تحقيق محمد عالم عبد المجيد الأفغاني، المكتبة التجارية، مكة المكرمة، ١٤٠٩هـ"),
 ]
 # the foreign sources as the thabat sets them: those the base holds, by the base's title; then those it does not
@@ -222,6 +227,7 @@ def tidy(ed):
     ed = re.sub(r"([٠-٩]+)\s*هـ\s*[-–/]\s*([٠-٩]+)\s*مـ?(?=[\s،.]|$)", "\\1هـ\u00A0/\u00A0\\2م", ed)
     ed = re.sub(r"([٠-٩]+)\s+(هـ|م)(?=[\s،.]|$)", r"\1\2", ed)
     ed = re.sub(r"\s+-\s+(?=لبنان)", "\u00A0- ", ed)
+    ed = re.sub(r"\s+-\s+(?=القاهرة)", "، ", ed)    # a catalogue's Latin hyphen between publisher and city
     return re.sub(r"[ \t\n]+", " ", ed).strip(" ،.")
 
 
@@ -241,7 +247,11 @@ PENDING = {
     (8, "أبو نعيم الأصبهاني"): "print",      # Hilya 9/118, scan D2/227 and its title page (F011)
     (8, "النووي، المجموع شرح المهذب"): "print",  # al-Majmu' 1/54, scan D2/308 (F011)
     (8, "الألباني، صحيح سنن أبي داود"): "print",  # 3/189 and 3/193–194 and the title page seen (F001, F008)
-    (4, "السخاوي"): "print",                 # al-Maqasid 3/372, Maymana ed., matched on the print scan (F247)
+    (4, "السخاوي"): "print",
+    (8, "السخاوي"): "digital",               # al-Maqasid 1/390–391, Maymana ed., on Shamela 1266 (F409)
+    (10, "السخاوي"): "digital",              # al-Maqasid, al-Khisht ed., p. 332 no. 455, on Shamela (F044)
+    (10, "ابن حجر"): "digital",              # Taqrib, ed. Awwama, p. 460 no. 5617, on Shamela (F398)
+    (6, "ابن حجر، بلوغ المرام"): "digital",  # Bulugh al-Maram no. 935, ed. al-Fahl, p. 361, on Shamela 17757 (F304)                 # al-Maqasid 3/372, Maymana ed., matched on the print scan (F247)
     (4, "المتنبي"): "print",                 # Dieterici's Berlin 1861 edition, p. 548 seen on archive.org 3190pdf_202001 (round 2, V4)
 }
 EDITIONS = {}
@@ -330,7 +340,7 @@ def notes_of(n):
 def same_page_seen(author, title, n, others):
     """A volume whose ledger has no row for a book still quotes it on the print when one of its own notes cites the book at
     a page another volume's row matched on the scan of that print (the same passage, the same page)."""
-    seen = [r for r in ledger_rows("all") if on_print(r) and matches(author, title, r, others)]
+    seen = [r for r in ledger_rows("all") if on_print(r) and matches(author, title, r, True)]   # by title alone
     h = norm(short(title)).split()[0] if not re.search(r"[A-Za-z]", author) else author.split(",")[0]
     for r in seen:
         part = re.sub(r"[^٠-٩]", "", r["الجزء"]) if re.fullmatch(r"\s*[٠-٩]+\s*", r["الجزء"]) else ""
