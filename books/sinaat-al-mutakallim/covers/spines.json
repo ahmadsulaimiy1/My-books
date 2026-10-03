@@ -200,13 +200,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "5": {
-  "pages": 461,
+  "pages": 459,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 28.3,
-  "spine_mm": 34.3,
+  "block_mm": 28.1,
+  "spine_mm": 34.1,
   "wrap_mm": [
-   416.3,
+   416.1,
    276.0
   ],
   "front": [
@@ -218,13 +218,13 @@
   "spine": [
    191.0,
    15.0,
-   225.3,
+   225.1,
    261.0
   ],
   "back": [
-   232.3,
+   232.1,
    15.0,
-   401.3,
+   401.1,
    261.0
   ],
   "margin_mm": 15.0,
@@ -250,13 +250,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "6": {
-  "pages": 497,
+  "pages": 499,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 30.4,
-  "spine_mm": 36.4,
+  "block_mm": 30.5,
+  "spine_mm": 36.5,
   "wrap_mm": [
-   418.4,
+   418.5,
    276.0
   ],
   "front": [
@@ -268,18 +268,18 @@
   "spine": [
    191.0,
    15.0,
-   227.4,
+   227.5,
    261.0
   ],
   "back": [
-   234.4,
+   234.5,
    15.0,
-   403.4,
+   403.5,
    261.0
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 194.5,
+  "shelf_x0": 194.3,
   "isbn": "978-978-000006-6",
   "isbn_printed": false,
   "plates": [
@@ -329,7 +329,7 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 230.9,
+  "shelf_x0": 230.8,
   "isbn": "978-978-000007-3",
   "isbn_printed": false,
   "plates": [
@@ -379,7 +379,7 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 261.2,
+  "shelf_x0": 261.1,
   "isbn": "978-978-000008-0",
   "isbn_printed": false,
   "plates": [
@@ -429,7 +429,7 @@
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 301.7,
+  "shelf_x0": 301.6,
   "isbn": "978-978-000009-7",
   "isbn_printed": false,
   "plates": [
@@ -450,13 +450,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "10": {
-  "pages": 581,
+  "pages": 585,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 35.5,
-  "spine_mm": 41.5,
+  "block_mm": 35.7,
+  "spine_mm": 41.7,
   "wrap_mm": [
-   423.5,
+   423.7,
    276.0
   ],
   "front": [
@@ -468,18 +468,18 @@
   "spine": [
    191.0,
    15.0,
-   232.5,
+   232.7,
    261.0
   ],
   "back": [
-   239.5,
+   239.7,
    15.0,
-   408.5,
+   408.7,
    261.0
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 328.5,
+  "shelf_x0": 328.4,
   "isbn": "978-978-000010-4",
   "isbn_printed": false,
   "plates": [
@@ -500,13 +500,13 @@
   "status": "provisional: from covers/printer-spec.json until the printer confirms it"
  },
  "11": {
-  "pages": 401,
+  "pages": 409,
   "binding": "case",
   "caliper_mm_per_leaf": 0.12,
-  "block_mm": 24.7,
-  "spine_mm": 30.7,
+  "block_mm": 25.1,
+  "spine_mm": 31.1,
   "wrap_mm": [
-   412.7,
+   413.1,
    276.0
   ],
   "front": [
@@ -518,18 +518,18 @@
   "spine": [
    191.0,
    15.0,
-   221.7,
+   222.1,
    261.0
   ],
   "back": [
-   228.7,
+   229.1,
    15.0,
-   397.7,
+   398.1,
    261.0
   ],
   "margin_mm": 15.0,
   "joint_mm": 7.0,
-  "shelf_x0": 370.0,
+  "shelf_x0": 370.1,
   "isbn": "978-978-000011-1",
   "isbn_printed": false,
   "plates": [
