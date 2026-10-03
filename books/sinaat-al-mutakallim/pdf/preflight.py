@@ -129,8 +129,8 @@ def main(v=1, proof=False):
     untraced = []
     for f, t in texts.items():
         for i, line in enumerate(t.splitlines(), 1):
-            if line.startswith("[^"):
-                continue
+            if line.startswith("[^") or "✘" in line:
+                continue                                # an error shown as error (✘): its correction carries the note
             for m in re.finditer(r"\((?:متفق عليه|رواه [^)]{2,60})\)", line):
                 if "[^" not in line[m.end():] and not re.search(r"…|/|، متفق", m.group(0)):
                     untraced.append(f"{f.name}:{n(i)}")

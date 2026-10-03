@@ -149,7 +149,7 @@ table.cmp td:first-child { font-weight: 600; color: var(--ink); white-space: now
 .tp-sub { position: absolute; top: 146mm; right: 24mm; left: 24mm; font: 400 19pt/1.4 var(--read); color: var(--ink); }
 .tp-desc { position: absolute; top: 160mm; right: 24mm; left: 44mm; font: 400 10pt/1.7 var(--sans); color: var(--ink-2); }
 .tp-vol { position: absolute; top: 106mm; right: 24mm; color: var(--gold-l); font: 500 8.6pt/1.6 var(--sans); }
-.tp-auth { position: absolute; bottom: 26mm; right: 24mm; }
+.tp-auth { position: absolute; bottom: 30mm; right: 24mm; }   /* clear of the house seal below it */
 .tp-auth small { font: 400 10pt/1.5 var(--read); color: var(--ink-3); display: block; }
 .tp-auth b { font: 600 17pt/1.5 var(--read); color: var(--sapphire); display: block; }
 .tp-auth .kn { font: 400 11.5pt/1.5 var(--read); font-style: normal; color: var(--gold-ink, #8A6A1F); display: block; margin-top: 1mm; }
