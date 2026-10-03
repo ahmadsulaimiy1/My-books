@@ -27,11 +27,25 @@ EMAIL = "al-ihsan.design@gmail.com"
 FICTIONAL_NAMES = ("الأسماء الواردة في أمثلة هذا الكتاب وحواراته أسماءٌ افتراضية، وُضعت لتمثيل المواقف التعليمية، "
                    "ولا يُقصد بها أشخاصٌ بأعيانهم؛ وما ذُكر فيها من مدنٍ فهو إطارٌ للموقف لا غير.")
 RIGHTS_HOLDER = "حقوق التأليف للمؤلف، وحقوق الطبع والنشر لدار الإحسان للتصميم والنشر"
-CITY = None
-# the ISBNs are the publisher's to issue: one for each volume, and one for the set if the publisher prints it on every
-# volume; the legal deposit likewise. None: not yet issued, and the line is not printed (the release check reports it)
-ISBN = {n: None for n in range(1, 12)}
-ISBN_SET = None
+CITY = "لاغوس، نيجيريا"                                                   # the legal place of publication (the author, 2026-10-03)
+
+
+def _isbns():
+    """The ISBNs the publisher supplied (covers/isbn.json): one for each volume, and one for the set. A number whose
+    check digit fails is not an ISBN as written; it is not printed, nor 'corrected' here, until the publisher confirms
+    it (the release check reports it). None: not supplied, and the line is not printed."""
+    import json
+    from pathlib import Path
+
+    def ok(x):
+        d = [int(c) for c in x if c.isdigit()]
+        return len(d) == 13 and (10 - sum(v * (3 if i % 2 else 1) for i, v in enumerate(d[:12])) % 10) % 10 == d[12]
+    j = json.loads((Path(__file__).resolve().parent.parent / "covers" / "isbn.json").read_text(encoding="utf-8"))
+    vols = {n: (j["volumes"].get(str(n)) if ok(j["volumes"].get(str(n), "")) else None) for n in range(1, 12)}
+    return vols, (j.get("set") if ok(j.get("set") or "") else None)
+
+
+ISBN, ISBN_SET = _isbns()
 DEPOSIT = {n: None for n in range(1, 12)}
 
 # the series in eleven volumes: ten in four stages and thirteen babs, then the reference (Bible, chs. 112c–112و).
@@ -428,7 +442,7 @@ def colophon(n=1, proof=None):
     return page(f'''<div class="co">{device(n, 13.0)}
 <p style="margin-top:8mm">{done}</p>
 <p class="f">صُفّ المتن بحرف شهرزاد الجديد، والنصوص التراثية بحرف أميري، والقرآن الكريم بحرف أميري قرآن، والعناوين بحرفَي تشانغا وكوفام، والتنقّل بحرف بلكس العربي، والإحالات اللاتينية بحرف سورس سيريف.</p>
-<p class="f">صدر عن {PUBLISHER_AR}، {YEAR}.</p>{note}
+<p class="f">صدر عن {PUBLISHER_AR}، {CITY + "، " if CITY else ""}{YEAR}.</p>{note}
 {mark()}</div>''')
 
 

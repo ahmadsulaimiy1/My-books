@@ -1,8 +1,23 @@
 {
- "status": "provisional",
- "note": "numbers supplied by the project for layout; official status only once issued by the national ISBN agency to the publisher. Nothing is printed in the zone while status is provisional (Bible, ch. 25 §10و).",
- "volumes": {"1": "978-978-000001-1", "2": "978-978-000002-8", "3": "978-978-000003-5", "4": "978-978-000004-2",
-             "5": "978-978-000005-9", "6": "978-978-000006-6", "7": "978-978-000007-3", "8": "978-978-000008-0",
-             "9": "978-978-000009-7", "10": "978-978-000010-4", "11": "978-978-000011-1"},
- "set": "978-978-000012-8"
+ "status": "supplied",
+ "note": "numbers supplied by the author/publisher for this edition (2026-09-26; confirmed for use 2026-10-03). Printed in the imprint and the PDF metadata where the ISBN-13 check digit is valid (volumes 1-9). Volume 10 (…010-4), volume 11 (…011-1) and the set (…012-8) fail the check digit as supplied, so they are not printed and are not corrected here: the publisher confirms them against the agency's allocation.",
+ "volumes": {
+  "1": "978-978-000001-1",
+  "2": "978-978-000002-8",
+  "3": "978-978-000003-5",
+  "4": "978-978-000004-2",
+  "5": "978-978-000005-9",
+  "6": "978-978-000006-6",
+  "7": "978-978-000007-3",
+  "8": "978-978-000008-0",
+  "9": "978-978-000009-7",
+  "10": "978-978-000010-4",
+  "11": "978-978-000011-1"
+ },
+ "set": "978-978-000012-8",
+ "invalid_as_supplied": [
+  "10",
+  "11",
+  "set"
+ ]
 }
