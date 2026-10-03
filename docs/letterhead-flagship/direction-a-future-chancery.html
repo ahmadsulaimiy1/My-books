@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Direction A — Future Chancery</title>
+<link rel="stylesheet" href="assets/letterhead-typography.css">
+<link rel="stylesheet" href="assets/materials.css">
+<style>
+  /* ═══════════════════════════════════════════════════════════════════════
+     DIRECTION A · FUTURE CHANCERY
+     The sapphire is not a band placed on the page — it is a structural
+     member. A 48mm column of flood sapphire runs the full height and bleeds
+     off three edges, and the sheet is what remains beside it. The identity
+     is mounted ON that column, set vertically, the way a building carries its
+     name on a pier. One foil rule crosses the boundary between column and
+     sheet: the single gesture that ties the two materials together.
+     A crimson index bleeds off the spine at a measured height.
+     ═══════════════════════════════════════════════════════════════════════ */
+  .spine{ position:absolute; left:0; top:0; bottom:0; width:48mm; z-index:2; }
+  .sheet > .spine{ z-index:2; }
+
+  /* the registration ladder: hairlines with their own micro-numerals */
+  .ladder{ position:absolute; left:0; width:48mm; height:.4px; opacity:.5; }
+  .ladder-n{ position:absolute; font:400 4.4pt/1 "Jost"; letter-spacing:.22em;
+    color:rgba(233,220,190,.55); direction:ltr; }
+
+  .mark{ position:absolute; left:12mm; top:15mm; width:24mm; height:29mm; }
+
+  .spine-en{ left:19.5mm; top:190mm; font-family:"Bodoni Moda",serif; font-weight:600;
+    font-size:11.6pt; letter-spacing:.22em; direction:ltr; }
+  .spine-sub{ left:26.5mm; top:190mm; font-family:"Jost",sans-serif; font-weight:300;
+    font-size:5.6pt; letter-spacing:.42em; direction:ltr; color:rgba(226,214,186,.72); }
+  .spine-foot{ left:13.2mm; top:284mm; font-family:"Jost",sans-serif; font-weight:400;
+    font-size:5.9pt; letter-spacing:.2em; direction:ltr; color:rgba(233,222,196,.82); }
+  .spine-foot b{ font-weight:500; }
+  .spine-foot i{ display:inline-block; width:2.4px; height:2.4px; background:var(--gold-400);
+    transform:rotate(45deg); margin:0 1.5em; vertical-align:.18em; font-style:normal; }
+
+  /* crimson index — bleeds off the left edge, a fixed 150mm down */
+  .index{ position:absolute; left:0; top:62mm; width:14mm; height:28mm; z-index:3; }
+  .index::after{ content:""; position:absolute; right:0; top:0; bottom:0; width:.5px;
+    background:var(--gold-400); opacity:.75; }
+
+  /* ── the sheet side ───────────────────────────────────────────────────── */
+  .head{ position:absolute; right:18mm; left:60mm; top:24mm; text-align:right; }
+  .office{ font-family:"Aref Ruqaa",serif; font-weight:400; font-size:12.4pt;
+    color:var(--sapphire-600); margin-bottom:5mm; letter-spacing:0; }
+  .name{ font-family:var(--name-face),"Amiri",serif; font-weight:700; font-size:31pt; line-height:1.62;
+    color:var(--sapphire-800); margin:0; white-space:nowrap; }
+  .name .house{ font-size:.62em; }
+
+  /* the one gesture that crosses the boundary: a foil rule running out of the
+     sheet and into the sapphire, where it becomes the lighter foil */
+  .cross-rule{ position:absolute; left:0; right:18mm; top:78mm; height:.9px; z-index:3; }
+
+  .scope-ar{ position:absolute; right:18mm; left:60mm; top:83mm; text-align:right;
+    font-family:"Amiri",serif; font-size:10.2pt; line-height:1.8; color:var(--ink-60); margin:0; }
+  .scope-en{ position:absolute; right:18mm; left:60mm; top:97mm; direction:ltr; text-align:right;
+    font:300 5.3pt/1 "Jost",sans-serif; letter-spacing:.225em; text-transform:uppercase;
+    color:var(--ink-40); }
+  .scope-en i{ display:inline-block; width:2.3px; height:2.3px; background:var(--gold-500);
+    transform:rotate(45deg); margin:0 .9em; vertical-align:.16em; font-style:normal; }
+
+  /* an oversized deboss of the mark, sitting low in the writing field */
+  .ghost{ position:absolute; right:14mm; top:170mm; width:74mm; height:90mm; opacity:.34; }
+
+  .foot{ position:absolute; right:18mm; left:60mm; bottom:14mm; direction:ltr; }
+  .foot-rule{ height:.5px; opacity:.8; margin-bottom:3mm; }
+  .folio{ display:flex; justify-content:space-between; align-items:baseline;
+    font:400 5.8pt/1 "Jost",sans-serif; letter-spacing:.24em; color:var(--ink-40); }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ── the sapphire pier ─────────────────────────────────────────────── -->
+  <div class="spine field-sapphire">
+    <img class="mark" src="assets/insignia-foil.png" alt="Insignia of the Personal Office">
+
+    <div class="ladder foil-block foil-block--dark" style="top:54mm"></div>
+    <span class="ladder-n" style="left:12mm; top:55.4mm">01</span>
+    <div class="ladder foil-block foil-block--dark" style="top:96mm"></div>
+    <span class="ladder-n" style="left:12mm; top:97.4mm">02</span>
+    <div class="ladder foil-block foil-block--dark" style="top:196mm"></div>
+    <span class="ladder-n" style="left:12mm; top:197.4mm">03</span>
+
+    <span class="vert spine-en foil foil--dark">IMAM AHMAD IBROHIM SULAIMIY</span>
+    <span class="vert spine-sub">PERSONAL OFFICE &nbsp;·&nbsp; ĀL-ES-SALAM</span>
+    <span class="vert spine-foot">+234&nbsp;810&nbsp;430&nbsp;2087<i></i>+44&nbsp;7961&nbsp;869638<i></i>abisulaimiycollege@gmail.com</span>
+  </div>
+
+  <div class="index field-crimson"></div>
+
+  <!-- ── the sheet ─────────────────────────────────────────────────────── -->
+  <div class="head">
+    <div class="office letterpress">المكتب الخاص</div>
+    <h1 class="name letterpress">الإمام أحمد بن إبراهيم السليمي <span class="house">(آل سلام)</span></h1>
+  </div>
+
+  <div class="cross-rule foil-block"></div>
+
+  <p class="scope-ar">للتطوير الأكاديمي والدعوة الإسلامية والعلاقات الدولية والشؤون الأهلية الخاصة</p>
+  <div class="scope-en">Academic Development<i></i>Islamic Da&lsquo;wah<i></i>International Relations<i></i>Private &amp; Civic Affairs</div>
+
+  <img class="ghost" src="assets/insignia-deboss.png" alt="" aria-hidden="true">
+
+  <div class="foot">
+    <div class="foot-rule foil-block"></div>
+    <div class="folio"><span>ĀL-ES-SALAM</span><span>PERSONAL OFFICE</span></div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,199 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   THE LETTERHEAD — shared stylesheet
+   المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام)
+
+   One stylesheet drives the whole stationery set, so the masthead on a letter
+   can never drift from the masthead on the blank sheet:
+
+     letterhead.html                    the blank first sheet
+     letterhead-continuation.html       the second sheet
+     letter-congratulation-dr-habib.html  a letter set on it
+
+   The three CONCEPT files are deliberately self-contained instead: they are
+   alternatives held up against each other, not part of the production set.
+
+   Typography is embedded, not linked — see letterhead-typography.css.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     THE LETTERHEAD — first sheet
+     المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام)
+
+     Concept I, IMPERIAL SCHOLAR, refined. What changed from the concept:
+       · the vertical rhythm is struck to one 4.5mm module, so every gap in
+         the masthead is a multiple of it and the eye reads a single system
+       · the name is set at one weight, as the insignia lockup sets it;
+         only the house takes gold, and only at the same size
+       · the flanking hairlines gained lozenge terminals, so they read as
+         drawn rules rather than as underscores
+       · chancery corner ticks mark the type area — the discipline of
+         Concept II without enclosing the page in a box
+       · the English scope is set on two balanced lines at a readable size
+         instead of one cramped line
+       · the foot answers the head: rule, register, royal thread, and the
+         office named once more in Arabic at the very bottom
+
+     PRODUCTION: press  the SPEC button (screen only) to see which elements
+     take gold foil, blind emboss, deboss and watermark. See README.md.
+     ═══════════════════════════════════════════════════════════════════════ */
+  :root{
+    --ink:#222222; --ink-70:#4f4d49; --ink-45:#7c7873;
+    --gold:#C5A773; --gold-deep:#9C7F4E;
+    --royal:#002FAB;
+    --paper:#FCFAF5; --paper-deep:#F4EFE3;
+    --mod:4mm;                   /* the one vertical module */
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  html,body{margin:0;padding:0;}
+  @page{ size:A4; margin:0; }
+
+  .sheet{
+    position:relative; width:210mm; height:297mm; overflow:hidden;
+    background:radial-gradient(118% 76% at 50% -4%, #FFFEFA 0%, var(--paper) 44%, var(--paper-deep) 100%);
+    color:var(--ink); font-family:"Source Serif 4", Georgia, serif;
+  }
+  .sheet::after{ content:""; position:absolute; inset:0; pointer-events:none; opacity:.42;
+    background-image:repeating-linear-gradient(90deg, rgba(34,34,34,.013) 0 .5px, transparent .5px 3.1px); }
+
+  /* ── chancery corner ticks: they mark the type area, they do not cage it ── */
+  .tick{ position:absolute; width:7mm; height:7mm; }
+  .tick::before,.tick::after{ content:""; position:absolute; background:var(--gold); opacity:.8; }
+  .tick::before{ width:7mm; height:.5px; } .tick::after{ width:.5px; height:7mm; }
+  .tick.tl{ top:12mm; left:14mm; }
+  .tick.tr{ top:12mm; right:14mm; } .tick.tr::before{ right:0; } .tick.tr::after{ right:0; }
+  .tick.bl{ bottom:12mm; left:14mm; } .tick.bl::before{ bottom:0; } .tick.bl::after{ bottom:0; }
+  .tick.br{ bottom:12mm; right:14mm; }
+  .tick.br::before{ bottom:0; right:0; } .tick.br::after{ bottom:0; right:0; }
+
+  /* ── ornament primitives ─────────────────────────────────────────────── */
+  .rule{ height:.9px; background:linear-gradient(90deg,transparent,var(--gold) 9%,var(--gold) 91%,transparent); }
+  .rule-fine{ height:.5px; background:linear-gradient(90deg,transparent,var(--gold-deep) 14%,var(--gold-deep) 86%,transparent); opacity:.62; }
+  .lozenge{ width:5mm; height:5mm; transform:rotate(45deg); border:.5px solid var(--gold-deep);
+    position:relative; flex:0 0 auto; }
+  .lozenge::before{ content:""; position:absolute; inset:1.3mm; background:var(--gold); }
+  .lozenge.sm{ width:2.6mm; height:2.6mm; border:none; background:var(--gold); }
+  .lozenge.sm::before{ content:none; }
+  .rule-group{ display:flex; align-items:center; gap:3.2mm; }
+  .rule-group > .rule,.rule-group > .rule-fine{ flex:1 1 auto; }
+  i.pip{ display:inline-block; width:2.7px; height:2.7px; background:var(--gold);
+         transform:rotate(45deg); margin:0 .9em; vertical-align:.14em; }
+
+  /* ── masthead ────────────────────────────────────────────────────────── */
+  .masthead{ position:absolute; top:12mm; left:0; right:0; padding:0 20mm; text-align:center; }
+
+  .mark-wrap{ display:block; width:19.8mm; margin:0 auto calc(var(--mod) * 1.15); }
+  .mark{ width:19.8mm; height:24mm; display:block; }
+
+  .eyebrow-row{ display:flex; align-items:center; gap:4.4mm; margin:0 auto var(--mod); max-width:126mm; }
+  .eyebrow-row > .rule-fine{ flex:1 1 auto; }
+  .office-eyebrow{ font-family:"Reem Kufi","Amiri",serif; font-size:13pt; font-weight:500;
+    color:var(--ink-70); word-spacing:.18em; line-height:1; white-space:nowrap; }
+
+  .name-ar{ font-family:"Amiri",serif; font-weight:700; font-size:27pt; line-height:1.28;
+    color:var(--ink); margin:0; word-spacing:.05em; white-space:nowrap; }
+  .name-ar .house{ color:var(--gold-deep); }
+
+  .rule-major{ margin-top:var(--mod); }
+  .scope-ar{ font-family:"Amiri",serif; font-size:10.8pt; line-height:1.65; color:var(--ink-70);
+    margin:var(--mod) auto 0; max-width:154mm; }
+
+  .latin{ direction:ltr; margin-top:calc(var(--mod) * 1.3); }
+  .latin-office{ font-family:"Cinzel",serif; font-weight:500; font-size:7.4pt;
+    letter-spacing:.46em; text-indent:.46em; color:var(--gold-deep); margin-bottom:2.6mm; }
+  .latin-name{ font-family:"Cinzel",serif; font-weight:600; font-size:12.6pt;
+    letter-spacing:.15em; text-indent:.15em; color:var(--ink); line-height:1.2; }
+  .latin-house{ font-family:"Cinzel",serif; font-weight:400; font-size:8.2pt;
+    letter-spacing:.54em; text-indent:.54em; color:var(--gold-deep); margin-top:2mm; }
+  .latin-scope{ font-family:"Source Serif 4",Georgia,serif; font-size:6.4pt; line-height:1.95;
+    letter-spacing:.20em; text-indent:.20em; color:var(--ink-45); margin-top:calc(var(--mod) * .9);
+    text-transform:uppercase; }
+
+  /* ── watermark ───────────────────────────────────────────────────────── */
+  .watermark{ position:absolute; left:50%; top:192mm; transform:translate(-50%,-50%);
+    width:48mm; pointer-events:none; display:block; }
+  .watermark img{ opacity:.04; }
+  body.spec .watermark img{ opacity:.16; }
+
+  /* ── foot ────────────────────────────────────────────────────────────── */
+  .footer{ position:absolute; left:22mm; right:22mm; bottom:13mm; text-align:center; }
+  .footer .rule-group{ margin-bottom:var(--mod); }
+  .contact{ direction:ltr; font-family:"Source Serif 4",Georgia,serif; font-size:8.4pt;
+    letter-spacing:.075em; color:var(--ink-70); line-height:1; }
+  .contact i.pip{ margin:0 1.3em; width:3px; height:3px; vertical-align:.18em; }
+  .contact a{ color:inherit; text-decoration:none; }
+  .royal-thread{ width:15mm; height:1.5px; background:var(--royal); opacity:.85;
+    margin:calc(var(--mod) * .85) auto 0; border-radius:1px; }
+  .foot-ar{ font-family:"Reem Kufi","Amiri",serif; font-size:7pt; color:var(--gold-deep);
+    word-spacing:.2em; margin-top:2.6mm; opacity:.9; }
+
+  /* ── PRODUCTION SPEC OVERLAY · screen only, never printed ────────────── */
+  .speckit{ position:fixed; top:14px; left:14px; z-index:99; font:600 10px/1 system-ui,sans-serif;
+    letter-spacing:.14em; background:#191918; color:#E3D4B4; 
+    border:1px solid #5b5b57; padding:9px 13px; border-radius:2px; cursor:pointer; }
+  body.spec .spec-zone{ outline:.7px dashed #0B4FD8; outline-offset:3px; }
+  /* only the statically-placed zones need a containing block; forcing it on
+     the watermark would strip its absolute placement off the sheet */
+  body.spec .spec-zone:not(.watermark){ position:relative; }
+  body.spec .spec-zone::after{
+    content:attr(data-spec); position:absolute; top:-5.2mm; left:50%; transform:translateX(-50%);
+    font:600 6.2pt/1.2 system-ui,sans-serif; letter-spacing:.1em; white-space:nowrap;
+    color:#0B4FD8; background:rgba(255,255,255,.92); border:.5px solid #0B4FD8;
+    padding:1.6px 5px; border-radius:2px; direction:ltr; }
+  body.spec .spec-zone.below::after{ top:auto; bottom:-5.2mm; }
+  @media print{ .speckit{ display:none !important; }
+                body.spec .spec-zone{ outline:none !important; }
+                body.spec .spec-zone::after{ display:none !important; } }
+
+  @media screen{ body{ background:#3b3a38; padding:28px 16px; }
+    .sheet{ margin:0 auto; box-shadow:0 30px 70px rgba(0,0,0,.45); } }
+  @media print{ body{background:none;padding:0;} .sheet{box-shadow:none;} }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THE WRITING FIELD — everything below applies to a letter set on the sheet
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* The field runs from the foot of the masthead to the head of the register.
+   Arabic sets right to left; the reference block sits on the reading edge. */
+/* Measured against the printed sheet: the masthead clears at 114mm and the
+   register begins at 264.6mm, so the field is bounded at 116mm / 40mm. A body
+   longer than roughly 140mm of set type belongs on the continuation sheet. */
+.field{ position:absolute; top:116mm; bottom:40mm; right:22mm; left:22mm; }
+.field--continued{ top:44mm; }
+
+.refline{ display:flex; justify-content:space-between; align-items:baseline;
+  font-family:"Amiri",serif; font-size:9.8pt; color:var(--ink-70); margin-bottom:6mm; }
+.refline .lbl{ color:var(--gold-deep); }
+.refline .val{ color:var(--ink); }
+
+.addressee{ font-family:"Amiri",serif; font-size:11.4pt; line-height:1.7; color:var(--ink);
+  margin:0 0 6mm; }
+.addressee .hon{ color:var(--gold-deep); }
+
+.letter{ font-family:"Amiri",serif; font-size:11.3pt; line-height:1.82; color:var(--ink);
+  text-align:justify; }
+.letter p{ margin:0 0 3.2mm; text-indent:0; }
+.letter p.salaam{ margin-bottom:5mm; }
+.letter .emph{ color:var(--gold-deep); }
+
+/* The signature follows the body rather than being pinned to the foot of the
+   field: pinning only holds while the letter is short, and a long one would
+   run straight through it. */
+.signature{ margin-top:6mm; text-align:right; }
+.sig-rule{ width:52mm; height:.5px; background:var(--gold-deep); opacity:.55;
+  margin:0 0 3.2mm auto; }
+.sig-name{ font-family:"Amiri",serif; font-weight:700; font-size:11.8pt; line-height:1.4;
+  color:var(--ink); }
+.sig-role{ font-family:"Amiri",serif; font-size:10pt; color:var(--ink-70); margin-top:1.4mm; }
+.sig-role .en{ font-family:"Cinzel",serif; font-size:7pt; letter-spacing:.26em;
+  color:var(--gold-deep); display:block; margin-top:2.2mm; direction:ltr; }
+
+/* ── the second sheet ─────────────────────────────────────────────────────── */
+.cont-head{ position:absolute; top:15mm; left:0; right:0; text-align:center; }
+.cont-mark{ width:11.6mm; height:14mm; display:block; margin:0 auto 4mm; }
+.cont-name{ font-family:"Amiri",serif; font-weight:700; font-size:11.4pt; color:var(--ink-70);
+  line-height:1; margin-bottom:4mm; white-space:nowrap; }
+.cont-rule{ margin:0 22mm; }
+.folio{ position:absolute; bottom:13mm; left:0; right:0; text-align:center;
+  font-family:"Amiri",serif; font-size:9.5pt; color:var(--ink-45);
+  letter-spacing:.2em; }
+.folio .n{ color:var(--gold-deep); }

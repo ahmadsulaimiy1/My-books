@@ -1,0 +1,217 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   MATERIALS — the physical vocabulary of the sheet
+   المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام)
+
+   Every direction in this folder is built from these five materials and this
+   one palette. Nothing here is decoration: each entry describes a real process
+   a stationer would quote for, and is named for that process, so the design and
+   the print order use the same words.
+
+       .foil / .foil-block   champagne-gold hot foil, with its brushed grain
+       .emboss               blind emboss  — raised, no ink
+       .deboss               deboss        — pressed in, no ink
+       .letterpress          letterpress   — ink, with the bite of the impression
+       .sheet                pearl-white cotton stock
+   ══════════════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* ── sapphire: the dominant colour, and the architecture of the page ───── */
+  --sapphire-900:#04112B;
+  --sapphire-800:#082047;
+  --sapphire-700:#0C2E68;
+  --sapphire-600:#123F8E;
+  --royal:#002FAB;          /* the luminous accent, never a large field */
+
+  /* ── crimson: deliberate, regal, and rationed ─────────────────────────── */
+  --crimson-900:#4E0C18;
+  --crimson-800:#6E1223;
+  --crimson-700:#8E1B2E;
+  --crimson-600:#A8213A;
+
+  /* ── champagne gold ───────────────────────────────────────────────────── */
+  --gold-050:#FAF2DE;
+  --gold-200:#EBD9AE;
+  --gold-400:#D4B985;
+  --gold-500:#C5A773;
+  --gold-700:#9C7F4E;
+  --gold-900:#6B5430;
+
+  /* ── pearl and paper ──────────────────────────────────────────────────── */
+  --pearl:#CFD6DE;
+  --paper:#F9F6EF;
+  --paper-2:#F2EDE1;
+  --ink:#151A27;            /* a sapphire-black: never a neutral grey */
+  --ink-60:#5A6072;
+  --ink-40:#8E93A1;
+
+  /* The face the NAME is set in. Aref Ruqaa is a Ruq'ah-derived display face:
+     calligraphic and unmistakably hand-cut. Amiri is Naskh: the register in
+     which scholarly Arabic is conventionally set. Switching this one value
+     changes every sheet in the set — see the note in README.md. */
+  --name-face:"Aref Ruqaa";
+
+  /* champagne foil: eleven stops, because real foil turns the light several
+     times across a single letter — three stops reads as a yellow gradient */
+  --foil:linear-gradient(104deg,
+     #8B6F3E 0%,  #C2A570 9%,  #EEDFB8 19%, #C8AC78 27%,
+     #9A7C47 38%, #E4D2A6 50%, #B99A63 60%, #F3E7C9 72%,
+     #C0A26C 82%, #8E7343 92%, #D6BF90 100%);
+  --foil-on-dark:linear-gradient(104deg,
+     #A3854E 0%,  #D8BC84 10%, #F7ECCE 20%, #D2B47E 28%,
+     #A98A50 38%, #EFDFB6 50%, #C9AA72 60%, #FBF2DA 72%,
+     #CDB07A 82%, #9C7F4A 92%, #E4D0A2 100%);
+}
+
+*{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+html,body{ margin:0; padding:0; }
+@page{ size:A4; margin:0; }
+
+/* ── THE SHEET ─────────────────────────────────────────────────────────────
+   Pearl-white cotton. The tint gradient is the cloudiness of a mould-made
+   stock; the tile on top is its fibre. Both are needed — the gradient alone
+   reads as a screen, the fibre alone reads as dirt. */
+.sheet{
+  position:relative; width:210mm; height:297mm; overflow:hidden;
+  background:
+    radial-gradient(128% 84% at 50% -8%, #FFFEFB 0%, var(--paper) 42%, var(--paper-2) 100%);
+  color:var(--ink);
+  font-family:"Jost","Helvetica Neue",sans-serif;
+}
+.sheet::before{
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:url(paper-cotton.png);
+  background-size:33mm 33mm;
+  mix-blend-mode:multiply; opacity:.14;   /* fibre, not concrete */
+}
+/* everything the page draws sits above the fibre */
+.sheet > *{ position:relative; z-index:1; }
+
+/* ── FOIL ──────────────────────────────────────────────────────────────────
+   TYPE and BLOCKS are foiled by two different means, for a reason worth
+   recording. `background-clip:text` gives a beautiful metallic ramp on screen,
+   but Chrome's print-to-PDF paints a one-pixel sliver of the unclipped
+   background along the edge of the element box — which comes out of the PDF as
+   a faint gold rule running across the page under every foiled line. It is not
+   the grain layer and clip-path only turns the sliver into a full rectangle.
+
+   So foiled TYPE is a solid champagne with a micro-bevel: a dark hairline above
+   and a warm highlight below, which is exactly what the eye reads on a real
+   foil edge at text size, and prints perfectly. The full eleven-stop ramp is
+   kept for BLOCKS — rules, bars, guilloché, the plinth — where the element
+   itself is the shape being foiled and no clipping is involved. */
+.foil-type{
+  color:#B08F55;
+  text-shadow:0 -.25px 0 rgba(110,84,40,.5), 0 .35px .3px rgba(255,250,232,.55);
+}
+.foil-type--dark{
+  color:#DFC58E;
+  text-shadow:0 -.25px 0 rgba(96,72,32,.65), 0 .35px .35px rgba(255,252,240,.5);
+}
+
+.foil-block{
+  background-image:url(foil-grain.png), var(--foil);
+  background-size:26mm auto, 100% 100%;
+  background-blend-mode:soft-light, normal;
+}
+.foil-block--dark{ background-image:url(foil-grain.png), var(--foil-on-dark); }
+
+/* ── BLIND EMBOSS ──────────────────────────────────────────────────────────
+   Raised out of the sheet, no ink at all. The light is fixed top-left for the
+   whole page, so emboss and deboss stay physically consistent with each other. */
+.emboss{
+  color:#F4F0E6;
+  text-shadow:-0.35px -0.45px 0.4px rgba(255,255,255,.95),
+               0.55px  0.75px 1.1px rgba(120,102,70,.55);
+}
+.emboss-block{
+  background:#F4F0E6;
+  box-shadow:inset 0.5px 0.6px 0.6px rgba(255,255,255,.95),
+             0.55px 0.75px 1.2px rgba(120,102,70,.42);
+}
+
+/* ── DEBOSS ────────────────────────────────────────────────────────────────
+   Pressed into the sheet. The same light, inverted. */
+.deboss{
+  color:#E9E3D5;
+  text-shadow: 0.45px 0.6px 0.8px rgba(255,255,255,.92),
+              -0.35px -0.45px 0.9px rgba(112,94,64,.6);
+}
+.deboss-block{
+  background:#EDE7DA;
+  box-shadow:inset 0.7px 0.9px 1.1px rgba(112,94,64,.42),
+             inset -0.4px -0.5px 0.5px rgba(255,255,255,.9);
+}
+
+/* ── LETTERPRESS ───────────────────────────────────────────────────────────
+   Ink, plus the hairline of light that catches the lip of the impression. */
+.letterpress{ text-shadow:0 .45px 0 rgba(255,255,255,.5); }
+.ink-sapphire{ color:var(--sapphire-800); }
+.ink-crimson { color:var(--crimson-700); }
+.ink-royal   { color:var(--royal); }
+
+/* A sapphire field carries its own ink texture: solid flood coverage on cotton
+   is never perfectly flat, and the unevenness is most of why it looks printed. */
+.field-sapphire{
+  background:
+    radial-gradient(120% 140% at 18% 0%, var(--sapphire-700) 0%, var(--sapphire-800) 46%, var(--sapphire-900) 100%);
+}
+.field-sapphire::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:url(paper-cotton.png); background-size:33mm 33mm;
+  mix-blend-mode:overlay; opacity:.22;
+}
+.field-crimson{
+  background:radial-gradient(120% 140% at 20% 0%, var(--crimson-700) 0%, var(--crimson-800) 55%, var(--crimson-900) 100%);
+}
+
+/* ── PRESENTATION ──────────────────────────────────────────────────────────
+   On screen the sheet is shown as a physical object on a surface. In print it
+   is simply the page. */
+@media screen{
+  body{ background:#1B1C20; padding:30px 16px; }
+  .sheet{ margin:0 auto;
+    box-shadow:0 1px 1px rgba(0,0,0,.30), 0 24px 46px rgba(0,0,0,.46),
+               0 60px 110px rgba(0,0,0,.34); }
+}
+@media print{ body{ background:none; padding:0; } .sheet{ box-shadow:none; } }
+
+/* ── THE MARK, AS EACH PROCESS WOULD ACTUALLY RENDER IT ────────────────────
+   A foil die and an emboss die cut a SILHOUETTE: they cannot reproduce the
+   mark's navy inlay or its modelling. So the mark is masked by its own alpha
+   and filled with the process, rather than dropped in as a picture. This is
+   both truer to production and the only way the mark survives on a sapphire
+   field, where its navy would otherwise disappear. */
+.mark-foil, .mark-emboss, .mark-deboss{
+  -webkit-mask-image:url(insignia-logo.png);  mask-image:url(insignia-logo.png);
+  -webkit-mask-size:contain;                  mask-size:contain;
+  -webkit-mask-repeat:no-repeat;              mask-repeat:no-repeat;
+  -webkit-mask-position:center;               mask-position:center;
+}
+.mark-foil{
+  background-image:url(foil-grain.png), var(--foil);
+  background-size:16mm auto, 100% 100%;
+  background-blend-mode:soft-light, normal;
+}
+.mark-foil--dark{ background-image:url(foil-grain.png), var(--foil-on-dark); }
+.mark-emboss{
+  background:#F3EFE5;
+  filter:drop-shadow(-0.3px -0.4px 0.3px rgba(255,255,255,.95))
+         drop-shadow(0.65px 0.85px 1px rgba(118,100,68,.5));
+}
+.mark-deboss{
+  background:#ECE6D9;
+  filter:drop-shadow(0.5px 0.65px 0.7px rgba(255,255,255,.9))
+         drop-shadow(-0.35px -0.45px 0.8px rgba(112,94,64,.55));
+}
+
+/* ── VERTICAL SETTING ──────────────────────────────────────────────────────
+   Anchored at its own baseline-left and rotated, so the value given for `top`
+   is where the run ENDS — which is how you actually place a spine. */
+.vert{ position:absolute; transform-origin:0 0; transform:rotate(-90deg);
+       white-space:nowrap; }
+
+/* Any <svg> used as a fill layer must be told its size explicitly. An SVG with
+   no width/height attribute takes its 300x150 default, and in a dir="rtl"
+   document that default box aligns RIGHT — so a full-width pattern band paints
+   only across the last third of the page. */
+svg.fill{ display:block; width:100%; height:100%; }

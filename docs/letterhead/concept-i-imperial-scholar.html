@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Concept I — Imperial Scholar</title>
+<link rel="stylesheet" href="assets/letterhead-typography.css">
+<style>
+  /* ═══════════════════════════════════════════════════════════════════════
+     CONCEPT I · IMPERIAL SCHOLAR
+     Monumental and axial. The insignia crowns the page, the Arabic name is
+     the single centre of gravity, and every rule is struck to the same axis.
+     The register is the commemorative inscription — a scholar's chancery,
+     not an institution's masthead.
+     ═══════════════════════════════════════════════════════════════════════ */
+  :root{
+    --ink:#222222; --ink-70:#4f4d49; --ink-45:#7c7873;
+    --gold:#C5A773; --gold-deep:#9C7F4E;
+    --royal:#002FAB;
+    --paper:#FCFAF5; --paper-deep:#F4EFE3;
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  html,body{margin:0;padding:0;}
+  @page{ size:A4; margin:0; }
+
+  .sheet{
+    position:relative; width:210mm; height:297mm; overflow:hidden;
+    background:radial-gradient(118% 76% at 50% -4%, #FFFEFA 0%, var(--paper) 44%, var(--paper-deep) 100%);
+    color:var(--ink); font-family:"Source Serif 4", Georgia, serif;
+  }
+  .sheet::after{ content:""; position:absolute; inset:0; pointer-events:none; opacity:.42;
+    background-image:repeating-linear-gradient(90deg, rgba(34,34,34,.013) 0 .5px, transparent .5px 3.1px); }
+
+  .rule{ height:.9px; background:linear-gradient(90deg,transparent,var(--gold) 10%,var(--gold) 90%,transparent); }
+  .rule-fine{ height:.5px; background:linear-gradient(90deg,transparent,var(--gold-deep) 16%,var(--gold-deep) 84%,transparent); opacity:.6; }
+  .lozenge{ width:5mm; height:5mm; transform:rotate(45deg); border:.5px solid var(--gold-deep); position:relative; flex:0 0 auto; }
+  .lozenge::before{ content:""; position:absolute; inset:1.3mm; background:var(--gold); }
+  .rule-group{ display:flex; align-items:center; gap:3.2mm; }
+  .rule-group > .rule,.rule-group > .rule-fine{ flex:1 1 auto; }
+  i.pip{ display:inline-block; width:2.7px; height:2.7px; background:var(--gold);
+         transform:rotate(45deg); margin:0 .9em; vertical-align:.14em; }
+
+  .masthead{ position:absolute; top:12.5mm; left:0; right:0; padding:0 20mm; text-align:center; }
+
+  /* the supplied mark, cut to transparency — GOLD FOIL + BLIND EMBOSS in production */
+  .mark{ width:23.1mm; height:28mm; display:block; margin:0 auto 5.5mm; }
+
+  .eyebrow-row{ display:flex; align-items:center; gap:5.5mm; margin:0 auto 4.6mm; max-width:122mm; }
+  .eyebrow-row > .rule-fine{ flex:1 1 auto; }
+  .office-eyebrow{ font-family:"Reem Kufi","Amiri",serif; font-size:14pt; font-weight:500;
+    color:var(--ink-70); word-spacing:.18em; line-height:1; white-space:nowrap; }
+
+  .name-ar{ font-family:"Amiri",serif; font-weight:700; font-size:29pt; line-height:1.3;
+    color:var(--ink); margin:0; word-spacing:.05em; }
+  .name-ar .kunya{ font-weight:400; color:var(--ink-70); font-size:.78em; }
+  .name-ar .house{ color:var(--gold-deep); font-weight:400; font-size:.78em; }
+
+  .scope-ar{ font-family:"Amiri",serif; font-size:11.2pt; line-height:1.8; color:var(--ink-70);
+    margin:4mm auto 0; max-width:150mm; }
+
+  .latin{ direction:ltr; margin-top:6.4mm; }
+  .latin-office{ font-family:"Cinzel",serif; font-weight:500; font-size:7.3pt;
+    letter-spacing:.46em; text-indent:.46em; color:var(--gold-deep); margin-bottom:2.6mm; }
+  .latin-name{ font-family:"Cinzel",serif; font-weight:600; font-size:14pt;
+    letter-spacing:.15em; text-indent:.15em; color:var(--ink); line-height:1.24; }
+  .latin-house{ font-family:"Cinzel",serif; font-weight:400; font-size:8.8pt;
+    letter-spacing:.52em; text-indent:.52em; color:var(--gold-deep); margin-top:1.9mm; }
+  .latin-scope{ font-family:"Source Serif 4",Georgia,serif; font-size:6.4pt;
+    letter-spacing:.20em; text-indent:.20em; color:var(--ink-45); margin-top:4.6mm;
+    text-transform:uppercase; white-space:nowrap; }
+
+  /* WATERMARK · registers as a blind emboss on the finished stock */
+  .watermark{ position:absolute; left:50%; top:186mm; transform:translate(-50%,-50%);
+    width:52mm; opacity:.04; pointer-events:none; }
+
+  .footer{ position:absolute; left:22mm; right:22mm; bottom:13.5mm; text-align:center; }
+  .footer .rule-group{ margin-bottom:4.4mm; }
+  .contact{ direction:ltr; font-family:"Source Serif 4",Georgia,serif; font-size:8.3pt;
+    letter-spacing:.075em; color:var(--ink-70); line-height:1; }
+  .contact i.pip{ margin:0 1.3em; width:3px; height:3px; vertical-align:.18em; }
+  .contact a{ color:inherit; text-decoration:none; }
+  .royal-thread{ width:15mm; height:1.5px; background:var(--royal); opacity:.85;
+    margin:4.8mm auto 0; border-radius:1px; }
+
+  @media screen{ body{ background:#3b3a38; padding:28px 16px; }
+    .sheet{ margin:0 auto; box-shadow:0 30px 70px rgba(0,0,0,.45); } }
+  @media print{ body{background:none;padding:0;} .sheet{box-shadow:none;} }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="masthead">
+    <img class="mark" src="assets/insignia-logo.png" alt="Insignia of the Personal Office">
+
+    <div class="eyebrow-row">
+      <span class="rule-fine"></span>
+      <span class="office-eyebrow">المكتب الخاص</span>
+      <span class="rule-fine"></span>
+    </div>
+
+    <h1 class="name-ar">الإمام أحمد <span class="kunya">بن</span> إبراهيم السليمي <span class="house">(آل سلام)</span></h1>
+
+    <div class="rule-group" style="margin-top:4.6mm">
+      <span class="rule"></span><span class="lozenge"></span><span class="rule"></span>
+    </div>
+
+    <p class="scope-ar">للتطوير الأكاديمي والدعوة الإسلامية والعلاقات الدولية والشؤون الأهلية الخاصة</p>
+
+    <div class="latin">
+      <div class="latin-office">PERSONAL OFFICE</div>
+      <div class="latin-name">IMAM AHMAD IBROHIM SULAIMIY</div>
+      <div class="latin-house">ĀL-ES-SALAM</div>
+      <div class="latin-scope">Academic Development<i class="pip"></i>Islamic Da&lsquo;wah<i class="pip"></i>International Relations<i class="pip"></i>Private &amp; Civic Affairs</div>
+    </div>
+  </div>
+
+  <img class="watermark" src="assets/insignia-logo-grey.png" alt="" aria-hidden="true">
+
+  <div class="footer">
+    <div class="rule-group">
+      <span class="rule"></span><span class="lozenge"></span><span class="rule"></span>
+    </div>
+    <div class="contact">
+      +234&nbsp;810&nbsp;430&nbsp;2087<i class="pip"></i>+44&nbsp;7961&nbsp;869638<i class="pip"></i><a href="mailto:abisulaimiycollege@gmail.com">abisulaimiycollege@gmail.com</a>
+    </div>
+    <div class="royal-thread"></div>
+  </div>
+
+</div>
+</body>
+</html>

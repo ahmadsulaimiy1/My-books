@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Letterhead — The Personal Office</title>
+<link rel="stylesheet" href="assets/letterhead-typography.css">
+<link rel="stylesheet" href="assets/materials.css">
+<link rel="stylesheet" href="assets/atelier.css">
+</head>
+<body>
+<button class="speckit" onclick="document.body.classList.toggle('spec')">PRODUCTION SPEC</button>
+
+<div class="sheet">
+  <!-- ══ ONE MILLED PLATE: head across the sheet, pier down the binding edge ══ -->
+  <div class="plate-gold gold-block" data-spec="GOLD FOIL keyline · lower silhouette only"></div>
+  <div class="plate field-sapphire" data-spec="SAPPHIRE FLOOD · offset">
+    <div class="plate-guil">
+      <svg class="fill" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <pattern id="guil" width="44" height="17" patternUnits="userSpaceOnUse">
+            <g fill="none" stroke="#E4CC8A" stroke-width=".38">
+              <path d="M0 8.5 C 5.5 1, 16.5 1, 22 8.5 S 38.5 16, 44 8.5"/>
+              <path d="M0 8.5 C 5.5 16, 16.5 16, 22 8.5 S 38.5 1, 44 8.5"/>
+            </g>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#guil)"/>
+      </svg>
+    </div>
+  </div>
+  <div class="edge-arris"></div>
+  <div class="edge" data-spec="MILLED CHANNEL: sill · GOLD RAIL 3.4 · return · PLATINUM 2.2 · cut line">
+    <i class="edge-sill"></i>
+    <i class="edge-cut"></i>
+    <i class="edge-rail gold-block gold-block--rich"></i>
+    <i class="edge-ret"></i>
+    <i class="edge-plat plat-block"></i>
+    <i class="edge-wall"></i>
+    <i class="edge-rule"></i>
+  </div>
+  <span class="vert pier-en gold-type gold-type--dark">IMAM AHMAD IBROHIM SULAIMIY</span>
+  <span class="vert pier-sub">PERSONAL OFFICE &nbsp;·&nbsp; ĀL-ES-SALAM</span>
+
+  <div class="verify">
+    <div class="frame gold-block"><img src="assets/qr-office.png"
+         alt="Scan for the office contact card"></div>
+    <div class="serial">PA/2026/09/0017</div>
+  </div>
+  <!-- the medallion resolves the plate's inner corner AND gives the mark its
+       clear space; the architecture is built around it, never the reverse -->
+  <div class="medallion gold-block" data-spec="GOLD FOIL RING · complete insignia, 7mm clear">
+    <div class="med-steel steel-block"></div>
+    <div class="med-field field-sapphire">
+      <div class="med-hair"></div>
+      <img class="med-mark" src="assets/insignia-foil.png"
+           alt="Insignia of the Personal Office">
+    </div>
+  </div>
+
+  <div class="office gold-type gold-type--dark">المكتب الخاص</div>
+  <h1 class="name" data-spec="PEARL, reversed out of sapphire">الإمام أحمد بن إبراهيم السليمي</h1>
+  <div class="house gold-type gold-type--dark">(آل سلام)</div>
+  <div class="name-rule gold-block gold-block--dark"></div>
+  <p class="scope-ar">للتطوير الأكاديمي والدعوة الإسلامية والعلاقات الدولية والشؤون الأهلية الخاصة</p>
+
+  <div class="ident">
+    <div class="ident-rule"></div>
+    <div class="ident-office">PERSONAL OFFICE</div>
+    <div class="ident-name letterpress">IMAM AHMAD IBROHIM SULAIMIY</div>
+    <div class="ident-house">ĀL · ES · SALAM</div>
+    <div class="scope-en">Academic Development<i></i>Islamic Da&lsquo;wah<i></i>International Relations<i></i>Private &amp; Civic Affairs</div>
+  </div>
+
+  <!-- ══ THE RED CHANNEL — the binding section turned through 90° ══ -->
+  <div class="redch-steel steel-block steel-block--dark"></div>
+  <div class="redch field-red"></div>
+  <div class="redch-in">
+    <span class="en">OFFICIAL CORRESPONDENCE</span>
+    <span class="ar">مراسلة رسمية</span>
+  </div>
+  <div class="redch-gold gold-block gold-block--rich"></div>
+
+
+
+  <div class="register register--blank" data-spec="THE FILE at the left · THE ADDRESSEE at the right · no boxes">
+    <div class="reg-pair">
+      <div class="reg-to">
+        <span class="k">إلى</span>
+        <div class="to-name">&nbsp;</div>
+        <div class="to-role">&nbsp;</div>
+      </div>
+      <div class="reg-file">
+        <div class="rf"><span class="k">رقم</span><span class="v lat"><span class="ref">&nbsp;</span></span></div>
+        <div class="rf"><span class="k">التاريخ</span><span class="v">&nbsp;</span></div>
+        <div class="rf"><span class="k"></span><span class="v sub">&nbsp;</span></div>
+      </div>
+    </div>
+    <div class="reg-hair gold-block"></div>
+    <div class="reg-subject"><span class="k">الموضوع</span><span class="s">&nbsp;</span></div>
+  </div>
+
+  <svg class="latent" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g fill="none" stroke="#6B7080" stroke-width="0.5" opacity="0.18">
+      <circle cx="200" cy="200" r="190"/><circle cx="200" cy="200" r="152"/>
+      <circle cx="200" cy="200" r="107"/><circle cx="200" cy="200" r="76"/>
+      <rect x="65.5" y="65.5" width="269" height="269"/>
+      <rect x="65.5" y="65.5" width="269" height="269" transform="rotate(45 200 200)"/>
+      <rect x="105" y="105" width="190" height="190" transform="rotate(22.5 200 200)"/>
+      <path d="M10 200 H390 M200 10 V390 M66 66 L334 334 M334 66 L66 334"/>
+    </g>
+  </svg>
+  <span class="watermark"><img src="assets/insignia-deboss.png" alt="" aria-hidden="true"></span>
+
+  <div class="microtext" data-spec="MICROTEXT 2.4pt">المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام) · PERSONAL OFFICE · ĀL-ES-SALAM · المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام) · PERSONAL OFFICE · ĀL-ES-SALAM · المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام) · PERSONAL OFFICE · ĀL-ES-SALAM · المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام) · PERSONAL OFFICE · ĀL-ES-SALAM · المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام) · PERSONAL OFFICE · ĀL-ES-SALAM · المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام) · PERSONAL OFFICE · ĀL-ES-SALAM · </div>
+  <div class="foot-rule gold-block"></div>
+  <div class="foot">
+    <span class="contact">+234&nbsp;810&nbsp;430&nbsp;2087<i></i>+44&nbsp;7961&nbsp;869638<i></i>abisulaimiycollege@gmail.com</span>
+    <span class="folio"><span class="ar">صفحة ١</span><span class="sep">·</span>PAGE 1</span>
+  </div>
+
+</div>
+</body>
+</html>
