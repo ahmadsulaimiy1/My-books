@@ -110,7 +110,14 @@ def plate(ref=None):
   </div>
 {edge()}{pier(ref)}'''
 
-def head():
+def head(channel_en="OFFICIAL CORRESPONDENCE", channel_ar="مراسلة رسمية"):
+    """The red channel names the CLASS of correspondence, not its subject --
+       the register's subject line does that. A letter written by the man
+       rather than issued by the office is PERSONAL, not 'informal' (nothing
+       bearing a seal, a serial and a signature is informal) and not
+       'non-official' (a class should be named for what it is). The Arabic
+       is مراسلة شخصية, not خاصة: the masthead already reads المكتب الخاص a
+       few millimetres above, and خاصة would echo it."""
     return f'''
   <div class="office gold-type gold-type--dark">المكتب الخاص</div>
   <h1 class="name">{NAME_AR}</h1>
@@ -130,8 +137,8 @@ def head():
   <div class="redch-steel steel-block steel-block--dark"></div>
   <div class="redch field-red"></div>
   <div class="redch-in">
-    <span class="en">OFFICIAL CORRESPONDENCE</span>
-    <span class="ar">مراسلة رسمية</span>
+    <span class="en">{channel_en}</span>
+    <span class="ar">{channel_ar}</span>
   </div>
   <div class="redch-gold gold-block gold-block--rich"></div>
 '''
@@ -487,7 +494,8 @@ def main():
         return "\n      ".join(b for g in groups for b in g)
 
     fa, fe = folio(1, n)
-    out = [sheet(plate(REF_SINAAH) + medallion() + head()
+    out = [sheet(plate(REF_SINAAH) + medallion()
+        + head(channel_en="PERSONAL CORRESPONDENCE", channel_ar="مراسلة شخصية")
         + register(ref=REF_SINAAH,
                    date="9 October 2026",
                    date_sub="25 Rabīʿ al-Ākhir 1448 AH",
