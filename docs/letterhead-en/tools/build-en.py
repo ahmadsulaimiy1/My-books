@@ -432,7 +432,7 @@ def measure_groups(groups, body_cls='letter letter--en', tight=False):
               f'<div class="open-rule{r} gold-block"></div>')
     body = '<div id="galley">' + "".join(
         f'<div class="{body_cls}" style="width:138mm">' + "".join(g) + '</div>'
-        for g in [[opener]] + groups) + '</div>'
+        for g in [[opener]] + [([] if g == PAGE_BREAK else g) for g in groups]) + '</div>'
     # the galley MUST live at ROOT or its relative stylesheet links resolve nowhere
     gp = os.path.join(ROOT, ".galley.html")
     open(gp, "w", encoding="utf-8").write(
@@ -448,6 +448,8 @@ def measure_groups(groups, body_cls='letter letter--en', tight=False):
     h = json.loads(m.group(1))
     return h[1:], h[0]          # (group heights, opener height)
 
+PAGE_BREAK = "\u0000BREAK"   # a group that is exactly this forces a new sheet
+
 def pack(groups, heights, opener=0.0):
     """Greedy, keep-with-next. Continuations are packed against the SHORTER
        capacity -- the one that leaves room for the hand -- so whichever
@@ -456,6 +458,15 @@ def pack(groups, heights, opener=0.0):
        last page collides with its own signature."""
     sheets, cur, used, cap = [], [], 0.0, CAP_FIRST - opener
     for g, h in zip(groups, heights):
+        if g == PAGE_BREAK:
+            # Arithmetic knows how much fits; only the author knows where a
+            # letter should turn. Greedy packing filled sheet one to 6mm of
+            # its foot and left the duʿāʾ and the farewell stranded alone on
+            # sheet two. An authored break puts the fold where the letter
+            # changes subject instead of where the millimetres run out.
+            if cur: sheets.append(cur)
+            cur, used, cap = [], 0.0, CAP_CONT_SIG
+            continue
         if h > cap and not cur:
             raise SystemExit(f"a single keep-together group is {h:.1f}mm "
                              f"and will not fit a {cap:.0f}mm field")
@@ -494,19 +505,28 @@ REF_ZAYNAB = "PO/2026/10/0024"
 ZAYNAB_GROUPS = [
  ['<p class="salutation">Assalāmu ʿalaykum wa raḥmatullāhi wa barakātuh,</p>'],
  ['<p>Umm Abdillah,</p>'],
- ['<p>The work is finished &mdash; all eleven volumes. Before anyone else, it comes to '
-  'you.</p>'],
- ['<p>My love, you carried its cost with me, and whatever good is in it you have a share '
-  'that no page records. May Allah accept it, and reward you beyond anything I can repay.</p>',
-  '<p>May Allah elevate you, and fulfil for us what we hope for.</p>',
-  # the valediction and the self-designation are ONE block with a line
-  # break, not two paragraphs: a paragraph gap between them would read as a
-  # pause where the letter wants none, and would let a page break fall
-  # between a man's farewell and the name he signs it with.
-  #
-  # "Habeeb" is kept in the author's own spelling, not normalised to Ḥabīb.
-  # It is how he writes it, and this is the one word in the letter that is
-  # his name for himself.
+ ['<p>The work is finished &mdash; all eleven volumes, five thousand four hundred and '
+  'seventy-nine pages. Before it goes to anyone else, it comes to you.</p>'],
+ # The book is the instrument of the declaration, not its rival. A man who has
+ # just set down 5,479 pages saying that none of them says this is worth more
+ # than any adjective available to him.
+ ['<p>My love, I have written five thousand pages this year and not one of them says the '
+  'thing I most want to say. Let a single line carry it: nothing I finish will ever mean '
+  'to me what you mean.</p>'],
+ ['<p>Go on with your studies and your work. Reach for every qualification you want, and '
+  'let nothing make it smaller &mdash; least of all me. I did not ask Allah for a '
+  'companion who would stand still. Rise, and you will find me standing for you before '
+  'anyone else.</p>'],
+ # "that she complies with me", set as accord rather than as instruction. A
+ # directive to obey, in writing, on a serialled sheet, beside a paragraph
+ # urging her to rise, would cancel the paragraph above it. Mutuality says the
+ # same thing in a form she can receive.
+ PAGE_BREAK,
+ ['<p>And let us walk in one direction: counsel taken together, and nothing asked of you '
+  'that is not also asked of me.</p>'],
+ ['<p>May Allah elevate you, and fulfil for us what we hope for.</p>',
+  # the valediction and the self-designation are ONE block with a line break,
+  # so no page break can fall between a man's farewell and his own name
   '<p class="close">With love and respect,<br>Your Habeeb,</p>'],
 ]
 
@@ -585,35 +605,52 @@ def main():
         + "\n".join(out) + '</body>\n</html>\n')
 
 
-    # ── the letter to Zaynab: one sheet, the hand on the same sheet ───────
+    # ── the letter to Zaynab: paginated from measured heights ────────────
+    # It began as a one-sheet letter with a guard that refused to emit it if
+    # it grew. It has grown, by instruction, so it gets the same measured
+    # paginator as its companion rather than a guard that just says no.
+    # pack() already handles the one-sheet case: CAP_FIRST is reduced to
+    # CAP_FIRST_SIG when the hand will stand on the first sheet.
     ZBODY = "letter letter--en letter--tight"
     zh, zop = measure_groups(ZAYNAB_GROUPS, ZBODY, tight=True)
-    ztot = sum(zh)
-    zfits = ztot <= (CAP_FIRST_SIG - zop)
-    print(f"  zaynab: {ztot:.1f}mm of text (opener {zop:.1f}mm) vs "
-          f"{CAP_FIRST_SIG - zop:.1f}mm on one sheet -> {'ONE SHEET' if zfits else 'DOES NOT FIT'}")
-    if not zfits:
-        raise SystemExit("the letter to Zaynab no longer fits one sheet; shorten it or "
-                         "set it in .letter--tight rather than letting it overrun")
-    fa, fe = folio(1)
+    zone = (PAGE_BREAK not in ZAYNAB_GROUPS
+            and sum(zh) <= (CAP_FIRST_SIG - zop))
+    # When it runs to more than one sheet the hand moves to the LAST sheet,
+    # so sheet one is no longer carrying it and must not reserve room for it.
+    # Reserving it anyway under-fills sheet one by 16mm and dumps the
+    # remainder onto a nearly empty second sheet.
+    zpacked = [ZAYNAB_GROUPS] if zone else pack(ZAYNAB_GROUPS, zh, zop)
+    zn = len(zpacked)
+    print(f"  zaynab: {sum(zh):.1f}mm of text (opener {zop:.1f}mm) -> {zn} sheet(s)")
+
+    def zblocks(groups):
+        return "\n      ".join(b for g in groups for b in g)
+
+    fa, fe = folio(1, None if zn == 1 else zn)
+    zout = [sheet(plate(REF_ZAYNAB) + medallion()
+        + head(channel_en="PERSONAL CORRESPONDENCE", channel_ar="مراسلة شخصية")
+        + register(ref=REF_ZAYNAB,
+                   date="9 October 2026",
+                   date_sub="25 Rabīʿ al-Ākhir 1448 AH",
+                   to_name="Hajia Zaynab Hanafi (Zahrāʾ)",
+                   to_role="",
+                   subject="The completion of the work, and what it owes to you")
+        + SECURITY
+        + '  <div class="field">\n    <p class="bismillah bismillah--tight">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
+          '    <div class="open-rule open-rule--tight gold-block"></div>\n'
+          f'    <div class="{ZBODY}">\n      ' + zblocks(zpacked[0])
+        + '\n    </div>\n  </div>\n'
+        + (signature_solo("Ahmad") if zn == 1 else "")
+        + foot(fa, fe))]
+    for i in range(1, zn):
+        fa, fe = folio(i + 1, zn)
+        zout.append(sheet(cont_head(REF_ZAYNAB) + SECURITY
+            + f'  <div class="field field--continued">\n    <div class="{ZBODY}">\n      '
+            + zblocks(zpacked[i]) + '\n    </div>\n  </div>\n'
+            + (signature_solo("Ahmad") if i == zn - 1 else "")
+            + foot(fa, fe)))
     open(os.path.join(ROOT, "letter-en-zaynab.html"), "w", encoding="utf-8").write(
-        HEAD.format(title="To Zaynab", at=AT)
-        + sheet(plate(REF_ZAYNAB) + medallion()
-            + head(channel_en="PERSONAL CORRESPONDENCE", channel_ar="مراسلة شخصية")
-            + register(ref=REF_ZAYNAB,
-                       date="9 October 2026",
-                       date_sub="25 Rabīʿ al-Ākhir 1448 AH",
-                       to_name="Hajia Zaynab Hanafi (Zahrāʾ)",
-                       to_role="",
-                       subject="The completion of the work, and what it owes to you")
-            + SECURITY
-            + '  <div class="field">\n    <p class="bismillah bismillah--tight">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
-              '    <div class="open-rule open-rule--tight gold-block"></div>\n'
-              f'    <div class="{ZBODY}">\n      '
-            + "\n      ".join(b for g in ZAYNAB_GROUPS for b in g)
-            + '\n    </div>\n  </div>\n'
-            + signature_solo("Ahmad") + foot(fa, fe))
-        + '</body>\n</html>\n')
+        HEAD.format(title="To Zaynab", at=AT) + "\n".join(zout) + '</body>\n</html>\n')
 
     names = ["letterhead-en.html", "letterhead-en-continuation.html",
              "letter-en-tahniah-dr-adewuyi.html",
