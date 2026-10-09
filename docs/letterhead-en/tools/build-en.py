@@ -327,15 +327,19 @@ SINAAH_GROUPS = [
  # "Dear Sir," and the courtesies stay together: a salutation orphaned from
  # the prayer and the greeting that follow it would read as abruptness.
  #
- # The greeting runs FROM the household TO the traveller, not the usual way
- # about. The writer is with the family as he writes and the recipient is the
- # one away, so "kindly greet the family" would be nonsense and "I trust this
- # meets you in good health" would be untrue -- they met today. What is left
- # to ask after, and the only thing worth asking, is the journey.
+ # Three facts shape this paragraph, and each rules out a stock courtesy:
+ #   - they met the day the letter was written, so "I trust this finds you
+ #     in good health" would be a politeness that is also a falsehood;
+ #   - he travelled AND THE FAMILY TRAVELLED WITH HIM, so the greeting runs
+ #     to them through him, and the prayer covers those with him;
+ #   - the relationship is PROSPECTIVE, not yet contracted, so the letter
+ #     carries respect and warmth but claims no familial footing. Nothing
+ #     here may read as though the writer were already of the household.
+ # What is left to ask after, and the only thing worth asking, is the journey.
  ['<p>Dear Sir,</p>',
-  '<p>May Allah preserve you in health and faith, and grant you safety and ease in your '
-  'travels. We ask after the journey, and pray that it went well. I write from among the '
-  'family; all here are well, and they send you their warm greetings.</p>'],
+  '<p>May Allah preserve you in health and faith, and grant you and those with you '
+  'safety and ease in your travels. We ask after the journey, and pray that it went '
+  'well. Kindly convey my greetings to the family.</p>'],
  ['<p>All praise is due to Allah, by whose grace good works are completed.</p>'],
  ['<p>With a heart full of gratitude, I share with you, among those dearest to me, the '
   'completion of my Arabic work <span class="ar">صناعة المتكلم العربي</span> '
