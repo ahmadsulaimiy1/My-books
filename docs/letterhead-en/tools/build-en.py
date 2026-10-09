@@ -417,6 +417,19 @@ document.fonts.ready.then(() => {
 </script>
 """
 
+# The opening rule's modifiers must be identical in the galley that measures a
+# letter and in the sheet that is emitted, or the measurement describes a
+# document nobody receives. Both call this; neither spells the classes itself.
+# (Fault recorded 9 Oct 2026: the one-page letter was emitted without
+# .open-rule--onepage while the galley measured it with, so a 1.4mm saving was
+# measured and never printed, and the body sat 2.67mm from the signature.)
+def opener_rule_cls(body_cls, tight):
+    r = ' open-rule--tight' if tight else ''
+    if 'letter--onepage' in body_cls:
+        r += ' open-rule--onepage'
+    return r
+
+
 def measure_groups(groups, body_cls='letter letter--en', tight=False):
     """Render every group once, at the real measure and in the real founts,
        and read its true height back out of the browser. Guessing line counts
@@ -427,8 +440,7 @@ def measure_groups(groups, body_cls='letter letter--en', tight=False):
     # capacity. Measuring it is the difference between a sheet that fits and
     # a sheet that silently overruns by the height of the invocation.
     t = ' bismillah--tight' if tight else ''
-    r = ' open-rule--tight' if tight else ''
-    if 'letter--onepage' in body_cls: r += ' open-rule--onepage'
+    r = opener_rule_cls(body_cls, tight)
     opener = (f'<p class="bismillah{t}">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>'
               f'<div class="open-rule{r} gold-block"></div>')
     body = '<div id="galley">' + "".join(
@@ -506,25 +518,23 @@ REF_ZAYNAB = "PO/2026/10/0024"
 ZAYNAB_GROUPS = [
  ['<p class="salutation">Assalāmu ʿalaykum wa raḥmatullāhi wa barakātuh,</p>'],
  ['<p>Umm Abdillah,</p>'],
- # The news and the declaration are one movement, not two: the book is the
- # instrument of the declaration, so it belongs in the same breath. Neither
- # the extent of the work nor the time it took is named here -- the register's
- # subject line carries the extent, and nothing may imply it was the labour
- # of a single year.
+ # Plain statement, in this order: what is finished, how large it is, and
+ # that she is told first. The extent is given because he asked for it; the
+ # time it took is not given at all, and no wording may imply it.
  #
- # What she gave stands in the same paragraph as the declaration, not in one
- # of its own: a separate paragraph costs a line of fill and a margin, and the
- # sheet has neither to spare. Named rather than gestured at -- her patience,
- # and the choice she never made him make. He asked that no line mention cost.
- ['<p>My love, the work is finished, and it comes to you before anyone else: of '
-  'everything I finish, none will ever mean to me what you mean. You were in its quiet '
-  'hours, patient when I was buried in a page and never making me feel I had to choose '
-  '&mdash; I have not said so often enough.</p>'],
- # Her work and the accord in one breath: "rise" and "let us walk as one" are
- # the same thought from two sides and read worse apart.
- ['<p>Go on with your studies and your work; let nothing make them smaller, least of '
-  'all me. Rise, and I will stand for you first; let us walk as one, nothing asked of '
-  'you that is not asked of me too.</p>'],
+ # What she gave follows in the same paragraph, said just as directly: she was
+ # patient, and she did not make him choose. A paragraph of its own would cost
+ # a margin and a line of fill, and the sheet has neither to spare. He asked
+ # that no line mention cost.
+ ['<p>My love, the work is complete: eleven volumes, 5,479 pages. I am telling you '
+  'first, because nothing I complete will ever mean to me what you mean. '
+  'You were patient with me throughout it, and you never made me feel I had to choose '
+  'between it and you; I have not thanked you enough.</p>'],
+ # Her studies and her career, then the accord. Both stated as plainly as the
+ # rest: support, and one standard that binds him equally.
+ ['<p>Continue your studies and your work; nothing should make them smaller, least of '
+  'all me. I want to see you rise, and I will support you in it. Between us let there '
+  'be one standard: nothing asked of you that is not asked of me too.</p>'],
  ['<p>May Allah elevate you, and fulfil for us what we hope for.</p>',
   '<p class="close">With love and respect,<br>Your Habeeb,</p>'],
 ]
@@ -646,7 +656,7 @@ def main():
                    subject="The completion of the work, and what it owes to you")
         + SECURITY
         + '  <div class="field">\n    <p class="bismillah bismillah--tight">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
-          '    <div class="open-rule open-rule--tight gold-block"></div>\n'
+          f'    <div class="open-rule{opener_rule_cls(ZBODY, True)} gold-block"></div>\n'
           f'    <div class="{ZBODY}">\n      ' + zblocks(zpacked[0])
         + '\n    </div>\n  </div>\n'
         + (signature_solo("Ahmad") if zn == 1 else "")
