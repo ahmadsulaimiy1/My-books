@@ -324,7 +324,18 @@ REF_SINAAH = "PO/2026/10/0023"
 # top-level blocks; the packer keeps a group whole.
 SINAAH_GROUPS = [
  ['<p class="salutation">Assalāmu ʿalaykum wa raḥmatullāhi wa barakātuh,</p>'],
- ['<p>Dear Sir,</p>'],
+ # "Dear Sir," and the courtesies stay together: a salutation orphaned from
+ # the prayer and the greeting that follow it would read as abruptness.
+ #
+ # The greeting runs FROM the household TO the traveller, not the usual way
+ # about. The writer is with the family as he writes and the recipient is the
+ # one away, so "kindly greet the family" would be nonsense and "I trust this
+ # meets you in good health" would be untrue -- they met today. What is left
+ # to ask after, and the only thing worth asking, is the journey.
+ ['<p>Dear Sir,</p>',
+  '<p>May Allah preserve you in health and faith, and grant you safety and ease in your '
+  'travels. We ask after the journey, and pray that it went well. I write from among the '
+  'family; all here are well, and they send you their warm greetings.</p>'],
  ['<p>All praise is due to Allah, by whose grace good works are completed.</p>'],
  ['<p>With a heart full of gratitude, I share with you, among those dearest to me, the '
   'completion of my Arabic work <span class="ar">صناعة المتكلم العربي</span> '
