@@ -507,17 +507,24 @@ ZAYNAB_GROUPS = [
  ['<p class="salutation">Assalāmu ʿalaykum wa raḥmatullāhi wa barakātuh,</p>'],
  ['<p>Umm Abdillah,</p>'],
  # The news and the declaration are one movement, not two: the book is the
- # instrument of the declaration, so it belongs in the same breath. The
- # register's subject line already announces the completion, so the body
- # does not repeat the inventory -- it keeps only the beat that matters,
- # that she has it before anyone else, and then the declaration itself.
- ['<p>My love, it comes to you before anyone else. Of the five thousand pages I have just '
-  'finished, none says this: nothing I finish will ever mean to me what you mean.</p>'],
- # Her work, and the accord, likewise. "Rise" and "let us walk as one" are
- # the same thought from two sides and read better adjacent than apart.
- ['<p>Go on with your studies and your work; let nothing make them smaller, least of all '
-  'me. Rise, and I will stand for you first. Let us walk as one, nothing asked of you '
-  'that is not asked of me too.</p>'],
+ # instrument of the declaration, so it belongs in the same breath. Neither
+ # the extent of the work nor the time it took is named here -- the register's
+ # subject line carries the extent, and nothing may imply it was the labour
+ # of a single year.
+ #
+ # What she gave stands in the same paragraph as the declaration, not in one
+ # of its own: a separate paragraph costs a line of fill and a margin, and the
+ # sheet has neither to spare. Named rather than gestured at -- her patience,
+ # and the choice she never made him make. He asked that no line mention cost.
+ ['<p>My love, the work is finished, and it comes to you before anyone else: of '
+  'everything I finish, none will ever mean to me what you mean. You were in its quiet '
+  'hours, patient when I was buried in a page and never making me feel I had to choose '
+  '&mdash; I have not said so often enough.</p>'],
+ # Her work and the accord in one breath: "rise" and "let us walk as one" are
+ # the same thought from two sides and read worse apart.
+ ['<p>Go on with your studies and your work; let nothing make them smaller, least of '
+  'all me. Rise, and I will stand for you first; let us walk as one, nothing asked of '
+  'you that is not asked of me too.</p>'],
  ['<p>May Allah elevate you, and fulfil for us what we hope for.</p>',
   '<p class="close">With love and respect,<br>Your Habeeb,</p>'],
 ]
