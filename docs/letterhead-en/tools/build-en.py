@@ -428,6 +428,7 @@ def measure_groups(groups, body_cls='letter letter--en', tight=False):
     # a sheet that silently overruns by the height of the invocation.
     t = ' bismillah--tight' if tight else ''
     r = ' open-rule--tight' if tight else ''
+    if 'letter--onepage' in body_cls: r += ' open-rule--onepage'
     opener = (f'<p class="bismillah{t}">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>'
               f'<div class="open-rule{r} gold-block"></div>')
     body = '<div id="galley">' + "".join(
@@ -505,28 +506,19 @@ REF_ZAYNAB = "PO/2026/10/0024"
 ZAYNAB_GROUPS = [
  ['<p class="salutation">Assalāmu ʿalaykum wa raḥmatullāhi wa barakātuh,</p>'],
  ['<p>Umm Abdillah,</p>'],
- ['<p>The work is finished &mdash; all eleven volumes, five thousand four hundred and '
-  'seventy-nine pages. Before it goes to anyone else, it comes to you.</p>'],
- # The book is the instrument of the declaration, not its rival. A man who has
- # just set down 5,479 pages saying that none of them says this is worth more
- # than any adjective available to him.
- ['<p>My love, I have written five thousand pages this year and not one of them says the '
-  'thing I most want to say. Let a single line carry it: nothing I finish will ever mean '
-  'to me what you mean.</p>'],
- ['<p>Go on with your studies and your work. Reach for every qualification you want, and '
-  'let nothing make it smaller &mdash; least of all me. I did not ask Allah for a '
-  'companion who would stand still. Rise, and you will find me standing for you before '
-  'anyone else.</p>'],
- # "that she complies with me", set as accord rather than as instruction. A
- # directive to obey, in writing, on a serialled sheet, beside a paragraph
- # urging her to rise, would cancel the paragraph above it. Mutuality says the
- # same thing in a form she can receive.
- PAGE_BREAK,
- ['<p>And let us walk in one direction: counsel taken together, and nothing asked of you '
-  'that is not also asked of me.</p>'],
+ # The news and the declaration are one movement, not two: the book is the
+ # instrument of the declaration, so it belongs in the same breath. The
+ # register's subject line already announces the completion, so the body
+ # does not repeat the inventory -- it keeps only the beat that matters,
+ # that she has it before anyone else, and then the declaration itself.
+ ['<p>My love, it comes to you before anyone else. Of the five thousand pages I have just '
+  'finished, none says this: nothing I finish will ever mean to me what you mean.</p>'],
+ # Her work, and the accord, likewise. "Rise" and "let us walk as one" are
+ # the same thought from two sides and read better adjacent than apart.
+ ['<p>Go on with your studies and your work; let nothing make them smaller, least of all '
+  'me. Rise, and I will stand for you first. Let us walk as one, nothing asked of you '
+  'that is not asked of me too.</p>'],
  ['<p>May Allah elevate you, and fulfil for us what we hope for.</p>',
-  # the valediction and the self-designation are ONE block with a line break,
-  # so no page break can fall between a man's farewell and his own name
   '<p class="close">With love and respect,<br>Your Habeeb,</p>'],
 ]
 
@@ -611,7 +603,7 @@ def main():
     # paginator as its companion rather than a guard that just says no.
     # pack() already handles the one-sheet case: CAP_FIRST is reduced to
     # CAP_FIRST_SIG when the hand will stand on the first sheet.
-    ZBODY = "letter letter--en letter--tight"
+    ZBODY = "letter letter--en letter--tight letter--onepage"
     zh, zop = measure_groups(ZAYNAB_GROUPS, ZBODY, tight=True)
     zone = (PAGE_BREAK not in ZAYNAB_GROUPS
             and sum(zh) <= (CAP_FIRST_SIG - zop))
@@ -621,6 +613,16 @@ def main():
     # remainder onto a nearly empty second sheet.
     zpacked = [ZAYNAB_GROUPS] if zone else pack(ZAYNAB_GROUPS, zh, zop)
     zn = len(zpacked)
+    # pack() sizes sheet one for a letter whose hand will stand on a LATER
+    # sheet. When it returns a single sheet the hand stands here, and the
+    # stricter capacity applies. Without this the builder will happily emit a
+    # one-sheet letter 1.3mm over budget and leave it to chance whether the
+    # last line clears the signature.
+    if zn == 1 and sum(zh) > CAP_FIRST_SIG - zop:
+        raise SystemExit(
+            f"one-sheet letter is {sum(zh):.1f}mm against {CAP_FIRST_SIG - zop:.1f}mm "
+            f"once the hand is allowed for ({sum(zh) - (CAP_FIRST_SIG - zop):.1f}mm over). "
+            f"Shorten it, or let it run to two sheets.")
     print(f"  zaynab: {sum(zh):.1f}mm of text (opener {zop:.1f}mm) -> {zn} sheet(s)")
 
     def zblocks(groups):

@@ -347,3 +347,13 @@
    its capacity; on a two-sheet letter they give back three millimetres */
 .bismillah--tight{ font-size:12pt; margin-bottom:2.2mm; }
 .open-rule--tight{ margin-bottom:5.4mm; }
+
+/* ── A LETTER HELD TO ONE SHEET ────────────────────────────────────────────
+   When a letter is within a couple of millimetres of its one-sheet budget,
+   the honest fix is space, not words: below a line's height no amount of
+   re-phrasing changes the line count, and cutting a man's sentence to win
+   1.3mm is the wrong trade. This trims the invocation's rule and the
+   salutation's gap by about two millimetres between them -- invisible on
+   the page, decisive for the fold. Stack it after .letter--tight. */
+.open-rule--onepage{ margin-bottom:4mm; }
+.letter--onepage p.salutation{ margin-bottom:3.2mm; }
