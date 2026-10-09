@@ -365,8 +365,7 @@ SINAAH_GROUPS = [
   '<p class="close">With love and respect,</p>'],
 ]
 
-SINAAH_SIG = ("Abu Abdillah, Jalālud-Deen,<br>"
-              "Ahmad bin Ibrohim Abdus-Salām, Sulaimiy")
+SINAAH_SIG = "Ahmad Sulaimiy"
 
 # Field capacities, in mm, read off the stationery itself:
 #   sheet 1      .field            top 147  bottom 245            ->  98mm
