@@ -251,3 +251,12 @@
   letter-spacing:.08em; color:var(--ink-60); white-space:nowrap; }
 .sig--issuing.sig--en .sig-ar{ font-family:"Scheherazade New",serif; font-weight:400;
   font-size:9.4pt; color:var(--ink-60); margin-top:.9mm; }
+
+/* ── ARABIC INSIDE AN ENGLISH BODY ─────────────────────────────────────────
+   .letter--en names "EB Garamond", serif. An Arabic word dropped into it has
+   no Arabic face in that stack and is served by whatever the renderer finds,
+   which prints in a foreign fount. Any Arabic inside an English letter
+   therefore declares its own fount and its own direction, and is isolated so
+   it cannot drag the surrounding Latin punctuation around it. */
+.letter--en .ar{ font-family:"Scheherazade New",serif; font-size:12.4pt;
+  direction:rtl; unicode-bidi:isolate; color:var(--ink); }

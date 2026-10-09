@@ -115,7 +115,23 @@ The embedded Latin cut is subset. It carries `ā ī ū ō` and the accented
 Latin-1 range; it does **not** carry the ayn `ʿ`, the turned comma `ʻ`, or the
 dotted emphatics `ḥ ṣ ḍ`. Anything outside the repertoire silently falls back
 to a system serif in the PDF, so the transliteration is set without them rather
-than letting that happen. Check a new letter with:
+than letting that happen.
+
+The trap is sharper than it looks. The supplementary face **declares**
+`unicode-range: U+0100-024F, …, U+1E00-1EFF, …` but actually contains only
+`Ā ā Ī ī Ō ō Ū ū` (plus space, `A`, `Á`/`Ä`, `†`) — thirteen glyphs. An `ḥ`
+or an `ṣ` therefore falls inside a range the sheet claims and finds nothing
+there, so it is served by whatever face the renderer has to hand. The ayn
+`ʿ` (U+02BF) and hamza `ʾ` (U+02BE) sit outside every declared range and do
+the same. Set the ayn as `&lsquo;` and the hamza as `&rsquo;`, which is what
+scholarship uses when the letters are unavailable.
+
+Arabic dropped into an English body has the same problem from the other side:
+`.letter--en` names `"EB Garamond", serif` and has no Arabic face in the
+stack. Wrap it in `<span class="ar">`, which names Scheherazade New and
+isolates the run so it cannot drag the surrounding Latin punctuation around.
+
+Check a new letter with:
 
 ```python
 import pymupdf
@@ -126,6 +142,38 @@ d = pymupdf.open("print/letter-en-tahniah-dr-adewuyi.pdf")
 
 Any `DejaVu`, `Liberation` or `Times` in that set is a glyph that is not in the
 subset.
+
+## The correspondence on this sheet
+
+| file | to | ref | sheets |
+|---|---|---|---|
+| `letter-en-tahniah-dr-adewuyi.html` | Dr Habibullah Yusuf Adewuyi | `PO/2026/09/0017` | 2 |
+| `letter-en-sinaah-completion.html` | Alh. (Dr) Zakariya O. Anofi | `PO/2026/10/0023` | 2 |
+
+Both are emitted by `tools/build-en.py`, which owns the plate, the nine-member
+section, the pier, the head and the foot in **one** function each, so no letter
+can drift from another. The serial is threaded through `plate()`, `pier()` and
+`cont_head()`, so each letter stamps its own reference on the pier and on the
+continuation head.
+
+`signature_solo()` is for private correspondence: the office's second
+signatory countersigns official correspondence and has no place under a
+personal letter, so that block carries the principal's hand alone.
+
+### Two faults worth knowing
+
+1. **The specimen letter overruns its own field.** On sheet 1 of
+   `letter-en-tahniah-dr-adewuyi.html` the body ends at 249.3mm against a field
+   bottom of 245mm — a 4.3mm overrun, invisible against the blank paper below
+   but outside the measure. Moving its fourth paragraph to sheet 2 clears it.
+   Left alone because it is already-issued correspondence and the break changes
+   how the letter reads across the fold.
+
+2. **A short continuation leaves a void.** `.signatures` is pinned to
+   `bottom:28mm` while `.field--continued` starts at 44mm, so a continuation
+   carrying only a few paragraphs shows a large gap above the hand — 116mm in
+   the specimen, 145mm in the completion letter. This is the stationery
+   behaving as built, not a fault in either letter.
 
 ## Also using this sheet
 

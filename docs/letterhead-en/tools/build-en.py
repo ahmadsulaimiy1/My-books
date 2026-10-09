@@ -88,18 +88,19 @@ def edge(full=False):
   </div>
 '''
 
-def pier():
+def pier(ref=None):
+    ref = ref or REF
     return f'''  <span class="vert pier-en gold-type gold-type--dark">IMAM AHMAD IBROHIM SULAIMIY</span>
   <span class="vert pier-sub">PERSONAL OFFICE &nbsp;·&nbsp; ĀL-ES-SALAM</span>
 
   <div class="verify">
     <div class="frame gold-block"><img src="{AT}/qr-office.png"
          alt="Scan for the office contact card"></div>
-    <div class="serial">{REF}</div>
+    <div class="serial">{ref}</div>
   </div>
 '''
 
-def plate():
+def plate(ref=None):
     return f'''  <!-- ══ ONE MILLED PLATE: head across the sheet, pier down the binding edge ══ -->
   <div class="plate-gold gold-block"></div>
   <div class="plate field-sapphire">
@@ -107,7 +108,7 @@ def plate():
 {GUIL}
     </div>
   </div>
-{edge()}{pier()}'''
+{edge()}{pier(ref)}'''
 
 def head():
     return f'''
@@ -208,14 +209,34 @@ SIGNATURES = f'''
   </div>
 '''
 
-def cont_head():
+def signature_solo(lat, role="Personal Office &nbsp;·&nbsp; المكتب الخاص"):
+    """Personal correspondence carries ONE hand. The office's own second
+       signatory (Communications & Internal Relations) countersigns official
+       correspondence and has no business under a private letter, so the block
+       is the principal's alone. The furniture is the atelier's, untouched; on
+       an English letter the overlay has already ranged it to the left."""
+    return f'''
+  <div class="signatures">
+    <div class="sig--principal sig--en">
+      <div class="sig-space"><img src="{AT}/signature-imam.png"
+           alt="Signature of Imam Ahmad Ibrohim Sulaimiy"></div>
+      <div class="sig-rule gold-block"></div>
+      <div class="sig-lat">{lat}</div>
+      <div class="sig-ar">{NAME_AR} {HOUSE_AR}</div>
+      <div class="sig-role">{role}</div>
+    </div>
+  </div>
+'''
+
+def cont_head(ref=None):
+    ref = ref or REF
     return f'''
   <div class="cont-plate field-sapphire"><div class="plate-guil">
 {GUIL}
   </div></div>
-{edge(full=True)}{pier()}
+{edge(full=True)}{pier(ref)}
 {medallion("cont-med medallion")}
-  <div class="cont-ref">REF. <span class="ref">{REF}</span><br><span class="k">CONTINUATION</span></div>
+  <div class="cont-ref">REF. <span class="ref">{ref}</span><br><span class="k">CONTINUATION</span></div>
   <div class="cont-head">
     <div class="cont-name letterpress">{NAME_AR} {HOUSE_AR}</div>
   </div>
@@ -272,6 +293,49 @@ LETTER_2 = [
  '<p>Wa-s-salāmu alaykum wa rahmatu Llāhi wa barakātuh.</p>',
 ]
 
+# ── the completion of Sina'at al-Mutakallim al-'Arabi ───────────────────────
+# A private letter, not an official minute: it shares news with a man the
+# writer counts among those closest to him, and asks for du'a and for counsel.
+# The register and the furniture stay exactly as the stationery sets them.
+#
+# ORTHOGRAPHY. The embedded Latin cut carries the macrons (a i u o) and the
+# Latin-1 range and NOTHING else: the ayn, the hamza and the dotted emphatics
+# are absent, and U+1E00-1EFF is DECLARED by the supplementary face while
+# holding no glyph in it, so an h-dot or an s-dot would be served by whatever
+# face the renderer finds and would print in the wrong fount. The
+# transliteration is therefore set with the macrons and with the quote-mark
+# substitutes that scholarship uses when the letters are unavailable:
+# the ayn as a left single quote and the hamza as a right single quote.
+# The work's own title is additionally given in Arabic script, which the
+# document fount carries in full -- that is transcription of the title the
+# author supplied, not an addition to it. His Arabic SUBTITLE was not
+# supplied, so the subtitle stands in English alone.
+REF_SINAAH = "PO/2026/10/0023"
+
+SINAAH_1 = [
+ '<p class="salutation">As-sal&#257;mu alaykum wa rahmatu Ll&#257;hi wa barak&#257;tuh.</p>',
+ '<p>Dear Sir,</p>',
+ '<p>All praise is due to Allah, by whose grace good works are completed.</p>',
+ '<p>With a heart full of gratitude, I share with you, among those dearest to me, the '
+ 'completion of my Arabic work <span class="ar">&#1589;&#1606;&#1575;&#1593;&#1577; '
+ '&#1575;&#1604;&#1605;&#1578;&#1603;&#1604;&#1605; &#1575;&#1604;&#1593;&#1585;&#1576;'
+ '&#1610;</span> (Sin&#257;&lsquo;at al-Mutakallim al-&lsquo;Arab&#299; &mdash; The Art of '
+ 'the Arabic Speaker: From Purity of the Tongue to Perfection of Expression). It comes in '
+ 'eleven volumes, spanning 5,479 pages.</p>',
+]
+
+SINAAH_2 = [
+ '<p>It would honour me if you would share in this joy, and remember the work and its '
+ 'author in your du&lsquo;&#257;&rsquo;. I ask Allah to accept it, to make it sincerely '
+ 'for His Face, and to make it of benefit to all who read it.</p>',
+ '<p>The attachments accompany this letter. Your counsel and observations would be most '
+ 'welcome.</p>',
+ '<p class="close">With love and respect,</p>',
+]
+
+SINAAH_SIG = ("Abu Abdillah, Jal&#257;lud-Deen,<br>"
+              "Ahmad bin Ibrohim Abdus-Sal&#257;m, Sulaimiy")
+
 def main():
     fa, fe = folio(1)
     open(os.path.join(ROOT, "letterhead-en.html"), "w", encoding="utf-8").write(
@@ -307,8 +371,31 @@ def main():
         HEAD.format(title="Congratulations on the conferment of the doctoral degree", at=AT)
         + p1 + "\n" + p2 + '</body>\n</html>\n')
 
+    # ── the completion letter: two sheets, the principal's hand alone ─────
+    fa1, fe1 = folio(1, 2); fa2, fe2 = folio(2, 2)
+    s1 = sheet(plate(REF_SINAAH) + medallion() + head()
+            + register(ref=REF_SINAAH,
+                       date="9 October 2026",
+                       date_sub="25 Rab&#299;&lsquo; al-&#256;khir 1448 AH",
+                       to_name="Alh. (Dr) Zakariya O. Anofi",
+                       to_role="Chairman, Board of Governors,<br>Sultan Hanafi Royal Schools",
+                       subject="Completion of Sin&#257;&lsquo;at al-Mutakallim al-&lsquo;Arab&#299; &mdash; eleven volumes, 5,479 pages")
+            + SECURITY
+            + '  <div class="field">\n    <p class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
+              '    <div class="open-rule gold-block"></div>\n'
+              '    <div class="letter letter--en">\n      ' + "\n      ".join(SINAAH_1)
+            + '\n    </div>\n  </div>\n' + foot(fa1, fe1))
+    s2 = sheet(cont_head(REF_SINAAH) + SECURITY
+        + '  <div class="field field--continued">\n    <div class="letter letter--en">\n      '
+        + "\n      ".join(SINAAH_2) + '\n    </div>\n  </div>\n'
+        + signature_solo(SINAAH_SIG) + foot(fa2, fe2))
+    open(os.path.join(ROOT, "letter-en-sinaah-completion.html"), "w", encoding="utf-8").write(
+        HEAD.format(title="Completion of Sina\u2018at al-Mutakallim al-\u2018Arabi", at=AT)
+        + s1 + "\n" + s2 + '</body>\n</html>\n')
+
     names = ["letterhead-en.html", "letterhead-en-continuation.html",
-             "letter-en-tahniah-dr-adewuyi.html"]
+             "letter-en-tahniah-dr-adewuyi.html",
+             "letter-en-sinaah-completion.html"]
     print(" · ".join(names))
     if "--pdf" in sys.argv:
         for n in names:
