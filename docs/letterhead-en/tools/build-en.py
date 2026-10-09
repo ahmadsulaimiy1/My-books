@@ -494,11 +494,11 @@ REF_ZAYNAB = "PO/2026/10/0024"
 ZAYNAB_GROUPS = [
  ['<p class="salutation">Assalāmu ʿalaykum wa raḥmatullāhi wa barakātuh,</p>'],
  ['<p>Umm Abdillah,</p>'],
- ['<p>The work is finished &mdash; all eleven volumes. Before it goes to anyone else, it '
-  'comes to you.</p>'],
+ ['<p>The work is finished &mdash; all eleven volumes. Before anyone else, it comes to '
+  'you.</p>'],
  ['<p>My love, you carried its cost with me, and whatever good is in it you have a share '
-  'that no page records. May Allah accept it, and reward you beyond anything I can '
-  'repay.</p>',
+  'that no page records. May Allah accept it, and reward you beyond anything I can repay.</p>',
+  '<p>May Allah elevate you, and fulfil for us what we hope for.</p>',
   '<p class="close">With love and respect,</p>'],
 ]
 
@@ -578,7 +578,8 @@ def main():
 
 
     # ── the letter to Zaynab: one sheet, the hand on the same sheet ───────
-    zh, zop = measure_groups(ZAYNAB_GROUPS)
+    ZBODY = "letter letter--en letter--tight"
+    zh, zop = measure_groups(ZAYNAB_GROUPS, ZBODY, tight=True)
     ztot = sum(zh)
     zfits = ztot <= (CAP_FIRST_SIG - zop)
     print(f"  zaynab: {ztot:.1f}mm of text (opener {zop:.1f}mm) vs "
@@ -598,9 +599,9 @@ def main():
                        to_role="",
                        subject="The completion of the work, and what it owes to you")
             + SECURITY
-            + '  <div class="field">\n    <p class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
-              '    <div class="open-rule gold-block"></div>\n'
-              '    <div class="letter letter--en">\n      '
+            + '  <div class="field">\n    <p class="bismillah bismillah--tight">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
+              '    <div class="open-rule open-rule--tight gold-block"></div>\n'
+              f'    <div class="{ZBODY}">\n      '
             + "\n      ".join(b for g in ZAYNAB_GROUPS for b in g)
             + '\n    </div>\n  </div>\n'
             + signature_solo("Ahmad") + foot(fa, fe))
