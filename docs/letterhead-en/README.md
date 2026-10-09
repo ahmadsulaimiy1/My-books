@@ -171,7 +171,7 @@ A `Type3` entry means step 1 above was missed. A `DejaVu`, `Liberation` or
 | file | to | ref | sheets |
 |---|---|---|---|
 | `letter-en-tahniah-dr-adewuyi.html` | Dr Habibullah Yusuf Adewuyi | `PO/2026/09/0017` | 2 |
-| `letter-en-sinaah-completion.html` | Alh. (Dr) Zakariya O. Anofi | `PO/2026/10/0023` | 3 |
+| `letter-en-sinaah-completion.html` | Alh. (Dr) Zakariya O. Anofi | `PO/2026/10/0023` | 2 |
 
 Both are emitted by `tools/build-en.py`, which owns the plate, the nine-member
 section, the pier, the head and the foot in **one** function each, so no letter
@@ -200,6 +200,25 @@ not:
   whichever sheet ends up last always has room for the signature.
 * groups are **keep-with-next**: a run-in heading can never be orphaned from
   the list it introduces.
+
+### Fitting a letter to a sheet count
+
+`.letter--tight` in the overlay draws the body metrics in — 9.6pt on 1.57,
+paragraph gaps 3.2mm — and `.bismillah--tight` / `.open-rule--tight` give
+back three millimetres at the head of sheet one. Same founts, same 138mm
+measure, same justification, same colour; only the setting closes up.
+
+9.6pt is the house's own close-set text, not a squeeze invented for this
+letter: `../digital-campus-paper` sets its body at 9.6pt on this same
+stationery. On the completion letter the change took 308.8mm of text down to
+236.8mm and three sheets down to two, with 16mm still clear between the last
+line and the signature.
+
+Apply it **per letter**. A letter that sits comfortably on its sheets should
+be left at the open metrics; tightening by reflex is how a house loses its
+voice. And pass the same classes to `measure_groups()` that the letter will
+actually be set in — measuring open text and then setting it tight is how a
+sheet silently overruns.
 
 ### Two faults worth knowing
 

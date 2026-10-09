@@ -416,7 +416,7 @@ document.fonts.ready.then(() => {
 </script>
 """
 
-def measure_groups(groups):
+def measure_groups(groups, body_cls='letter letter--en', tight=False):
     """Render every group once, at the real measure and in the real founts,
        and read its true height back out of the browser. Guessing line counts
        is how a sheet silently overruns."""
@@ -425,10 +425,12 @@ def measure_groups(groups):
     # inside sheet one's field above the first word and eat into its
     # capacity. Measuring it is the difference between a sheet that fits and
     # a sheet that silently overruns by the height of the invocation.
-    opener = ('<p class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>'
-              '<div class="open-rule gold-block"></div>')
+    t = ' bismillah--tight' if tight else ''
+    r = ' open-rule--tight' if tight else ''
+    opener = (f'<p class="bismillah{t}">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>'
+              f'<div class="open-rule{r} gold-block"></div>')
     body = '<div id="galley">' + "".join(
-        '<div class="letter letter--en" style="width:138mm">' + "".join(g) + '</div>'
+        f'<div class="{body_cls}" style="width:138mm">' + "".join(g) + '</div>'
         for g in [[opener]] + groups) + '</div>'
     # the galley MUST live at ROOT or its relative stylesheet links resolve nowhere
     gp = os.path.join(ROOT, ".galley.html")
@@ -498,7 +500,8 @@ def main():
         + p1 + "\n" + p2 + '</body>\n</html>\n')
 
     # ── the completion letter: paginated from measured heights ───────────
-    heights, opener = measure_groups(SINAAH_GROUPS)
+    BODY = "letter letter--en letter--tight"
+    heights, opener = measure_groups(SINAAH_GROUPS, BODY, tight=True)
     packed  = pack(SINAAH_GROUPS, heights, opener)
     n = len(packed)
     print(f"  sinaah: {len(SINAAH_GROUPS)} groups, "
@@ -518,16 +521,16 @@ def main():
                    to_role="Chairman, Board of Governors,<br>Sultan Hanafi Royal Schools",
                    subject="Completion of Ṣināʿat al-Mutakallim al-ʿArabī &mdash; eleven volumes, 5,479 pages")
         + SECURITY
-        + '  <div class="field">\n    <p class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
-          '    <div class="open-rule gold-block"></div>\n'
-          '    <div class="letter letter--en">\n      ' + blocks(packed[0])
+        + '  <div class="field">\n    <p class="bismillah bismillah--tight">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
+          '    <div class="open-rule open-rule--tight gold-block"></div>\n'
+          f'    <div class="{BODY}">\n      ' + blocks(packed[0])
         + '\n    </div>\n  </div>\n'
         + (signature_solo(SINAAH_SIG) if n == 1 else "")
         + foot(fa, fe))]
     for i in range(1, n):
         fa, fe = folio(i + 1, n)
         out.append(sheet(cont_head(REF_SINAAH) + SECURITY
-            + '  <div class="field field--continued">\n    <div class="letter letter--en">\n      '
+            + f'  <div class="field field--continued">\n    <div class="{BODY}">\n      '
             + blocks(packed[i]) + '\n    </div>\n  </div>\n'
             + (signature_solo(SINAAH_SIG) if i == n - 1 else "")
             + foot(fa, fe)))

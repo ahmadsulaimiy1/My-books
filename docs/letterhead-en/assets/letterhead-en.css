@@ -327,3 +327,23 @@
 .letter--en ol li{ counter-increment:stage; }
 .letter--en ol li::before{ content:counter(stage); position:absolute; left:1.4mm; top:0;
   font:600 8pt/1.62 "Inter",sans-serif; color:var(--gold-700); letter-spacing:.04em; }
+
+/* ── A LETTER SET TO TWO SHEETS ────────────────────────────────────────────
+   Same founts, same measure, same justification, same colour -- only the
+   body metrics draw in. 9.6pt is not a compromise invented here: the costing
+   paper in ../digital-campus-paper sets its body at 9.6pt on this very
+   stationery, so this is the house's own close-set text, not a squeeze.
+   Applied per letter, never globally: a letter that fits three sheets
+   comfortably should be left at the open metrics. */
+.letter--tight{ font-size:9.6pt; line-height:1.57; }
+.letter--tight p{ margin:0 0 3.2mm; }
+.letter--tight p.salutation{ margin-bottom:4mm; }
+.letter--tight .close{ margin-top:4mm; }
+.letter--tight ul, .letter--tight ol{ margin:0 0 3.2mm; }
+.letter--tight li{ margin:0 0 1.5mm; }
+.letter--tight ol li::before{ font-size:7.4pt; line-height:1.62; }
+
+/* the invocation and its rule stand inside sheet one's field and eat into
+   its capacity; on a two-sheet letter they give back three millimetres */
+.bismillah--tight{ font-size:12pt; margin-bottom:2.2mm; }
+.open-rule--tight{ margin-bottom:5.4mm; }
