@@ -395,6 +395,7 @@ SINAAH_SIG = "Ahmad Sulaimiy"
 #   ...but .signatures is pinned at bottom:28mm and stands ~40mm tall, so a
 #   sheet that carries the hand can only run to 229mm.
 CAP_FIRST, CAP_CONT, CAP_CONT_SIG = 98.0, 196.0, 185.0
+CAP_FIRST_SIG = 82.0   # one-sheet letter: the hand stands on the same sheet
 
 GALLEY_JS = """
 <script>
@@ -463,6 +464,30 @@ def pack(groups, heights, opener=0.0):
         cur.append(g); used += h
     sheets.append(cur)
     return sheets
+
+
+# ── to Zaynab ───────────────────────────────────────────────────────────────
+# Short, by instruction. The romance of a letter like this is not in the
+# adjectives; it is in the fact that she is receiving it on the sheet he
+# reserves for heads of institutions, with the seal, the serial and the
+# register all in place. The stationery does the declaring. The words are
+# therefore plain, specific and few -- a letter that strained for feeling on
+# this paper would undo what the paper is saying.
+#
+# Nothing here is generic praise. The one claim it makes is a true one and
+# the author can strike it if the detail is wrong: that the cost of the work
+# was carried by two people and recorded against one.
+REF_ZAYNAB = "PO/2026/10/0024"
+
+ZAYNAB_GROUPS = [
+ ['<p class="salutation">Assalāmu ʿalaykum wa raḥmatullāhi wa barakātuh,</p>'],
+ ['<p>Zaynab,</p>'],
+ ['<p>The work is finished &mdash; all eleven volumes. Before it goes to anyone else, it '
+  'comes to you.</p>'],
+ ['<p>You carried its cost with me, and whatever good is in it you have a share that no '
+  'page records. May Allah accept it, and reward you beyond anything I can repay.</p>',
+  '<p class="close">With love and respect,</p>'],
+]
 
 def main():
     fa, fe = folio(1)
@@ -538,9 +563,40 @@ def main():
         HEAD.format(title="Completion of Ṣināʿat al-Mutakallim al-ʿArabī", at=AT)
         + "\n".join(out) + '</body>\n</html>\n')
 
+
+    # ── the letter to Zaynab: one sheet, the hand on the same sheet ───────
+    zh, zop = measure_groups(ZAYNAB_GROUPS)
+    ztot = sum(zh)
+    zfits = ztot <= (CAP_FIRST_SIG - zop)
+    print(f"  zaynab: {ztot:.1f}mm of text (opener {zop:.1f}mm) vs "
+          f"{CAP_FIRST_SIG - zop:.1f}mm on one sheet -> {'ONE SHEET' if zfits else 'DOES NOT FIT'}")
+    if not zfits:
+        raise SystemExit("the letter to Zaynab no longer fits one sheet; shorten it or "
+                         "set it in .letter--tight rather than letting it overrun")
+    fa, fe = folio(1)
+    open(os.path.join(ROOT, "letter-en-zaynab.html"), "w", encoding="utf-8").write(
+        HEAD.format(title="To Zaynab", at=AT)
+        + sheet(plate(REF_ZAYNAB) + medallion()
+            + head(channel_en="PERSONAL CORRESPONDENCE", channel_ar="مراسلة شخصية")
+            + register(ref=REF_ZAYNAB,
+                       date="9 October 2026",
+                       date_sub="25 Rabīʿ al-Ākhir 1448 AH",
+                       to_name="Zaynab",
+                       to_role="",
+                       subject="The completion of the work, and what it owes to you")
+            + SECURITY
+            + '  <div class="field">\n    <p class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
+              '    <div class="open-rule gold-block"></div>\n'
+              '    <div class="letter letter--en">\n      '
+            + "\n      ".join(b for g in ZAYNAB_GROUPS for b in g)
+            + '\n    </div>\n  </div>\n'
+            + signature_solo("Ahmad") + foot(fa, fe))
+        + '</body>\n</html>\n')
+
     names = ["letterhead-en.html", "letterhead-en-continuation.html",
              "letter-en-tahniah-dr-adewuyi.html",
-             "letter-en-sinaah-completion.html"]
+             "letter-en-sinaah-completion.html",
+             "letter-en-zaynab.html"]
     print(" · ".join(names))
     if "--pdf" in sys.argv:
         for n in names:
