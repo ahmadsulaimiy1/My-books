@@ -1,0 +1,194 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   MATERIALS — palette and processes
+   المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام)
+
+   SAPPHIRE — RED — PEARL — GOLD, and the viewer should perceive four, not three.
+
+   The last iteration lost its gold: a champagne so restrained it read as warm
+   grey, and a page that announced itself as blue, white and red. The gold here
+   is BRIGHTER and FRESHER — a struck-foil ramp with genuine white highlights in
+   it — and it is placed like jewellery: the medallion ring, the insignia, the
+   rule under the name, the edge of the pier, the register hairlines, the
+   signature rule. Limited, positioned, unmistakable.
+
+   RED is red. Not crimson, not burgundy, not wine. It appears three times and
+   never as a wash: the inlay down the binding edge, the rule that opens the
+   register, and the reference number.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* ── sapphire — dominant, and layered rather than flat ─────────────────── */
+  --sapphire-950:#020B1E;
+  --sapphire-900:#04122E;
+  --sapphire-800:#082349;
+  --sapphire-700:#0B3068;
+  --sapphire-600:#11418F;
+  --sapphire-500:#1A55B4;
+
+  /* ── RED ───────────────────────────────────────────────────────────────── */
+  --red-800:#9E0C21;
+  --red-700:#C8102E;          /* the principal red */
+  --red-600:#E01B37;
+
+  /* ── gold — freshly struck, not antiqued ───────────────────────────────── */
+  --gold-050:#FFFAE6;
+  --gold-100:#FBEFC4;
+  --gold-300:#EFD98F;
+  --gold-500:#D9B65A;
+  --gold-600:#C79E3C;
+  --gold-700:#A67F2A;
+  --gold-900:#6E5115;
+
+  /* ── stainless — cooler and brighter than platinum, with a white glint ── */
+  --steel-900:#48535F;
+  --steel-700:#6F7B88;
+  --steel-500:#A6B2BF;
+  --steel-300:#CFD8E1;
+  --steel-100:#EDF2F7;
+
+  /* ── pearl ─────────────────────────────────────────────────────────────── */
+  --pearl:#FBF9F5;
+  --pearl-2:#F2EFE7;
+  --ink:#121826;
+  --ink-60:#54607A;
+  --ink-40:#8C95A8;
+
+  /* Eleven stops with real white in them. Three-stop "gold" is a yellow
+     gradient; foil turns the light several times across one letter, and the
+     brightest turn is nearly white. */
+  --foil-gold:linear-gradient(104deg,
+     #9A7526 0%,  #D9BA63 9%,  #FDF4CE 19%, #E2C67B 27%,
+     #A8832D 38%, #F6E7B0 50%, #CBA84A 60%, #FFFCE9 72%,
+     #D8B865 82%, #967123 92%, #EEDC9E 100%);
+  --foil-gold-dark:linear-gradient(104deg,
+     #B08A33 0%,  #E6C878 9%,  #FFF8D8 19%, #EED08A 27%,
+     #BE9640 38%, #FBEDBE 50%, #DABA5C 60%, #FFFDF4 72%,
+     #E7C877 82%, #A8802E 92%, #F4E4AC 100%);
+
+  /* Diamond stainless: the glint at 72% is pure white. That single stop is the
+     difference between "grey metal" and a polished, faceted surface. */
+  /* A RICHER gold for the members that must read as heavy metal rather than as
+     a hairline — deeper chroma, less champagne. The pale ramp above is right
+     for a 0.45mm rule; a 2.4mm engraved member needs the weight. */
+  --foil-gold-rich:linear-gradient(104deg,
+     #8A6418 0%,  #C99B2E 9%,  #F7DF97 19%, #DDB14A 27%,
+     #A07820 38%, #FCEDB4 50%, #CDA43C 60%, #FFF8D8 72%,
+     #E0B855 82%, #8E6A1C 92%, #EFD9A0 100%);
+
+  --foil-steel:linear-gradient(104deg,
+     #6F7B88 0%,  #B7C2CE 10%, #F7FAFD 20%, #A6B2BF 28%,
+     #79858F 38%, #E8EEF4 50%, #9FAAB7 60%, #FFFFFF 72%,
+     #B9C4D0 82%, #6B7784 92%, #D8E0E8 100%);
+  /* PLATINUM — the SECOND metal of the binding edge, and deliberately NOT a
+     second stainless. It lies on the floor of a channel that the gold rail
+     overhangs, so it receives less light than anything else on the sheet: the
+     ramp is cooler, a stop darker throughout, and its brightest turn is a pale
+     grey-blue rather than white. That is what makes it support the gold
+     instead of competing with it — a recessed metal cannot out-shine a
+     proud one. */
+  --foil-plat:linear-gradient(104deg,
+     #59636F 0%,  #8C97A4 10%, #C6D0DA 20%, #7B8692 28%,
+     #5D6773 38%, #B3BDC8 50%, #7E8995 60%, #D9E1E9 72%,
+     #909BA7 82%, #555F6B 92%, #A6B0BC 100%);
+
+  --foil-steel-dark:linear-gradient(104deg,
+     #8B96A3 0%,  #CBD5DF 10%, #FDFEFF 20%, #BAC5D1 28%,
+     #94A0AC 38%, #F2F7FB 50%, #B4BFCB 60%, #FFFFFF 72%,
+     #CAD4DE 82%, #86929F 92%, #E6ECF2 100%);
+
+  --name-face:"Reem Kufi";
+}
+
+*{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+html,body{ margin:0; padding:0; }
+@page{ size:A4; margin:0; }
+
+.sheet{
+  position:relative; width:210mm; height:297mm; overflow:hidden;
+  background:radial-gradient(132% 88% at 44% -10%, #FFFEFB 0%, var(--pearl) 40%, var(--pearl-2) 100%);
+  color:var(--ink); font-family:"EB Garamond","Scheherazade New",Georgia,serif;
+}
+.sheet::before{
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:url(paper-cotton.png); background-size:33mm 33mm;
+  mix-blend-mode:multiply; opacity:.13;
+}
+.sheet > *{ position:relative; }
+
+/* ── GOLD ──────────────────────────────────────────────────────────────────
+   TYPE and BLOCKS take gold by different means. `background-clip:text` prints a
+   sliver of unclipped background along the element box — a faint gold rule
+   across the page under every line — so gold TYPE is a solid with a micro-bevel
+   (a dark hairline above, a lit one below, which is what the eye reads at text
+   size anyway) and the eleven-stop ramp is kept for BLOCKS, where the element
+   itself is the shape being struck. */
+.gold-type      { color:#B08C30; text-shadow:0 -.25px 0 rgba(96,68,16,.5), 0 .35px .3px rgba(255,252,228,.75); }
+.gold-type--dark{ color:#F0D896; text-shadow:0 -.25px 0 rgba(72,50,8,.75), 0 .4px .4px rgba(255,253,240,.5); }
+.gold-block     { background-image:url(foil-grain.png), var(--foil-gold);
+                  background-size:24mm auto, 100% 100%; background-blend-mode:soft-light, normal; }
+.gold-block--dark{ background-image:url(foil-grain.png), var(--foil-gold-dark); }
+.gold-block--rich{ background-image:url(foil-grain.png), var(--foil-gold-rich); }
+
+/* ── STAINLESS ─────────────────────────────────────────────────────────────
+   THREE METALS, ONE JOB EACH. This is the rule the page is built on, and it is
+   what separates a considered sheet from a gilded one:
+
+     GOLD       the principal, PROUD metal — the rail of the binding edge, the
+                the medallion's outer ring, the insignia, the plate keyline, the
+                rule beneath the name, the lit lower wall of the red channel
+     PLATINUM   the secondary, RECESSED metal — the floor of the binding
+                channel only. It never appears anywhere gold does not already
+                lead, and it is always the darker of the two
+     STAINLESS  instrument — the medallion's inner bezel, the shaded upper wall
+                of the red channel, microtext, latent geometry
+     SAPPHIRE   ruling — the plate, and every hairline in the register
+
+   Most stationery picks one metal. Two is rare. Four, with a rule about which
+   does what and a lighting model they all obey, is what an atelier does. */
+.steel-block     { background-image:url(foil-grain.png), var(--foil-steel);
+                   background-size:24mm auto, 100% 100%; background-blend-mode:soft-light, normal; }
+.steel-block--dark{ background-image:url(foil-grain.png), var(--foil-steel-dark); }
+.plat-block      { background-image:url(foil-grain.png), var(--foil-plat);
+                   background-size:24mm auto, 100% 100%; background-blend-mode:soft-light, normal; }
+.steel-type      { color:#7B8794; text-shadow:0 -.25px 0 rgba(52,62,74,.45), 0 .35px .3px rgba(255,255,255,.9); }
+.steel-type--dark{ color:#CDD7E1; text-shadow:0 -.25px 0 rgba(14,26,46,.7),  0 .35px .35px rgba(255,255,255,.45); }
+
+/* ── FIELDS ────────────────────────────────────────────────────────────────
+   Sapphire is layered, not flat: a printed flood on cotton is uneven, and that
+   unevenness is most of why it reads as ink rather than as a screen fill. */
+.field-sapphire{ background:
+   radial-gradient(112% 76% at 78% -6%, var(--sapphire-600) 0%, var(--sapphire-800) 44%, var(--sapphire-950) 100%); }
+.field-sapphire::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:url(paper-cotton.png); background-size:33mm 33mm;
+  mix-blend-mode:overlay; opacity:.19; }
+/* Red gets the same treatment as sapphire: a flood, not a fill. Flat red is the
+   single fastest way to make a page look printed on a desktop machine. */
+.field-red{ background:radial-gradient(120% 320% at 16% -40%,
+   var(--red-600) 0%, var(--red-700) 44%, var(--red-800) 100%); }
+.field-red::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:url(paper-cotton.png); background-size:33mm 33mm;
+  mix-blend-mode:overlay; opacity:.17; }
+
+/* ── RELIEF — light fixed top-left across the whole sheet ──────────────────── */
+.emboss{ color:#F6F3EB; text-shadow:-0.35px -0.45px 0.4px rgba(255,255,255,.95),
+                                     0.55px 0.75px 1.1px rgba(116,106,86,.5); }
+.deboss{ color:#ECE8DE; text-shadow: 0.45px 0.6px 0.8px rgba(255,255,255,.92),
+                                    -0.35px -0.45px 0.9px rgba(108,98,78,.55); }
+.letterpress{ text-shadow:0 .45px 0 rgba(255,255,255,.5); }
+
+.vert{ position:absolute; transform-origin:0 0; transform:rotate(-90deg); white-space:nowrap; }
+svg.fill{ display:block; width:100%; height:100%; }
+
+@media screen{
+  body{ background:#141518; padding:30px 16px; }
+  .sheet{ margin:0 auto;
+    box-shadow:0 1px 1px rgba(0,0,0,.3), 0 24px 46px rgba(0,0,0,.46), 0 60px 110px rgba(0,0,0,.34); }
+  .sheet + .sheet{ margin-top:26px; }
+}
+@media print{
+  body{ background:none; padding:0; }
+  .sheet{ box-shadow:none; }
+  .sheet + .sheet{ page-break-before:always; margin-top:0; }
+}

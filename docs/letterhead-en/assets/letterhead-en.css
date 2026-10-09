@@ -1,0 +1,362 @@
+/* ── THE EMPHATICS AND THE AYN ─────────────────────────────────────────────
+   The sealed v1 cut carries the macrons and Latin-1 and nothing else, and its
+   supplementary face DECLARES U+1E00-1EFF while holding no glyph in that
+   block -- so an h-dot or an s-dot fell into a range the sheet claimed and
+   was then served by whatever face the renderer had to hand, printing in a
+   foreign fount. The ayn U+02BF and hamza U+02BE sat outside every declared
+   range and did the same.
+
+   These four faces close that hole. They are subset to TWELVE codepoints --
+   exactly the ones v1 lacks -- and declared with a unicode-range covering
+   only those, so they can never take a glyph the sealed cut already serves.
+   They are declared HERE, in the overlay, which loads after the sealed
+   stylesheets: v1 itself is untouched and verify-v1.py still passes.
+
+   Sources: the Google Fonts latin-ext cuts of EB Garamond and Inter. Those
+   are served as VARIABLE fonts, and Chrome will not embed a variable font in
+   a PDF -- it falls back to Type3 glyph procedures, which look correct on
+   screen and are not a real embedded fount. They are therefore instanced to
+   static wght 400 and 600 with fontTools' instancer BEFORE pyftsubset. If a
+   future rebuild shows "Type3" in the PDF's font list, that step was missed.
+
+   These cover EB Garamond and Inter ONLY. Playfair Display's latin-ext cut
+   does not carry these glyphs at all, and Reem Kufi / Scheherazade New carry
+   no Latin diacritics whatever -- so nothing set in the masthead name, the
+   signature line, or the recipient's name and role may use them. Audit every
+   new letter per the README.                                              */
+@font-face{
+  font-family:'EB Garamond'; font-style:normal; font-weight:400; font-display:block;
+  unicode-range:U+02BE-02BF, U+1E0C-1E0D, U+1E24-1E25, U+1E62-1E63, U+1E6C-1E6D, U+1E92-1E93;
+  src:url(data:font/woff2;charset=utf-8;base64,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) format('woff2');
+}
+@font-face{
+  font-family:'EB Garamond'; font-style:normal; font-weight:600; font-display:block;
+  unicode-range:U+02BE-02BF, U+1E0C-1E0D, U+1E24-1E25, U+1E62-1E63, U+1E6C-1E6D, U+1E92-1E93;
+  src:url(data:font/woff2;charset=utf-8;base64,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) format('woff2');
+}
+@font-face{
+  font-family:'Inter'; font-style:normal; font-weight:400; font-display:block;
+  unicode-range:U+02BE-02BF, U+1E0C-1E0D, U+1E24-1E25, U+1E62-1E63, U+1E6C-1E6D, U+1E92-1E93;
+  src:url(data:font/woff2;charset=utf-8;base64,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) format('woff2');
+}
+@font-face{
+  font-family:'Inter'; font-style:normal; font-weight:600; font-display:block;
+  unicode-range:U+02BE-02BF, U+1E0C-1E0D, U+1E24-1E25, U+1E62-1E63, U+1E6C-1E6D, U+1E92-1E93;
+  src:url(data:font/woff2;charset=utf-8;base64,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) format('woff2');
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   THE ATELIER SHEET — ENGLISH COUNTERPART
+   المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام)
+
+   THE SAME STATIONERY, HANDED THE OTHER WAY. This file adds no identity, no
+   palette, no fount and no ornament. It is loaded after atelier.css and does
+   exactly one thing: it moves the milled plate, its pier, the seal and every
+   piece of furniture from the binding edge at the right to the binding edge at
+   the left, so that a sheet written in English opens the way an English reader
+   opens it. Nothing else about the letterhead changes, and the Arabic sheet is
+   untouched — ../letterhead-atelier is sealed and still verifies.
+
+   THE MIRROR IS GEOMETRIC. THE LIGHT IS NOT.
+
+   This is the whole of the difficulty, and the reason the section below is
+   re-derived member by member rather than flipped. LIGHT IS FIXED TOP-LEFT
+   over the whole sheet: that is the stationery's first rule, and two sheets of
+   one identity cannot be lit from two different directions. A mechanical
+   mirror reverses every gradient, which is the same as moving the lamp to the
+   top right — the sheets would read as a matched pair until they were laid
+   side by side, and then one of them would look wrong without the reader being
+   able to say why.
+
+   So the OBJECT is mirrored and the LIGHT is left where it stands:
+
+     SAPPHIRE FIELD │ cut line │ far wall │ PLATINUM │ return │ GOLD RAIL
+                    │   .22    │   .30    │   2.20   │  .35   │   3.40
+                    │ cut │ SILL │ arris │ PEARL
+                    │ .19 │  .86 │  .55  │
+
+   Read outward from the plate, that is the Arabic section's nine members in
+   the identical order, at the identical widths. What changes is which face
+   each one presents to the lamp, and every one of them changes:
+
+   · The channel's NEAR wall is now the one at the right, so it turns INTO the
+     light and becomes the lit riser; the far wall at the left turns away and
+     goes into shade. On the Arabic sheet it is the other way about. This is
+     the single most consequential swap in the file: get it backwards and the
+     channel reads as a ridge.
+   · The GOLD RAIL is still the proud metal, but the light now strikes its left
+     flank, so the shade runs down its right. Its inset shadow and its specular
+     line change sides.
+   · The RETURN — the step up from the platinum floor onto the gold — now faces
+     the lamp square-on rather than away from it, which makes it the brightest
+     member in the section by physics and not merely by decision.
+   · The PLATINUM floor is overhung by the rail from the right, so its shadow
+     falls on the right and its one specular line sits left of centre.
+   · The SILL is a top surface and stays lit, but it darkens toward the channel,
+     which is now on its left.
+
+   AND THE PLATE NOW CASTS. With the plate at the right, its shadow fell onto
+   itself and was never seen. With the plate at the left, the shadow falls onto
+   open paper, so the arris is built here as what it actually is on this side:
+   sapphire, an occlusion line, and a soft cast shadow dying into the pearl. It
+   is the one member that does more work on the English sheet than on the
+   Arabic one, and without it the plate reads as pasted on rather than milled.
+
+   THE SEAL IS NOT MIRRORED, only moved. The insignia is an Arabic
+   calligraphic mark; a mirrored mark is a different mark. Its ring, its clear
+   zone and its 10mm of ground are carried across unchanged.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── THE PLATE ─────────────────────────────────────────────────────────────
+   Head across the top as before, pier down the LEFT. The gold keyline is still
+   struck only along the lower silhouette; the binding edge has no keyline,
+   because the gold there is the rail. */
+.plate-gold{ clip-path:polygon(210mm 0,0 0,0 297mm,38mm 297mm,38mm 56.55mm,210mm 56.55mm); }
+.plate     { clip-path:polygon(210mm 0,0 0,0 297mm,38mm 297mm,38mm 56mm,210mm 56mm); }
+
+/* ── THE EDGE SECTION, RE-LIT ──────────────────────────────────────────────
+   Offsets are the Arabic section's own, measured from the other end:
+   mirrored = 7.87 − (left + width). Nothing is resized. */
+.edge{ left:30.13mm; }
+
+/* THE CUT LINE where the channel's far wall lands back on the plate surface.
+   The finest member, and the only one whose job is to separate rather than to
+   be seen — so it is the one member whose tone does not change. */
+.edge-rule { left:0;      width:.22mm; }
+
+/* THE FAR WALL, now at the LEFT of the channel and therefore turned away from
+   the lamp. On the Arabic sheet this member takes the light and is the pale
+   steel riser; here it is in shade for the whole of its height, and it darkens
+   as it drops into the channel. */
+.edge-wall { left:.22mm;  width:.30mm;
+  background:linear-gradient(90deg,#5B6572 0%,#3C4652 55%,#262E39 100%); }
+
+/* THE PLATINUM FLOOR — recessed, and now overhung from the RIGHT by the rail,
+   so the occlusion runs down its right side. One specular line, off-centre to
+   the left: the only bright thing platinum is allowed on this sheet. */
+.edge-plat { left:.52mm;  width:2.20mm;
+  box-shadow: inset -.55mm 0 .70mm rgba(4,12,28,.55),
+              inset  .28mm 0 .34mm rgba(6,16,34,.30); }
+.edge-plat::after{ left:1.32mm; }
+
+/* THE RETURN — the step from the platinum floor up onto the gold. With the
+   gold now to its right, this riser faces the lamp square-on: the brightest
+   member in the section, and what welds the two metals into one assembly
+   instead of two lines. Platinum-white at the floor, gold-white at the rail. */
+.edge-ret  { left:2.72mm; width:.35mm;
+  background:linear-gradient(90deg,#E8EEF5 0%,#F6EFD2 55%,#FFF7D6 100%); }
+
+/* THE GOLD RAIL — the principal member, still 3.4mm and still proud. The light
+   strikes its left flank, so the lit hairline runs down the left and the shade
+   down the right: both insets change sides. */
+.edge-rail { left:3.07mm; width:3.40mm;
+  box-shadow: inset -.34mm 0 .40mm rgba(40,26,2,.62),
+              inset  .05mm 0 0    rgba(255,252,236,.55); }
+
+/* THE NEAR WALL — 0.19mm, and on this sheet it is LIT. It faces the lamp, so
+   it reads as a bright hairline where the sill drops to the rail. On the
+   Arabic sheet the same member is almost black. */
+.edge-cut  { left:6.47mm; width:.19mm;
+  background:linear-gradient(90deg,#C9D5E3 0%,#9FAFC1 100%); }
+
+/* THE SILL — the plate's own top surface, lit, darkening toward the channel
+   that is now cut to its left. A dark band between the paper and the gold is
+   what makes an edge look like stripes; a lit one reads as the material the
+   channel was cut into. */
+.edge-sill { left:6.66mm; width:.86mm;
+  background:linear-gradient(90deg,#0E2F66 0%,#153E80 40%,#1B4A92 100%); }
+
+/* THE ARRIS — and on this side it is the plate's SHADOW edge, not its lit one.
+   Anchored to the edge assembly so it lands on the plate's outer face: the
+   sill's tone, darkening to an occlusion line, then the plate's cast shadow
+   fading out across the pearl. */
+.edge-arris{ left:37.65mm; width:.55mm; top:56mm;
+  background:linear-gradient(90deg,#1B4A92 0%,#123A78 42%,#0A1E46 74%,#061430 100%); }
+/* and the shadow the plate throws onto the paper beside it. This is not a
+   tenth member — the section still has nine — it is light falling on pearl,
+   which is why it lies outside the assembly and fades to nothing. Without it
+   the plate reads as printed on the sheet rather than standing proud of it,
+   and on the Arabic sheet the question never arises because the shadow falls
+   on the plate's own face and is never seen. */
+.edge-arris::after{ content:""; position:absolute; top:0; bottom:0; left:.55mm; width:1.8mm;
+  background:linear-gradient(90deg,
+    rgba(22,28,40,.26) 0%, rgba(38,44,58,.13) 36%,
+    rgba(62,68,82,.055) 68%, rgba(90,96,110,0) 100%); }
+.edge-arris--full{ top:0; }
+
+/* ── THE SEAL — moved, never flipped ───────────────────────────────────────
+   Centre (71mm, 56mm): astride the plate's lower edge, 10mm clear of the edge
+   section on one side and 10mm clear of the Arabic name on the other, exactly
+   as before. The clear zone is the fixed quantity on this page. */
+.medallion{ left:48mm; }
+.cont-med { left:46mm; }
+
+/* ── THE HEAD ──────────────────────────────────────────────────────────────
+   The Arabic identity keeps its ground, its size, its colour and its flush-
+   right setting — Arabic set flush left is not a mirror of anything, it is a
+   mistake. The block is moved to the far side of the seal and ranges to the
+   right margin, which is where the Arabic line now begins. */
+/* ONE AXIS, AT THE RIGHT MARGIN. On the Arabic sheet the whole masthead ranges
+   to the margin at 24mm and the seal stands opposite it at 116mm; the mirror of
+   that is a masthead ranging to the margin at 186mm with the seal opposite at
+   48mm. So the Latin identity ranges RIGHT here. It is the one setting on this
+   sheet that looks unfamiliar written down and is obviously correct on the
+   page: left-ranged, the wordmark would start at 48mm and run straight under
+   the seal, and the clear zone is the fixed quantity on this page. */
+.office, .name, .house, .scope-ar{ left:104mm; right:24mm; }
+.name-rule{ left:auto; right:24mm; width:54mm; }
+.ident{ left:48mm; right:24mm; text-align:right; }
+.ident-rule{ margin-left:auto; }
+
+/* ── THE RED CHANNEL ───────────────────────────────────────────────────────
+   The same detail turned through 90°, running from the right trim and dying
+   against the plate at the left: a cross-member meeting a post, handed over. */
+.redch, .redch-steel, .redch-gold{ left:38mm; right:0; }
+.redch-in{ left:48mm; right:24mm; flex-direction:row-reverse; }
+
+/* ── THE REGISTER, THE FIELD, THE SIGNATURES AND THE FOOT ──────────────────
+   All of it moves inboard of the pier. The register is additionally set left
+   to right, because an English letter's file head is read that way: the
+   addressee leads at the left and the file follows at the right, which is the
+   Arabic chancery order reflected rather than rearranged. */
+.register{ left:48mm; right:24mm; direction:ltr; }
+.register .rf{ grid-template-columns:13mm 1fr; }
+/* the file island takes 58mm so a Hijri equivalent sets on one line */
+.register .reg-file{ width:58mm; }
+/* the reference stays in the instrument voice, as it is everywhere else */
+.register .rf .v.lat{ font:400 8.4pt/1.3 "Inter",sans-serif; letter-spacing:.07em; }
+.register .rf .k, .register .rf .v,
+.register .reg-to .k, .register .to-name, .register .to-role{ text-align:left; }
+/* the Latin instrument voice already carries every reference and serial on
+   this sheet; the register's keys join it rather than introducing a new one */
+.register .k{ font:600 5.2pt/1.5 "Inter",sans-serif; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--gold-700); }
+.register .rf .v{ direction:ltr; font-family:"EB Garamond",serif; font-size:9.4pt; }
+.register .to-name{ font:600 10.6pt/1.4 "EB Garamond",serif; }
+.register .to-role{ font:400 9.4pt/1.45 "EB Garamond",serif; }
+.register .reg-subject .s{ font:600 10pt/1.4 "EB Garamond",serif; }
+.register--blank .rf .v{ min-width:40mm; }
+
+.field{ left:48mm; right:24mm; }
+/* the flex container inherits rtl from the root, where order:1 lands at the
+   RIGHT; an English letter is signed with the principal at the left, so the
+   block declares its own direction rather than relying on the order numbers */
+.signatures{ left:48mm; right:24mm; direction:ltr; }
+.sig--principal{ order:1; text-align:left; }
+.sig--issuing  { order:2; text-align:left; }
+.sig-lat, .sig-role{ direction:ltr; }
+
+.microtext, .foot-rule{ left:38mm; right:24mm; }
+.foot{ left:48mm; right:24mm; flex-direction:row-reverse; }
+
+/* ── THE PIER'S OWN FURNITURE ──────────────────────────────────────────────
+   Centred in the 30.13mm field outboard of the section, and still reading
+   bottom to top, which is how a vertical line is read on the left edge of a
+   left-to-right page. */
+.pier-en { left:15.57mm; }
+.pier-sub{ left:10.61mm; }
+.verify  { left:4.70mm; }
+
+/* ── SECURITY AND RELIEF ───────────────────────────────────────────────────
+   The latent geometry stays centred on the writing field and the watermark at
+   its optical centre; both simply follow the field across. */
+.latent  { left:42mm; }
+.watermark{ left:74mm; }
+
+/* ── THE CONTINUATION SHEET ────────────────────────────────────────────────
+   The identical construction at the mirrored coordinates. What page two drops
+   is the head, not the architecture — on this sheet as on the other. */
+.cont-plate{ left:0; right:auto; }
+.cont-head { left:80mm; right:24mm; }
+/* the reference and the Arabic name share one band across the head, so they
+   take opposite ends of the pearl beyond the seal: the reference just clear of
+   the seal at 80mm, the name ranging to the right margin as it does above */
+.cont-ref  { left:80mm; right:auto; text-align:left; }
+.cont-rule { left:38mm; right:24mm; }
+
+/* ── THE ENGLISH LETTER ────────────────────────────────────────────────────
+   One setting, for the one thing this sheet does that the Arabic sheet does
+   not: carry a body of English prose. EB Garamond is already the Latin
+   document voice of this stationery; it is used here at the size the Arabic
+   letter's Latin passages are set at, leaded for a 138mm measure. */
+.letter--en{ direction:ltr; font-family:"EB Garamond",serif; font-size:10.6pt;
+  line-height:1.68; text-align:justify; hyphens:none; }
+.letter--en p{ margin:0 0 4mm; }
+.letter--en p.salutation{ margin-bottom:5mm; }
+.letter--en .close{ margin-top:5mm; }
+
+/* the signature of an English letter leads with the Latin name; the Arabic
+   form stands beneath it, as the Latin form stands beneath the Arabic on the
+   Arabic sheet. Same two lines, same two founts, reversed order. */
+.sig--principal.sig--en .sig-lat{ font-size:9.6pt; color:var(--sapphire-800); margin-top:0; }
+.sig--principal.sig--en .sig-ar { margin-top:1.5mm; font-size:8.6pt; color:var(--ink-60); }
+/* the issuing office stays deliberately smaller — a private office, not a
+   ministry — so its Latin line is set at the size its Arabic line carried */
+.sig--issuing.sig--en .sig-lat{ font:400 8.6pt/1.45 "EB Garamond",serif;
+  letter-spacing:0; color:var(--ink); margin-top:0; }
+.sig--issuing.sig--en .sig-lat .cred{ font:400 6pt/1 "Inter",sans-serif;
+  letter-spacing:.08em; color:var(--ink-60); white-space:nowrap; }
+.sig--issuing.sig--en .sig-ar{ font-family:"Scheherazade New",serif; font-weight:400;
+  font-size:9.4pt; color:var(--ink-60); margin-top:.9mm; }
+
+/* ── ARABIC INSIDE AN ENGLISH BODY ─────────────────────────────────────────
+   .letter--en names "EB Garamond", serif. An Arabic word dropped into it has
+   no Arabic face in that stack and is served by whatever the renderer finds,
+   which prints in a foreign fount. Any Arabic inside an English letter
+   therefore declares its own fount and its own direction, and is isolated so
+   it cannot drag the surrounding Latin punctuation around it. */
+.letter--en .ar{ font-family:"Scheherazade New",serif; font-size:12.4pt;
+  direction:rtl; unicode-bidi:isolate; color:var(--ink); }
+
+/* ── STRUCTURE INSIDE A LETTER ─────────────────────────────────────────────
+   A letter that sets out a work needs sections, but a letter must not turn
+   into a report: no heading lines, no rules, no numbering of its own. Each
+   section announces itself in the first phrase of its own paragraph, set in
+   the semibold of the SAME fount and in the plate's sapphire, so the measure
+   is never broken. Lists hang their marks in the rail, leaving the text
+   column flush with every other paragraph on the sheet. */
+.letter--en .run{ font-weight:600; color:var(--sapphire-800); }
+
+.letter--en ul, .letter--en ol{ margin:0 0 4mm; padding:0; list-style:none; }
+.letter--en li{ position:relative; padding-left:7mm; margin:0 0 2mm;
+  text-align:justify; }
+.letter--en li:last-child{ margin-bottom:0; }
+.letter--en ul li::before{ content:"\2014"; position:absolute; left:0; top:0;
+  color:var(--gold-700); }
+.letter--en ol{ counter-reset:stage; }
+.letter--en ol li{ counter-increment:stage; }
+.letter--en ol li::before{ content:counter(stage); position:absolute; left:1.4mm; top:0;
+  font:600 8pt/1.62 "Inter",sans-serif; color:var(--gold-700); letter-spacing:.04em; }
+
+/* ── A LETTER SET TO TWO SHEETS ────────────────────────────────────────────
+   Same founts, same measure, same justification, same colour -- only the
+   body metrics draw in. 9.6pt is not a compromise invented here: the costing
+   paper in ../digital-campus-paper sets its body at 9.6pt on this very
+   stationery, so this is the house's own close-set text, not a squeeze.
+   Applied per letter, never globally: a letter that fits three sheets
+   comfortably should be left at the open metrics. */
+.letter--tight{ font-size:9.6pt; line-height:1.57; }
+.letter--tight p{ margin:0 0 3.2mm; }
+.letter--tight p.salutation{ margin-bottom:4mm; }
+.letter--tight .close{ margin-top:4mm; }
+.letter--tight ul, .letter--tight ol{ margin:0 0 3.2mm; }
+.letter--tight li{ margin:0 0 1.5mm; }
+.letter--tight ol li::before{ font-size:7.4pt; line-height:1.62; }
+
+/* the invocation and its rule stand inside sheet one's field and eat into
+   its capacity; on a two-sheet letter they give back three millimetres */
+.bismillah--tight{ font-size:12pt; margin-bottom:2.2mm; }
+.open-rule--tight{ margin-bottom:5.4mm; }
+
+/* ── A LETTER HELD TO ONE SHEET ────────────────────────────────────────────
+   When a letter is within a couple of millimetres of its one-sheet budget,
+   the honest fix is space, not words: below a line's height no amount of
+   re-phrasing changes the line count, and cutting a man's sentence to win
+   1.3mm is the wrong trade. This trims the invocation's rule and the
+   salutation's gap by about two millimetres between them -- invisible on
+   the page, decisive for the fold. Stack it after .letter--tight. */
+.open-rule--onepage{ margin-bottom:2.6mm; }
+.letter--onepage{ line-height:1.45; }
+.letter--onepage p{ margin:0 0 2.6mm; }
+.letter--onepage p.salutation{ margin-bottom:3.2mm; }
+.letter--onepage .close{ margin-top:3.4mm; }

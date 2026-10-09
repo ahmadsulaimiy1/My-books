@@ -1,0 +1,367 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   THE COSTING PAPER — DOCUMENT LAYER
+   مدارس السلطان حنفي الملكية · الحرم الرقمي
+
+   THIS FILE ADDS A DOCUMENT. IT DOES NOT ADD A LETTERHEAD. The plate, the
+   nine-member binding section, the medallion, the pier, the red channel, the
+   foot and the security layers are loaded unchanged from
+   ../letterhead-atelier/assets/atelier.css and are not restated here. Nothing
+   below overrides them except the writing field's own extent, because a
+   fourteen-sheet paper needs more field than a letter does.
+
+   ONE RAIL, ONE COLUMN, AND TABLES THAT BREAK OUT. The 138mm field is divided
+   once: a 26mm rail at the left carrying the section number and the Arabic
+   title, and a 108mm text column beside it. 108mm sets English at about
+   seventy characters, which is a reading measure; 138mm is not. Tables,
+   matrices and the two diagrams are given the full field by .full, and that
+   contrast — narrow prose, wide evidence — is the whole page architecture.
+   It is also why no two sections look alike without anything being decorated.
+
+   THE INSTRUMENT VOICE CARRIES THE LABELS. Every small label on this sheet is
+   Inter: section numbers, table heads, status marks, figure captions, note
+   keys. Every heading and every word of argument is EB Garamond, the Latin
+   DOCUMENT voice. Playfair 700 is not used anywhere below — it is the
+   IDENTITY voice and it stays on the masthead. The four-voice rule of the
+   stationery is not relaxed because the document is long.
+
+   RULES ARE HAIRLINES AND THERE ARE NO BOXES. One gold hairline under a table
+   head, one faint sapphire hairline between rows, one gold stem beside a
+   note. A figure is made to carry weight by being set in the document face at
+   size with tabular figures, never by being put in a panel.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── THE FIELD ─────────────────────────────────────────────────────────────
+   Sheet one keeps the letter's own top (147mm, under the register) and is
+   taken down to 26mm — there is no signature block on it, so the 52mm the
+   letter reserved is field. Continuation sheets open at 44mm, 8mm below the
+   continuation rule, and close at 26mm, 3mm above the microtext. */
+.field--open { top:152mm; bottom:25mm; }
+.field--paper{ top:43mm; bottom:25mm; }
+.paper{ direction:ltr; }
+
+/* every block sits in the text column; .full takes the field back */
+.paper > *{ margin-left:22mm; }
+.paper > .full{ margin-left:0; }
+.paper > :last-child{ margin-bottom:0 !important; }
+
+/* ── SECTION HEADS ─────────────────────────────────────────────────────────
+   The number and the Arabic title hang in the rail, the English title opens
+   the column. Nothing is centred and nothing is ruled: the indent IS the
+   hierarchy, so a section can begin a sheet or sit mid-sheet and read the
+   same either way. */
+/* THE RAIL CARRIES THE NUMBER AND NOTHING ELSE. An Arabic title set in an 18mm
+   rail wraps to two or three lines, and a rail taller than its own head either
+   collides with the block beneath it or opens a hole under the title. The
+   Arabic belongs under the English, right-aligned on the column — which is
+   also the correct bilingual head: one statement, two scripts, one block. */
+.head{ display:flex; gap:4mm; margin-left:0 !important; margin-bottom:4.2mm; }
+.rail{ flex:0 0 18mm; width:18mm; text-align:right; padding-top:.9mm; }
+.rail .n{ display:block; font:600 5.4pt/1.3 "Inter",sans-serif; letter-spacing:.28em;
+  color:var(--gold-700); }
+.head .ar{ display:block; direction:rtl; text-align:right; margin-top:1.4mm;
+  font:400 8.2pt/1.5 "Reem Kufi",sans-serif; color:var(--sapphire-700); }
+.head .t{ flex:1; min-width:0; font:600 12.6pt/1.3 "EB Garamond",serif;
+  letter-spacing:.004em; color:var(--sapphire-800); }
+
+/* ── PROSE ────────────────────────────────────────────────────────────────── */
+.paper p{ margin:0 0 3mm; font:400 9.6pt/1.58 "EB Garamond",serif; color:var(--ink);
+  text-align:justify; hyphens:none; }
+.paper p:last-child{ margin-bottom:0; }
+.blk{ margin-bottom:5.6mm; }
+.blk--tight{ margin-bottom:4mm; }
+
+/* the opening statement is set one step larger; after it the paper speaks at
+   its ordinary size and does not raise its voice again */
+.lede p{ font-size:10.2pt; line-height:1.64; }
+.kicker{ font:600 5.4pt/1.4 "Inter",sans-serif; letter-spacing:.3em; color:var(--gold-700);
+  margin-bottom:3mm; }
+
+/* ── POINTS ───────────────────────────────────────────────────────────────── */
+.pts{ margin:0 0 5.6mm; padding:0; list-style:none; }
+.pts li{ position:relative; padding-left:5.2mm; margin-bottom:2.4mm;
+  font:400 9.2pt/1.54 "EB Garamond",serif; color:var(--ink); }
+.pts li:last-child{ margin-bottom:0; }
+.pts li::before{ content:""; position:absolute; left:.5mm; top:1.55mm; width:1.5mm; height:1.5mm;
+  background:var(--gold-600); transform:rotate(45deg); }
+.pts li b{ font-weight:600; color:var(--sapphire-800); }
+.pts--sapphire li::before{ background:var(--sapphire-600); }
+
+/* ── TABLES ────────────────────────────────────────────────────────────────
+   A table earns its place here only where a reader needs to compare rows. The
+   head is a gold hairline with Inter above it; the rows are separated by the
+   faintest sapphire the press will hold. No fills, no vertical rules, no
+   alternating bands. */
+.tbl{ width:100%; border-collapse:collapse; direction:ltr; margin-bottom:5.6mm; }
+.tbl th{ font:600 5pt/1.4 "Inter",sans-serif; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--gold-700); text-align:left; vertical-align:bottom;
+  padding:0 4mm 1.8mm 0; border-bottom:.34mm solid var(--gold-600); }
+.tbl th:last-child, .tbl td:last-child{ padding-right:0; }
+.tbl th.r, .tbl td.r{ text-align:right; }
+.tbl td{ font:400 8.8pt/1.5 "EB Garamond",serif; color:var(--ink);
+  padding:1.9mm 4mm 1.9mm 0; vertical-align:top;
+  border-bottom:.3px solid rgba(11,48,104,.22); }
+.tbl tr:last-child td{ border-bottom:0; }
+.tbl td.k{ font-family:"EB Garamond",serif; font-weight:600; font-size:8.8pt;
+  letter-spacing:0; color:var(--sapphire-800); white-space:normal; }
+/* a group heading inside a long register — set in the instrument voice so it
+   reads as structure rather than as another row of content */
+.tbl tr.grp td{ border-bottom:0; padding:4.4mm 0 1.4mm;
+  font:600 5pt/1.4 "Inter",sans-serif; letter-spacing:.26em; text-transform:uppercase;
+  color:var(--sapphire-700); }
+.tbl tr.grp:first-child td{ padding-top:0; }
+.tbl .gloss{ display:block; font-size:8.4pt; color:var(--ink-60); margin-top:.9mm; }
+
+/* ── STATUS MARKS ──────────────────────────────────────────────────────────
+   Two marks, no box around either. A short rule in the mark's own colour
+   leads it, which is enough to make the two scan apart down a column of
+   thirty rows. Sapphire is established; gold is proposed. */
+.mk{ display:block; white-space:nowrap; font:600 4.7pt/1.5 "Inter",sans-serif;
+  letter-spacing:.17em; text-transform:uppercase; }
+.mk::before{ content:""; display:block; width:4.4mm; height:.3mm; margin-bottom:1.1mm;
+  background:currentColor; }
+.mk--now { color:var(--sapphire-700); }
+.mk--prop{ color:var(--gold-700); }
+.legend{ display:flex; gap:9mm; margin-bottom:5.6mm; }
+.legend .i{ flex:1; }
+.legend .d{ font:400 8.2pt/1.5 "EB Garamond",serif; color:var(--ink-60); margin-top:1.6mm; }
+
+/* ── FIGURES ───────────────────────────────────────────────────────────────
+   Money is set in the document face, at size, with tabular lining figures, so
+   a column of amounts aligns on the digit and a figure in a sentence keeps
+   the sentence's own colour. That is the whole treatment. */
+.fig{ font:600 10.4pt/1 "EB Garamond",serif; color:var(--sapphire-900);
+  font-variant-numeric:lining-nums tabular-nums; white-space:nowrap; letter-spacing:.005em; }
+.fig--lg{ font-size:13.6pt; }
+.fig--sm{ font-size:9.2pt; }
+.num{ font-variant-numeric:lining-nums tabular-nums; }
+
+/* THE SUMMARY on sheet one — two routes, two figures, one rule between them */
+.summary{ margin-bottom:4mm; }
+.summary .row{ display:flex; align-items:baseline; justify-content:space-between; gap:8mm;
+  padding:2.7mm 0; border-top:.3px solid rgba(11,48,104,.26); }
+.summary .row:last-child{ border-bottom:.3px solid rgba(11,48,104,.26); }
+.summary .l{ flex:1; }
+.summary .l .t{ font:600 5.2pt/1.4 "Inter",sans-serif; letter-spacing:.26em;
+  text-transform:uppercase; color:var(--sapphire-700); }
+.summary .l .d{ font:400 8.6pt/1.5 "EB Garamond",serif; color:var(--ink-60); margin-top:1.3mm; }
+.summary .a{ text-align:right; }
+.summary .a .q{ display:block; font:400 4.7pt/1.4 "Inter",sans-serif; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--ink-40); margin-top:1.4mm; }
+
+/* ── THE ARITHMETIC MATRIX ─────────────────────────────────────────────────
+   Three volumes down, three rates across, nine products shown. The two corner
+   products are the envelope, and they are marked by being set in sapphire at
+   weight rather than by being outlined — the reader finds them because they
+   are the heaviest things in the grid. */
+.mtx{ width:100%; border-collapse:collapse; direction:ltr; margin-bottom:3mm; }
+.mtx th{ font:600 5pt/1.5 "Inter",sans-serif; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--gold-700); padding:0 0 1.8mm; text-align:right; vertical-align:bottom;
+  border-bottom:.34mm solid var(--gold-600); }
+.mtx th.c{ text-align:left; }
+.mtx th .s{ display:block; font-size:4.6pt; letter-spacing:.16em; color:var(--ink-40);
+  margin-top:.9mm; }
+.mtx td{ padding:3mm 0; text-align:right; border-bottom:.3px solid rgba(11,48,104,.2);
+  font:400 10pt/1 "EB Garamond",serif; font-variant-numeric:lining-nums tabular-nums;
+  color:var(--ink); }
+.mtx tr:last-child td{ border-bottom:0; }
+.mtx td.c{ text-align:left; font:600 5.2pt/1.4 "Inter",sans-serif; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--sapphire-700); }
+.mtx td.x{ font-weight:600; color:var(--sapphire-900); }
+.mtx-key{ font:400 7.8pt/1.5 "EB Garamond",serif; color:var(--ink-60); margin-bottom:5.6mm; }
+/* the worked blend, set as a line of arithmetic rather than as a result */
+.work{ margin-bottom:5.6mm; padding-left:5mm; border-left:.4mm solid rgba(199,158,60,.5); }
+.work .e{ font:400 9pt/1.7 "EB Garamond",serif; font-variant-numeric:lining-nums tabular-nums;
+  color:var(--ink); }
+.work .c{ font:400 4.8pt/1.5 "Inter",sans-serif; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--gold-700); margin-top:2mm; }
+
+/* ── THE TWO ROUTES, SIDE BY SIDE ──────────────────────────────────────────
+   Equal columns, equal type, one hairline between. Each column states what is
+   in its favour and what has to be weighed against it, and the second list is
+   never shorter than the first — a comparison in which only one side has
+   drawbacks is not a comparison. */
+.routes{ display:flex; margin-bottom:5.6mm; }
+.route{ width:50%; }
+.route:first-child{ padding-right:7mm; }
+.route:last-child{ padding-left:7mm; border-left:.3px solid rgba(11,48,104,.28); }
+.route .rn{ font:600 5.2pt/1.4 "Inter",sans-serif; letter-spacing:.26em; text-transform:uppercase;
+  color:var(--gold-700); }
+.route .rt{ font:600 10.4pt/1.3 "EB Garamond",serif; color:var(--sapphire-800); margin-top:1.8mm; }
+.route .rf{ display:block; margin-top:2.2mm; font:600 9.6pt/1 "EB Garamond",serif;
+  font-variant-numeric:lining-nums tabular-nums; color:var(--sapphire-900); }
+.route .sh{ font:600 4.8pt/1.5 "Inter",sans-serif; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--ink-40); margin:5mm 0 2.4mm; padding-top:2.4mm;
+  border-top:.3px solid rgba(11,48,104,.22); }
+.route ul{ margin:0; padding:0; list-style:none; }
+.route li{ position:relative; padding-left:4.4mm; margin-bottom:1.9mm;
+  font:400 8.6pt/1.5 "EB Garamond",serif; color:var(--ink); }
+.route li:last-child{ margin-bottom:0; }
+.route li::before{ content:""; position:absolute; left:.3mm; top:1.5mm; width:1.3mm; height:1.3mm;
+  background:var(--gold-600); transform:rotate(45deg); }
+.route .sh--w + ul li::before{ background:var(--steel-500); }
+
+/* ── THE CHAIN — a lifecycle drawn as a spine and nodes ────────────────────
+   No arrow glyphs. The Latin cut carried on this stationery has no arrow and
+   no approximation sign in its repertoire, and a lifecycle drawn in arrows
+   across a 138mm measure is what produced the broken stage name in the paper
+   this one replaces. A spine does not wrap and does not break. */
+.chain{ position:relative; margin:0 0 5.6mm; padding:0; list-style:none; }
+.chain::before{ content:""; position:absolute; left:1.45mm; top:2.4mm; bottom:3.4mm; width:.3mm;
+  background:linear-gradient(180deg,rgba(199,158,60,.85),rgba(199,158,60,.25)); }
+.chain li{ position:relative; padding-left:7.4mm; margin-bottom:3.2mm; }
+.chain li:last-child{ margin-bottom:0; }
+.chain li::before{ content:""; position:absolute; left:0; top:1.5mm; width:3mm; height:3mm;
+  border-radius:50%; background:var(--pearl); box-shadow:inset 0 0 0 .34mm var(--gold-600); }
+.chain li:first-child::before, .chain li:last-child::before{ background:var(--gold-500);
+  box-shadow:inset 0 0 0 .34mm var(--gold-700); }
+.chain .st{ font:600 5.2pt/1.4 "Inter",sans-serif; letter-spacing:.26em; text-transform:uppercase;
+  color:var(--sapphire-800); }
+.chain .sd{ font:400 8.8pt/1.52 "EB Garamond",serif; color:var(--ink); margin-top:1.3mm; }
+
+/* ── THE TRACK — the institutional chain, four stations to a row ───────────
+   Eight stations will not fit across 138mm at a legible size, so the track
+   turns once. The rule above each station is the track; the node sits on it. */
+.track{ display:grid; grid-template-columns:repeat(4,1fr); margin-bottom:3mm; }
+.track .st{ position:relative; padding:4.2mm 4mm 0 0; }
+.track .st::before{ content:""; position:absolute; left:0; right:0; top:1.9mm; height:.3mm;
+  background:rgba(199,158,60,.55); }
+.track .st:nth-child(4n)::before, .track .st:last-child::before{ right:4mm; }
+.track .st::after{ content:""; position:absolute; left:0; top:.9mm; width:2.2mm; height:2.2mm;
+  background:var(--gold-500); transform:rotate(45deg); }
+.track .st span{ display:block; font:600 5pt/1.45 "Inter",sans-serif; letter-spacing:.17em;
+  text-transform:uppercase; color:var(--sapphire-800); }
+.track-key{ font:400 7.8pt/1.5 "EB Garamond",serif; color:var(--ink-60); margin-bottom:5.6mm; }
+
+/* ── THE LAYERED MODEL — nested frames, labels astride the top edge ───────
+   An engineering drawing's convention, not a dashboard's: hairline frames,
+   each label sitting on its own frame line in the instrument voice. The
+   nesting is the argument — a new service attaches at a layer, against
+   records and workflows that already exist. */
+.nest{ margin:0 auto 3mm; max-width:118mm; }
+.nest .lay{ position:relative; border:.3px solid rgba(11,48,104,.4); padding:6.4mm 6mm 6mm; }
+.nest .lay > .lk{ position:absolute; top:-1.7mm; left:5mm; padding:0 2mm; background:var(--pearl);
+  font:600 4.9pt/1.4 "Inter",sans-serif; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--gold-700); }
+.nest .lay > .lv{ font:400 8.4pt/1.5 "EB Garamond",serif; color:var(--ink-60);
+  margin-bottom:5.4mm; }
+.nest .lay--core{ border-color:rgba(11,48,104,.6); padding:5.4mm 6mm; text-align:center; }
+.nest .lay--core > .lk{ left:50%; transform:translateX(-50%); color:var(--sapphire-700); }
+.nest .lay--core > .lv{ margin-bottom:0; font-size:9pt; color:var(--sapphire-800);
+  font-weight:600; }
+
+/* ── NOTES ────────────────────────────────────────────────────────────────
+   The source paper put its qualifications in tinted panels. A panel reads as
+   an advertisement for the sentence inside it. A gold stem in the margin says
+   the same thing — this is a qualification, read it — and keeps the page a
+   page. The one qualification that must not be missed takes the red. */
+.note{ position:relative; padding-left:5.4mm; margin:0 0 5.6mm; }
+.note::before{ content:""; position:absolute; left:0; top:.4mm; bottom:.4mm; width:.5mm;
+  background:var(--gold-600); opacity:.8; }
+.note .nk{ font:600 5pt/1.4 "Inter",sans-serif; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--gold-700); margin-bottom:2.2mm; }
+.note p{ font-size:9pt; line-height:1.58; }
+.note--imp::before{ background:var(--red-700); opacity:.85; }
+.note--imp .nk{ color:var(--red-800); }
+
+/* ── CONVENTIONS — a definition list using the rail ───────────────────────── */
+.conv{ margin-left:0 !important; margin-bottom:5.6mm; }
+.conv .d{ position:relative; padding-left:22mm; margin-bottom:4.2mm; }
+.conv .d:last-child{ margin-bottom:0; }
+.conv .d > .k{ position:absolute; left:0; top:.6mm; width:18mm; text-align:right;
+  font:600 5pt/1.5 "Inter",sans-serif; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--gold-700); }
+.conv .d p{ margin-bottom:0; font-size:9.4pt; }
+
+/* ── THE SIGNATURE — the stationery's own treatment, nothing added ────────
+   One principal signs. Opposite, and deliberately quieter, is the space in
+   which the institution records its own approval: a costing paper is an
+   instrument, and an instrument carries the place where it is accepted. The
+   space is left empty, because this paper does not assert an approval that
+   has not been given. */
+.sign{ display:flex; justify-content:space-between; align-items:flex-end; gap:12mm;
+  margin-left:0 !important; margin-top:9mm; direction:ltr; }
+.sign .s1{ width:78mm; }
+.sign .s2{ width:52mm; }
+.sign .sp{ height:16mm; display:flex; align-items:flex-end; }
+.sign .sp img{ height:13.5mm; }
+.sign .rule{ height:.45mm; margin-bottom:2.4mm; }
+.sign .rule--f{ height:.3px; background:var(--gold-600); opacity:.6; margin-bottom:2.2mm; }
+.sign .nm{ font:700 9.2pt/1.4 "Playfair Display",serif; letter-spacing:.05em;
+  color:var(--sapphire-800); }
+.sign .ar{ direction:rtl; font:600 8.6pt/1.5 "Reem Kufi",sans-serif; color:var(--ink-60);
+  margin-top:1.4mm; }
+.sign .ro{ font:400 5pt/1.7 "Inter",sans-serif; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--gold-700); margin-top:2.2mm; }
+.sign .s2 .ro{ color:var(--ink-40); letter-spacing:.2em; }
+.sign .s2 .bl{ font:400 5pt/1.5 "Inter",sans-serif; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--ink-40); }
+.sign .s2 .bl i{ display:block; height:.3px; background:rgba(11,48,104,.4); margin:3.6mm 0 1.4mm;
+  font-style:normal; }
+
+/* ── THE REGISTER, SET LEFT TO RIGHT ──────────────────────────────────────
+   The stationery's register is a chancery head for an Arabic letter: the
+   addressee leads at the right, the file follows at the left. This paper is
+   written in English, so the same two islands are set the other way round —
+   the addressee leads at the left — and nothing else about them changes. No
+   rules, no boxes, labels inside the lines. */
+/* the pier is at the left on an English sheet, so the register sits inboard
+   of it; the two islands keep their order — addressee leading, file following */
+.reg2{ position:absolute; top:107.4mm; left:48mm; right:24mm; z-index:1; direction:ltr; }
+.reg2-pair{ display:flex; justify-content:space-between; align-items:flex-start; }
+.reg2-to  { width:72mm; }
+.reg2-file{ width:56mm; padding-top:3.9mm; }
+.r2{ display:grid; grid-template-columns:19mm 1fr; column-gap:2.6mm; align-items:baseline;
+  margin-bottom:1.7mm; }
+.r2 .k{ font:600 5pt/1.5 "Inter",sans-serif; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--gold-700); white-space:nowrap; }
+.r2 .v{ font:400 9pt/1.4 "EB Garamond",serif; color:var(--ink); }
+.r2 .v.ref{ font:600 8pt/1.4 "Inter",sans-serif; letter-spacing:.09em; color:var(--red-700);
+  font-variant-numeric:lining-nums tabular-nums; }
+.r2 .v.ara{ direction:rtl; font:400 10pt/1.4 "Scheherazade New",serif; }
+.r2 .v.sub{ font-size:8.2pt; color:var(--ink-60); }
+.reg2-to > .k{ display:block; margin-bottom:1.6mm; font:600 5pt/1.5 "Inter",sans-serif;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--gold-700); }
+.reg2-to .nm{ font:600 10.6pt/1.4 "EB Garamond",serif; color:var(--sapphire-800); }
+.reg2-to .ro{ font:400 9.2pt/1.45 "EB Garamond",serif; color:var(--ink-60); margin-top:1.2mm; }
+.reg2-hair{ height:.32mm; margin-top:5mm; opacity:.92; }
+.reg2-sub{ display:flex; justify-content:center; align-items:baseline; gap:3.4mm; margin-top:3.4mm; }
+.reg2-sub .k{ font:600 5pt/1.5 "Inter",sans-serif; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--gold-700); white-space:nowrap; }
+.reg2-sub .s{ font:600 9.8pt/1.4 "EB Garamond",serif; color:var(--sapphire-800); }
+
+/* the continuation head carries the running section, so a fourteen-sheet
+   paper can be navigated from any sheet in the hand */
+/* the running head shares its band with the Arabic name at the right margin,
+   so it is given a width and wraps rather than running into it */
+.cont-ref{ width:50mm; }
+.cont-ref .sec{ display:block; color:var(--sapphire-700); letter-spacing:.2em;
+  text-transform:uppercase; }  /* uppercased by the press, never by the source:
+     .upper() in the generator would eat the HTML entities in a title */
+
+/* ── THE GALLEY — screen only, never printed ───────────────────────────────
+   The measuring harness renders every block once in a 138mm column and reads
+   its height back. It is not a page and never becomes one. */
+.galley{ width:138mm; margin:0; direction:ltr; }
+
+/* the Gregorian equivalent rides inside the date cell: a register of three
+   lines closes higher, and the field that opens under it gains the difference */
+.r2 .v .sub2{ display:block; direction:ltr; margin-top:1.1mm;
+  font:400 7.6pt/1.4 "EB Garamond","Scheherazade New",serif; color:var(--ink-60); }
+
+/* the folio is a single unbreakable token; a page number that wraps is a fault
+   the reader notices before anything else on the sheet */
+/* nowrap alone keeps the folio on one line; letting the classification grow to
+   fill defeats space-between and runs the two together */
+.foot .folio{ white-space:nowrap; flex:none; }
+.foot .contact{ flex:0 1 auto; }
+.foot{ gap:8mm; }
+
+/* .full zeroes the left margin to reclaim the rail; the layered model is the
+   one full-measure figure that should sit on the column's centre line, so it
+   takes its auto margins back */
+.paper > .nest{ margin-left:auto !important; margin-right:auto; }
+
+/* A standing label aligns with what it labels. Point lists are set to the full
+   measure like the tables — they are evidence, not argument — so the kicker
+   above them leaves the text column too. */
+.paper > .kicker{ margin-left:0 !important; }

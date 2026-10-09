@@ -1,0 +1,179 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   THE FLAGSHIP — IMPERIAL CHANCERY
+   المكتب الخاص · الإمام أحمد بن إبراهيم السليمي (آل سلام)
+
+   Direction B, pushed. What separates this from the concept it came from:
+
+   · THE CROWN HAS A SILHOUETTE. It is no longer a rectangle of colour but a
+     shaped plate: the sapphire descends at the centre into a cartouche, and
+     the cartouche exists for a reason — it is what holds the Latin name. The
+     architecture is load-bearing, not decorative.
+   · THE EDGE IS A TRICOLOUR. Champagne, then a crimson hairline, then
+     sapphire, struck in that order along the whole silhouette. Three plates in
+     register is the most expensive thing on the sheet and the most diplomatic.
+   · THE GUILLOCHÉ IS ENGINE-TURNED IN TWO REGISTERS. A faint rosette ground
+     across the plate, a radial rosette behind the mark, and a dense band
+     closing the foot. This is the line-work of an engraved certificate.
+   · THE NAME IS STRUCK IN FOIL AND ECHOED IN EMBOSS, in register — the pairing
+     a stationer charges most for and a recipient feels before reading.
+   · THE FOOT ANSWERS THE HEAD in the same three plates, inverted.
+
+   One stylesheet drives the blank sheet, the continuation sheet and a letter,
+   so the masthead on correspondence can never drift from the masthead on the
+   blank. Materials and palette come from materials.css.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── THE CROWN ─────────────────────────────────────────────────────────────
+   Three stacked plates in register. Each is clipped to the same silhouette,
+   each a fraction larger than the one above it, so what shows along the edge
+   is a champagne keyline, then a crimson hairline, then the sapphire field. */
+.crown, .crown-crimson, .crown-foil{ position:absolute; top:0; left:0; right:0; z-index:2; }
+.crown-foil   { height:98.0mm; clip-path:polygon(0 0,210mm 0,210mm 86.0mm,149.0mm 86.0mm,141.6mm 98.0mm,68.4mm 98.0mm,61.0mm 86.0mm,0 86.0mm); }
+.crown-crimson{ height:97.5mm; clip-path:polygon(0 0,210mm 0,210mm 85.5mm,148.6mm 85.5mm,141.3mm 97.5mm,68.7mm 97.5mm,61.4mm 85.5mm,0 85.5mm); }
+.crown        { height:97.0mm; clip-path:polygon(0 0,210mm 0,210mm 85.0mm,148.2mm 85.0mm,141.0mm 97.0mm,69.0mm 97.0mm,61.8mm 85.0mm,0 85.0mm); overflow:hidden; }
+
+.guil-ground{ position:absolute; inset:0; opacity:.22; }
+.guil-band  { position:absolute; left:0; right:0; top:77.6mm; height:7.4mm; overflow:hidden; opacity:.85; }
+/* the medallion is centred on the mark, not on the plate: the mark is struck
+   over it, the way a seal is struck over a lathe-turned ground */
+.rosette    { position:absolute; left:50%; top:0.5mm; width:40mm; height:40mm;
+              transform:translateX(-50%); opacity:.2; }
+
+.mark{ position:absolute; left:50%; top:8mm; transform:translateX(-50%);
+       width:20.6mm; height:25mm; z-index:3; }
+
+.office{ position:absolute; top:42mm; left:0; right:0; text-align:center; z-index:3;
+  font-family:"Aref Ruqaa",serif; font-weight:400; font-size:12.4pt; }
+
+/* the name: foil, with a blind emboss struck underneath it in register */
+.name-wrap{ position:absolute; top:50mm; left:0; right:0; text-align:center; z-index:3; }
+.name{ margin:0; font-family:var(--name-face),"Amiri",serif; font-weight:700;
+  font-size:28pt; line-height:1.6; white-space:nowrap; }
+.name .house{ font-size:.64em; }
+/* the emboss struck under the foil, in register: a hairline of shadow above
+   the foil and of lifted light below it — what the eye reads as relief */
+.name-echo{ position:absolute; left:0; right:0; top:.5mm; z-index:-1;
+  color:rgba(2,9,24,.8); text-shadow:0 .9px .5px rgba(150,180,225,.22); }
+
+/* a hairline under the name, stopping short of the cartouche shoulders */
+.name-rule{ position:absolute; left:50%; top:71mm; width:52mm; height:.5px;
+  transform:translateX(-50%); z-index:3; opacity:.9; }
+
+/* the cartouche holds the Latin name — that is why it descends */
+.cartouche-en{ position:absolute; left:0; right:0; top:88.6mm; text-align:center; z-index:3;
+  direction:ltr; font-family:"Jost",sans-serif; font-weight:500; font-size:7.6pt;
+  letter-spacing:.26em; text-indent:.26em; }
+/* NOT Bodoni here, though it is the Latin display face everywhere else. The
+   cartouche sits in the deepest sapphire on the plate, and Bodoni's hairlines
+   simply disappear into it at this size — the very failure the typography
+   build warns about. Jost carries an even stroke, so the foil reads. It is
+   also struck brighter than the foil on the open ground, for the same reason. */
+.cartouche-en .foil-type--dark{ color:#F4E3B4;
+  text-shadow:0 .4px .5px rgba(255,254,248,.45); }
+
+/* ── THE SHEET ─────────────────────────────────────────────────────────────  */
+.en{ position:absolute; top:104mm; left:0; right:0; text-align:center; direction:ltr; }
+.en-office{ font:400 6pt/1 "Jost",sans-serif; letter-spacing:.46em; text-indent:.46em;
+  color:var(--gold-700); }
+.en-house{ font:400 6.6pt/1 "Jost",sans-serif; letter-spacing:.5em; text-indent:.5em;
+  color:var(--gold-700); margin-top:2.6mm; }
+.en-house .sep{ color:var(--crimson-700); }
+
+.scope-ar{ position:absolute; top:116mm; left:28mm; right:28mm; text-align:center; margin:0;
+  font-family:"Amiri",serif; font-size:10.6pt; line-height:1.75; color:var(--ink-60); }
+.scope-en{ position:absolute; top:125.5mm; left:22mm; right:22mm; text-align:center;
+  direction:ltr; font:300 5.4pt/1 "Jost",sans-serif; letter-spacing:.23em; text-indent:.23em;
+  text-transform:uppercase; color:var(--ink-40); }
+.pip{ display:inline-block; width:2.3px; height:2.3px; background:var(--gold-500);
+  transform:rotate(45deg); margin:0 .85em; vertical-align:.16em; font-style:normal; }
+
+/* corner brackets: they mark the type area, echoing the cartouche's chamfer */
+.bracket{ position:absolute; width:8mm; height:8mm; z-index:1; }
+.bracket span{ position:absolute; background:var(--gold-500); opacity:1; }
+.bracket .a{ width:8mm; height:.5px; } .bracket .b{ width:.5px; height:8mm; }
+.bracket.tl{ left:15mm; top:106mm; } .bracket.tl .a,.bracket.tl .b{ left:0; top:0; }
+.bracket.tr{ right:15mm; top:106mm; } .bracket.tr .a,.bracket.tr .b{ right:0; top:0; }
+.bracket.bl{ left:15mm; bottom:28mm; } .bracket.bl .a,.bracket.bl .b{ left:0; bottom:0; }
+.bracket.br{ right:15mm; bottom:28mm; } .bracket.br .a,.bracket.br .b{ right:0; bottom:0; }
+
+/* the mark, pressed into the sheet, low in the writing field */
+.watermark{ position:absolute; left:50%; top:202mm; transform:translate(-50%,-50%);
+  width:46mm; z-index:0; }
+.watermark img{ width:100%; display:block; opacity:.2; }
+
+/* a mark for the eye that looks twice */
+.micro{ position:absolute; left:16mm; bottom:30mm; direction:ltr;
+  font:400 4.2pt/1 "Jost",sans-serif; letter-spacing:.42em; color:var(--gold-700); opacity:.75; }
+
+/* ── THE PLINTH — the head's three plates, inverted ───────────────────────── */
+.plinth, .plinth-crimson, .plinth-foil{ position:absolute; left:0; right:0; bottom:0; z-index:2; }
+.plinth-foil   { height:20.4mm; }
+.plinth-crimson{ height:19.7mm; }
+.plinth        { height:19.0mm; overflow:hidden; }
+.plinth .guil-band{ top:0; height:5mm; opacity:.5; }
+
+.contact{ position:absolute; left:0; right:0; bottom:0; height:19mm; z-index:3; direction:ltr;
+  display:flex; align-items:center; justify-content:center;
+  font:400 6.5pt/1 "Jost",sans-serif; letter-spacing:.17em; }
+.contact i{ display:inline-block; width:2.7px; height:2.7px; background:var(--gold-400);
+  transform:rotate(45deg); margin:0 1.5em; vertical-align:.18em; font-style:normal; }
+.folio{ position:absolute; right:16mm; bottom:0; height:19mm; z-index:3;
+  display:flex; align-items:center; font-family:"Bodoni Moda",serif; font-size:9pt;
+  color:rgba(226,206,160,.85); }
+
+/* ── THE WRITING FIELD ─────────────────────────────────────────────────────
+   Measured against the printed sheet: the masthead clears at 130mm and the
+   plinth begins at 276.6mm. A body longer than about 130mm of set type belongs
+   on the continuation sheet. */
+.field{ position:absolute; top:136mm; right:24mm; left:24mm; bottom:26mm; z-index:1; }
+.field--continued{ top:52mm; }
+
+.refline{ display:flex; justify-content:space-between; align-items:baseline;
+  font-family:"Amiri",serif; font-size:9.6pt; color:var(--ink-60); margin-bottom:6mm; }
+.refline .lbl{ color:var(--gold-700); }
+.addressee{ font-family:"Amiri",serif; font-size:11.2pt; line-height:1.7; margin:0 0 5mm;
+  color:var(--ink); }
+.addressee .hon{ color:var(--sapphire-700); }
+.letter{ font-family:"Amiri",serif; font-size:11pt; line-height:1.82; color:var(--ink);
+  text-align:justify; }
+.letter p{ margin:0 0 3mm; }
+.letter p.salaam{ margin-bottom:4.4mm; }
+.signature{ margin-top:6mm; text-align:right; }
+.sig-rule{ width:52mm; height:.5px; background:var(--gold-700); opacity:.5;
+  margin:0 0 3mm auto; }
+.sig-name{ font-family:var(--name-face),"Amiri",serif; font-weight:700; font-size:12pt;
+  line-height:1.5; color:var(--sapphire-800); }
+.sig-role{ font-family:"Amiri",serif; font-size:9.6pt; color:var(--ink-60); margin-top:1.2mm; }
+/* named .lat, not .en: .en is already the absolutely-positioned English block
+   in the masthead, and reusing it here inherited its centring */
+.sig-role .lat{ display:block; margin-top:2mm; direction:ltr; text-align:right;
+  font:400 5.6pt/1 "Jost",sans-serif; letter-spacing:.3em; color:var(--gold-700); }
+
+/* ── THE CONTINUATION SHEET ────────────────────────────────────────────────
+   The identity reduced to what cannot be dropped: the mark, the name at text
+   size, and the same three plates — as a rule, not a band. */
+.cont-head{ position:absolute; top:16mm; left:0; right:0; text-align:center; z-index:2; }
+.cont-mark{ width:11.5mm; height:14mm; display:block; margin:0 auto 3.6mm; }
+.cont-name{ font-family:var(--name-face),"Amiri",serif; font-weight:700; font-size:11.6pt;
+  color:var(--sapphire-800); line-height:1.5; margin-bottom:4mm; white-space:nowrap; }
+.cont-plates{ position:absolute; left:24mm; right:24mm; top:44mm; }
+.cont-plates div{ height:.5px; }
+.cont-plates .f{ height:.7px; }
+.cont-plates .c{ background:var(--crimson-700); opacity:.85; margin-top:.7mm; }
+.cont-plates .s{ background:var(--sapphire-800); opacity:.9; margin-top:.7mm; }
+
+/* ── PRODUCTION SPEC · screen only, never printed ─────────────────────────── */
+.speckit{ position:fixed; top:14px; left:14px; z-index:99; font:500 10px/1 "Jost",system-ui,sans-serif;
+  letter-spacing:.16em; background:#0A1F4D; color:#E4D2A6; border:1px solid #C5A773;
+  padding:9px 14px; border-radius:2px; cursor:pointer; }
+body.spec .spec-zone{ outline:.7px dashed #D33; outline-offset:3px; }
+body.spec .spec-zone:not(.watermark):not(.crown-foil):not(.plinth-foil){ position:relative; }
+body.spec .spec-zone::after{
+  content:attr(data-spec); position:absolute; top:-5mm; left:50%; transform:translateX(-50%);
+  font:500 6pt/1.2 "Jost",system-ui,sans-serif; letter-spacing:.1em; white-space:nowrap;
+  color:#fff; background:#C0202E; padding:1.6px 5px; border-radius:2px; direction:ltr; z-index:40; }
+body.spec .spec-zone.below::after{ top:auto; bottom:-5mm; }
+body.spec .watermark img{ opacity:.6; }
+@media print{ .speckit{ display:none !important; }
+              body.spec .spec-zone{ outline:none !important; }
+              body.spec .spec-zone::after{ display:none !important; } }
