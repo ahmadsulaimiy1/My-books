@@ -499,7 +499,15 @@ ZAYNAB_GROUPS = [
  ['<p>My love, you carried its cost with me, and whatever good is in it you have a share '
   'that no page records. May Allah accept it, and reward you beyond anything I can repay.</p>',
   '<p>May Allah elevate you, and fulfil for us what we hope for.</p>',
-  '<p class="close">With love and respect,</p>'],
+  # the valediction and the self-designation are ONE block with a line
+  # break, not two paragraphs: a paragraph gap between them would read as a
+  # pause where the letter wants none, and would let a page break fall
+  # between a man's farewell and the name he signs it with.
+  #
+  # "Habeeb" is kept in the author's own spelling, not normalised to Ḥabīb.
+  # It is how he writes it, and this is the one word in the letter that is
+  # his name for himself.
+  '<p class="close">With love and respect,<br>Your Habeeb,</p>'],
 ]
 
 def main():
