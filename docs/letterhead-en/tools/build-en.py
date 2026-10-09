@@ -14,7 +14,7 @@ and untouched. assets/letterhead-en.css is laid over the top and moves the
 plate, the pier, the seal and the furniture to the binding edge at the left,
 re-lighting the nine-member section as it goes so the lamp stays where it is.
 """
-import os, subprocess, sys
+import os, re, subprocess, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -293,48 +293,153 @@ LETTER_2 = [
  '<p>Wa-s-salāmu alaykum wa rahmatu Llāhi wa barakātuh.</p>',
 ]
 
-# ── the completion of Sina'at al-Mutakallim al-'Arabi ───────────────────────
-# A private letter, not an official minute: it shares news with a man the
-# writer counts among those closest to him, and asks for du'a and for counsel.
-# The register and the furniture stay exactly as the stationery sets them.
+# ── the completion of Ṣināʿat al-Mutakallim al-ʿArabī ───────────────────────
+# A private letter that also sets out a work: it shares news with a man the
+# writer counts among those closest to him, describes the book, and asks for
+# duʿāʾ and for counsel. The register and the furniture stay as the
+# stationery sets them; the sections announce themselves in the first phrase
+# of their own paragraph so the measure is never broken by a heading line.
 #
-# ORTHOGRAPHY. The embedded Latin cut carries the macrons (a i u o) and the
-# Latin-1 range and NOTHING else: the ayn, the hamza and the dotted emphatics
-# are absent, and U+1E00-1EFF is DECLARED by the supplementary face while
-# holding no glyph in it, so an h-dot or an s-dot would be served by whatever
-# face the renderer finds and would print in the wrong fount. The
-# transliteration is therefore set with the macrons and with the quote-mark
-# substitutes that scholarship uses when the letters are unavailable:
-# the ayn as a left single quote and the hamza as a right single quote.
-# The work's own title is additionally given in Arabic script, which the
-# document fount carries in full -- that is transcription of the title the
-# author supplied, not an addition to it. His Arabic SUBTITLE was not
-# supplied, so the subtitle stands in English alone.
+# ORTHOGRAPHY. assets/letterhead-en.css now carries four supplementary faces
+# holding the twelve codepoints the sealed v1 cut lacks, so the ayn, the
+# hamza and the dotted emphatics are set as the letters they are -- al-Jāḥiẓ
+# and ʿAbd al-Qāhir al-Jurjānī, not al-Jahiz and Abd al-Qahir. Those faces
+# cover EB Garamond and Inter ONLY. Nothing set in Playfair Display (the
+# masthead name, the signature line) or in Reem Kufi / Scheherazade New (the
+# recipient's name and role) may use them. Audit every build.
+#
+# The author's own italics are not reproduced: the embedded cut has no italic
+# face, so an <em> would be a synthesised oblique of the roman. Titles and
+# technical terms stand in roman, which is what the specimen letter does.
 REF_SINAAH = "PO/2026/10/0023"
 
-SINAAH_1 = [
- '<p class="salutation">As-sal&#257;mu alaykum wa rahmatu Ll&#257;hi wa barak&#257;tuh.</p>',
- '<p>Dear Sir,</p>',
- '<p>All praise is due to Allah, by whose grace good works are completed.</p>',
- '<p>With a heart full of gratitude, I share with you, among those dearest to me, the '
- 'completion of my Arabic work <span class="ar">&#1589;&#1606;&#1575;&#1593;&#1577; '
- '&#1575;&#1604;&#1605;&#1578;&#1603;&#1604;&#1605; &#1575;&#1604;&#1593;&#1585;&#1576;'
- '&#1610;</span> (Sin&#257;&lsquo;at al-Mutakallim al-&lsquo;Arab&#299; &mdash; The Art of '
- 'the Arabic Speaker: From Purity of the Tongue to Perfection of Expression). It comes in '
- 'eleven volumes, spanning 5,479 pages.</p>',
+# Groups that must not be broken across a sheet. Each group is a list of
+# top-level blocks; the packer keeps a group whole.
+SINAAH_GROUPS = [
+ ['<p class="salutation">Assalāmu ʿalaykum wa raḥmatullāhi wa barakātuh,</p>'],
+ ['<p>Dear Sir,</p>'],
+ ['<p>All praise is due to Allah, by whose grace good works are completed.</p>'],
+ ['<p>With a heart full of gratitude, I share with you, among those dearest to me, the '
+  'completion of my Arabic work <span class="ar">صناعة المتكلم العربي</span> '
+  '(Ṣināʿat al-Mutakallim al-ʿArabī &mdash; The Art of the Arabic Speaker: From Purity '
+  'of the Tongue to Perfection of Expression). It comes in eleven volumes, spanning '
+  '5,479 pages.</p>'],
+ ['<p><span class="run">Why this book.</span> Many who have studied Arabic for years, '
+  'and know its grammar and its rhetoric, still do not find it on their tongue when '
+  'they need it: in a lesson, a sermon, a meeting or a conversation. Our books teach '
+  'the rules of the language and the analysis of fine speech. Few of them take the '
+  'learner by the hand from knowing Arabic to speaking it well. This work was written '
+  'for that gap.</p>'],
+ # the run-in heading, its list and the paragraph that closes it stay together
+ ['<p><span class="run">What it brings together.</span> The work gathers into one '
+  'graded path what lies scattered across many books:</p>',
+  '<ul>'
+  '<li>Sībawayh and Ibn Jinnī on the sound and structure of the language.</li>'
+  '<li>Ibn al-Jazarī on the points and qualities of the letters.</li>'
+  '<li>al-Jāḥiẓ and ʿAbd al-Qāhir al-Jurjānī on bayān and the ordering of speech.</li>'
+  '<li>Ibn Khaldūn on the acquired faculty (malaka).</li>'
+  '</ul>',
+  '<p>Alongside these, it draws on what modern studies of communication have reached. '
+  'Classical texts are quoted in their own words and cited to their editions by volume '
+  'and page.</p>'],
+ ['<p><span class="run">Its path.</span> It opens with a question that cannot be '
+  'avoided: which Arabic are we to speak? It then goes in four stages:</p>',
+  '<ol>'
+  '<li><span class="run">Grounding:</span> the fundamentals of speech, pronunciation, '
+  'the natural Arabic sentence, and the ordering of speech.</li>'
+  '<li><span class="run">Communication:</span> context, courtesy and dialogue.</li>'
+  '<li><span class="run">Platforms:</span> the circle of learning, the sermon, the '
+  'lecture, the interview and the meeting.</li>'
+  '<li><span class="run">Mastery:</span> media, official discourse and negotiation, '
+  'ending in improvisation and the acquired faculty.</li>'
+  '</ol>'],
+ ['<p><span class="run">The Reference volume.</span> An eleventh volume serves as a '
+  'reference. It holds a Bank of Errors, which gives each error with its correction, '
+  'its explanation and its severity. It also holds an applied dictionary of '
+  'expressions, a dictionary of literal-translation errors, and complete model '
+  'texts.</p>'],
+ ['<p>It would honour me if you would share in this joy, and remember the work and its '
+  'author in your duʿāʾ. I ask Allah to accept it, to make it sincerely for His Face, '
+  'and to make it of benefit to all who read it. Your counsel and observations would '
+  'be most welcome.</p>',
+  '<p class="close">With love and respect,</p>'],
 ]
 
-SINAAH_2 = [
- '<p>It would honour me if you would share in this joy, and remember the work and its '
- 'author in your du&lsquo;&#257;&rsquo;. I ask Allah to accept it, to make it sincerely '
- 'for His Face, and to make it of benefit to all who read it.</p>',
- '<p>The attachments accompany this letter. Your counsel and observations would be most '
- 'welcome.</p>',
- '<p class="close">With love and respect,</p>',
-]
+SINAAH_SIG = ("Abu Abdillah, Jalālud-Deen,<br>"
+              "Ahmad bin Ibrohim Abdus-Salām, Sulaimiy")
 
-SINAAH_SIG = ("Abu Abdillah, Jal&#257;lud-Deen,<br>"
-              "Ahmad bin Ibrohim Abdus-Sal&#257;m, Sulaimiy")
+# Field capacities, in mm, read off the stationery itself:
+#   sheet 1      .field            top 147  bottom 245            ->  98mm
+#   continuation .field--continued top  44  bottom 240            -> 196mm
+#   ...but .signatures is pinned at bottom:28mm and stands ~40mm tall, so a
+#   sheet that carries the hand can only run to 229mm.
+CAP_FIRST, CAP_CONT, CAP_CONT_SIG = 98.0, 196.0, 185.0
+
+GALLEY_JS = """
+<script>
+document.fonts.ready.then(() => {
+  const MM = 96/25.4;
+  const h = [...document.querySelectorAll('#galley > div')].map(g => {
+    let t = 0;
+    for (const c of g.children) {
+      const r = c.getBoundingClientRect();
+      const m = parseFloat(getComputedStyle(c).marginBottom) || 0;
+      t += r.height + m;
+    }
+    return +(t/MM).toFixed(3);
+  });
+  const pre = document.createElement('pre');
+  pre.id = 'H'; pre.textContent = JSON.stringify(h);
+  document.body.appendChild(pre);
+});
+</script>
+"""
+
+def measure_groups(groups):
+    """Render every group once, at the real measure and in the real founts,
+       and read its true height back out of the browser. Guessing line counts
+       is how a sheet silently overruns."""
+    import json, tempfile
+    # group zero is the OPENER -- the Bismillah and its rule, which stand
+    # inside sheet one's field above the first word and eat into its
+    # capacity. Measuring it is the difference between a sheet that fits and
+    # a sheet that silently overruns by the height of the invocation.
+    opener = ('<p class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>'
+              '<div class="open-rule gold-block"></div>')
+    body = '<div id="galley">' + "".join(
+        '<div class="letter letter--en" style="width:138mm">' + "".join(g) + '</div>'
+        for g in [[opener]] + groups) + '</div>'
+    # the galley MUST live at ROOT or its relative stylesheet links resolve nowhere
+    gp = os.path.join(ROOT, ".galley.html")
+    open(gp, "w", encoding="utf-8").write(
+        HEAD.format(title="galley", at=AT) + body + GALLEY_JS + "</body></html>")
+    shell = _find("/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell")
+    out = subprocess.run([shell, "--disable-gpu", "--no-sandbox",
+        "--virtual-time-budget=25000", "--dump-dom", "file://" + gp],
+        capture_output=True, timeout=300).stdout.decode("utf-8", "replace")
+    os.remove(gp)
+    m = re.search(r'<pre id="H">(.*?)</pre>', out, re.S)
+    if not m:
+        raise SystemExit("galley did not measure -- webfonts never settled")
+    h = json.loads(m.group(1))
+    return h[1:], h[0]          # (group heights, opener height)
+
+def pack(groups, heights, opener=0.0):
+    """Greedy, keep-with-next. Continuations are packed against the SHORTER
+       capacity -- the one that leaves room for the hand -- so whichever
+       sheet ends up last always has room for the signature. The few
+       millimetres given up on a middle sheet are cheaper than a letter whose
+       last page collides with its own signature."""
+    sheets, cur, used, cap = [], [], 0.0, CAP_FIRST - opener
+    for g, h in zip(groups, heights):
+        if h > cap and not cur:
+            raise SystemExit(f"a single keep-together group is {h:.1f}mm "
+                             f"and will not fit a {cap:.0f}mm field")
+        if cur and used + h > cap:
+            sheets.append(cur); cur, used, cap = [], 0.0, CAP_CONT_SIG
+        cur.append(g); used += h
+    sheets.append(cur)
+    return sheets
 
 def main():
     fa, fe = folio(1)
@@ -371,27 +476,42 @@ def main():
         HEAD.format(title="Congratulations on the conferment of the doctoral degree", at=AT)
         + p1 + "\n" + p2 + '</body>\n</html>\n')
 
-    # ── the completion letter: two sheets, the principal's hand alone ─────
-    fa1, fe1 = folio(1, 2); fa2, fe2 = folio(2, 2)
-    s1 = sheet(plate(REF_SINAAH) + medallion() + head()
-            + register(ref=REF_SINAAH,
-                       date="9 October 2026",
-                       date_sub="25 Rab&#299;&lsquo; al-&#256;khir 1448 AH",
-                       to_name="Alh. (Dr) Zakariya O. Anofi",
-                       to_role="Chairman, Board of Governors,<br>Sultan Hanafi Royal Schools",
-                       subject="Completion of Sin&#257;&lsquo;at al-Mutakallim al-&lsquo;Arab&#299; &mdash; eleven volumes, 5,479 pages")
-            + SECURITY
-            + '  <div class="field">\n    <p class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
-              '    <div class="open-rule gold-block"></div>\n'
-              '    <div class="letter letter--en">\n      ' + "\n      ".join(SINAAH_1)
-            + '\n    </div>\n  </div>\n' + foot(fa1, fe1))
-    s2 = sheet(cont_head(REF_SINAAH) + SECURITY
-        + '  <div class="field field--continued">\n    <div class="letter letter--en">\n      '
-        + "\n      ".join(SINAAH_2) + '\n    </div>\n  </div>\n'
-        + signature_solo(SINAAH_SIG) + foot(fa2, fe2))
+    # ── the completion letter: paginated from measured heights ───────────
+    heights, opener = measure_groups(SINAAH_GROUPS)
+    packed  = pack(SINAAH_GROUPS, heights, opener)
+    n = len(packed)
+    print(f"  sinaah: {len(SINAAH_GROUPS)} groups, "
+          f"{sum(heights):.1f}mm of text (opener {opener:.1f}mm) -> {n} sheet(s) "
+          f"[{', '.join(f'{sum(heights[sum(len(x) for x in packed[:i]):sum(len(x) for x in packed[:i+1])]):.1f}mm' for i in range(n))}]")
+
+    def blocks(groups):
+        return "\n      ".join(b for g in groups for b in g)
+
+    fa, fe = folio(1, n)
+    out = [sheet(plate(REF_SINAAH) + medallion() + head()
+        + register(ref=REF_SINAAH,
+                   date="9 October 2026",
+                   date_sub="25 Rabīʿ al-Ākhir 1448 AH",
+                   to_name="Alh. (Dr) Zakariya O. Anofi",
+                   to_role="Chairman, Board of Governors,<br>Sultan Hanafi Royal Schools",
+                   subject="Completion of Ṣināʿat al-Mutakallim al-ʿArabī &mdash; eleven volumes, 5,479 pages")
+        + SECURITY
+        + '  <div class="field">\n    <p class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>\n'
+          '    <div class="open-rule gold-block"></div>\n'
+          '    <div class="letter letter--en">\n      ' + blocks(packed[0])
+        + '\n    </div>\n  </div>\n'
+        + (signature_solo(SINAAH_SIG) if n == 1 else "")
+        + foot(fa, fe))]
+    for i in range(1, n):
+        fa, fe = folio(i + 1, n)
+        out.append(sheet(cont_head(REF_SINAAH) + SECURITY
+            + '  <div class="field field--continued">\n    <div class="letter letter--en">\n      '
+            + blocks(packed[i]) + '\n    </div>\n  </div>\n'
+            + (signature_solo(SINAAH_SIG) if i == n - 1 else "")
+            + foot(fa, fe)))
     open(os.path.join(ROOT, "letter-en-sinaah-completion.html"), "w", encoding="utf-8").write(
-        HEAD.format(title="Completion of Sina\u2018at al-Mutakallim al-\u2018Arabi", at=AT)
-        + s1 + "\n" + s2 + '</body>\n</html>\n')
+        HEAD.format(title="Completion of Ṣināʿat al-Mutakallim al-ʿArabī", at=AT)
+        + "\n".join(out) + '</body>\n</html>\n')
 
     names = ["letterhead-en.html", "letterhead-en-continuation.html",
              "letter-en-tahniah-dr-adewuyi.html",

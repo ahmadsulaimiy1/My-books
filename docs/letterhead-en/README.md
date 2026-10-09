@@ -112,43 +112,66 @@ Four things, and they are the whole list:
 ## Transliteration
 
 The embedded Latin cut is subset. It carries `ā ī ū ō` and the accented
-Latin-1 range; it does **not** carry the ayn `ʿ`, the turned comma `ʻ`, or the
-dotted emphatics `ḥ ṣ ḍ`. Anything outside the repertoire silently falls back
-to a system serif in the PDF, so the transliteration is set without them rather
-than letting that happen.
+Latin-1 range. It does **not** carry the ayn `ʿ`, the hamza `ʾ`, or the dotted
+emphatics `ḥ ṣ ḍ ṭ ẓ`.
 
-The trap is sharper than it looks. The supplementary face **declares**
+The trap is sharper than it looks. v1's supplementary face **declares**
 `unicode-range: U+0100-024F, …, U+1E00-1EFF, …` but actually contains only
-`Ā ā Ī ī Ō ō Ū ū` (plus space, `A`, `Á`/`Ä`, `†`) — thirteen glyphs. An `ḥ`
-or an `ṣ` therefore falls inside a range the sheet claims and finds nothing
+`Ā ā Ī ī Ō ō Ū ū` (plus space, `A`, `Á`/`Ä`, `†`) — thirteen glyphs. An `ḥ` or
+an `ṣ` therefore falls inside a range the sheet claims and finds nothing
 there, so it is served by whatever face the renderer has to hand. The ayn
-`ʿ` (U+02BF) and hamza `ʾ` (U+02BE) sit outside every declared range and do
-the same. Set the ayn as `&lsquo;` and the hamza as `&rsquo;`, which is what
-scholarship uses when the letters are unavailable.
+(U+02BF) and hamza (U+02BE) sit outside every declared range and do the same.
+
+**This is now fixed, in the overlay, without touching v1.**
+`assets/letterhead-en.css` declares four supplementary faces holding exactly
+the twelve codepoints v1 lacks — `ʾ ʿ ḌḍḤḥ ṢṣṬṭ Ẓẓ` — with a `unicode-range`
+covering only those, so they can never take a glyph the sealed cut already
+serves. `verify-v1.py` still reports 32 files matching.
+
+Two things will bite whoever regenerates them:
+
+1. **Google serves EB Garamond and Inter as variable fonts, and Chrome will
+   not embed a variable font in a PDF.** It falls back to Type3 glyph
+   procedures, which look correct on screen and are not a real embedded
+   fount. Instance to static `wght` with `fontTools.varLib.instancer`
+   *before* `pyftsubset`. If a rebuild shows `Type3` in the font list, this
+   step was missed.
+2. **Pass `updateFontNames=True` when instancing**, or the 600 instance keeps
+   the PostScript name `EBGaramond-Regular` and the audit below reports
+   semibold text as Regular — hiding nothing, but wasting the next person's
+   afternoon.
+
+The faces cover **EB Garamond and Inter only**. Playfair Display's latin-ext
+cut does not carry these glyphs at all, and Reem Kufi and Scheherazade New
+carry no Latin diacritics whatever — not even the macrons. So nothing set in
+the masthead name, the signature line (Playfair), or the recipient's name
+(Reem Kufi) and role (Scheherazade) may use them.
 
 Arabic dropped into an English body has the same problem from the other side:
 `.letter--en` names `"EB Garamond", serif` and has no Arabic face in the
 stack. Wrap it in `<span class="ar">`, which names Scheherazade New and
 isolates the run so it cannot drag the surrounding Latin punctuation around.
 
-Check a new letter with:
+### Audit every letter
 
 ```python
-import pymupdf
-d = pymupdf.open("print/letter-en-tahniah-dr-adewuyi.pdf")
-{s["font"] for p in d for b in p.get_text("dict")["blocks"]
-          for l in b.get("lines", []) for s in l["spans"]}
+import pymupdf, re
+d = pymupdf.open("print/letter-en-sinaah-completion.pdf")
+faces = {s["font"] for p in d for b in p.get_text("dict")["blocks"]
+         for l in b.get("lines", []) for s in l["spans"]}
+assert not [f for f in faces if "Type3" in f], "variable font not instanced"
+assert not [f for f in faces if re.search(r"DejaVu|Liberation|Times|Noto", f)]
 ```
 
-Any `DejaVu`, `Liberation` or `Times` in that set is a glyph that is not in the
-subset.
+A `Type3` entry means step 1 above was missed. A `DejaVu`, `Liberation` or
+`Times` entry is a glyph in no house fount at all.
 
 ## The correspondence on this sheet
 
 | file | to | ref | sheets |
 |---|---|---|---|
 | `letter-en-tahniah-dr-adewuyi.html` | Dr Habibullah Yusuf Adewuyi | `PO/2026/09/0017` | 2 |
-| `letter-en-sinaah-completion.html` | Alh. (Dr) Zakariya O. Anofi | `PO/2026/10/0023` | 2 |
+| `letter-en-sinaah-completion.html` | Alh. (Dr) Zakariya O. Anofi | `PO/2026/10/0023` | 3 |
 
 Both are emitted by `tools/build-en.py`, which owns the plate, the nine-member
 section, the pier, the head and the foot in **one** function each, so no letter
@@ -159,6 +182,24 @@ continuation head.
 `signature_solo()` is for private correspondence: the office's second
 signatory countersigns official correspondence and has no place under a
 personal letter, so that block carries the principal's hand alone.
+
+### Pagination
+
+The completion letter is **not** split by hand. `tools/build-en.py` renders
+every block once, at the real measure and in the real founts, reads its true
+height back out of the browser after `document.fonts.ready`, and packs the
+groups onto sheets. Three things that measurement gets right and a guess does
+not:
+
+* the **Bismillah and its rule** stand inside sheet one's field above the
+  first word and eat 19.8mm of its 98mm. Forget them and the sheet overruns
+  by exactly the height of the invocation.
+* `.signatures` is pinned at `bottom:28mm` and stands ~40mm tall, so a sheet
+  carrying the hand can only run to 229mm, not the field's 240mm.
+  Continuations are therefore packed against **185mm**, never 196mm, so
+  whichever sheet ends up last always has room for the signature.
+* groups are **keep-with-next**: a run-in heading can never be orphaned from
+  the list it introduces.
 
 ### Two faults worth knowing
 
