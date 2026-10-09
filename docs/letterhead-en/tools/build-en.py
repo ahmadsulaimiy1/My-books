@@ -477,15 +477,28 @@ def pack(groups, heights, opener=0.0):
 # Nothing here is generic praise. The one claim it makes is a true one and
 # the author can strike it if the detail is wrong: that the cost of the work
 # was carried by two people and recorded against one.
+#
+# THREE FORMS OF ADDRESS, DELIBERATELY, IN THAT ORDER. The register confers
+# her full public standing -- Hajia Zaynab Hanafi (Zahrāʾ). The opening uses
+# her kunya, Umm Abdillah, answering the author's own Abu Abdillah. The
+# middle, where the letter stops being a letter, says My love. Formal, then
+# familial, then intimate, down one short sheet. Do not level them: the
+# progression IS the letter.
+#
+# The register line is set in EB Garamond 600 by the English overlay (NOT in
+# Reem Kufi, which the Arabic sheet uses there and which carries no Latin
+# diacritic at all), so the macron and the hamza in Zahrāʾ are served by a
+# house fount. Audit the PDF if that rule ever changes.
 REF_ZAYNAB = "PO/2026/10/0024"
 
 ZAYNAB_GROUPS = [
  ['<p class="salutation">Assalāmu ʿalaykum wa raḥmatullāhi wa barakātuh,</p>'],
- ['<p>Zaynab,</p>'],
+ ['<p>Umm Abdillah,</p>'],
  ['<p>The work is finished &mdash; all eleven volumes. Before it goes to anyone else, it '
   'comes to you.</p>'],
- ['<p>You carried its cost with me, and whatever good is in it you have a share that no '
-  'page records. May Allah accept it, and reward you beyond anything I can repay.</p>',
+ ['<p>My love, you carried its cost with me, and whatever good is in it you have a share '
+  'that no page records. May Allah accept it, and reward you beyond anything I can '
+  'repay.</p>',
   '<p class="close">With love and respect,</p>'],
 ]
 
@@ -581,7 +594,7 @@ def main():
             + register(ref=REF_ZAYNAB,
                        date="9 October 2026",
                        date_sub="25 Rabīʿ al-Ākhir 1448 AH",
-                       to_name="Zaynab",
+                       to_name="Hajia Zaynab Hanafi (Zahrāʾ)",
                        to_role="",
                        subject="The completion of the work, and what it owes to you")
             + SECURITY
