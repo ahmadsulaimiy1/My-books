@@ -6,17 +6,17 @@
 
 | المجلد | الملف | الصفحات | ردمك | SHA-256 |
 |---|---|---|---|---|
-| ١: الأصول | `Volume-01_Al-Usul.pdf` | ٥٧٣ | ISBN 978-978-000001-1 | `34b62e1dc454cda0ecc88626c58a8f14c471d15735407bbdabf8f4c6cb757bb9` |
-| ٢: اللسان | `Volume-02_Al-Lisan.pdf` | ٦٢٥ | ISBN 978-978-000002-8 | `0fee11a45fd2c9083bded3364b1cc5b0db9a4a3b16a19c780476665707191239` |
-| ٣: العبارة | `Volume-03_Al-Ibara.pdf` | ٤٩٣ | ISBN 978-978-000003-5 | `a34905395cb3c0d247f60174ebefe0d934b4ee98ccafd790d31fda578b6577b0` |
-| ٤: البيان | `Volume-04_Al-Bayan.pdf` | ٥٣٩ | ISBN 978-978-000004-2 | `cdf624a5ef8e305c3ceceb222023704db91293378f94020466a5d4b856aba2e4` |
-| ٥: المقام | `Volume-05_Al-Maqam.pdf` | ٤٥٩ | ISBN 978-978-000005-9 | `139a30adf1c4f17fca1fd65703f858a48351dd146c1b4c24629526219a5e342b` |
-| ٦: الأدب | `Volume-06_Al-Adab.pdf` | ٤٩٩ | ISBN 978-978-000006-6 | `673c833e3146a39976c1e700364573bcc592247dc3e5e3a22cf7e3ad73bc78cf` |
-| ٧: الحوار | `Volume-07_Al-Hiwar.pdf` | ٣٩٥ | ISBN 978-978-000007-3 | `8e924f2eecdc56719bf8f4fd14d958ffea0643aa479ae4bcf73058960cbd11ff` |
-| ٨: المجالس والمنبر | `Volume-08_Al-Majalis-wal-Minbar.pdf` | ٥٦٥ | ISBN 978-978-000008-0 | `d2b3156243fb5fff7b31744f975ec0c8364778369960f996778e62397948eba7` |
-| ٩: المؤسسة | `Volume-09_Al-Muassasa.pdf` | ٣٣٧ | ISBN 978-978-000009-7 | `fb40864b8a8614c9a6ad6d123ac83c91ca1fe7454ffa20cf3e728020466fb96f` |
-| ١٠: التمكين | `Volume-10_Al-Tamkin.pdf` | ٥٨٥ | ينتظر تأكيد الناشر | `f0e662ffd2f23efbca60f02eaa688117494f3bec2fa15df6815e5094507c0183` |
-| ١١: مرجع المتكلّم العربي | `Volume-11_Marji-al-Mutakallim.pdf` | ٤٠٩ | ينتظر تأكيد الناشر | `89cfd9d66d402f8d49d0dfd929bf1a4eecc59e0522705e2f1a6c83c71dcd9f4b` |
+| ١: الأصول | `Volume-01_Al-Usul.pdf` | ٥٧٣ | ISBN 978-978-000001-1 | `31dd62da5441422fe959a22039d4984c08dab90e97b6efda560cde95779f77c2` |
+| ٢: اللسان | `Volume-02_Al-Lisan.pdf` | ٦٢٥ | ISBN 978-978-000002-8 | `078d0f14a86a85a88bf24aba2101ede40f78a286f9ea51bcabc57d08f513ef40` |
+| ٣: العبارة | `Volume-03_Al-Ibara.pdf` | ٤٩٣ | ISBN 978-978-000003-5 | `e8f2a86814b260e536a7ceb0ddc9d63589623f1290df32fee6968d9875dd0b3a` |
+| ٤: البيان | `Volume-04_Al-Bayan.pdf` | ٥٣٩ | ISBN 978-978-000004-2 | `782d7d57df2132a8de7feadc5b80a79dbcf458ec2a378bcaadeb5a5992ba5451` |
+| ٥: المقام | `Volume-05_Al-Maqam.pdf` | ٤٥٩ | ISBN 978-978-000005-9 | `8989f6e12b74c379c6ed859361cd64e2d14e78f6edb509d7d2eefbc67717627e` |
+| ٦: الأدب | `Volume-06_Al-Adab.pdf` | ٤٩٩ | ISBN 978-978-000006-6 | `616fa1b8bc07389f7a47c4a6308174c2cd9dcd8a3f00c2ed23ec7e1e987ebc0d` |
+| ٧: الحوار | `Volume-07_Al-Hiwar.pdf` | ٣٩٥ | ISBN 978-978-000007-3 | `ae8a9e36c93b0c6d94149914a22d96d56a37eaa3b6970e5d6fe116b99aa19678` |
+| ٨: المجالس والمنبر | `Volume-08_Al-Majalis-wal-Minbar.pdf` | ٥٦٥ | ISBN 978-978-000008-0 | `dd0e6db17c6e9401708e9dfc27c0726b5cc9fe6008396eb3efc8a36c47bc3b36` |
+| ٩: المؤسسة | `Volume-09_Al-Muassasa.pdf` | ٣٣٧ | ISBN 978-978-000009-7 | `eb8290dfb59ece6b04dadcab02e72eb0abca88528af2aff1785e6ce03f45393c` |
+| ١٠: التمكين | `Volume-10_Al-Tamkin.pdf` | ٥٨٥ | ينتظر تأكيد الناشر | `cc905a91422f41664d19dee38817a0ff4a17b40eab47cee8f71477d4dc287e72` |
+| ١١: مرجع المتكلّم العربي | `Volume-11_Marji-al-Mutakallim.pdf` | ٤٠٩ | ينتظر تأكيد الناشر | `7717b67d4a23d59299f378bbd4c3ee0262fb64139916cbc718cedc21ca4233c2` |
 
 ردمك المجموعة: ينتظر تأكيد الناشر. رقم الإيداع القانوني: ينتظر الجهة المختصّة.
 
